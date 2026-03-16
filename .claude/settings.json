@@ -41,6 +41,7 @@
       "Edit(~/.claude/settings.json)"
     ]
   },
+  "outputStyle": ".claude/output-styles/apex-educational.md",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
@@ -108,6 +109,11 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/protect-files.sh",
+            "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/enforce-workflow.sh",
             "timeout": 5
           }
         ]

@@ -2,8 +2,11 @@
 # language-preference.sh — SessionStart hook (runs BEFORE session-context.sh)
 # Reads saved language preference and injects it into Claude's context.
 # Per docs: "For SessionStart hooks, anything you write to stdout is added to Claude's context."
-# Requires jq — exit 0 if missing to degrade gracefully
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — language preference disabled. Install: https://jqlang.github.io/jq/download/"
+  exit 0
+fi
 
 PREF_FILE="$HOME/.claude/apex-preferences.json"
 
