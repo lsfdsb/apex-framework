@@ -2,7 +2,6 @@
 name: cicd
 description: Sets up CI/CD pipelines with GitHub Actions and Vercel. This skill should be used when the user says "CI", "CD", "pipeline", "GitHub Actions", "automate deploy", "continuous integration", "automated tests", or when setting up deployment workflows. Fast shipping needs automated quality gates.
 argument-hint: "[setup|review|claude-pr]"
-disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 

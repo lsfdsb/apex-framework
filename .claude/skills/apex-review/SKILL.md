@@ -1,7 +1,6 @@
 ---
 name: apex-review
 description: Runs a critical quality review of the APEX Framework itself. This skill should be used when the user says "review framework", "audit APEX", "improve framework", "framework quality", "rate our framework", or periodically to ensure the framework stays current. Checks all skills, agents, hooks, and settings against official Claude Code documentation.
-disable-model-invocation: true
 context: fork
 agent: Plan
 ---
