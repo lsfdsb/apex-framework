@@ -80,23 +80,17 @@ The effort slider controls how much thinking Claude does. Available in `/model`:
 
 Change it: `/model` → adjust effort slider, or edit `effortLevel` in settings.
 
-## Extended Context Windows
+## Context Windows
 
-For large codebases or long sessions, Claude Code supports extended context:
-
-| Model Spec | Window | Best For |
-|------------|--------|----------|
-| `sonnet` | 200K (default) | Normal development |
+| Model | Window | Best For |
+|-------|--------|----------|
+| `sonnet` | 200K | Normal development |
 | `sonnet[1m]` | 1M tokens | Large file analysis, big refactors |
-| `opus` | 200K (default) | Complex reasoning |
-| `opus[1m]` | 1M tokens | Full codebase architecture review |
+| `opus` | 1M tokens | Complex reasoning, full codebase architecture |
 
-Use extended context sparingly — it costs proportionally more tokens. Best for:
-- Reviewing entire codebases (`/architecture` on large projects)
-- Analyzing long log files or test outputs
-- Refactoring across many files simultaneously
+Opus has a 1M context window by default. Sonnet defaults to 200K but can be extended to 1M.
 
-To use: set `model: "sonnet[1m]"` on agent definitions or switch via `/model`.
+For Sonnet extended context: set `model: "sonnet[1m]"` on agent definitions or switch via `/model`.
 
 ## Max Plan Token Budget
 
