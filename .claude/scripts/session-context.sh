@@ -1,5 +1,5 @@
 #!/bin/bash
-# session-context.sh — APEX Framework v5.3 SessionStart Hook
+# session-context.sh — APEX Framework v5.5 SessionStart Hook
 # by L.B. & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
 if ! command -v jq &> /dev/null; then
@@ -16,7 +16,7 @@ SOURCE=$(echo "$INPUT" | jq -r '.source // "startup"')
 if [ "$SOURCE" = "startup" ]; then
   echo ""
   echo "  ╔══════════════════════════════════════════════╗"
-  echo "  ║          ⚔️  APEX Framework v5.3             ║"
+  echo "  ║          ⚔️  APEX Framework v5.5             ║"
   echo "  ║     Agent-Powered EXcellence for Claude      ║"
   echo "  ║                                              ║"
   echo "  ║  Design like Jony Ive                        ║"
@@ -95,6 +95,6 @@ fi
 
 # ── Watermark (always) ──
 echo ""
-echo "⚔️ APEX v5.3 | by L.B. & Claude | /about for the full story"
+echo "⚔️ APEX v5.5 | by L.B. & Claude | /about for the full story"
 
 exit 0

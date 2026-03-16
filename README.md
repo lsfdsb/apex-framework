@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.4
+# ⚔️ APEX Framework v5.5
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.4             ║
+  ║          ⚔️  APEX Framework v5.5             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 16 hooks, 3 agents, 4 rules, and 2 output styles** that enforce a disciplined development workflow.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **26 skills, 16 hooks, 3 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
 
 ### The Workflow
 
@@ -80,10 +80,10 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 16 | code-standards, design-system, security, a11y, verify-lib, teach, debug, and more |
+| Skills | 17 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, and more |
 | Agents | 3 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku) |
 | Hook Scripts | 16 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging |
-| Rules | 4 | Path-based: testing, components, api, sql |
+| Rules | 5 | Path-based: testing, components, api, sql, supabase |
 | Output Styles | 2 | Educational + Mandalorian |
 | StatusLine | 1 | Real-time: model, tokens, cost, context %, lines changed |
 | Sandbox | 1 | Filesystem restrictions: blocks writes to /etc, ~/.ssh, ~/.aws |
@@ -168,6 +168,19 @@ APEX tests its own hooks:
 ---
 
 ## Changelog
+
+### v5.5.0 (2026-03-16) — Supabase Integration & Skill Fixes
+
+**New:**
+- `/supabase` skill — comprehensive Supabase helper with subcommands: setup, auth, migration, types, realtime, storage, edge-functions
+- `supabase.md` rule — auto-loads when working with Supabase-related files
+- `/init` skill updated with Supabase scaffolding step
+- `sql-practices` reference expanded with multi-tenant RLS, role-based RLS, storage policies, realtime setup, connection pooling, and migration templates
+- `.mcp.json.template` updated with Supabase MCP server as primary option
+
+**Fixed:**
+- Removed `disable-model-invocation` flag from 7 skills (about, prd, init, cicd, apex-review, deploy, commit) — the flag was blocking `/slash` command invocation entirely
+- Updated Opus context window from 200K to 1M in cost-management skill (no longer needs `[1m]` suffix)
 
 ### v5.4.0 (2026-03-16) — Full Claude Code Integration
 

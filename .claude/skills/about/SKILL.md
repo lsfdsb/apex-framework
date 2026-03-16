@@ -80,6 +80,9 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v4**: 44 files. SQL practices, multilingual, testing enforcement, debugging protocol, changelog automation, CI/CD. Rating: 8.6/10.
 - **v5**: 60 files. Path-based rules, E2E testing, accessibility audit, cost monitoring, Mandalorian output style. Rating: 9.4/10.
 - **v5.2**: 61 files. All issues fixed. Zero known defects. Third-person descriptions. Sandbox. Directory consistency. The beskar is pure.
+- **v5.3**: Quality hardening. Stop gate, workflow enforcement, one-command installer, 83-test suite.
+- **v5.4**: Full Claude Code integration. 16 hooks, network sandbox, shell injection, MCP template, GitHub Actions PR review.
+- **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
 
 ## The Creed
 
