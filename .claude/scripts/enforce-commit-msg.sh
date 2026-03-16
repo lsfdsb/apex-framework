@@ -22,7 +22,7 @@ if echo "$COMMAND" | grep -qE '^git\s+commit'; then
   # 2. HEREDOC: -m "$(cat <<'EOF'\nmessage\nEOF\n)"
   # 3. No -m flag (editor-based) — skip
   # Note: Uses sed instead of grep -oP for macOS/BSD compatibility
-  MSG=$(echo "$COMMAND" | sed -n 's/.*-m ["\x27]\([^"\x27]*\)["\x27].*/\1/p' | head -1)
+  MSG=$(echo "$COMMAND" | sed -n 's/^[^-]*-m ["\x27]\([^"\x27]*\)["\x27].*/\1/p' | head -1)
 
   # If simple -m extraction failed, try HEREDOC pattern
   if [ -z "$MSG" ]; then
