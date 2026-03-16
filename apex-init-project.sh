@@ -25,7 +25,7 @@ fi
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║    ⚔️  APEX Framework v5.3 — Project Setup   ║"
+echo "  ║    ⚔️  APEX Framework v5.5 — Project Setup   ║"
 echo "  ║     by L.B. & Claude · São Paulo, 2026      ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
