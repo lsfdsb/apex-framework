@@ -67,7 +67,40 @@ Generate a CLAUDE.md tailored to THIS project:
 - [Any detected conventions from existing code]
 ```
 
-### Step 5: Install Git Hooks (outside Claude Code enforcement)
+### Step 5: Supabase Setup (if applicable)
+
+If the project uses Supabase (detected in package.json or user confirms):
+
+1. **Create client files** — Run `/supabase setup` to scaffold:
+   - `src/lib/supabase/client.ts` (browser client)
+   - `src/lib/supabase/server.ts` (server client, for Next.js)
+   - `src/lib/supabase/middleware.ts` (session refresh, for Next.js)
+   - `middleware.ts` (root middleware, for Next.js)
+   - For Vite projects: `src/lib/supabase.ts` (single client)
+
+2. **Create `.env.local.example`** with Supabase vars:
+   ```bash
+   # Supabase — get from https://supabase.com/dashboard/project/_/settings/api
+   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+   ```
+
+3. **Add db scripts** to `package.json`:
+   ```json
+   {
+     "db:types": "supabase gen types typescript --linked > src/types/supabase.ts",
+     "db:push": "supabase db push",
+     "db:diff": "supabase db diff --linked",
+     "db:migration": "supabase migration new"
+   }
+   ```
+
+4. **Offer to link** — Ask the user if they want to run `npx supabase link` now.
+
+5. **Ensure `.env.local` is in `.gitignore`**.
+
+### Step 6: Install Git Hooks (outside Claude Code enforcement)
 
 Install APEX git hooks for quality enforcement even outside Claude Code:
 
@@ -80,7 +113,7 @@ chmod +x .git/hooks/pre-commit .git/hooks/commit-msg
 
 These hooks run on EVERY commit — even manual ones from terminal — checking for console.log, hardcoded secrets, TypeScript errors, lint issues, and conventional commit format.
 
-### Step 6: Create Hook Scripts
+### Step 7: Create Hook Scripts
 
 Copy and make executable:
 
@@ -88,18 +121,18 @@ Copy and make executable:
 chmod +x .claude/scripts/*.sh
 ```
 
-### Step 7: Create .gitignore additions
+### Step 8: Create .gitignore additions
 
 Ensure `.claude/settings.local.json` is gitignored.
 
-### Step 8: First Commit
+### Step 9: First Commit
 
 ```bash
 git add .claude/ CLAUDE.md docs/ .gitignore
 git commit -m "chore: initialize APEX Framework"
 ```
 
-### Step 9: Welcome Message
+### Step 10: Welcome Message
 
 Tell the user what was set up and what's available:
 
@@ -109,6 +142,7 @@ Tell the user what was set up and what's available:
 Your project now has:
   📋 /prd — Generate PRDs before building
   🔍 /research — Research before integrating
+  🗄️ /supabase — Database setup, auth, migrations, types
   ✅ /qa — Quality gate before shipping
   🔒 /security — Security audit on sensitive code
   🎯 /cx-review — Customer experience review

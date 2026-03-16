@@ -102,3 +102,142 @@ CREATE POLICY "delete_own" ON [table_name]
 -- Service role: bypass RLS (for server-side operations)
 -- This is automatic — service_role key bypasses RLS by default
 ```
+
+## Supabase RLS — Multi-Tenant Pattern
+
+```sql
+-- Organization-scoped access via memberships table
+ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "org_select" ON projects
+  FOR SELECT TO authenticated
+  USING (
+    org_id IN (
+      SELECT org_id FROM memberships
+      WHERE user_id = auth.uid()
+    )
+  );
+
+CREATE POLICY "org_insert" ON projects
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    org_id IN (
+      SELECT org_id FROM memberships
+      WHERE user_id = auth.uid()
+      AND role IN ('admin', 'editor')
+    )
+  );
+```
+
+## Supabase RLS — Role-Based Pattern
+
+```sql
+-- Admin bypass + user-scoped access
+ALTER TABLE sensitive_data ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "admin_all" ON sensitive_data
+  USING (
+    EXISTS (
+      SELECT 1 FROM user_roles
+      WHERE user_id = auth.uid() AND role = 'admin'
+    )
+  );
+
+CREATE POLICY "user_select_own" ON sensitive_data
+  FOR SELECT TO authenticated
+  USING (auth.uid() = user_id);
+```
+
+## Supabase Storage Policies
+
+```sql
+-- Users can upload to their own folder
+CREATE POLICY "upload_own" ON storage.objects
+  FOR INSERT TO authenticated
+  WITH CHECK (
+    bucket_id = 'avatars'
+    AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+-- Users can read their own files
+CREATE POLICY "read_own" ON storage.objects
+  FOR SELECT TO authenticated
+  USING (
+    bucket_id = 'documents'
+    AND auth.uid()::text = (storage.foldername(name))[1]
+  );
+
+-- Public read access to public bucket
+CREATE POLICY "public_read" ON storage.objects
+  FOR SELECT TO public
+  USING (bucket_id = 'public');
+```
+
+## Supabase Realtime — Enable on Tables
+
+```sql
+-- Enable realtime for a specific table
+ALTER PUBLICATION supabase_realtime ADD TABLE messages;
+
+-- Enable realtime for multiple tables
+ALTER PUBLICATION supabase_realtime ADD TABLE messages, notifications, presence;
+```
+
+## Supabase Connection Pooling
+
+```
+# Direct connection (migrations, schema changes)
+# Port 5432 — use for: supabase db push, drizzle-kit push
+DATABASE_URL=postgresql://postgres:[password]@db.[project].supabase.co:5432/postgres
+
+# Pooled connection (API routes, short-lived queries)
+# Port 6543 — use for: application queries, server actions
+DATABASE_URL=postgresql://postgres.[project]:[password]@aws-0-[region].pooler.supabase.com:6543/postgres
+```
+
+## Migration Template — Complete
+
+```sql
+-- supabase/migrations/YYYYMMDDHHMMSS_description.sql
+
+-- 1. Create table with standard columns
+CREATE TABLE IF NOT EXISTS public.table_name (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  -- domain columns here
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+-- 2. Indexes on FKs and frequent queries
+CREATE INDEX idx_table_name_user_id ON public.table_name(user_id);
+
+-- 3. RLS
+ALTER TABLE public.table_name ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "select_own" ON public.table_name
+  FOR SELECT TO authenticated USING (auth.uid() = user_id);
+CREATE POLICY "insert_own" ON public.table_name
+  FOR INSERT TO authenticated WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "update_own" ON public.table_name
+  FOR UPDATE TO authenticated
+  USING (auth.uid() = user_id) WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "delete_own" ON public.table_name
+  FOR DELETE TO authenticated USING (auth.uid() = user_id);
+
+-- 4. updated_at trigger (reuse shared function)
+CREATE OR REPLACE FUNCTION public.handle_updated_at()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = NOW();
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER set_updated_at
+  BEFORE UPDATE ON public.table_name
+  FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
+
+-- 5. Enable realtime (if needed)
+-- ALTER PUBLICATION supabase_realtime ADD TABLE public.table_name;
+```

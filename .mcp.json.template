@@ -13,8 +13,18 @@
       }
     },
 
+    "supabase": {
+      "// Supabase MCP — database access, migrations, RLS, and schema management": "",
+      "// Install: claude mcp add supabase -- npx -y @supabase/mcp-server-supabase@latest": "",
+      "command": "npx",
+      "args": ["-y", "@supabase/mcp-server-supabase@latest", "--access-token", "${SUPABASE_ACCESS_TOKEN}"],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "${SUPABASE_ACCESS_TOKEN}"
+      }
+    },
+
     "postgres": {
-      "// Direct PostgreSQL access for query execution and schema inspection": "",
+      "// Direct PostgreSQL access — use if you need raw SQL outside Supabase": "",
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
     },
