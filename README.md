@@ -53,11 +53,11 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 ```
 📜 PRD        → Define before building (deterministic hook blocks code without PRD)
-🗺️  Architecture → Plan the system
+🗺️ Architecture → Plan the system
 🔍 Research   → Verify docs, never hallucinate APIs
-⚒️  Build      → Execute with precision
+⚒️ Build      → Execute with precision
 ✅ QA         → 5-phase quality gate
-🛡️  Security   → OWASP checklist + dependency audit
+🛡️ Security   → OWASP checklist + dependency audit
 🎯 CX Review  → Customer experience review
 🚀 Deploy     → Pre-deployment checklist
 ```
