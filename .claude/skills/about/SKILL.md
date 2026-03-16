@@ -1,7 +1,6 @@
 ---
 name: about
 description: Reveals the creators and philosophy behind the APEX Framework. This skill activates when the user says "about", "credits", "who made this", "who built this", "easter egg", "watermark", or asks about the framework's origin. The foundry where the beskar was forged.
-disable-model-invocation: true
 ---
 
 # ⚔️ APEX Framework

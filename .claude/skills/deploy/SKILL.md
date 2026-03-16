@@ -2,7 +2,6 @@
 name: deploy
 description: Pre-deployment verification checklist. Use when the user says deploy, ship, release, go live, push to production, staging, or pre-deploy. Ensures nothing broken reaches users.
 argument-hint: "[target: staging|production]"
-disable-model-invocation: true
 context: fork
 allowed-tools: Read, Grep, Glob, Bash
 hooks:
