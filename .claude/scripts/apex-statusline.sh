@@ -1,0 +1,80 @@
+#!/bin/bash
+# apex-statusline.sh — APEX Framework v5.2
+# by L.B. & Claude · São Paulo, 2026
+#
+# Official JSON schema (code.claude.com/docs/en/statusline):
+#   .model.id / .model.display_name
+#   .context_window.used_percentage / .context_window.total_input_tokens
+#   .context_window.total_output_tokens / .context_window.context_window_size
+#   .cost.total_cost_usd / .cost.total_duration_ms
+#   .cost.total_lines_added / .cost.total_lines_removed
+#
+# Note: context_window is null before first API call. Handle with // 0.
+
+if ! command -v jq &> /dev/null; then
+  echo "⚔️ APEX | by L.B. & Claude"
+  exit 0
+fi
+
+INPUT=$(cat)
+
+# ── Model ──
+MODEL_DISPLAY=$(echo "$INPUT" | jq -r '.model.display_name // "—"')
+MODEL_ID=$(echo "$INPUT" | jq -r '.model.id // ""')
+
+case "$MODEL_DISPLAY" in
+  *Opus*)   M="opus" ;;
+  *Sonnet*) M="sonnet" ;;
+  *Haiku*)  M="haiku" ;;
+  *)        M="$(echo "$MODEL_DISPLAY" | tr '[:upper:]' '[:lower:]' | cut -c1-8)" ;;
+esac
+echo "$MODEL_ID" | grep -qi "opusplan" 2>/dev/null && M="opus→sonnet"
+
+# ── Context window ──
+CTX_PCT=$(echo "$INPUT" | jq -r '.context_window.used_percentage // 0' 2>/dev/null)
+CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
+
+# ── Tokens ──
+TOK_IN=$(echo "$INPUT" | jq -r '.context_window.total_input_tokens // 0' 2>/dev/null)
+TOK_OUT=$(echo "$INPUT" | jq -r '.context_window.total_output_tokens // 0' 2>/dev/null)
+
+fmt_tok() {
+  local n=$1
+  if [ "$n" -ge 1000000 ] 2>/dev/null; then
+    printf '%.1fM' "$(echo "scale=1; $n / 1000000" | bc 2>/dev/null || echo "0")"
+  elif [ "$n" -ge 1000 ] 2>/dev/null; then
+    printf '%.1fK' "$(echo "scale=1; $n / 1000" | bc 2>/dev/null || echo "0")"
+  else
+    echo "${n}"
+  fi
+}
+
+# ── Cost ──
+COST=$(printf '%.2f' "$(echo "$INPUT" | jq -r '.cost.total_cost_usd // 0' 2>/dev/null)" 2>/dev/null || echo "0.00")
+
+# ── Lines ──
+LA=$(echo "$INPUT" | jq -r '.cost.total_lines_added // 0' 2>/dev/null)
+LR=$(echo "$INPUT" | jq -r '.cost.total_lines_removed // 0' 2>/dev/null)
+
+# ── Duration ──
+DUR=$(($(echo "$INPUT" | jq -r '.cost.total_duration_ms // 0' 2>/dev/null) / 60000))
+
+# ── Plan badge ──
+PLAN=""
+if [ "$COST" = "0.00" ]; then PLAN="MAX "; fi
+
+# ── Context bar ──
+BW=10; F=$((CTX_INT * BW / 100)); [ "$F" -gt "$BW" ] && F=$BW; E=$((BW - F)); BAR=""
+for ((i=0;i<F;i++)); do BAR="${BAR}▓"; done
+for ((i=0;i<E;i++)); do BAR="${BAR}░"; done
+
+# ── Alerts ──
+A=""
+[ "$CTX_INT" -gt 80 ] 2>/dev/null && A=" ⚠️CTX"
+[ "$CTX_INT" -gt 60 ] 2>/dev/null && [ "$CTX_INT" -le 80 ] 2>/dev/null && A=" 🟡"
+PREF="$HOME/.claude/apex-preferences.json"
+TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
+command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️COST"
+
+# ── Output ──
+echo "⚔️ APEX | ${M} ${PLAN}| ${BAR} ${CTX_INT}% | ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT") | \$${COST} | +${LA}/-${LR} | ${DUR}m${A} | by L.B. & Claude"

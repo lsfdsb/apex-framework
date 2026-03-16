@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.pnp.*
+
+# Environment (NEVER commit secrets)
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+coverage/
+
+# Claude Code personal overrides (team members customize locally)
+.claude/settings.local.json
+
+# Debug
+*.log
+npm-debug.log*

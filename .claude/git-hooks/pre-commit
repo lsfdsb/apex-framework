@@ -1,0 +1,112 @@
+#!/bin/bash
+# APEX Framework — Git Pre-Commit Hook
+# This runs OUTSIDE Claude Code — enforces quality on every commit,
+# even manual commits from the terminal.
+#
+# Install: cp this file to .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# Or: /init will install it automatically
+
+echo "⚔️ APEX pre-commit checks..."
+
+# Get staged files
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+
+if [ -z "$STAGED_FILES" ]; then
+  exit 0
+fi
+
+# Check for TypeScript project
+HAS_TS=false
+if [ -f "tsconfig.json" ]; then
+  HAS_TS=true
+fi
+
+# Check for Node project
+HAS_NODE=false
+if [ -f "package.json" ]; then
+  HAS_NODE=true
+fi
+
+ERRORS=0
+
+# 1. Check for forbidden patterns in staged files
+echo "  🔍 Checking for forbidden patterns..."
+for FILE in $STAGED_FILES; do
+  if [ ! -f "$FILE" ]; then continue; fi
+  
+  # Source-code-only checks (skip .md, .txt, .yaml, shell scripts, etc.)
+  if [[ "$FILE" =~ \.(ts|tsx|js|jsx|mjs|cjs)$ ]]; then
+    # No console.log in production code (allow in test files)
+    if [[ ! "$FILE" =~ \.test\. ]] && [[ ! "$FILE" =~ \.spec\. ]] && [[ ! "$FILE" =~ __tests__ ]]; then
+      if grep -n 'console\.log' "$FILE" 2>/dev/null | grep -v '// eslint-disable' > /dev/null; then
+        echo "    ❌ console.log found in $FILE (remove or use logger)"
+        ERRORS=$((ERRORS + 1))
+      fi
+    fi
+
+    # No debugger statements
+    if grep -n 'debugger' "$FILE" 2>/dev/null > /dev/null; then
+      echo "    ❌ debugger statement in $FILE"
+      ERRORS=$((ERRORS + 1))
+    fi
+  fi
+
+  # No hardcoded secrets (all file types)
+  if grep -inE '(password|secret|api_key|apikey|token)\s*[=:]\s*["\x27][^"\x27]{8,}' "$FILE" 2>/dev/null | grep -v '\.example' | grep -v '\.env' | grep -v 'test' > /dev/null; then
+    echo "    ❌ Possible hardcoded secret in $FILE"
+    ERRORS=$((ERRORS + 1))
+  fi
+done
+
+# 2. Type check (if TypeScript)
+if [ "$HAS_TS" = true ] && command -v npx &> /dev/null; then
+  echo "  📐 Type checking..."
+  if ! npx tsc --noEmit --pretty 2>/dev/null; then
+    echo "    ❌ TypeScript errors found"
+    ERRORS=$((ERRORS + 1))
+  else
+    echo "    ✅ Types OK"
+  fi
+fi
+
+# 3. Lint staged files (if eslint available)
+if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/eslint" ]; then
+  echo "  📏 Linting..."
+  STAGED_JS=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+  if [ -n "$STAGED_JS" ]; then
+    if ! npx eslint $STAGED_JS --max-warnings=0 --quiet 2>/dev/null; then
+      echo "    ❌ Lint errors found"
+      ERRORS=$((ERRORS + 1))
+    else
+      echo "    ✅ Lint OK"
+    fi
+  fi
+fi
+
+# 4. Format check (if prettier available)
+if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/prettier" ]; then
+  echo "  🎨 Format check..."
+  STAGED_FORMAT=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx|css|json|md)$' | tr '\n' ' ')
+  if [ -n "$STAGED_FORMAT" ]; then
+    if ! npx prettier --check $STAGED_FORMAT 2>/dev/null; then
+      echo "    ❌ Format errors (run: npx prettier --write .)"
+      ERRORS=$((ERRORS + 1))
+    else
+      echo "    ✅ Format OK"
+    fi
+  fi
+fi
+
+# 5. Validate commit message format (if using -m flag)
+# Note: commit-msg hook handles this better, but we check here too
+
+if [ $ERRORS -gt 0 ]; then
+  echo ""
+  echo "  🛑 APEX: $ERRORS issue(s) found. Commit blocked."
+  echo "  Fix the issues above and try again."
+  echo ""
+  exit 1
+fi
+
+echo "  ✅ APEX: All checks passed. This is the way."
+exit 0

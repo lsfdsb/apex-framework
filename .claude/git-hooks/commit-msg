@@ -1,0 +1,41 @@
+#!/bin/bash
+# APEX Framework — Git Commit Message Hook
+# Validates conventional commit format on every commit,
+# even manual commits outside Claude Code.
+#
+# Install: cp this file to .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(head -1 "$COMMIT_MSG_FILE")
+
+# Allow merge commits
+if echo "$COMMIT_MSG" | grep -qE '^Merge'; then
+  exit 0
+fi
+
+# Validate format: type(scope): description
+if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+'; then
+  echo ""
+  echo "⚔️ APEX: Invalid commit message format."
+  echo ""
+  echo "Required: type(scope): description"
+  echo ""
+  echo "Types:    feat, fix, docs, refactor, test, perf, security, chore"
+  echo "Example:  feat(auth): add OAuth login with Google"
+  echo "Example:  fix(cart): prevent negative quantities"
+  echo ""
+  echo "Your message: $COMMIT_MSG"
+  echo ""
+  exit 1
+fi
+
+# Check length
+if [ ${#COMMIT_MSG} -gt 72 ]; then
+  echo ""
+  echo "⚔️ APEX: Commit message too long (${#COMMIT_MSG} chars, max 72)."
+  echo "Keep the subject line concise. Add details in the body."
+  echo ""
+  exit 1
+fi
+
+exit 0
