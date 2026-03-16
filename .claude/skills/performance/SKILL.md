@@ -1,6 +1,7 @@
 ---
 name: performance
 description: Analyze and optimize application performance. Use when the user mentions slow, performance, optimize, speed, lag, loading, bundle size, lighthouse, core web vitals, LCP, CLS, memory leak, render, or when reviewing code with performance implications. Our apps have zero lag — non-negotiable.
+argument-hint: "[component or page]"
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

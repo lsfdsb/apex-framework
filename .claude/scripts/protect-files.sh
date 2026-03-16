@@ -1,6 +1,9 @@
 #!/bin/bash
-# Requires jq — exit 0 (allow) if missing to avoid blocking all operations
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — file protection disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 # protect-files.sh — PreToolUse hook
 # Blocks edits to protected files. Exit 2 = block. Exit 0 = allow.
 # Claude receives stderr as feedback to adjust its approach.

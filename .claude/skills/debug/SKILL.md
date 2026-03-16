@@ -60,6 +60,31 @@ Every bug follows the same investigation process. Teaching the user this protoco
 | `ECONNREFUSED` | Service not running | Start the database/API server |
 | `JWT expired` | Auth token timed out | Implement token refresh flow |
 
+## Checkpointing (Save/Restore State)
+
+When debugging complex issues across long sessions, use git checkpoints to save and restore state:
+
+```bash
+# Save a checkpoint before trying a risky fix
+git stash push -m "debug-checkpoint: before fix attempt 1"
+
+# Try your fix...
+
+# If it didn't work, restore the checkpoint
+git stash pop
+
+# Or save as a named branch for later reference
+git checkout -b debug/issue-description
+git commit -am "debug: checkpoint before approach 2"
+git checkout -  # go back to original branch
+```
+
+**When to checkpoint**:
+- Before trying a fix you're unsure about
+- When switching between multiple debugging approaches
+- Before reverting changes to test in isolation
+- When the session is getting long and you want to preserve progress
+
 ## Output Format
 
 ```markdown

@@ -1,10 +1,16 @@
 ---
 name: changelog
 description: Generates and maintains CHANGELOG.md and auto-updates PRD status. This skill should be used when the user says "changelog", "what changed", "release notes", "update docs", "update PRD", or after completing a feature. Also auto-invoked by the commit skill after successful commits. Keeps documentation alive — PRDs update automatically as features are built.
+argument-hint: "[version or 'unreleased']"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # Changelog & Documentation Keeper
+
+## Current Context
+
+Recent commits: !`git log --oneline -10 2>/dev/null`
+Tags: !`git tag --sort=-v:refname 2>/dev/null | head -5`
 
 ## What This Skill Does
 

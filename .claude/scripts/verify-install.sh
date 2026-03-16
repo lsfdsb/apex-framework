@@ -1,6 +1,9 @@
 #!/bin/bash
-# Requires jq — exit 0 (allow) if missing to avoid blocking all operations
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — library install verification disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 # verify-install.sh — PreToolUse hook on Bash
 # Catches package install commands and injects a reminder to verify the lib.
 # Doesn't block (exit 0) but adds context via stdout for Claude.

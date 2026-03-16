@@ -1,6 +1,9 @@
 #!/bin/bash
-# Requires jq — exit 0 if missing to degrade gracefully
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — auto-format disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 # auto-format.sh — PostToolUse hook on Write|Edit|MultiEdit
 # Runs formatter on files Claude just wrote/edited.
 # PostToolUse receives tool_input with the file path.

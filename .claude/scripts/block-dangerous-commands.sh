@@ -1,6 +1,9 @@
 #!/bin/bash
-# Requires jq — exit 0 (allow) if missing to avoid blocking all operations
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — dangerous command blocking disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 # block-dangerous-commands.sh — PreToolUse hook on Bash tool
 # Blocks destructive commands before they execute.
 # Exit 2 = block with feedback. Exit 0 = allow.

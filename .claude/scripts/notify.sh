@@ -1,6 +1,9 @@
 #!/bin/bash
-# Requires jq — exit 0 (allow) if missing to avoid blocking all operations
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — notifications disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 # notify.sh — Notification hook
 # Sends desktop notification when Claude needs your attention.
 # Works on macOS (osascript) and Linux (notify-send).

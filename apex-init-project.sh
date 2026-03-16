@@ -7,7 +7,8 @@
 
 set -e
 
-APEX_DIR="$HOME/apex-framework"
+# Support running from any location — find APEX relative to this script
+APEX_DIR="$(cd "$(dirname "$0")" && pwd)"
 PROJECT_DIR="$(pwd)"
 
 # ── Verify we're in a git repo ──
@@ -24,7 +25,7 @@ fi
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║     ⚔️  APEX Framework v5.2 — Project Setup  ║"
+echo "  ║    ⚔️  APEX Framework v5.3 — Project Setup   ║"
 echo "  ║     by L.B. & Claude · São Paulo, 2026      ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
@@ -57,6 +58,14 @@ echo "📏 Installing rules..."
 if [ -d "$APEX_DIR/.claude/rules" ]; then
   cp -r "$APEX_DIR/.claude/rules" .claude/
   echo "   ✅ $(ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' ') rules installed"
+fi
+
+# ── Output Styles ──
+echo ""
+echo "🎨 Installing output styles..."
+if [ -d "$APEX_DIR/.claude/output-styles" ]; then
+  cp -r "$APEX_DIR/.claude/output-styles" .claude/
+  echo "   ✅ $(ls .claude/output-styles/*.md 2>/dev/null | wc -l | tr -d ' ') output styles installed"
 fi
 
 # ── Settings ──

@@ -3,8 +3,11 @@
 # Saves critical workflow state before context compaction.
 # Per docs: stdout content from PreCompact isn't added to context,
 # but we can save state to a file that SessionStart reads back.
-# Requires jq — exit 0 if missing to degrade gracefully
-if ! command -v jq &> /dev/null; then exit 0; fi
+# Requires jq — warn and allow if missing (hooks should not silently degrade)
+if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — pre-compact state saving disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  exit 0
+fi
 
 STATE_FILE="$CLAUDE_PROJECT_DIR/.claude/.apex-state.json"
 

@@ -1,12 +1,25 @@
 ---
 name: security
 description: Runs a security audit on code handling authentication, authorization, payments, user data, file uploads, or external integrations. This skill should be used when the user mentions security, auth, login, password, token, API key, encryption, OWASP, vulnerability, injection, XSS, CSRF, or when reviewing sensitive code. Follows the Ionescu/Rutkowska philosophy — defense in depth, trust nothing.
+argument-hint: "[component or file to audit]"
 allowed-tools: Read, Grep, Glob, Bash
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh"
+          timeout: 5
 ---
 
 # Security Audit — Trust Nothing
 
 > "Security is a process, not a product." — Bruce Schneier
+
+## Current Context
+
+Dependencies with known issues: !`npm audit --audit-level=moderate 2>/dev/null | head -15`
+Env files present: !`ls -la .env* 2>/dev/null || echo "No .env files found"`
 
 ## Scan Process
 
@@ -44,7 +57,7 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ## Detailed Reference
 
-For grep commands, security headers config, Next.js vulnerability patterns, and env var security, read `reference.md` in this skill's directory.
+For grep commands, security headers config, Next.js vulnerability patterns, and env var security, read `$SKILL_DIR/reference.md`.
 
 ## Output
 

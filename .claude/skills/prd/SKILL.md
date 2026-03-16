@@ -1,6 +1,7 @@
 ---
 name: prd
 description: Generates a comprehensive Product Requirements Document before building any new application or major feature. This skill should be used when the user says "new app", "new feature", "build me", "create an app", "let's build", "start a project", or explicitly asks for a PRD, spec, or requirements document. Must be invoked before implementation begins — no code without a PRD. Also activates for "plan", "scope", "requirements", "spec".
+argument-hint: "[feature-name]"
 disable-model-invocation: true
 context: fork
 agent: Plan

@@ -1,6 +1,7 @@
 ---
 name: architecture
 description: Design or review system architecture. Use when the user asks to architect, design a system, plan the stack, database design, schema, API design, system diagram, or when making structural decisions. Use after PRD approval before implementation.
+argument-hint: "[system-name]"
 context: fork
 agent: Plan
 ---

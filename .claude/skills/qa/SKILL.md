@@ -1,12 +1,19 @@
 ---
 name: qa
 description: Runs comprehensive quality assurance on any feature, PR, or code change. This skill should be used when the user says "test", "QA", "quality check", "review code", "is this ready", "check for bugs", "verify", or before any merge/deploy. Claude should also invoke this after completing any implementation task — no code ships without QA.
+argument-hint: "[feature or PR name]"
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # QA Gate — Zero Defect Tolerance
 
 > "Quality is not an act, it is a habit." — Aristotle
+
+## Current Context
+
+Git status: !`git status --short 2>/dev/null | head -20`
+Recent commits: !`git log --oneline -5 2>/dev/null`
+Changed files: !`git diff --name-only HEAD~1 2>/dev/null | head -20`
 
 ## What This Skill Does
 
