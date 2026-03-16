@@ -4,6 +4,7 @@ description: UI/UX design review specialist. Reviews interfaces against our desi
 tools: Read, Glob, Grep
 disallowedTools: Write, Edit, MultiEdit, Bash
 model: sonnet
+memory: project
 maxTurns: 15
 skills: design-system, cx-review, a11y
 ---

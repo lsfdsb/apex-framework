@@ -1,0 +1,39 @@
+{
+  "mcpServers": {
+    "// MCP (Model Context Protocol) servers extend Claude Code with external tools.": "",
+    "// Copy this file to .mcp.json and configure the servers you need.": "",
+    "// Docs: https://docs.anthropic.com/en/docs/claude-code/mcp-servers": "",
+
+    "github": {
+      "// Provides GitHub API access (issues, PRs, repos) without needing gh CLI": "",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
+      }
+    },
+
+    "postgres": {
+      "// Direct PostgreSQL access for query execution and schema inspection": "",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "${DATABASE_URL}"]
+    },
+
+    "filesystem": {
+      "// Scoped file access — useful for restricting Claude to specific directories": "",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "./src", "./docs"]
+    },
+
+    "sentry": {
+      "// Error monitoring — query Sentry issues and events directly": "",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-sentry"],
+      "env": {
+        "SENTRY_AUTH_TOKEN": "${SENTRY_AUTH_TOKEN}",
+        "SENTRY_ORG": "your-org",
+        "SENTRY_PROJECT": "your-project"
+      }
+    }
+  }
+}

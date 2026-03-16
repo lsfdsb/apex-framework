@@ -1,6 +1,7 @@
 ---
 name: a11y
 description: Runs an accessibility audit against WCAG 2.2 AA standards. This skill should be used when the user says "accessibility", "a11y", "WCAG", "screen reader", "keyboard navigation", "contrast", "aria", or before shipping any user-facing feature. Accessibility is not optional — it's a legal and ethical requirement.
+argument-hint: "[page or component]"
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

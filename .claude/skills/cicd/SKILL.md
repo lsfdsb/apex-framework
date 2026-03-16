@@ -1,6 +1,7 @@
 ---
 name: cicd
 description: Sets up CI/CD pipelines with GitHub Actions and Vercel. This skill should be used when the user says "CI", "CD", "pipeline", "GitHub Actions", "automate deploy", "continuous integration", "automated tests", or when setting up deployment workflows. Fast shipping needs automated quality gates.
+argument-hint: "[setup|review|claude-pr]"
 disable-model-invocation: true
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
@@ -102,3 +103,53 @@ Code → Push → CI runs (lint + type + test + audit + e2e)
 ```
 
 Every step is automated. No human can skip the quality gates.
+
+## Claude Code Automated PR Review
+
+Create `.github/workflows/claude-pr-review.yml` to get AI-powered code reviews on every PR:
+
+```yaml
+name: Claude PR Review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    if: github.event.pull_request.draft == false
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Run Claude Review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DIFF=$(git diff origin/${{ github.base_ref }}...HEAD)
+          claude -p "Review this PR diff for bugs, security, performance, and quality: $DIFF" \
+            --output-format text > review.txt
+      - name: Post Review Comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const review = fs.readFileSync('review.txt', 'utf8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: review
+            });
+```
+
+**Setup**: Add `ANTHROPIC_API_KEY` to your repo's Settings → Secrets → Actions.
+
+A full version of this workflow is available at `.github/workflows/claude-pr-review.yml`.

@@ -1,11 +1,18 @@
 ---
 name: commit
 description: Creates a clean, conventional commit with pre-commit checks. This skill should be used when the user says "commit", "save my work", "checkpoint", or wants to commit changes. Runs lint, type check, and tests before committing. Claude should never auto-commit — the user decides when to save.
+argument-hint: "[commit message or leave blank for auto-generate]"
 disable-model-invocation: true
 allowed-tools: Read, Bash, Grep, Glob
 ---
 
 # Commit — Ship Clean Code
+
+## Current Context
+
+Staged files: !`git diff --cached --stat 2>/dev/null || echo "Nothing staged"`
+Unstaged changes: !`git status --short 2>/dev/null | head -15`
+Recent commits: !`git log --oneline -5 2>/dev/null`
 
 ## Pre-Commit Checklist (run all before committing)
 

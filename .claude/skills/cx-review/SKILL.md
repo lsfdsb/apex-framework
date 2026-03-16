@@ -1,6 +1,7 @@
 ---
 name: cx-review
 description: Review any user-facing feature from a Customer Experience perspective. Use when the user says "review UX", "customer review", "is this good enough", "ready to ship", "CX review", "customer journey", "onboarding", or before deploying user-facing changes. Our Head of CX philosophy drives every decision.
+argument-hint: "[feature or page]"
 allowed-tools: Read, Glob, Grep
 ---
 

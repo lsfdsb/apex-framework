@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.3
+# ⚔️ APEX Framework v5.4
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.3             ║
+  ║          ⚔️  APEX Framework v5.4             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 11 hooks, 3 agents, 4 rules, and 2 output styles** that enforce a disciplined development workflow.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 16 hooks, 3 agents, 4 rules, and 2 output styles** that enforce a disciplined development workflow.
 
 ### The Workflow
 
@@ -82,7 +82,7 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 |----------|-------|---------|
 | Skills | 16 | code-standards, design-system, security, a11y, verify-lib, teach, debug, and more |
 | Agents | 3 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku) |
-| Hook Scripts | 11 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation |
+| Hook Scripts | 16 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging |
 | Rules | 4 | Path-based: testing, components, api, sql |
 | Output Styles | 2 | Educational + Mandalorian |
 | StatusLine | 1 | Real-time: model, tokens, cost, context %, lines changed |
@@ -108,9 +108,10 @@ Layer 1: settings.json deny list
 Layer 2: Sandbox config
   → OS-level filesystem restrictions (blocks writes to /etc, /usr, ~/.ssh)
 
-Layer 3: Hook scripts (PreToolUse, PostToolUse, Stop)
+Layer 3: Hook scripts (PreToolUse, PostToolUse, Stop, UserPromptSubmit, PostToolUseFailure, PostCompact, SubagentStop, SessionEnd)
   → Runtime enforcement: blocks dangerous commands, validates commit messages,
-    enforces PRD-before-code, checks test execution, auto-formats code
+    enforces PRD-before-code, checks test execution, auto-formats code,
+    guards workflow skips, provides failure diagnostics, preserves context
 ```
 
 ### What's Deterministic (cannot be skipped)
@@ -151,7 +152,7 @@ APEX tests its own hooks:
 ./tests/test-hooks.sh
 ```
 
-68 tests covering: dangerous command blocking, commit message validation, file protection, workflow enforcement, library install detection, file permissions, jq warnings, and macOS compatibility.
+83 tests covering: dangerous command blocking, commit message validation, file protection, workflow enforcement, library install detection, file permissions, jq warnings, and macOS compatibility.
 
 ---
 
@@ -167,6 +168,32 @@ APEX tests its own hooks:
 ---
 
 ## Changelog
+
+### v5.4.0 (2026-03-16) — Full Claude Code Integration
+
+**New:**
+- `guard-workflow-skip.sh` — UserPromptSubmit hook: nudges users when they try to skip PRD/tests/security
+- `handle-failure.sh` — PostToolUseFailure hook: diagnostic hints for TypeScript, test, npm, build, and permission errors
+- `post-compact.sh` — PostCompact hook: verifies critical context survived compaction
+- `log-subagent.sh` — SubagentStop hook: logs agent completions for visibility
+- `session-cleanup.sh` — SessionEnd hook: warns about uncommitted files, cleans up state
+- `.mcp.json.template` — MCP server template with GitHub, Postgres, Filesystem, Sentry configs
+- `.github/workflows/claude-pr-review.yml` — GitHub Actions workflow for Claude Code automated PR reviews
+- Network sandbox: `allowedDomains` restricts outbound to GitHub, npm, Anthropic, Supabase, Vercel, Sentry
+- `argument-hint` on all 14 user-invocable skills (autocomplete hints in `/slash` commands)
+- Shell injection (`!`cmd``) on qa, security, deploy, commit, changelog skills (live context)
+- `$SKILL_DIR/reference.md` on design-system skill (proper relative paths)
+- Skill-scoped hooks on deploy and security skills (block dangerous commands during audits)
+- `memory: project` on design-reviewer agent (persistent design knowledge)
+- `async: true` on auto-format PostToolUse hook (non-blocking)
+- Extended context documentation (`sonnet[1m]`, `opus[1m]`) in cost-management skill
+- `max` effort level documented in cost-management skill
+- Debug checkpointing section (git stash save/restore for debugging sessions)
+- Claude PR review workflow documented in cicd skill
+
+**Fixed:**
+- `session-cleanup.sh` now warns (not silently passes) when jq is missing
+- Test suite expanded from 68 to 83 tests (all passing)
 
 ### v5.3.0 (2026-03-16) — Quality Hardening
 

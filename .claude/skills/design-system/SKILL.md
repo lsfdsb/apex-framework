@@ -79,4 +79,4 @@ Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults
 
 ## Detailed Reference
 
-For font pairings, color palettes, responsive breakpoints, and component state matrix, read `reference.md` in this skill's directory.
+For font pairings, color palettes, responsive breakpoints, and component state matrix, read `$SKILL_DIR/reference.md`.

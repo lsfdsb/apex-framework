@@ -1,6 +1,7 @@
 ---
 name: e2e
 description: Write and run end-to-end tests with Playwright. Use when the user says "e2e", "end to end", "playwright", "browser test", "integration test", "test the flow", "test the page", or when testing complete user journeys. Every critical user flow needs an E2E test before shipping.
+argument-hint: "[user-flow]"
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 

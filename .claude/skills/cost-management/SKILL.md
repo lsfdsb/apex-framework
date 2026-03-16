@@ -76,8 +76,27 @@ The effort slider controls how much thinking Claude does. Available in `/model`:
 | `low` | Quick edits, simple questions | ~50% fewer thinking tokens |
 | `medium` | Regular development (our default) | Balanced |
 | `high` | Complex debugging, architecture | ~2x thinking tokens |
+| `max` | Critical architecture, security audits | Maximum reasoning depth |
 
 Change it: `/model` → adjust effort slider, or edit `effortLevel` in settings.
+
+## Extended Context Windows
+
+For large codebases or long sessions, Claude Code supports extended context:
+
+| Model Spec | Window | Best For |
+|------------|--------|----------|
+| `sonnet` | 200K (default) | Normal development |
+| `sonnet[1m]` | 1M tokens | Large file analysis, big refactors |
+| `opus` | 200K (default) | Complex reasoning |
+| `opus[1m]` | 1M tokens | Full codebase architecture review |
+
+Use extended context sparingly — it costs proportionally more tokens. Best for:
+- Reviewing entire codebases (`/architecture` on large projects)
+- Analyzing long log files or test outputs
+- Refactoring across many files simultaneously
+
+To use: set `model: "sonnet[1m]"` on agent definitions or switch via `/model`.
 
 ## Max Plan Token Budget
 

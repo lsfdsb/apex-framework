@@ -1,14 +1,29 @@
 ---
 name: deploy
 description: Pre-deployment verification checklist. Use when the user says deploy, ship, release, go live, push to production, staging, or pre-deploy. Ensures nothing broken reaches users.
+argument-hint: "[target: staging|production]"
 disable-model-invocation: true
 context: fork
 allowed-tools: Read, Grep, Glob, Bash
+hooks:
+  PreToolUse:
+    - matcher: "Bash"
+      hooks:
+        - type: command
+          command: "$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh"
+          timeout: 5
 ---
 
 # Deployment Gate — Ship with Confidence
 
 ultrathink
+
+## Current Context
+
+Branch: !`git branch --show-current 2>/dev/null`
+Last commit: !`git log --oneline -1 2>/dev/null`
+Uncommitted changes: !`git status --short 2>/dev/null | wc -l | tr -d ' '` files
+Build status: !`npm run build 2>&1 | tail -3`
 
 Run all gates. Report results. Block if any gate fails.
 
