@@ -30,6 +30,7 @@ coverage/
 # Claude Code personal overrides (team members customize locally)
 .claude/settings.local.json
 .claude/.apex-state.json
+.claude/.failure-log
 
 # Debug
 *.log
