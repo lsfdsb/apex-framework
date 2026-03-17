@@ -249,16 +249,100 @@ if [ -f "$APEX_CACHE/.claude/CLAUDE.md" ]; then
   UPDATE_COUNT=$((UPDATE_COUNT + 1))
 fi
 
+# ══════════════════════════════════════════════════
+# PROJECT-LEVEL UPDATE
+# If the current project has APEX installed (.claude/scripts/),
+# update project-level files too.
+# ══════════════════════════════════════════════════
+PROJECT_UPDATE_COUNT=0
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-}"
+
+if [ -n "$PROJECT_DIR" ] && [ -d "$PROJECT_DIR/.claude/scripts" ] && [ "$PROJECT_DIR" != "$APEX_CACHE" ]; then
+  log "Updating project-level files in $PROJECT_DIR"
+
+  # Backup project .claude/ (excluding state files)
+  PROJECT_BACKUP="$APEX_CACHE/.backup-project-$(date +%Y%m%d%H%M%S)"
+  mkdir -p "$PROJECT_BACKUP"
+  for dir in scripts skills rules output-styles; do
+    if [ -d "$PROJECT_DIR/.claude/$dir" ]; then
+      cp -r "$PROJECT_DIR/.claude/$dir" "$PROJECT_BACKUP/" 2>/dev/null || true
+    fi
+  done
+
+  # Update project scripts
+  if [ -d "$APEX_CACHE/.claude/scripts" ]; then
+    mkdir -p "$PROJECT_DIR/.claude/scripts"
+    for script in "$APEX_CACHE"/.claude/scripts/*.sh; do
+      if [ -f "$script" ]; then
+        BASENAME=$(basename "$script")
+        cp "$script" "$PROJECT_DIR/.claude/scripts/$BASENAME"
+        chmod +x "$PROJECT_DIR/.claude/scripts/$BASENAME"
+        PROJECT_UPDATE_COUNT=$((PROJECT_UPDATE_COUNT + 1))
+      fi
+    done
+  fi
+
+  # Update project-level skills
+  PROJECT_SKILLS=(prd architecture research qa security performance deploy commit changelog init e2e cicd)
+  mkdir -p "$PROJECT_DIR/.claude/skills"
+  for skill in "${PROJECT_SKILLS[@]}"; do
+    if [ -d "$APEX_CACHE/.claude/skills/$skill" ]; then
+      cp -r "$APEX_CACHE/.claude/skills/$skill" "$PROJECT_DIR/.claude/skills/"
+      PROJECT_UPDATE_COUNT=$((PROJECT_UPDATE_COUNT + 1))
+    fi
+  done
+
+  # Update project rules
+  if [ -d "$APEX_CACHE/.claude/rules" ]; then
+    mkdir -p "$PROJECT_DIR/.claude/rules"
+    for rule in "$APEX_CACHE"/.claude/rules/*.md; do
+      if [ -f "$rule" ]; then
+        cp "$rule" "$PROJECT_DIR/.claude/rules/"
+        PROJECT_UPDATE_COUNT=$((PROJECT_UPDATE_COUNT + 1))
+      fi
+    done
+  fi
+
+  # Update project output styles
+  if [ -d "$APEX_CACHE/.claude/output-styles" ]; then
+    mkdir -p "$PROJECT_DIR/.claude/output-styles"
+    for style in "$APEX_CACHE"/.claude/output-styles/*.md; do
+      if [ -f "$style" ]; then
+        cp "$style" "$PROJECT_DIR/.claude/output-styles/"
+        PROJECT_UPDATE_COUNT=$((PROJECT_UPDATE_COUNT + 1))
+      fi
+    done
+  fi
+
+  # Update project settings.json (preserves settings.local.json)
+  if [ -f "$APEX_CACHE/.claude/settings.json" ]; then
+    cp "$APEX_CACHE/.claude/settings.json" "$PROJECT_DIR/.claude/settings.json"
+    PROJECT_UPDATE_COUNT=$((PROJECT_UPDATE_COUNT + 1))
+  fi
+
+  # NOTE: We do NOT overwrite:
+  #   - CLAUDE.md (user may have customized it for their project)
+  #   - settings.local.json (user's local overrides)
+  #   - .apex-state.json (session state)
+  #   - git hooks in .git/hooks/ (may have custom hooks)
+
+  log "Project update: $PROJECT_UPDATE_COUNT files in $PROJECT_DIR"
+fi
+
 # ── Save installed version ──
 echo "$REMOTE_VERSION" > "$APEX_CACHE/.installed-version"
 
-log "Update complete: v$LOCAL_VERSION → v$REMOTE_VERSION ($UPDATE_COUNT files updated)"
+TOTAL=$((UPDATE_COUNT + PROJECT_UPDATE_COUNT))
+log "Update complete: v$LOCAL_VERSION → v$REMOTE_VERSION ($TOTAL files updated)"
 
 # ── Output to Claude context (stdout goes to Claude) ──
 echo ""
 echo "🔄 APEX Auto-Update: v$LOCAL_VERSION → v$REMOTE_VERSION"
-echo "   $UPDATE_COUNT files updated. Backup saved."
-echo "   Changelog: https://github.com/${APEX_REPO}/releases"
+echo "   User-level: $UPDATE_COUNT files updated"
+if [ "$PROJECT_UPDATE_COUNT" -gt 0 ]; then
+  echo "   Project-level: $PROJECT_UPDATE_COUNT files updated"
+fi
+echo "   Backup saved. Changelog: https://github.com/${APEX_REPO}/releases"
 echo ""
 
 exit 0
