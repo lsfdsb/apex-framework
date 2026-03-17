@@ -1,156 +1,146 @@
 ---
 name: init
 description: Initialize the APEX Framework in the current project. Sets up project-level skills, hooks, scripts, docs structure, and CLAUDE.md. Use when starting a new project or when the user says "init", "initialize", "setup APEX", "start project", "new project", or "scaffold".
-allowed-tools: Read, Write, Bash, Glob
+allowed-tools: Read, Write, Bash, Glob, Edit, Grep
 ---
 
 # Initialize APEX in This Project
 
 ## What This Does
 
-Sets up the project-level APEX files that aren't covered by user-level installation. After running this, the project has the full APEX workflow.
+Installs the full APEX Framework into the current project by running the official init script. This copies skills, hooks, scripts, rules, settings, git hooks, and CLAUDE.md from the APEX source. Then it customizes CLAUDE.md for the project's specific stack.
 
-## Process
+## CRITICAL: Use the Init Script
 
-### Step 1: Check What Exists
+The APEX framework ships with `apex-init-project.sh` which handles ALL file copying. **You MUST run this script** — do NOT manually recreate files.
 
-- Does `.claude/` exist? Don't overwrite existing config.
-- Does `CLAUDE.md` exist? Merge, don't replace.
-- Does `package.json` exist? Detect existing stack and adapt.
-- Does `.git/` exist? If not, initialize git.
+### Step 1: Find the APEX Framework Source
 
-### Step 2: Detect Existing Stack
+Look for the APEX framework in these locations (in order):
+1. `~/apex-framework/` (git clone / development)
+2. `~/.apex-framework/` (installed via auto-update)
 
-Read `package.json`, `requirements.txt`, `Cargo.toml`, etc. to detect:
+Verify by checking for the `VERSION` file and `apex-init-project.sh` in that directory.
 
-- Framework (Next.js, Remix, Django, Rails, etc.)
-- Language (TypeScript, Python, Rust, etc.)
-- Database (Supabase, Prisma, Drizzle, etc.)
-- Testing (Vitest, Jest, Pytest, etc.)
-
-Adapt CLAUDE.md and settings to match the detected stack. **Never force our defaults on an existing project.**
-
-### Step 3: Create Project Structure
-
-```bash
-# Project-level skills (not in user-level)
-mkdir -p .claude/skills/{prd,architecture,research,qa-gate,security-audit,performance,deploy}
-mkdir -p .claude/scripts
-mkdir -p docs/{prd,architecture,research,reviews}
-
-# Copy project-level skill files
-# (Content comes from the APEX framework source)
+If neither exists, tell the user:
+```
+APEX Framework source not found. Please clone it first:
+  git clone https://github.com/lsfdsb/apex-framework.git ~/apex-framework
 ```
 
-### Step 4: Create Project CLAUDE.md
+### Step 2: Run the Init Script
 
-Generate a CLAUDE.md tailored to THIS project:
+```bash
+# Run from the PROJECT directory (current working directory)
+bash ~/apex-framework/apex-init-project.sh
+# OR if installed via auto-update:
+bash ~/.apex-framework/apex-init-project.sh
+```
+
+This script will:
+- Copy 12+ project skills (prd, architecture, research, qa, security, etc.)
+- Copy hook scripts and make them executable
+- Copy path-based rules
+- Copy output styles
+- Copy settings.json (hooks, permissions, sandbox, statusLine)
+- Install git hooks (pre-commit, commit-msg)
+- Copy CLAUDE.md (or preserve existing one)
+- Update .gitignore with APEX entries
+- Create docs directories (docs/prd, docs/architecture, docs/research, docs/reviews)
+
+**Wait for the script to finish and show its output to the user.**
+
+### Step 3: Detect Existing Stack
+
+After the script runs, read the project's config files to detect the stack:
+- `package.json` → framework, dependencies, scripts
+- `requirements.txt` / `pyproject.toml` → Python stack
+- `Cargo.toml` → Rust stack
+- `go.mod` → Go stack
+- `tsconfig.json` → TypeScript config
+- Existing `src/` structure
+
+Detect:
+- Framework (Next.js, Remix, Vite, Django, Rails, etc.)
+- Language (TypeScript, Python, Rust, Go, etc.)
+- Database (Supabase, Prisma, Drizzle, etc.)
+- Testing (Vitest, Jest, Pytest, etc.)
+- Package manager (npm, pnpm, yarn, bun)
+- Dev/build/test/lint commands from package.json scripts
+
+### Step 4: Customize CLAUDE.md for This Project
+
+The init script copies the generic APEX CLAUDE.md. Now **edit it** to add project-specific information. Use the Edit tool to prepend or append project-specific sections:
 
 ```markdown
 # [Project Name]
 
-> Part of the APEX Framework
+> Powered by APEX Framework v[version from VERSION file]
 
 ## Stack
 
-- [Detected or chosen stack]
+- [Detected framework + version]
+- [Detected language]
+- [Detected database, if any]
+- [Detected testing framework]
 
 ## Build Commands
 
-- `[detected dev command]`
-- `[detected build command]`
-- `[detected test command]`
-- `[detected lint command]`
+- `[package-manager] dev` — development server
+- `[package-manager] build` — production build
+- `[package-manager] test` — run tests
+- `[package-manager] lint` — lint check
 
 ## Project-Specific Rules
 
+- Use `[detected package manager]` (not npm) for all commands
 - [Any detected conventions from existing code]
+- [Path aliases from tsconfig, if any]
 ```
+
+**IMPORTANT:** Merge with existing CLAUDE.md content if one already existed. Never lose project-specific information.
 
 ### Step 5: Supabase Setup (if applicable)
 
-If the project uses Supabase (detected in package.json or user confirms):
+If Supabase is detected in package.json dependencies, ask the user if they want to set it up:
 
-1. **Create client files** — Run `/supabase setup` to scaffold:
-   - `src/lib/supabase/client.ts` (browser client)
-   - `src/lib/supabase/server.ts` (server client, for Next.js)
-   - `src/lib/supabase/middleware.ts` (session refresh, for Next.js)
-   - `middleware.ts` (root middleware, for Next.js)
-   - For Vite projects: `src/lib/supabase.ts` (single client)
+1. **Create client files** — Run `/supabase setup`
+2. **Create `.env.local.example`** with Supabase vars
+3. **Add db scripts** to `package.json`
+4. **Offer to link** — Ask if they want to run `npx supabase link`
+5. **Ensure `.env.local` is in `.gitignore`**
 
-2. **Create `.env.local.example`** with Supabase vars:
-   ```bash
-   # Supabase — get from https://supabase.com/dashboard/project/_/settings/api
-   NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
-   SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-   ```
-
-3. **Add db scripts** to `package.json`:
-   ```json
-   {
-     "db:types": "supabase gen types typescript --linked > src/types/supabase.ts",
-     "db:push": "supabase db push",
-     "db:diff": "supabase db diff --linked",
-     "db:migration": "supabase migration new"
-   }
-   ```
-
-4. **Offer to link** — Ask the user if they want to run `npx supabase link` now.
-
-5. **Ensure `.env.local` is in `.gitignore`**.
-
-### Step 6: Install Git Hooks (outside Claude Code enforcement)
-
-Install APEX git hooks for quality enforcement even outside Claude Code:
-
-```bash
-# Copy pre-commit and commit-msg hooks
-cp .claude/git-hooks/pre-commit .git/hooks/pre-commit
-cp .claude/git-hooks/commit-msg .git/hooks/commit-msg
-chmod +x .git/hooks/pre-commit .git/hooks/commit-msg
-```
-
-These hooks run on EVERY commit — even manual ones from terminal — checking for console.log, hardcoded secrets, TypeScript errors, lint issues, and conventional commit format.
-
-### Step 7: Create Hook Scripts
-
-Copy and make executable:
-
-```bash
-chmod +x .claude/scripts/*.sh
-```
-
-### Step 8: Create .gitignore additions
-
-Ensure `.claude/settings.local.json` is gitignored.
-
-### Step 9: First Commit
+### Step 6: First Commit
 
 ```bash
 git add .claude/ CLAUDE.md docs/ .gitignore
-git commit -m "chore: initialize APEX Framework"
+git commit -m "chore: initialize APEX Framework v[version]"
 ```
 
-### Step 10: Welcome Message
+### Step 7: Welcome Message
 
-Tell the user what was set up and what's available:
+Show the APEX version and what was installed:
 
 ```
-🚀 APEX Framework initialized!
+⚔️ APEX Framework v[version] initialized!
 
 Your project now has:
   📋 /prd — Generate PRDs before building
+  🏗️ /architecture — Design before coding
   🔍 /research — Research before integrating
-  🗄️ /supabase — Database setup, auth, migrations, types
   ✅ /qa — Quality gate before shipping
   🔒 /security — Security audit on sensitive code
   🎯 /cx-review — Customer experience review
   🚀 /deploy — Pre-deployment checklist
   📝 /commit — Clean conventional commits
   🔄 /changelog — Auto-maintain docs
+  🐛 /debug — Structured debugging
+  🧪 /e2e — Playwright E2E tests
+
+Stack detected: [framework] + [language] + [database]
+Package manager: [detected pm]
 
 Start with: /prd [your first feature]
 
-💡 Tip: Your APEX skills at ~/.claude/ (design-system, code-standards, etc.) are already active globally!
+This is the way. ⚔️
 ```
