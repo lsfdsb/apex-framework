@@ -28,13 +28,28 @@ Analyze the current session and the framework itself to find:
 
 ## Analysis Methodology
 
-### Step 1: Session Archaeology
-Investigate what happened during this session:
-- Read recent git history (`git log --oneline -20`)
-- Check for hook-related patterns in recent changes
-- Look at the project structure and what files were touched
-- Check if there are any `.apex-state.json` breadcrumbs
-- Look for patterns of repeated manual work that could be automated
+### Step 1: Session Archaeology (FULL CONVERSATION)
+Read the **complete session transcript** first — this is your primary data source:
+
+```bash
+# Extract the full session as readable text (user prompts, Claude responses, tool calls, errors)
+bash .claude/scripts/extract-session.sh 1000
+```
+
+This gives you the actual conversation: what the user asked, how Claude responded, which tools were called, which errors occurred, where thinking went wrong, and where the user had to repeat themselves.
+
+**What to look for in the transcript:**
+- **Repeated questions** — User asked the same thing twice? The framework failed them.
+- **Error patterns** — Tool calls that failed, hooks that blocked, commands that errored.
+- **Course corrections** — User had to redirect Claude? Something was missing or wrong.
+- **Manual work** — User did something manually that could be automated.
+- **Thinking pivots** — Claude's thinking changed direction? Could indicate a gap.
+- **Slow loops** — Multiple read/search cycles for something that should be faster.
+
+Also check:
+- Recent git history (`git log --oneline -20`)
+- Project structure and what files were touched
+- `.apex-state.json` breadcrumbs if they exist
 
 ### Step 2: Framework Audit
 Cross-reference session findings against the current framework:
