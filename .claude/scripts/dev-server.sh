@@ -37,7 +37,7 @@ if [ -f "$PID_FILE" ]; then
   if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
     # Already running — report status
     PORT=$(grep -oE 'localhost:[0-9]+' "$LOG_FILE" 2>/dev/null | tail -1 || echo "")
-    echo "🟢 Dev server already running (PID $OLD_PID${PORT:+ · http://$PORT})"
+    echo "🟢 Dev server running (PID $OLD_PID${PORT:+ · http://$PORT}) ━ forge is hot!"
     exit 0
   fi
   # Stale PID file — clean up
@@ -75,7 +75,7 @@ for i in $(seq 1 10); do
     ERRORS=$(tail -5 "$LOG_FILE" 2>/dev/null)
     echo "🔴 Dev server failed to start."
     if [ -n "$ERRORS" ]; then
-      echo "Last output:"
+      echo "  Last output:"
       echo "$ERRORS"
     fi
     rm -f "$PID_FILE" 2>/dev/null
@@ -94,11 +94,16 @@ if [ "$STARTED" = true ]; then
   if [ -z "$URL" ]; then
     URL=$(grep -oE 'https?://127\.0\.0\.1:[0-9]+' "$LOG_FILE" 2>/dev/null | head -1)
   fi
-  echo "🟢 Dev server started (PID $DEV_PID${URL:+ · $URL})"
-  echo "   Logs: .claude/dev-server.log"
-  echo "   Use /dev to check status, view errors, or restart."
+  echo "┌──────────────────────────────────────────────┐"
+  echo "│  🟢 Dev server started                        │"
+  echo "│     PID $DEV_PID${URL:+ · $URL}"
+  echo "│     Logs: .claude/dev-server.log              │"
+  echo "│     Use /dev to check status or restart       │"
+  echo "│                                               │"
+  echo "│  🔥 The forge is hot. Ready to build.         │"
+  echo "└──────────────────────────────────────────────┘"
 else
-  echo "🟡 Dev server starting (PID $DEV_PID) — may still be compiling."
+  echo "🟡 Dev server starting (PID $DEV_PID) — forge is heating up..."
   echo "   Logs: .claude/dev-server.log"
   echo "   Use /dev to check status."
 fi

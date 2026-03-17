@@ -59,6 +59,15 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
+     ║                    ╭───╮                                   ║
+     ║                ╭──(  ·  )──╮                               ║
+     ║                 ╰─( °bg° )─╯   "Patu!"                    ║
+     ║                    ╰─┬─╯                                   ║
+     ║                     /|\        The foundling watches       ║
+     ║                    / | \       over every commit.          ║
+     ║                                                           ║
+     ╠═══════════════════════════════════════════════════════════╣
+     ║                                                           ║
      ║              🔥 This is the way. 🔥                       ║
      ║                                                           ║
      ╚═══════════════════════════════════════════════════════════╝
@@ -84,6 +93,29 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v5.4**: Full Claude Code integration. 16 hooks, network sandbox, shell injection, MCP template, GitHub Actions PR review.
 - **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
 - **v5.6**: Auto-update & self-evolution. Auto-update from GitHub on SessionStart, /evolve skill with framework-evolver agent, session transcript analysis.
+
+## The Mascot
+
+Grogu — the foundling — watches over every session. He appears randomly to encourage, warn, and celebrate with you. If you see him, you're doing it right.
+
+```
+        ╭───╮
+    ╭──(  ·  )──╮
+     ╰─( °bg° )─╯   "Patu!"
+        ╰─┬─╯
+         /|\
+        / | \
+```
+
+Where Grogu appears:
+- **Session start** (10% chance) — random quote and ASCII art
+- **Pre-commit success** (20% chance) — celebrates your clean code
+- **Context compact** — loyal reminder that he's still here
+- **Birthday (March 13)** — full celebration with cake
+- **Fridays** — happy ear wiggle
+- **Failure loops** — worried face when you're stuck
+- **Session end** — waves goodbye (or tugs your robe if you forgot to commit)
+- **About/Credits** — always present at the foundry
 
 ## The Creed
 
