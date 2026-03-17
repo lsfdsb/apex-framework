@@ -21,7 +21,16 @@
       "Bash(npm view *)",
       "Bash(npm audit *)",
       "Bash(npx drizzle-kit *)",
-      "Bash(cat > ~/.claude/apex-preferences.json *)"
+      "Bash(cat > ~/.claude/apex-preferences.json *)",
+      "Bash(pnpm run *)",
+      "Bash(pnpm build)",
+      "Bash(pnpm dev)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm format)",
+      "Bash(pnpm install)",
+      "Bash(pnpm add *)",
+      "Bash(pnpm preview)",
+      "Bash(git commit *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -56,7 +65,10 @@
         "~/.gnupg/**",
         "~/.claude/settings.json"
       ],
-      "denyRead": ["~/.ssh/id_*", "~/.aws/credentials"]
+      "denyRead": [
+        "~/.ssh/id_*",
+        "~/.aws/credentials"
+      ]
     },
     "network": {
       "allowedDomains": [

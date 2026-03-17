@@ -59,19 +59,18 @@ fi
 
 # --- PRD Check ---
 
-# Look for PRD files in docs/prd/ (project root relative)
-PRD_DIR="docs/prd"
-if [ -n "$CLAUDE_PROJECT_DIR" ]; then
-  PRD_DIR="$CLAUDE_PROJECT_DIR/docs/prd"
-fi
+# Look for PRD files in multiple locations (project root, CLAUDE_PROJECT_DIR, CWD)
+prd_exists() {
+  local dir="$1/docs/prd"
+  [ -d "$dir" ] && [ "$(find "$dir" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')" -gt 0 ]
+}
 
-# If docs/prd/ exists and has at least one .md file, allow
-if [ -d "$PRD_DIR" ]; then
-  PRD_COUNT=$(find "$PRD_DIR" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$PRD_COUNT" -gt 0 ]; then
-    exit 0
-  fi
-fi
+# Check CLAUDE_PROJECT_DIR first, then CWD, then relative path
+if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && prd_exists "$CLAUDE_PROJECT_DIR"; then exit 0; fi
+if prd_exists "$(pwd)"; then exit 0; fi
+if prd_exists "."; then exit 0; fi
+# Also accept PRD files anywhere in docs/ as a fallback
+if [ -d "docs" ] && find docs -name "*prd*" -o -name "*PRD*" -o -name "*requirements*" 2>/dev/null | grep -qE '\.(md|txt)$'; then exit 0; fi
 
 # --- BLOCK: No PRD found ---
 echo "BLOCKED: No PRD found in docs/prd/." >&2

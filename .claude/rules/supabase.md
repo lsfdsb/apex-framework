@@ -5,23 +5,22 @@ paths:
   - "**/lib/supabase/**"
   - "**/auth/callback/**"
   - "**/*supabase*"
-  - "**/middleware.ts"
 ---
 
 # Supabase Conventions
 
 ## Client Setup
-- Use `@supabase/ssr` for Next.js (not `@supabase/auth-helpers-nextjs` — deprecated).
-- Browser client: `createBrowserClient<Database>()` in `src/lib/supabase/client.ts`.
-- Server client: `createServerClient<Database>()` in `src/lib/supabase/server.ts`.
+- Browser client: `createClient<Database>()` from `@supabase/supabase-js` (React/Vite) or `createBrowserClient<Database>()` from `@supabase/ssr` (Next.js).
+- Server/SSR client: `createServerClient<Database>()` from `@supabase/ssr` — only for SSR frameworks (Next.js, Remix). Not applicable in React SPA (Vite).
 - Always pass the `Database` generic for full type safety.
-- Regenerate types after every schema change: `npx supabase gen types typescript --linked > src/types/supabase.ts`.
+- Regenerate types after every schema change: `npx supabase gen types typescript --linked > src/lib/supabase/types.ts`.
 
 ## Auth
-- Use `getUser()` on server — never trust `getSession()` alone (JWT can be spoofed).
-- `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never in `NEXT_PUBLIC_` or `VITE_` prefixed vars.
-- OAuth callback route: `app/auth/callback/route.ts` using `exchangeCodeForSession()`.
-- Middleware must refresh session on every request via `supabase.auth.getUser()`.
+- React SPA: use `supabase.auth.getUser()` in hooks/context — never cache the raw JWT yourself.
+- SSR/Server: use `getUser()` server-side — never trust `getSession()` alone (JWT can be spoofed).
+- `SUPABASE_SERVICE_ROLE_KEY` is server-only. Never expose in `NEXT_PUBLIC_` or `VITE_` prefixed vars.
+- OAuth callback: handle `exchangeCodeForSession()` in the callback route/page for the current framework.
+- For Next.js: middleware must refresh session on every request via `supabase.auth.getUser()`.
 
 ## RLS (Row Level Security)
 - Enable RLS on ALL tables with user data — no exceptions.

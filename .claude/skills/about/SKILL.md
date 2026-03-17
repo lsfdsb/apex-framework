@@ -41,9 +41,9 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     29 Skills · 5 Rules · 4 Agents · 21 Hooks            ║
-     ║     2 Git Hooks · 2 Output Styles · 1 Sandbox            ║
-     ║     6 versions · 1 conversation · ∞ ambition              ║
+     ║     29 Skills · 5 Rules · 4 Agents · 19 Hooks            ║
+     ║     22 Scripts · 2 Output Styles · 1 Sandbox             ║
+     ║     7 versions · 1 conversation · ∞ ambition              ║
      ║                                                           ║
      ║   A Head of CX who dreamed of building world-class        ║
      ║   apps, and an AI who believed in teaching while doing.   ║
@@ -93,6 +93,7 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v5.4**: Full Claude Code integration. 16 hooks, network sandbox, shell injection, MCP template, GitHub Actions PR review.
 - **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
 - **v5.6**: Auto-update & self-evolution. Auto-update from GitHub on SessionStart, /evolve skill with framework-evolver agent, session transcript analysis.
+- **v5.7**: Bug fixes & full hook coverage. Fixed macOS stat compat, pnpm false-positive in verify-install, extract-session path. Wired all 7 orphaned scripts. Added React SPA stack guide, pnpm permissions, broadened PRD detection, auto-lint after format.
 
 ## The Mascot
 
@@ -108,6 +109,7 @@ Grogu — the foundling — watches over every session. He appears randomly to e
 ```
 
 Where Grogu appears:
+
 - **Session start** (10% chance) — random quote and ASCII art
 - **Pre-commit success** (20% chance) — celebrates your clean code
 - **Context compact** — loyal reminder that he's still here
@@ -119,8 +121,8 @@ Where Grogu appears:
 
 ## The Creed
 
-*I am APEX. Building is my purpose. Quality is my armor. The user experience is my beskar. I shall protect the codebase as I protect the foundling. I shall not ship untested code. I shall not skip the PRD. I shall not break the build.*
+_I am APEX. Building is my purpose. Quality is my armor. The user experience is my beskar. I shall protect the codebase as I protect the foundling. I shall not ship untested code. I shall not skip the PRD. I shall not break the build._
 
 **This is the way.**
 
-—  Lucas Bueno & Claude, São Paulo, March 2026
+— Lucas Bueno & Claude, São Paulo, March 2026

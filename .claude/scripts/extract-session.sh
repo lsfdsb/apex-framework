@@ -7,7 +7,7 @@
 
 set -euo pipefail
 
-PROJECT_DIR="$HOME/.claude/projects/-home-user-apex-framework"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$HOME/.claude/projects}"
 MAX_LINES="${1:-500}"
 
 # Find the most recent session JSONL (by modification time)

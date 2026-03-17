@@ -21,6 +21,12 @@ case "$FILE_PATH" in
     if command -v npx &> /dev/null && [ -f "node_modules/.bin/prettier" ]; then
       npx prettier --write "$FILE_PATH" 2>/dev/null
     fi
+    # Run linter fix after formatting (oxlint for APEX projects, eslint fallback)
+    if [ -f "node_modules/.bin/oxlint" ]; then
+      npx oxlint --fix "$FILE_PATH" 2>/dev/null || true
+    elif [ -f "node_modules/.bin/eslint" ]; then
+      npx eslint --fix "$FILE_PATH" 2>/dev/null || true
+    fi
     ;;
   *.py)
     if command -v black &> /dev/null; then
