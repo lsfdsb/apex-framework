@@ -10,13 +10,33 @@ fi
 INPUT=$(cat)
 SOURCE=$(echo "$INPUT" | jq -r '.source // "startup"')
 
+# ── Resolve version dynamically ──
+APEX_VERSION=""
+# Priority 1: VERSION file in project dir
+if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && [ -f "$CLAUDE_PROJECT_DIR/VERSION" ]; then
+  APEX_VERSION=$(cat "$CLAUDE_PROJECT_DIR/VERSION" 2>/dev/null | tr -d '[:space:]')
+fi
+# Priority 2: Cached repo version
+if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/VERSION" ]; then
+  APEX_VERSION=$(cat "$HOME/.apex-framework/VERSION" 2>/dev/null | tr -d '[:space:]')
+fi
+# Priority 3: Installed version marker
+if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/.installed-version" ]; then
+  APEX_VERSION=$(cat "$HOME/.apex-framework/.installed-version" 2>/dev/null | tr -d '[:space:]')
+fi
+# Fallback
+if [ -z "$APEX_VERSION" ]; then
+  APEX_VERSION="5.5.0"
+fi
+APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
+
 # ══════════════════════════════════════════════════
 # ⚔️ APEX BANNER — shows on every new session
 # ══════════════════════════════════════════════════
 if [ "$SOURCE" = "startup" ]; then
   echo ""
   echo "  ╔══════════════════════════════════════════════╗"
-  echo "  ║          ⚔️  APEX Framework v5.5             ║"
+  printf "  ║          ⚔️  APEX Framework v%-16s║\n" "$APEX_V_SHORT"
   echo "  ║     Agent-Powered EXcellence for Claude      ║"
   echo "  ║                                              ║"
   echo "  ║  Design like Jony Ive                        ║"
@@ -95,6 +115,6 @@ fi
 
 # ── Watermark (always) ──
 echo ""
-echo "⚔️ APEX v5.5 | by L.B. & Claude | /about for the full story"
+echo "⚔️ APEX v$APEX_V_SHORT | by L.B. & Claude | /about for the full story"
 
 exit 0

@@ -22,7 +22,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APEX_DIR="$SCRIPT_DIR"
 USER_CLAUDE="$HOME/.claude"
-VERSION="5.3.0"
+VERSION=$(cat "$(cd "$(dirname "$0")" && pwd)/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.5.0")
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
@@ -134,7 +134,10 @@ if [ ! -f "$USER_CLAUDE/apex-preferences.json" ]; then
   cat > "$USER_CLAUDE/apex-preferences.json" << 'PREFJSON'
 {
   "language": "ask",
-  "cost_alert_threshold_usd": 5.00
+  "cost_alert_threshold_usd": 5.00,
+  "auto_update": true,
+  "update_repo": "lsfdsb/apex-framework",
+  "update_branch": "main"
 }
 PREFJSON
   echo "   ✅ ~/.claude/apex-preferences.json (language will be asked on first session)"
@@ -257,6 +260,11 @@ cat > "$USER_CLAUDE/settings.json" << 'SETTINGSJSON'
       {
         "matcher": "",
         "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/auto-update.sh",
+            "timeout": 30
+          },
           {
             "type": "command",
             "command": "~/.claude/scripts/language-preference.sh",
