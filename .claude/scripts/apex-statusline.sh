@@ -1,5 +1,5 @@
 #!/bin/bash
-# apex-statusline.sh — APEX Framework v5.2
+# apex-statusline.sh — APEX Framework
 # by L.B. & Claude · São Paulo, 2026
 #
 # Official JSON schema (code.claude.com/docs/en/statusline):
