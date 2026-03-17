@@ -7,6 +7,11 @@
 
 set -euo pipefail
 
+if ! command -v python3 &>/dev/null; then
+  echo "ERROR: python3 is required but not installed." >&2
+  exit 1
+fi
+
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$HOME/.claude/projects}"
 MAX_LINES="${1:-500}"
 

@@ -10,12 +10,18 @@
       "Bash(pnpm build *)",
       "Bash(pnpm add *)",
       "Bash(pnpm install *)",
+      "Bash(pnpm preview)",
+      "Bash(pnpm lint)",
+      "Bash(pnpm format)",
       "Bash(npm run *)",
+      "Bash(npm view *)",
+      "Bash(npm audit *)",
       "Bash(npx vitest *)",
       "Bash(npx playwright *)",
       "Bash(npx tsc *)",
       "Bash(npx eslint *)",
       "Bash(npx prettier *)",
+      "Bash(npx drizzle-kit *)",
       "Bash(git status *)",
       "Bash(git diff *)",
       "Bash(git log *)",
@@ -23,19 +29,8 @@
       "Bash(git add *)",
       "Bash(git checkout *)",
       "Bash(git stash *)",
-      "Bash(npm view *)",
-      "Bash(npm audit *)",
-      "Bash(npx drizzle-kit *)",
-      "Bash(cat > ~/.claude/apex-preferences.json *)",
-      "Bash(pnpm run *)",
-      "Bash(pnpm build)",
-      "Bash(pnpm dev)",
-      "Bash(pnpm lint)",
-      "Bash(pnpm format)",
-      "Bash(pnpm install)",
-      "Bash(pnpm add *)",
-      "Bash(pnpm preview)",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(cat > ~/.claude/apex-preferences.json *)"
     ],
     "deny": [
       "Bash(rm -rf *)",
@@ -55,7 +50,6 @@
       "Edit(~/.claude/settings.json)"
     ]
   },
-  "outputStyle": ".claude/output-styles/apex-educational.md",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
