@@ -30,9 +30,18 @@ if [ -z "$APEX_VERSION" ]; then
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
-# ── Random Grogu mood for easter egg ──
-GROGU_MOODS=(
-  "         ╭───╮\n    ╭───( • • )───╮\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯\n    Grogu is watching your code."
+# ── Random Grogu poses (animated variety — different pose each time) ──
+GROGU_POSES=(
+  # Pose 0: Normal — curious look
+  "         ╭───╮\n    ╭───( • • )───╮\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 1: Happy — eyes up, celebrating
+  "         ╭───╮\n   ╭────( ◠ ◠ )────╮\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 2: Sleepy — zzz
+  "         ╭───╮     z\n    ╭───( - - )───╮  z\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 3: Surprised — wide eyes
+  "         ╭───╮\n   ╭────( ◉ ◉ )────╮  !\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 4: Using the Force
+  "         ╭───╮    *\n    ╭───( • • )───╮ ~*\n         ╰─┬─╯   ~\n          ╭┴╮\n          ╰─╯"
 )
 GROGU_QUOTES=(
   "\"Patu!\" — Grogu (approving your commit)"
@@ -85,11 +94,9 @@ if [ "$SOURCE" = "startup" ]; then
   # ── Grogu Easter Egg (10% chance on normal startup) ──
   GROGU_CHANCE=$((RANDOM % 10))
   if [ "$GROGU_CHANCE" -eq 0 ]; then
-    echo "           ╭───╮"
-    echo "      ╭───( • • )───╮   The Child is here."
-    echo "           ╰─┬─╯       Protect the code,"
-    echo "            ╭┴╮        protect the foundling."
-    echo "            ╰─╯"
+    POSE_IDX=$((RANDOM % ${#GROGU_POSES[@]}))
+    echo ""
+    printf "  %b\n" "${GROGU_POSES[$POSE_IDX]}"
     echo ""
     echo "  $GROGU_QUOTE"
     echo ""

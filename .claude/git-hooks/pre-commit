@@ -260,8 +260,16 @@ if [ "$APEX_COLORS" = true ]; then
   printf "  ${OK_BOLD}╚══════════════════════════════════════╝${RST}\n"
   if [ "$GROGU_CELEBRATE" -eq 0 ]; then
     echo ""
-    printf "  ${CREED}        ╭───╮${RST}\n"
-    printf "  ${CREED}   ╭───( • • )───╮${RST}  ${OK}\"Patu!\"${RST}\n"
+    # Animated reveal — each line appears with a brief delay
+    printf "  ${CREED}        ╭───╮${RST}\n";          sleep 0.06
+    printf "  ${CREED}   ╭───( • • )───╮${RST}\n";     sleep 0.06
+    printf "  ${CREED}        ╰─┬─╯${RST}\n";          sleep 0.06
+    printf "  ${CREED}         ╭┴╮${RST}\n";            sleep 0.06
+    printf "  ${CREED}         ╰─╯${RST}\n";            sleep 0.12
+    # Pose change — eyes light up
+    printf "\033[5A"
+    printf "  ${CREED}        ╭───╮${RST}     ${OK}✨${RST}\n"
+    printf "  ${CREED}   ╭───( ${OK}◠ ◠${RST} ${CREED})───╮${RST}  ${OK}\"Patu!\"${RST}\n"
     printf "  ${CREED}        ╰─┬─╯${RST}      ${STEEL}Grogu approves this commit${RST}\n"
     printf "  ${CREED}         ╭┴╮${RST}\n"
     printf "  ${CREED}         ╰─╯${RST}\n"
