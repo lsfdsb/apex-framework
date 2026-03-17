@@ -17,6 +17,19 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   fi
 fi
 
+# Stop dev server if running
+DEV_PID_FILE="$CLAUDE_PROJECT_DIR/.claude/.dev-server.pid"
+if [ -f "$DEV_PID_FILE" ]; then
+  DEV_PID=$(cat "$DEV_PID_FILE" 2>/dev/null)
+  if [ -n "$DEV_PID" ] && kill -0 "$DEV_PID" 2>/dev/null; then
+    kill "$DEV_PID" 2>/dev/null
+    sleep 0.5
+    kill -9 "$DEV_PID" 2>/dev/null
+  fi
+  rm -f "$DEV_PID_FILE" 2>/dev/null
+  rm -f "$CLAUDE_PROJECT_DIR/.claude/.dev-monitor-cursor" 2>/dev/null
+fi
+
 # Clean up temporary state file
 STATE_FILE="$CLAUDE_PROJECT_DIR/.claude/.apex-state.json"
 if [ -f "$STATE_FILE" ]; then

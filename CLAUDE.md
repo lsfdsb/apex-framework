@@ -23,9 +23,11 @@ Our CX philosophy: understand users holistically, view exceptional service as an
 5. **Security on sensitive code** — Run `/security` on auth, payments, or PII handling.
 6. **CX review before users see it** — Run `/cx-review` before deploying user-facing changes.
 7. **Full context always** — Read existing files before editing. No blind changes.
-8. **Explain every decision** — Our output style is educational. Teach the user what you're building and why.
-9. **Adapt to existing stacks** — If the user already has a project, adapt to their stack. Don't force ours.
-10. **Only official libraries** — Every dependency must be verified: official publisher, maintained, no critical CVEs, proper license.
+8. **Definitive fixes only** — Never band-aid. Understand root cause, map all connections, fix everywhere. See `/debug` skill.
+9. **Impact analysis before changes** — Before fixing or refactoring anything, trace all dependencies and connections. If A depends on B depends on C, understand the full chain before touching any of them.
+10. **Explain every decision** — Our output style is educational. Teach the user what you're building and why.
+11. **Adapt to existing stacks** — If the user already has a project, adapt to their stack. Don't force ours.
+12. **Only official libraries** — Every dependency must be verified: official publisher, maintained, no critical CVEs, proper license.
 
 ## Tech Stack (see `apex-stack` skill for full details)
 
@@ -78,6 +80,7 @@ src/
 **Workflow**: `/prd` → `/architecture` → `/research` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit` → `/deploy`
 **Testing**: `/e2e` (Playwright E2E tests), testing rules auto-load for *.test.ts
 **DevOps**: `/cicd` (GitHub Actions), `/deploy` (pre-deploy gate)
+**DevServer**: `/dev` (auto-starts on SessionStart, monitors logs, detects errors/crashes)
 **Utilities**: `/init` (setup APEX), `/changelog` (update docs), `/debug` (structured debugging), `/apex-review` (audit framework), `/evolve` (self-improve from session)
 **Auto-loading**: design-system, code-standards, sql-practices, apex-stack, workflow-enforcer, verify-lib, teach, accessibility
 **Path-based rules**: testing.md, sql.md, api.md, components.md — load only when touching matching files

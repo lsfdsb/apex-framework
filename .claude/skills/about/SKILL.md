@@ -41,7 +41,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     28 Skills · 5 Rules · 4 Agents · 16 Hooks            ║
+     ║     29 Skills · 5 Rules · 4 Agents · 21 Hooks            ║
      ║     2 Git Hooks · 2 Output Styles · 1 Sandbox            ║
      ║     6 versions · 1 conversation · ∞ ambition              ║
      ║                                                           ║
