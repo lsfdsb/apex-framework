@@ -37,6 +37,7 @@ CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
 # ── Tokens ──
 TOK_IN=$(echo "$INPUT" | jq -r '.context_window.total_input_tokens // 0' 2>/dev/null)
 TOK_OUT=$(echo "$INPUT" | jq -r '.context_window.total_output_tokens // 0' 2>/dev/null)
+CTX_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0' 2>/dev/null)
 
 fmt_tok() {
   local n=$1
@@ -95,5 +96,11 @@ else
   SWORD_ICON="🔥"
 fi
 
+# ── Context size label ──
+CTX_LABEL=""
+if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
+  CTX_LABEL=" /$(fmt_tok "$CTX_SIZE")"
+fi
+
 # ── Output ──
-echo "${SWORD_ICON} APEX ┃ ${M} ${PLAN}┃ ${BAR} ${CTX_INT}% ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT") ┃ \$${COST} ┃ +${LA}/-${LR} ┃ ${DUR_MIN}m${A} ┃ L.B. & Claude"
+echo "${SWORD_ICON} APEX ┃ ${M} ${PLAN}┃ ${BAR} ${CTX_INT}%${CTX_LABEL} ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT") ┃ \$${COST} ┃ +${LA}/-${LR} ┃ ${DUR_MIN}m${A} ┃ L.B. & Claude"
