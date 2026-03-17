@@ -39,6 +39,31 @@ TOK_IN=$(echo "$INPUT" | jq -r '.context_window.total_input_tokens // 0' 2>/dev/
 TOK_OUT=$(echo "$INPUT" | jq -r '.context_window.total_output_tokens // 0' 2>/dev/null)
 CTX_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0' 2>/dev/null)
 
+# ── Context size correction based on known model limits ──
+# Claude Code may report stale/wrong context_window_size after model switch.
+# Override with known values and recompute percentage proportionally.
+EXPECTED_CTX=0
+case "$MODEL_ID" in
+  *opus*1m*|*opus*1M*)   EXPECTED_CTX=1000000 ;;
+  *opus-4*)              EXPECTED_CTX=200000 ;;
+  *sonnet-4*)            EXPECTED_CTX=200000 ;;
+  *haiku*)               EXPECTED_CTX=200000 ;;
+esac
+# Also check display name for 1M hint
+echo "$MODEL_ID" | grep -qi "1m" 2>/dev/null && EXPECTED_CTX=1000000
+
+if [ "$EXPECTED_CTX" -gt 0 ] 2>/dev/null && [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
+  if [ "$CTX_SIZE" -ne "$EXPECTED_CTX" ]; then
+    # Recompute: if API says 14% of 200K, but actual window is 1M,
+    # real percentage = 14% * 200K / 1M = 2.8%
+    if command -v bc &>/dev/null; then
+      CTX_PCT=$(echo "scale=1; $CTX_PCT * $CTX_SIZE / $EXPECTED_CTX" | bc 2>/dev/null || echo "$CTX_PCT")
+      CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
+    fi
+    CTX_SIZE=$EXPECTED_CTX
+  fi
+fi
+
 fmt_tok() {
   local n=$1
   if [ "$n" -ge 1000000 ] 2>/dev/null; then
