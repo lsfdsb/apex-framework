@@ -260,11 +260,11 @@ if [ "$APEX_COLORS" = true ]; then
   printf "  ${OK_BOLD}╚══════════════════════════════════════╝${RST}\n"
   if [ "$GROGU_CELEBRATE" -eq 0 ]; then
     echo ""
-    printf "  ${CREED}     ╭───╮${RST}\n"
-    printf "  ${CREED} ╭──(  ·  )──╮${RST}  ${OK}\"Patu!\"${RST}\n"
-    printf "  ${CREED}  ╰─( ^bg^ )─╯${RST}  ${STEEL}Grogu approves this commit${RST}\n"
-    printf "  ${CREED}     ╰─┬─╯${RST}\n"
-    printf "  ${CREED}      /|\\${RST}\n"
+    printf "  ${CREED}        ╭───╮${RST}\n"
+    printf "  ${CREED}   ╭───( • • )───╮${RST}  ${OK}\"Patu!\"${RST}\n"
+    printf "  ${CREED}        ╰─┬─╯${RST}      ${STEEL}Grogu approves this commit${RST}\n"
+    printf "  ${CREED}         ╭┴╮${RST}\n"
+    printf "  ${CREED}         ╰─╯${RST}\n"
   fi
 else
   echo "  ✅ APEX: All checks passed. This is the way."

@@ -59,16 +59,15 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
-     ║                    ╭───╮                                   ║
-     ║                ╭──(  ·  )──╮                               ║
-     ║                 ╰─( °bg° )─╯   "Patu!"                    ║
-     ║                    ╰─┬─╯                                   ║
-     ║                     /|\        The foundling watches       ║
-     ║                    / | \       over every commit.          ║
+     ║              ╭───╮                                        ║
+     ║         ╭───( • • )───╮                                   ║
+     ║              ╰─┬─╯        "Patu!"                         ║
+     ║               ╭┴╮         The foundling watches           ║
+     ║               ╰─╯         over every commit.              ║
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
-     ║              🔥 This is the way. 🔥                       ║
+     ║                  This is the way.                         ║
      ║                                                           ║
      ╚═══════════════════════════════════════════════════════════╝
 ```
@@ -99,12 +98,11 @@ Six versions later, through honest self-criticism, documentation research, and r
 Grogu — the foundling — watches over every session. He appears randomly to encourage, warn, and celebrate with you. If you see him, you're doing it right.
 
 ```
-        ╭───╮
-    ╭──(  ·  )──╮
-     ╰─( °bg° )─╯   "Patu!"
-        ╰─┬─╯
-         /|\
-        / | \
+         ╭───╮
+    ╭───( • • )───╮
+         ╰─┬─╯       "Patu!"
+          ╭┴╮
+          ╰─╯
 ```
 
 Where Grogu appears:
