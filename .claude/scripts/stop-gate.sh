@@ -1,12 +1,10 @@
 #!/bin/bash
 # stop-gate.sh — Stop hook
 # Fires when Claude finishes responding. Checks if code was written
-# but tests were not run. Uses Haiku by default (prompt hook behavior
-# is simulated here via stdout feedback to Claude's context).
+# but tests were not run. Uses visual nudges to remind about testing.
 #
 # Exit 0 = allow. Stdout is added to Claude's context as a reminder.
-# This is a "nudge" hook — it can't block (Stop hooks don't support exit 2),
-# but it injects strong reminders into context when tests are missing.
+# by L.B. & Claude · São Paulo, 2026
 
 # jq is required to parse the transcript
 if ! command -v jq &> /dev/null; then
@@ -17,7 +15,6 @@ fi
 INPUT=$(cat)
 
 # Extract the assistant's last response content
-# The Stop hook receives the full conversation turn
 RESPONSE=$(echo "$INPUT" | jq -r '.assistant_response // empty' 2>/dev/null)
 
 # If no response to analyze, skip
@@ -61,9 +58,17 @@ fi
 
 if [ "$WROTE_CODE" = true ] && [ "$TESTS_RAN" = false ] && [ "$EXEMPT" = false ]; then
   echo ""
-  echo "⚠️ APEX STOP GATE: Code was written but no tests were run."
-  echo "Our rule: no code ships without tests. Run 'npm run test' or '/qa' before continuing."
-  echo "If tests aren't applicable (docs, config), mention why explicitly."
+  echo "┌──────────────────────────────────────────────────────────────┐"
+  echo "│  ⚠️ APEX STOP GATE                                          │"
+  echo "│                                                              │"
+  echo "│  Code was written but no tests were run.                     │"
+  echo "│  Our rule: no code ships without tests.                      │"
+  echo "│                                                              │"
+  echo "│  ➤ Run 'npm run test' or '/qa' before continuing.           │"
+  echo "│  ➤ If tests aren't applicable, mention why explicitly.      │"
+  echo "│                                                              │"
+  echo "│  👶 Grogu says: \"Baba!\" (he wants you to test your code)    │"
+  echo "└──────────────────────────────────────────────────────────────┘"
   echo ""
 fi
 

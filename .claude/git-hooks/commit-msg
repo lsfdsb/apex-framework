@@ -1,9 +1,15 @@
 #!/bin/bash
 # APEX Framework — Git Commit Message Hook
-# Validates conventional commit format on every commit,
-# even manual commits outside Claude Code.
+# Validates conventional commit format with visual feedback.
 #
 # Install: cp this file to .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
+# by L.B. & Claude · São Paulo, 2026
+
+# ── Source color library ──
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." 2>/dev/null && pwd)/.claude/scripts"
+if [ -f "$SCRIPT_DIR/apex-colors.sh" ]; then
+  FORCE_COLOR=1 source "$SCRIPT_DIR/apex-colors.sh"
+fi
 
 COMMIT_MSG_FILE=$1
 COMMIT_MSG=$(head -1 "$COMMIT_MSG_FILE")
@@ -16,15 +22,29 @@ fi
 # Validate format: type(scope): description
 if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+'; then
   echo ""
-  echo "⚔️ APEX: Invalid commit message format."
-  echo ""
-  echo "Required: type(scope): description"
-  echo ""
-  echo "Types:    feat, fix, docs, refactor, test, perf, security, chore"
-  echo "Example:  feat(auth): add OAuth login with Google"
-  echo "Example:  fix(cart): prevent negative quantities"
-  echo ""
-  echo "Your message: $COMMIT_MSG"
+  if [ "$APEX_COLORS" = true ]; then
+    printf "  ${ERR_BOLD}╔══════════════════════════════════════════╗${RST}\n"
+    printf "  ${ERR_BOLD}║${RST}  ${ERR}⚔️  Invalid commit message format${RST}     ${ERR_BOLD}║${RST}\n"
+    printf "  ${ERR_BOLD}╚══════════════════════════════════════════╝${RST}\n"
+    echo ""
+    printf "  ${BESKAR}Required:${RST} ${FROST}type(scope): description${RST}\n"
+    echo ""
+    printf "  ${STEEL}Types:${RST}    ${GOLD}feat${RST} ${STEEL}|${RST} ${GOLD}fix${RST} ${STEEL}|${RST} ${GOLD}docs${RST} ${STEEL}|${RST} ${GOLD}refactor${RST} ${STEEL}|${RST} ${GOLD}test${RST} ${STEEL}|${RST} ${GOLD}perf${RST} ${STEEL}|${RST} ${GOLD}security${RST} ${STEEL}|${RST} ${GOLD}chore${RST}\n"
+    printf "  ${STEEL}Example:${RST}  ${OK}feat(auth): add OAuth login with Google${RST}\n"
+    printf "  ${STEEL}Example:${RST}  ${OK}fix(cart): prevent negative quantities${RST}\n"
+    echo ""
+    printf "  ${STEEL}Your msg:${RST} ${ERR}%s${RST}\n" "$COMMIT_MSG"
+  else
+    echo "  ⚔️ APEX: Invalid commit message format."
+    echo ""
+    echo "  Required: type(scope): description"
+    echo ""
+    echo "  Types:    feat, fix, docs, refactor, test, perf, security, chore"
+    echo "  Example:  feat(auth): add OAuth login with Google"
+    echo "  Example:  fix(cart): prevent negative quantities"
+    echo ""
+    echo "  Your message: $COMMIT_MSG"
+  fi
   echo ""
   exit 1
 fi
@@ -32,10 +52,33 @@ fi
 # Check length
 if [ ${#COMMIT_MSG} -gt 72 ]; then
   echo ""
-  echo "⚔️ APEX: Commit message too long (${#COMMIT_MSG} chars, max 72)."
-  echo "Keep the subject line concise. Add details in the body."
+  if [ "$APEX_COLORS" = true ]; then
+    printf "  ${WARN_BOLD}⚔️  Commit message too long${RST} ${STEEL}(${#COMMIT_MSG} chars, max 72)${RST}\n"
+    printf "  ${STEEL}Keep the subject line concise. Add details in the body.${RST}\n"
+  else
+    echo "  ⚔️ APEX: Commit message too long (${#COMMIT_MSG} chars, max 72)."
+    echo "  Keep the subject line concise. Add details in the body."
+  fi
   echo ""
   exit 1
+fi
+
+# Extract type for visual feedback
+TYPE=$(echo "$COMMIT_MSG" | sed -E 's/^([a-z]+).*/\1/')
+case "$TYPE" in
+  feat)     ICON="✨" ;;
+  fix)      ICON="🔧" ;;
+  docs)     ICON="📝" ;;
+  refactor) ICON="♻️" ;;
+  test)     ICON="🧪" ;;
+  perf)     ICON="⚡" ;;
+  security) ICON="🛡️" ;;
+  chore)    ICON="🔩" ;;
+  *)        ICON="📦" ;;
+esac
+
+if [ "$APEX_COLORS" = true ]; then
+  printf "  ${OK}✓${RST} ${STEEL}Commit message:${RST} ${BESKAR}%s %s${RST}\n" "$ICON" "$COMMIT_MSG"
 fi
 
 exit 0

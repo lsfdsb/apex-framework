@@ -1,112 +1,277 @@
 #!/bin/bash
 # APEX Framework — Git Pre-Commit Hook
-# This runs OUTSIDE Claude Code — enforces quality on every commit,
-# even manual commits from the terminal.
+# Animated quality gate with ANSI colors and progress.
+# This runs OUTSIDE Claude Code — enforces quality on every commit.
 #
 # Install: cp this file to .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 # Or: /init will install it automatically
+# by L.B. & Claude · São Paulo, 2026
 
-echo "⚔️ APEX pre-commit checks..."
+# ── Source color library ──
+SCRIPT_DIR="$(cd "$(dirname "$0")/../.." 2>/dev/null && pwd)/.claude/scripts"
+if [ -f "$SCRIPT_DIR/apex-colors.sh" ]; then
+  FORCE_COLOR=1 source "$SCRIPT_DIR/apex-colors.sh"
+else
+  # Inline fallback if color library not found
+  RST='' GOLD='' GOLD_BOLD='' OK='' OK_BOLD='' ERR='' ERR_BOLD=''
+  STEEL='' BESKAR='' SHADOW='' FROST='' EMBER='' WARN=''
+fi
+
+# ── Animated Header ──
+echo ""
+if [ "$APEX_COLORS" = true ]; then
+  printf "  ${GOLD_BOLD}╔══════════════════════════════════════╗${RST}\n"
+  printf "  ${GOLD_BOLD}║${RST}   ${EMBER}⚔️  APEX Pre-Commit Forge${RST}         ${GOLD_BOLD}║${RST}\n"
+  printf "  ${GOLD_BOLD}╚══════════════════════════════════════╝${RST}\n"
+else
+  echo "  ╔══════════════════════════════════════╗"
+  echo "  ║   ⚔️  APEX Pre-Commit Forge          ║"
+  echo "  ╚══════════════════════════════════════╝"
+fi
+echo ""
 
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
 
 if [ -z "$STAGED_FILES" ]; then
+  apex_status "info" "No staged files. Nothing to check." 2>/dev/null || echo "  › No staged files."
   exit 0
+fi
+
+# Count staged files for progress
+FILE_COUNT=$(echo "$STAGED_FILES" | wc -l | tr -d ' ')
+if [ "$APEX_COLORS" = true ]; then
+  printf "  ${STEEL}%s file(s) staged for commit${RST}\n\n" "$FILE_COUNT"
+else
+  echo "  $FILE_COUNT file(s) staged for commit"
+  echo ""
 fi
 
 # Check for TypeScript project
 HAS_TS=false
-if [ -f "tsconfig.json" ]; then
-  HAS_TS=true
-fi
+[ -f "tsconfig.json" ] && HAS_TS=true
 
 # Check for Node project
 HAS_NODE=false
-if [ -f "package.json" ]; then
-  HAS_NODE=true
-fi
+[ -f "package.json" ] && HAS_NODE=true
 
 ERRORS=0
+TOTAL_CHECKS=0
+PASSED_CHECKS=0
 
-# 1. Check for forbidden patterns in staged files
-echo "  🔍 Checking for forbidden patterns..."
+# ── Count total checks ──
+TOTAL_CHECKS=1  # forbidden patterns (always)
+[ "$HAS_TS" = true ] && command -v npx &>/dev/null && TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+[ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/eslint" ] && TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+[ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/prettier" ] && TOTAL_CHECKS=$((TOTAL_CHECKS + 1))
+
+# ═══════════════════════════════════════
+# 1. Check for forbidden patterns
+# ═══════════════════════════════════════
+if [ "$APEX_COLORS" = true ]; then
+  apex_spinner_start "Scanning for forbidden patterns..."
+else
+  echo "  🔍 Checking for forbidden patterns..."
+fi
+
+PATTERN_ERRORS=0
 for FILE in $STAGED_FILES; do
   if [ ! -f "$FILE" ]; then continue; fi
-  
+
   # Source-code-only checks (skip .md, .txt, .yaml, shell scripts, etc.)
   if [[ "$FILE" =~ \.(ts|tsx|js|jsx|mjs|cjs)$ ]]; then
     # No console.log in production code (allow in test files)
     if [[ ! "$FILE" =~ \.test\. ]] && [[ ! "$FILE" =~ \.spec\. ]] && [[ ! "$FILE" =~ __tests__ ]]; then
       if grep -n 'console\.log' "$FILE" 2>/dev/null | grep -v '// eslint-disable' > /dev/null; then
-        echo "    ❌ console.log found in $FILE (remove or use logger)"
-        ERRORS=$((ERRORS + 1))
+        PATTERN_ERRORS=$((PATTERN_ERRORS + 1))
+        if [ "$APEX_COLORS" = true ]; then
+          apex_spinner_stop "fail" "console.log found in $FILE"
+        else
+          echo "    ❌ console.log found in $FILE (remove or use logger)"
+        fi
       fi
     fi
 
     # No debugger statements
     if grep -n 'debugger' "$FILE" 2>/dev/null > /dev/null; then
-      echo "    ❌ debugger statement in $FILE"
-      ERRORS=$((ERRORS + 1))
+      PATTERN_ERRORS=$((PATTERN_ERRORS + 1))
+      if [ "$APEX_COLORS" = true ]; then
+        apex_spinner_stop "fail" "debugger statement in $FILE"
+      else
+        echo "    ❌ debugger statement in $FILE"
+      fi
     fi
   fi
 
   # No hardcoded secrets (all file types)
   if grep -inE '(password|secret|api_key|apikey|token)\s*[=:]\s*["\x27][^"\x27]{8,}' "$FILE" 2>/dev/null | grep -v '\.example' | grep -v '\.env' | grep -v 'test' > /dev/null; then
-    echo "    ❌ Possible hardcoded secret in $FILE"
-    ERRORS=$((ERRORS + 1))
+    PATTERN_ERRORS=$((PATTERN_ERRORS + 1))
+    if [ "$APEX_COLORS" = true ]; then
+      apex_spinner_stop "fail" "Possible hardcoded secret in $FILE"
+    else
+      echo "    ❌ Possible hardcoded secret in $FILE"
+    fi
   fi
 done
 
-# 2. Type check (if TypeScript)
-if [ "$HAS_TS" = true ] && command -v npx &> /dev/null; then
-  echo "  📐 Type checking..."
-  if ! npx tsc --noEmit --pretty 2>/dev/null; then
-    echo "    ❌ TypeScript errors found"
-    ERRORS=$((ERRORS + 1))
+if [ $PATTERN_ERRORS -gt 0 ]; then
+  ERRORS=$((ERRORS + PATTERN_ERRORS))
+else
+  if [ "$APEX_COLORS" = true ]; then
+    apex_spinner_stop "ok" "No forbidden patterns"
   else
-    echo "    ✅ Types OK"
+    echo "    ✅ No forbidden patterns"
   fi
+  PASSED_CHECKS=$((PASSED_CHECKS + 1))
 fi
 
+# Show progress
+[ "$APEX_COLORS" = true ] && apex_progress 1 "$TOTAL_CHECKS" && echo ""
+
+# ═══════════════════════════════════════
+# 2. Type check (if TypeScript)
+# ═══════════════════════════════════════
+if [ "$HAS_TS" = true ] && command -v npx &> /dev/null; then
+  if [ "$APEX_COLORS" = true ]; then
+    apex_spinner_start "Type checking with TypeScript..."
+  else
+    echo "  📐 Type checking..."
+  fi
+
+  if ! npx tsc --noEmit --pretty 2>/dev/null; then
+    if [ "$APEX_COLORS" = true ]; then
+      apex_spinner_stop "fail" "TypeScript errors found"
+    else
+      echo "    ❌ TypeScript errors found"
+    fi
+    ERRORS=$((ERRORS + 1))
+  else
+    if [ "$APEX_COLORS" = true ]; then
+      apex_spinner_stop "ok" "Types OK"
+    else
+      echo "    ✅ Types OK"
+    fi
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
+  fi
+  [ "$APEX_COLORS" = true ] && apex_progress 2 "$TOTAL_CHECKS" && echo ""
+fi
+
+# ═══════════════════════════════════════
 # 3. Lint staged files (if eslint available)
+# ═══════════════════════════════════════
 if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/eslint" ]; then
-  echo "  📏 Linting..."
+  if [ "$APEX_COLORS" = true ]; then
+    apex_spinner_start "Linting with ESLint..."
+  else
+    echo "  📏 Linting..."
+  fi
+
   STAGED_JS=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
   if [ -n "$STAGED_JS" ]; then
     if ! npx eslint $STAGED_JS --max-warnings=0 --quiet 2>/dev/null; then
-      echo "    ❌ Lint errors found"
+      if [ "$APEX_COLORS" = true ]; then
+        apex_spinner_stop "fail" "Lint errors found"
+      else
+        echo "    ❌ Lint errors found"
+      fi
       ERRORS=$((ERRORS + 1))
     else
-      echo "    ✅ Lint OK"
+      if [ "$APEX_COLORS" = true ]; then
+        apex_spinner_stop "ok" "Lint OK"
+      else
+        echo "    ✅ Lint OK"
+      fi
+      PASSED_CHECKS=$((PASSED_CHECKS + 1))
     fi
+  else
+    if [ "$APEX_COLORS" = true ]; then
+      apex_spinner_stop "skip" "No JS/TS files to lint"
+    else
+      echo "    ○ No JS/TS files to lint"
+    fi
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
   fi
+  [ "$APEX_COLORS" = true ] && apex_progress 3 "$TOTAL_CHECKS" && echo ""
 fi
 
+# ═══════════════════════════════════════
 # 4. Format check (if prettier available)
+# ═══════════════════════════════════════
 if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/prettier" ]; then
-  echo "  🎨 Format check..."
+  if [ "$APEX_COLORS" = true ]; then
+    apex_spinner_start "Checking format with Prettier..."
+  else
+    echo "  🎨 Format check..."
+  fi
+
   STAGED_FORMAT=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx|css|json|md)$' | tr '\n' ' ')
   if [ -n "$STAGED_FORMAT" ]; then
     if ! npx prettier --check $STAGED_FORMAT 2>/dev/null; then
-      echo "    ❌ Format errors (run: npx prettier --write .)"
+      if [ "$APEX_COLORS" = true ]; then
+        apex_spinner_stop "fail" "Format errors (run: npx prettier --write .)"
+      else
+        echo "    ❌ Format errors (run: npx prettier --write .)"
+      fi
       ERRORS=$((ERRORS + 1))
     else
-      echo "    ✅ Format OK"
+      if [ "$APEX_COLORS" = true ]; then
+        apex_spinner_stop "ok" "Format OK"
+      else
+        echo "    ✅ Format OK"
+      fi
+      PASSED_CHECKS=$((PASSED_CHECKS + 1))
     fi
+  else
+    if [ "$APEX_COLORS" = true ]; then
+      apex_spinner_stop "skip" "No formattable files"
+    else
+      echo "    ○ No formattable files"
+    fi
+    PASSED_CHECKS=$((PASSED_CHECKS + 1))
   fi
+  [ "$APEX_COLORS" = true ] && apex_progress "$TOTAL_CHECKS" "$TOTAL_CHECKS" && echo ""
 fi
 
-# 5. Validate commit message format (if using -m flag)
-# Note: commit-msg hook handles this better, but we check here too
-
+# ═══════════════════════════════════════
+# Final Result
+# ═══════════════════════════════════════
+echo ""
 if [ $ERRORS -gt 0 ]; then
-  echo ""
-  echo "  🛑 APEX: $ERRORS issue(s) found. Commit blocked."
-  echo "  Fix the issues above and try again."
+  if [ "$APEX_COLORS" = true ]; then
+    printf "  ${ERR_BOLD}╔══════════════════════════════════════╗${RST}\n"
+    printf "  ${ERR_BOLD}║${RST}  ${FIRE} ${ERR_BOLD}%d issue(s) found. Commit blocked.${RST} ${ERR_BOLD}║${RST}\n" "$ERRORS"
+    printf "  ${ERR_BOLD}║${RST}  ${STEEL}Fix the issues above and try again.${RST} ${ERR_BOLD}║${RST}\n"
+    printf "  ${ERR_BOLD}╚══════════════════════════════════════╝${RST}\n"
+  else
+    echo "  🛑 APEX: $ERRORS issue(s) found. Commit blocked."
+    echo "  Fix the issues above and try again."
+  fi
   echo ""
   exit 1
 fi
 
-echo "  ✅ APEX: All checks passed. This is the way."
+# Grogu celebrates on success (20% chance)
+GROGU_CELEBRATE=$((RANDOM % 5))
+
+if [ "$APEX_COLORS" = true ]; then
+  printf "  ${OK_BOLD}╔══════════════════════════════════════╗${RST}\n"
+  printf "  ${OK_BOLD}║${RST}  ${OK_BOLD}✓ All %d checks passed${RST}               ${OK_BOLD}║${RST}\n" "$PASSED_CHECKS"
+  printf "  ${OK_BOLD}║${RST}  ${STEEL}This is the way. ⚔️${RST}                ${OK_BOLD}║${RST}\n"
+  printf "  ${OK_BOLD}╚══════════════════════════════════════╝${RST}\n"
+  if [ "$GROGU_CELEBRATE" -eq 0 ]; then
+    echo ""
+    printf "  ${CREED}     ╭───╮${RST}\n"
+    printf "  ${CREED} ╭──(  ·  )──╮${RST}  ${OK}\"Patu!\"${RST}\n"
+    printf "  ${CREED}  ╰─( ^bg^ )─╯${RST}  ${STEEL}Grogu approves this commit${RST}\n"
+    printf "  ${CREED}     ╰─┬─╯${RST}\n"
+    printf "  ${CREED}      /|\\${RST}\n"
+  fi
+else
+  echo "  ✅ APEX: All checks passed. This is the way."
+  if [ "$GROGU_CELEBRATE" -eq 0 ]; then
+    echo ""
+    echo "  👶 \"Patu!\" — Grogu approves this commit"
+  fi
+fi
+echo ""
 exit 0

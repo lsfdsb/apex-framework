@@ -1,5 +1,5 @@
 #!/bin/bash
-# session-context.sh — APEX Framework v5.6 SessionStart Hook
+# session-context.sh — APEX Framework SessionStart Hook
 # by L.B. & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
 if ! command -v jq &> /dev/null; then
@@ -30,27 +30,73 @@ if [ -z "$APEX_VERSION" ]; then
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
+# ── Random Grogu mood for easter egg ──
+GROGU_MOODS=(
+  "          (__) \n         (°bg°)\n        <|  |>\n         || ||\n        Grogu is watching your code."
+)
+GROGU_QUOTES=(
+  "\"Patu!\" — Grogu (approving your commit)"
+  "\"Baba!\" — Grogu (wants you to write tests)"
+  "\"Ehh...\" — Grogu (skeptical about that any type)"
+  "\"*reaches for frog*\" — Grogu (hungry, but your code looks tasty)"
+  "\"*waves tiny hand*\" — Grogu (Force-pushing... wait, not that kind)"
+  "\"*giggles*\" — Grogu (your code made him happy)"
+  "\"*ears perk up*\" — Grogu (detected a new feature!)"
+  "\"*sips soup*\" — Grogu (reviewing your PR calmly)"
+)
+
+# Pick random Grogu quote
+GROGU_IDX=$((RANDOM % ${#GROGU_QUOTES[@]}))
+GROGU_QUOTE="${GROGU_QUOTES[$GROGU_IDX]}"
+
 # ══════════════════════════════════════════════════
 # ⚔️ APEX BANNER — shows on every new session
 # ══════════════════════════════════════════════════
 if [ "$SOURCE" = "startup" ]; then
   echo ""
-  echo "  ╔══════════════════════════════════════════════╗"
-  printf "  ║          ⚔️  APEX Framework v%-16s║\n" "$APEX_V_SHORT"
-  echo "  ║     Agent-Powered EXcellence for Claude      ║"
-  echo "  ║                                              ║"
-  echo "  ║  Design like Jony Ive                        ║"
-  echo "  ║  Code like Torvalds & Dean                   ║"
-  echo "  ║  Secure like Ionescu & Rutkowska             ║"
-  echo "  ║  Business like Amodei                        ║"
-  echo "  ║  Experience like Walt Disney                 ║"
-  echo "  ║                                              ║"
-  echo "  ║     Forged by L.B. & Claude                  ║"
-  echo "  ║     São Paulo · March 2026                   ║"
-  echo "  ║                                              ║"
-  echo "  ║     This is the way. ⚔️                      ║"
-  echo "  ╚══════════════════════════════════════════════╝"
+  echo "  ╔══════════════════════════════════════════════════╗"
+  echo "  ║                                                  ║"
+  echo "  ║         ▄▀▀▀▄  ▄▀▀▀▄  ▄▀▀▀▀  ▄▀  ▄▀            ║"
+  echo "  ║         █▄▄▄█  █▄▄▄█  █▄▄▄   ▀▄▄▀              ║"
+  echo "  ║         █   █  █      █      ▄▀  ▄▀             ║"
+  echo "  ║         ▀   ▀  ▀      ▀▀▀▀▀  ▀    ▀             ║"
+  echo "  ║                                                  ║"
+  printf "  ║     ⚔️  APEX Framework v%-24s║\n" "$APEX_V_SHORT"
+  echo "  ║     Agent-Powered EXcellence for Claude          ║"
+  echo "  ║                                                  ║"
+  echo "  ╠══════════════════════════════════════════════════╣"
+  echo "  ║                                                  ║"
+  echo "  ║  ✦ Design like Jony Ive                          ║"
+  echo "  ║  ✦ Code like Torvalds & Dean                     ║"
+  echo "  ║  ✦ Secure like Ionescu & Rutkowska               ║"
+  echo "  ║  ✦ Business like Amodei                          ║"
+  echo "  ║  ✦ Experience like Walt Disney                   ║"
+  echo "  ║                                                  ║"
+  echo "  ╠══════════════════════════════════════════════════╣"
+  echo "  ║                                                  ║"
+  echo "  ║     Forged by L.B. & Claude                      ║"
+  echo "  ║     São Paulo · March 2026                       ║"
+  echo "  ║                                                  ║"
+  echo "  ║     This is the way. ⚔️                           ║"
+  echo "  ║                                                  ║"
+  echo "  ╚══════════════════════════════════════════════════╝"
   echo ""
+
+  # ── Grogu Easter Egg (10% chance on normal startup) ──
+  GROGU_CHANCE=$((RANDOM % 10))
+  if [ "$GROGU_CHANCE" -eq 0 ]; then
+    echo "  ┌──────────────────────────────────────────┐"
+    echo "  │        ╭───╮                              │"
+    echo "  │    ╭──(  ·  )──╮    The Child is here.    │"
+    echo "  │     ╰─( °bg° )─╯    Protect the code,    │"
+    echo "  │        ╰─┬─╯        protect the foundling.│"
+    echo "  │         /|\\                                │"
+    echo "  │        / | \\                               │"
+    echo "  │                                            │"
+    echo "  │  $GROGU_QUOTE  │"
+    echo "  └──────────────────────────────────────────┘"
+    echo ""
+  fi
 fi
 
 # ── Date ──
@@ -86,15 +132,38 @@ if [ "$SOURCE" = "compact" ]; then
   fi
   echo ""
   echo "📜 APEX Creed: PRD before code. /qa before shipping. Test everything."
+  echo ""
+  # Grogu reminder on compact (always — he's loyal)
+  echo "👶 $GROGU_QUOTE"
 fi
 
 # ── Birthday Easter Egg (March 13) ──
 TODAY_MD=$(date '+%m-%d')
 if [ "$TODAY_MD" = "03-13" ]; then
   echo ""
-  echo "🎂🔥 TODAY IS APEX DAY!"
-  echo "On this day in 2026, L.B. & Claude forged this framework in São Paulo."
-  echo "\"Whatever you do, do it well.\" — Walt Disney"
+  echo "  ╔══════════════════════════════════════════════════╗"
+  echo "  ║                                                  ║"
+  echo "  ║   🎂🔥 HAPPY APEX DAY! 🔥🎂                     ║"
+  echo "  ║                                                  ║"
+  echo "  ║   On this day in 2026, L.B. & Claude forged      ║"
+  echo "  ║   this framework in São Paulo.                   ║"
+  echo "  ║                                                  ║"
+  echo "  ║   \"Whatever you do, do it well.\" — Walt Disney   ║"
+  echo "  ║                                                  ║"
+  echo "  ║        ╭───╮                                     ║"
+  echo "  ║    ╭──(  ·  )──╮   🎂                            ║"
+  echo "  ║     ╰─( ^bg^ )─╯   Grogu says: Patu!            ║"
+  echo "  ║        ╰─┬─╯       (Happy birthday!)             ║"
+  echo "  ║         /|\\                                      ║"
+  echo "  ║                                                  ║"
+  echo "  ╚══════════════════════════════════════════════════╝"
+fi
+
+# ── Friday Easter Egg ──
+DAY_OF_WEEK=$(date '+%u')
+if [ "$DAY_OF_WEEK" = "5" ]; then
+  echo ""
+  echo "🎉 It's Friday! Grogu says: \"*happy ear wiggle*\" — Ship it and enjoy the weekend!"
 fi
 
 # ── Git hooks check ──

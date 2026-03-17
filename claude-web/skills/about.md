@@ -60,6 +60,15 @@ disable-model-invocation: true
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
+     ║                    ╭───╮                                   ║
+     ║                ╭──(  ·  )──╮                               ║
+     ║                 ╰─( °bg° )─╯   "Patu!"                    ║
+     ║                    ╰─┬─╯                                   ║
+     ║                     /|\        The foundling watches       ║
+     ║                    / | \       over every commit.          ║
+     ║                                                           ║
+     ╠═══════════════════════════════════════════════════════════╣
+     ║                                                           ║
      ║              🔥 This is the way. 🔥                       ║
      ║                                                           ║
      ╚═══════════════════════════════════════════════════════════╝
@@ -81,6 +90,19 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v4**: 44 files. SQL practices, multilingual, testing enforcement, debugging protocol, changelog automation, CI/CD. Rating: 8.6/10.
 - **v5**: 60 files. Path-based rules, E2E testing, accessibility audit, cost monitoring, Mandalorian output style. Rating: 9.4/10.
 - **v5.2**: 61 files. All issues fixed. Zero known defects. Third-person descriptions. Sandbox. Directory consistency. The beskar is pure.
+
+## The Mascot
+
+Grogu — the foundling — watches over every session. He appears randomly to encourage, warn, and celebrate with you.
+
+```
+        ╭───╮
+    ╭──(  ·  )──╮
+     ╰─( °bg° )─╯   "Patu!"
+        ╰─┬─╯
+         /|\
+        / | \
+```
 
 ## The Creed
 

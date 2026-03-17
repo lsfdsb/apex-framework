@@ -26,12 +26,17 @@ fi
 if ! kill -0 "$PID" 2>/dev/null; then
   LAST_LINES=$(tail -10 "$LOG_FILE" 2>/dev/null)
   echo ""
-  echo "🔴 APEX DEV MONITOR: Dev server (PID $PID) has crashed."
+  echo "┌──────────────────────────────────────────────────────────────┐"
+  echo "│  🔴 APEX DEV MONITOR: Dev server (PID $PID) has crashed."
   if [ -n "$LAST_LINES" ]; then
-    echo "Last output:"
-    echo "$LAST_LINES"
+    echo "│"
+    echo "│  Last output:"
+    echo "$LAST_LINES" | sed 's/^/│  /'
   fi
-  echo "Run /dev restart to start it again."
+  echo "│"
+  echo "│  👶 Grogu felt a disturbance in the Force."
+  echo "│  Run /dev restart to start it again."
+  echo "└──────────────────────────────────────────────────────────────┘"
   echo ""
   rm -f "$PID_FILE" 2>/dev/null
   exit 0
@@ -65,7 +70,6 @@ NEW_CONTENT=$(tail -n +"$((LAST_LINE + 1))" "$LOG_FILE" 2>/dev/null)
 echo "$TOTAL_LINES" > "$CURSOR_FILE"
 
 # Look for errors and warnings in new content
-# Common patterns: Next.js, Vite, Webpack, TypeScript, ESLint
 ERRORS=$(echo "$NEW_CONTENT" | grep -iE \
   '(error|Error:|ERROR|failed to compile|Module not found|SyntaxError|TypeError|ReferenceError|Cannot find module|ENOENT|EADDRINUSE|unhandled rejection|fatal|panic)' \
   2>/dev/null | head -20)
@@ -83,21 +87,24 @@ RECOVERED=$(echo "$NEW_CONTENT" | grep -iE \
 OUTPUT=""
 
 if [ -n "$ERRORS" ]; then
-  OUTPUT="${OUTPUT}\n🔴 APEX DEV MONITOR: Dev server errors detected:\n"
-  OUTPUT="${OUTPUT}${ERRORS}\n"
-  OUTPUT="${OUTPUT}\nFix these errors before continuing. Check .claude/dev-server.log for full context.\n"
+  OUTPUT="${OUTPUT}\n┌──────────────────────────────────────────────────────────────┐"
+  OUTPUT="${OUTPUT}\n│  🔴 APEX DEV MONITOR: Errors detected"
+  OUTPUT="${OUTPUT}\n│"
+  OUTPUT="${OUTPUT}\n$(echo "$ERRORS" | head -10 | sed 's/^/│  /')"
+  OUTPUT="${OUTPUT}\n│"
+  OUTPUT="${OUTPUT}\n│  Fix these before continuing. See .claude/dev-server.log"
+  OUTPUT="${OUTPUT}\n└──────────────────────────────────────────────────────────────┘"
 fi
 
 if [ -n "$WARNINGS" ] && [ -z "$ERRORS" ]; then
-  # Only show warnings when no errors (errors take priority)
   WARNING_COUNT=$(echo "$WARNINGS" | wc -l | tr -d '[:space:]')
   if [ "$WARNING_COUNT" -gt 3 ]; then
-    OUTPUT="${OUTPUT}\n🟡 APEX DEV MONITOR: ${WARNING_COUNT} warnings in dev server. Check .claude/dev-server.log\n"
+    OUTPUT="${OUTPUT}\n🟡 APEX DEV MONITOR: ${WARNING_COUNT} warnings. Check .claude/dev-server.log"
   fi
 fi
 
 if [ -n "$RECOVERED" ] && [ -z "$ERRORS" ]; then
-  OUTPUT="${OUTPUT}\n🟢 Dev server: ${RECOVERED}\n"
+  OUTPUT="${OUTPUT}\n🟢 Dev server recovered: ${RECOVERED} ━ the forge burns strong again!"
 fi
 
 if [ -n "$OUTPUT" ]; then

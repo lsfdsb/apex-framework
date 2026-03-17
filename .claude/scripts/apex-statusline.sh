@@ -1,5 +1,5 @@
 #!/bin/bash
-# apex-statusline.sh — APEX Framework
+# apex-statusline.sh — APEX Framework Status Line
 # by L.B. & Claude · São Paulo, 2026
 #
 # Official JSON schema (code.claude.com/docs/en/statusline):
@@ -57,16 +57,26 @@ LA=$(echo "$INPUT" | jq -r '.cost.total_lines_added // 0' 2>/dev/null)
 LR=$(echo "$INPUT" | jq -r '.cost.total_lines_removed // 0' 2>/dev/null)
 
 # ── Duration ──
-DUR=$(($(echo "$INPUT" | jq -r '.cost.total_duration_ms // 0' 2>/dev/null) / 60000))
+DUR_MS=$(echo "$INPUT" | jq -r '.cost.total_duration_ms // 0' 2>/dev/null)
+DUR_MIN=$((DUR_MS / 60000))
 
 # ── Plan badge ──
 PLAN=""
 if [ "$COST" = "0.00" ]; then PLAN="MAX "; fi
 
-# ── Context bar ──
-BW=10; F=$((CTX_INT * BW / 100)); [ "$F" -gt "$BW" ] && F=$BW; E=$((BW - F)); BAR=""
-for ((i=0;i<F;i++)); do BAR="${BAR}▓"; done
+# ── Context bar (enhanced with gradient feel) ──
+BW=12
+F=$((CTX_INT * BW / 100))
+[ "$F" -gt "$BW" ] && F=$BW
+E=$((BW - F))
+BAR=""
+for ((i=0;i<F;i++)); do BAR="${BAR}█"; done
 for ((i=0;i<E;i++)); do BAR="${BAR}░"; done
+
+# ── Context status icon ──
+CTX_ICON="◆"
+[ "$CTX_INT" -gt 80 ] 2>/dev/null && CTX_ICON="◆!"
+[ "$CTX_INT" -gt 60 ] 2>/dev/null && [ "$CTX_INT" -le 80 ] 2>/dev/null && CTX_ICON="◆"
 
 # ── Alerts ──
 A=""
@@ -76,5 +86,14 @@ PREF="$HOME/.claude/apex-preferences.json"
 TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
 command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️COST"
 
+# ── Forge animation (subtle pulse based on activity) ──
+# Alternate between two states every 5s based on duration
+PULSE_STATE=$((DUR_MIN % 2))
+if [ "$PULSE_STATE" -eq 0 ]; then
+  SWORD_ICON="⚔️"
+else
+  SWORD_ICON="🔥"
+fi
+
 # ── Output ──
-echo "⚔️ APEX | ${M} ${PLAN}| ${BAR} ${CTX_INT}% | ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT") | \$${COST} | +${LA}/-${LR} | ${DUR}m${A} | by L.B. & Claude"
+echo "${SWORD_ICON} APEX ┃ ${M} ${PLAN}┃ ${BAR} ${CTX_INT}% ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT") ┃ \$${COST} ┃ +${LA}/-${LR} ┃ ${DUR_MIN}m${A} ┃ L.B. & Claude"
