@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.6
+# ⚔️ APEX Framework v5.7
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.6             ║
+  ║          ⚔️  APEX Framework v5.7             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -169,7 +169,7 @@ APEX tests its own hooks:
 
 ## Changelog
 
-### v5.6.0 (2026-03-17) — Auto-Update & Self-Evolution
+### v5.7.0 (2026-03-17) — Auto-Update & Self-Evolution
 
 **New:**
 - Auto-update system — APEX checks for GitHub updates on SessionStart (pulls latest skills, hooks, agents automatically)
