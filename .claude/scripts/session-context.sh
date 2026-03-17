@@ -1,5 +1,5 @@
 #!/bin/bash
-# session-context.sh — APEX Framework v5.5 SessionStart Hook
+# session-context.sh — APEX Framework v5.6 SessionStart Hook
 # by L.B. & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
 if ! command -v jq &> /dev/null; then
@@ -26,7 +26,7 @@ if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/.installed-version" ]; 
 fi
 # Fallback
 if [ -z "$APEX_VERSION" ]; then
-  APEX_VERSION="5.5.0"
+  APEX_VERSION="5.6.0"
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
