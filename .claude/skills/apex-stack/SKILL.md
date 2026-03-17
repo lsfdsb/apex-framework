@@ -9,6 +9,27 @@ user-invocable: false
 ## Rule #1: Adapt First
 If the user already has a project with an existing stack, **adapt to it**. Don't force our defaults. Read their package.json, requirements.txt, or equivalent first. Our stack is for new projects only.
 
+## React SPA Stack (Vite — existing projects)
+When the user's project uses **React + Vite** (not Next.js), adapt to this stack:
+- **Framework**: React 19 + Vite (rolldown-vite for faster builds)
+- **Routing**: React Router DOM v7 (lazy-loaded routes, file-based or config-based)
+- **Styling**: Tailwind CSS 3 (utility-first, `class` strategy for dark mode)
+- **Components**: shadcn/ui (`src/components/ui/`) — copy-paste, not a dependency
+- **Backend**: Supabase (auth + DB) — browser client via `@supabase/supabase-js`
+- **Forms**: React Hook Form + Zod v4
+- **State**: React context + hooks (no Redux needed for most apps)
+- **Notifications**: Sonner (toast library)
+- **Linter**: Oxlint (faster than ESLint, no config needed)
+- **Dev server**: `pnpm dev` (use pnpm, not npm — check for pnpm-lock.yaml)
+- **Build**: `pnpm build` → Vite bundles to `dist/`
+- **Deployment**: Vercel or Netlify (static SPA, configure rewrite to `index.html`)
+
+Key differences from Next.js:
+- No server-side rendering — all auth/data fetching is client-side
+- No middleware — use React Router loaders or context for auth guards
+- `VITE_` prefix for env vars (not `NEXT_PUBLIC_`)
+- No App Router — routes defined in `src/App.tsx` with `<Routes>`
+
 ## The APEX Default Stack (New Projects)
 
 Chosen for: performance, AI-tool compatibility, mobile-first, security, and DX.

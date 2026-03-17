@@ -28,7 +28,7 @@ if echo "$COMMAND" | grep -qE '^git\s+commit'; then
   if [ -z "$MSG" ]; then
     if echo "$COMMAND" | grep -qE '-m\s+"\$\(cat\s+<<'; then
       # Extract any conventional commit line inside the heredoc (POSIX-compatible)
-      MSG=$(echo "$COMMAND" | grep -oE '(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9-]+\))?: .+' | head -1 || echo "")
+      MSG=$(echo "$COMMAND" | grep -oE '(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+' | head -1 || echo "")
     fi
   fi
 
@@ -38,7 +38,7 @@ if echo "$COMMAND" | grep -qE '^git\s+commit'; then
   fi
   
   # Validate conventional commit format: type(scope): description
-  if ! echo "$MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9-]+\))?: .+'; then
+  if ! echo "$MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+'; then
     echo "BLOCKED: Commit message doesn't follow conventional format." >&2
     echo "Required: type(scope): description" >&2
     echo "Types: feat, fix, docs, refactor, test, perf, security, chore" >&2
