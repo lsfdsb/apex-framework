@@ -78,7 +78,7 @@ src/
 **Workflow**: `/prd` → `/architecture` → `/research` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit` → `/deploy`
 **Testing**: `/e2e` (Playwright E2E tests), testing rules auto-load for *.test.ts
 **DevOps**: `/cicd` (GitHub Actions), `/deploy` (pre-deploy gate)
-**Utilities**: `/init` (setup APEX), `/changelog` (update docs), `/debug` (structured debugging), `/apex-review` (audit framework)
+**Utilities**: `/init` (setup APEX), `/changelog` (update docs), `/debug` (structured debugging), `/apex-review` (audit framework), `/evolve` (self-improve from session)
 **Auto-loading**: design-system, code-standards, sql-practices, apex-stack, workflow-enforcer, verify-lib, teach, accessibility
 **Path-based rules**: testing.md, sql.md, api.md, components.md — load only when touching matching files
 
