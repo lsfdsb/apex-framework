@@ -76,7 +76,7 @@ For each approved change:
 
 After all changes are applied:
 
-1. Bump the patch version in the `VERSION` file (e.g., 5.5.0 → 5.5.1)
+1. Bump the patch version in the `VERSION` file (e.g., 5.6.0 → 5.6.1)
 2. Commit with message: `feat(evolve): [brief description of improvements]`
 3. Ask the user if they want to push to GitHub (so auto-update propagates to other projects)
 

@@ -41,7 +41,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     25 Skills · 4 Rules · 3 Agents · 10 Hooks            ║
+     ║     28 Skills · 5 Rules · 4 Agents · 16 Hooks            ║
      ║     2 Git Hooks · 2 Output Styles · 1 Sandbox            ║
      ║     6 versions · 1 conversation · ∞ ambition              ║
      ║                                                           ║
@@ -83,6 +83,7 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v5.3**: Quality hardening. Stop gate, workflow enforcement, one-command installer, 83-test suite.
 - **v5.4**: Full Claude Code integration. 16 hooks, network sandbox, shell injection, MCP template, GitHub Actions PR review.
 - **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
+- **v5.6**: Auto-update & self-evolution. Auto-update from GitHub on SessionStart, /evolve skill with framework-evolver agent, session transcript analysis.
 
 ## The Creed
 

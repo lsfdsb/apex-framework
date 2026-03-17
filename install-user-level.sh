@@ -22,7 +22,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APEX_DIR="$SCRIPT_DIR"
 USER_CLAUDE="$HOME/.claude"
-VERSION=$(cat "$(cd "$(dirname "$0")" && pwd)/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.5.0")
+VERSION=$(cat "$(cd "$(dirname "$0")" && pwd)/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.6.0")
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"

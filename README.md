@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.5
+# ⚔️ APEX Framework v5.6
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.5             ║
+  ║          ⚔️  APEX Framework v5.6             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **26 skills, 16 hooks, 3 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **28 skills, 16 hooks, 4 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
 
 ### The Workflow
 
@@ -80,8 +80,8 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 17 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, and more |
-| Agents | 3 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku) |
+| Skills | 19 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, evolve, set-language, and more |
+| Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Opus) |
 | Hook Scripts | 16 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging |
 | Rules | 5 | Path-based: testing, components, api, sql, supabase |
 | Output Styles | 2 | Educational + Mandalorian |
@@ -168,6 +168,20 @@ APEX tests its own hooks:
 ---
 
 ## Changelog
+
+### v5.6.0 (2026-03-17) — Auto-Update & Self-Evolution
+
+**New:**
+- Auto-update system — APEX checks for GitHub updates on SessionStart (pulls latest skills, hooks, agents automatically)
+- Project-level auto-update on SessionStart — keeps project-installed APEX files in sync with the user-level source
+- `/evolve` skill — spawns framework-evolver agent to analyze session transcripts for gaps and improvements
+- `framework-evolver` agent — autonomous self-improvement agent that proposes targeted framework changes
+- Session transcript extraction script (`extract-session.sh`) for `/evolve` analysis
+- `VERSION` file — single source of truth for version, resolved dynamically by session banner
+- `/set-language` skill — persists language preference (en-us / pt-br) across sessions
+
+**Removed:**
+- `.github/workflows/claude-pr-review.yml` — requires API key, incompatible with Claude Max plan
 
 ### v5.5.0 (2026-03-16) — Supabase Integration & Skill Fixes
 

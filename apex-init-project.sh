@@ -25,7 +25,7 @@ fi
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.5.0")
+APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.6.0")
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 echo "  ║    ⚔️  APEX Framework v${APEX_V_SHORT} — Project Setup   ║"
 echo "  ║     by L.B. & Claude · São Paulo, 2026      ║"
