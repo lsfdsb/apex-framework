@@ -74,6 +74,7 @@ UNIVERSAL_SKILLS=(
   "about"
   "performance"
   "security"
+  "evolve"
 )
 
 echo "📦 Installing ${#UNIVERSAL_SKILLS[@]} universal skills..."
