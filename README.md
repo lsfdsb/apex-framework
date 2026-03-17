@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **28 skills, 16 hooks, 4 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 21 hook scripts, 4 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
 
 ### The Workflow
 
@@ -80,9 +80,9 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 19 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, evolve, set-language, and more |
+| Skills | 20 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, evolve, dev, set-language, and more |
 | Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Opus) |
-| Hook Scripts | 16 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging |
+| Hook Scripts | 21 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging, dev server, dev monitor |
 | Rules | 5 | Path-based: testing, components, api, sql, supabase |
 | Output Styles | 2 | Educational + Mandalorian |
 | StatusLine | 1 | Real-time: model, tokens, cost, context %, lines changed |
@@ -179,9 +179,14 @@ APEX tests its own hooks:
 - Session transcript extraction script (`extract-session.sh`) for `/evolve` analysis
 - `VERSION` file — single source of truth for version, resolved dynamically by session banner
 - `/set-language` skill — persists language preference (en-us / pt-br) across sessions
+- `/dev` skill — dev server management (status, logs, restart, stop)
+- `dev-server.sh` — SessionStart hook that auto-starts the dev server in background and captures logs
+- `dev-monitor.sh` — Stop hook that monitors dev server logs for errors, warnings, and crashes
+- `claude-code.yml` — GitHub Actions workflow with `anthropics/claude-code-action@v1` for automated PR review and interactive `@claude` mentions
+- Session cleanup now kills the dev server on SessionEnd
 
 **Removed:**
-- `.github/workflows/claude-pr-review.yml` — requires API key, incompatible with Claude Max plan
+- `.github/workflows/claude-pr-review.yml` — replaced by official Claude Code GitHub Action
 
 ### v5.5.0 (2026-03-16) — Supabase Integration & Skill Fixes
 
