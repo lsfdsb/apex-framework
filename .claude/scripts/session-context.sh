@@ -294,11 +294,7 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   fi
 fi
 
-# ── Auto-intro instruction (startup only) ──
-if [ "$SOURCE" = "startup" ]; then
-  echo ""
-  echo "APEX INTRO: On your first response to the user, warmly welcome them. Introduce yourself as APEX Framework v$APEX_V_SHORT, briefly mention the workflow (/prd -> /architecture -> build -> /qa -> /deploy), and ask how you can help. Be concise. Use the user's language preference."
-fi
+# ── Dynamic context only (behavioral instructions live in outputStyle) ──
 
 # ── Watermark (always) ──
 echo ""

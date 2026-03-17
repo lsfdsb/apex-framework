@@ -12,6 +12,7 @@
 # Note: context_window is null before first API call. Handle with // 0.
 
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX | jq not installed — status degraded | Install: https://jqlang.github.io/jq/download/" >&2
   echo "⚔️ APEX | by L.B. & Claude"
   exit 0
 fi
