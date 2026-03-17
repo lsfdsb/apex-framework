@@ -59,16 +59,15 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
-     ║                    ╭───╮                                   ║
-     ║                ╭──(  ·  )──╮                               ║
-     ║                 ╰─( °bg° )─╯   "Patu!"                    ║
-     ║                    ╰─┬─╯                                   ║
-     ║                     /|\        The foundling watches       ║
-     ║                    / | \       over every commit.          ║
+     ║              ╭───╮                                        ║
+     ║         ╭───( • • )───╮                                   ║
+     ║              ╰─┬─╯        "Patu!"                         ║
+     ║               ╭┴╮         The foundling watches           ║
+     ║               ╰─╯         over every commit.              ║
      ║                                                           ║
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
-     ║              🔥 This is the way. 🔥                       ║
+     ║                  This is the way.                         ║
      ║                                                           ║
      ╚═══════════════════════════════════════════════════════════╝
 ```
@@ -97,18 +96,38 @@ Six versions later, through honest self-criticism, documentation research, and r
 
 ## The Mascot
 
-Grogu — the foundling — watches over every session. He appears randomly to encourage, warn, and celebrate with you. If you see him, you're doing it right.
+Grogu — the foundling — watches over every session. He appears in different poses (happy, sleepy, surprised, using the Force) — a different mood each time. If you see him, you're doing it right.
 
 ```
-        ╭───╮
-    ╭──(  ·  )──╮
-     ╰─( °bg° )─╯   "Patu!"
-        ╰─┬─╯
-         /|\
-        / | \
+⣄⣀⡀⠀⠀⠀⡀⠐⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⣏⡿⠿⢿⣿⣯⣄⡀⠀⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠠⠀⠀⠀⠀⢠⠴⠂⠀⠀⠀⠀⠱⠀⠀⠀⠀⠀⠀⠀⢀⣤⣤⣤⡦⠤⣰
+⠈⢇⠀⠀⠀⠉⠛⠿⣷⣦⡀⠀⠀⠀⣰⣿⣿⣿⣷⡆⠀⠀⠀⠀⠀⣰⣾⣿⣿⣷⡀⠀⠀⣀⢀⣤⣶⣶⠿⡟⠿⠋⠃⣠⠞⠁
+⠀⠘⣆⠀⠀⠀⠀⠀⣶⡿⣷⡀⠀⠀⠙⠻⠿⠿⠛⠋⠀⠄⠠⠄⠈⠛⠻⠿⠿⠟⠁⠀⠐⣿⣿⣿⠋⠁⠐⠀⠀⠀⣠⢇⠀⠀
+⠀⡸⢉⣿⣦⣤⡀⠰⠘⣷⣼⣷⡄⠀⠀⠀⠀⠀⣀⣠⠤⠤⠤⢤⣄⣀⠀⠀⠀⠀⠀⠀⣽⣿⣽⡿⠀⠀⠀⢀⣠⡴⠃⠈⡆⠀
+⣰⢃⡿⢉⢈⢻⣿⣧⣄⣀⣩⠗⠛⠦⣤⢴⣤⠢⢄⡀⢀⣀⣀⣀⣀⣀⡤⢤⣄⢦⣡⣾⡟⣯⣭⣵⣶⣶⡿⠟⠋⠐⠀⠀⠸⡄
+⡟⣼⡃⣞⡌⢀⣽⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠙⠋⠛⠿⠻⢡⠀⣹⣿⣿⣿⣷⣗⡈⠅⢳⠀⠀⢀⣹
+⣷⡿⠹⣿⣿⣿⢯⡙⢻⡿⠃⠀⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡴⠟⠃⠘⣾⣿⣿⣿⣿⣿⣶⣿⠂⠘⠛⠻
+⠏⢠⣼⣿⣿⣿⣦⢱⣿⣀⣀⣀⠀⡀⣀⡀⣀⣀⣀⠀⠀⢀⠀⠀⠀⢀⠀⠀⠀⠉⠀⠀⠀⠀⠈⠛⣿⣿⣿⣿⣟⡿⣇⠀⠀⠘
+⣧⣿⣽⣿⣿⣿⣿⣿⣿⠟⠁⠈⠉⠹⠛⠻⠟⠛⠛⠛⠻⢿⣛⣿⣿⣾⡿⣷⣶⣧⣴⣤⣦⣤⣴⡶⠿⣿⣿⡿⢿⡟⠛⢳⡄⠀
+⣿⣿⢶⣿⣿⣿⡿⣿⡇⠀⠀⠀⣀⡀⠀⠀⠀⣶⣸⣿⣿⢿⠿⡿⠷⠿⠿⠿⢿⣿⣷⣀⠸⠿⠷⣆⠀⠀⣿⣿⣿⣉⠏⠿⣿⡀
+⢻⣷⣮⣿⣿⣿⣷⡏⡅⣤⣤⣾⣿⣷⣦⣴⣤⣴⣧⣧⣬⣼⣤⣭⡆⠀⠀⠀⠀⠘⣷⡿⠙⣶⣀⠀⠳⣄⢨⣿⣿⣟⣻⣖⡛⣛
+⣿⣿⣿⣿⣿⡟⣿⣹⣻⣷⣿⣿⣿⣿⣿⣿⣟⣿⣼⣴⣧⣷⣾⣸⡇⠀⠀⠀⠀⠀⠈⠀⠀⢀⠀⣹⡷⠈⢦⣿⣿⣿⣿⣿⣷⣾
+⠈⢿⣿⡟⢹⠏⠉⠉⣩⣽⣿⣿⣿⠏⠉⠉⠉⠉⠉⠉⠉⠉⠉⠉⠙⠀⢀⣀⣠⣤⣤⣶⣶⣾⡿⠳⠀⠳⠈⢿⠻⢻⣿⡿⠯⠬
+⠈⡏⠈⠙⢻⣤⣤⠼⠟⠛⣹⠃⠀⠀⢀⣀⢠⣀⡀⢄⠀⠀⠀⠀⣆⠐⠛⠛⠉⠋⠉⠁⠈⣹⡧⠁⣠⢴⣇⣾⡾⠛⠋⢀⡾⠁
+⠀⢻⣄⡀⠀⢫⡉⠛⠒⠚⠛⠓⠛⠻⠿⠯⣦⡀⢀⠌⠲⣙⠣⣷⣿⢶⣶⣶⣦⠶⠒⠒⠒⠻⠷⠚⠛⠛⠉⠁⠀⣀⣴⣾⠇⠀
+⠀⠸⡇⠙⠳⠦⢥⣀⡀⠀⠀⢤⣤⣀⠀⠀⠀⢹⠉⣶⠤⣤⢿⣯⡿⢯⠉⡏⠁⠀⠀⠀⠀⠀⠀⠀⣀⣤⣤⡴⠞⠛⠯⡟⠀⠀
+⠀⠀⢷⠀⠀⠀⠀⠀⠉⠙⠓⠒⠦⠼⠿⣭⣤⣈⣳⣿⣾⣿⣷⣿⣿⣿⣷⣃⣤⡤⢤⠴⠶⣶⣾⠟⠟⠉⠀⠀⠀⠀⠐⡇⠀⠀
+⠀⠀⢸⡀⠀⠀⠀⠠⣀⣦⡄⠀⠀⠀⠀⠀⠀⠀⢠⣤⣦⣥⣿⣤⣷⣶⣧⡄⠀⠀⠀⠀⠰⣿⡄⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀
+⠀⠀⠀⣷⢰⠀⠙⢶⡽⣏⠃⠀⠀⠀⠀⠀⠰⣿⣿⣿⣾⣷⣾⣿⣿⣿⣿⡿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡏⠀⠀⠀
+⠀⠀⠀⢹⡀⠀⠀⠀⠙⠛⠀⠀⠀⠀⠀⠀⠀⢘⣛⠛⠛⠛⠓⠛⣛⠛⢛⣃⠀⠀⠀⠀⠀⣀⣤⠀⠀⠀⠀⠀⠀⢰⠃⠀⠀⠀
+⠀⠀⠀⠈⠻⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⠋⠽⠯⠽⠟⠫⠿⠟⠀⠀⠘⢿⣻⡿⠯⠀⠀⠀⢀⣠⡤⠏⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠉⠑⠒⠒⠠⠀⠀⠀⢀⠀⠈⠉⠁⠉⠉⠈⠀⠀⠉⠉⠉⠙⠋⠀⠀⣛⡿⠁⠼⠛⠒⠊⠉⠀⠀⠀⠀⠀⠀⠀
 ```
+
+"Patu!" — The foundling watches over every commit.
 
 Where Grogu appears:
+
 - **Session start** (10% chance) — random quote and ASCII art
 - **Pre-commit success** (20% chance) — celebrates your clean code
 - **Context compact** — loyal reminder that he's still here
@@ -120,8 +139,8 @@ Where Grogu appears:
 
 ## The Creed
 
-*I am APEX. Building is my purpose. Quality is my armor. The user experience is my beskar. I shall protect the codebase as I protect the foundling. I shall not ship untested code. I shall not skip the PRD. I shall not break the build.*
+_I am APEX. Building is my purpose. Quality is my armor. The user experience is my beskar. I shall protect the codebase as I protect the foundling. I shall not ship untested code. I shall not skip the PRD. I shall not break the build._
 
 **This is the way.**
 
-—  Lucas Bueno & Claude, São Paulo, March 2026
+— Lucas Bueno & Claude, São Paulo, March 2026

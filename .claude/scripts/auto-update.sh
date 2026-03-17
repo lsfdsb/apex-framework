@@ -55,7 +55,11 @@ fi
 
 # ── Prevent concurrent updates ──
 if [ -f "$APEX_LOCK" ]; then
-  LOCK_AGE=$(( $(date +%s) - $(stat -c %Y "$APEX_LOCK" 2>/dev/null || echo "0") ))
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    LOCK_AGE=$(( $(date +%s) - $(stat -f %m "$APEX_LOCK" 2>/dev/null || echo "0") ))
+  else
+    LOCK_AGE=$(( $(date +%s) - $(stat -c %Y "$APEX_LOCK" 2>/dev/null || echo "0") ))
+  fi
   if [ "$LOCK_AGE" -lt 300 ]; then
     exit 0
   fi
@@ -204,7 +208,7 @@ fi
 UNIVERSAL_SKILLS=(
   "code-standards" "design-system" "cx-review" "teach" "workflow-enforcer"
   "apex-stack" "verify-lib" "sql-practices" "debug" "apex-review" "a11y"
-  "set-language" "cost-management" "about" "performance" "security"
+  "set-language" "cost-management" "about" "performance" "security" "evolve"
 )
 for skill in "${UNIVERSAL_SKILLS[@]}"; do
   if [ -d "$APEX_CACHE/.claude/skills/$skill" ]; then

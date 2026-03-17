@@ -7,10 +7,13 @@ user-invocable: false
 # APEX Stack — Verified & Performant
 
 ## Rule #1: Adapt First
+
 If the user already has a project with an existing stack, **adapt to it**. Don't force our defaults. Read their package.json, requirements.txt, or equivalent first. Our stack is for new projects only.
 
 ## React SPA Stack (Vite — existing projects)
+
 When the user's project uses **React + Vite** (not Next.js), adapt to this stack:
+
 - **Framework**: React 19 + Vite (rolldown-vite for faster builds)
 - **Routing**: React Router DOM v7 (lazy-loaded routes, file-based or config-based)
 - **Styling**: Tailwind CSS 3 (utility-first, `class` strategy for dark mode)
@@ -25,6 +28,7 @@ When the user's project uses **React + Vite** (not Next.js), adapt to this stack
 - **Deployment**: Vercel or Netlify (static SPA, configure rewrite to `index.html`)
 
 Key differences from Next.js:
+
 - No server-side rendering — all auth/data fetching is client-side
 - No middleware — use React Router loaders or context for auth guards
 - `VITE_` prefix for env vars (not `NEXT_PUBLIC_`)
@@ -35,6 +39,7 @@ Key differences from Next.js:
 Chosen for: performance, AI-tool compatibility, mobile-first, security, and DX.
 
 ### Development Environment (macOS)
+
 - **Terminal**: iTerm2 (native split panes for Agent Teams) or built-in Terminal
 - **Editor**: VS Code + Claude Code extension (launch with `code .`, then open Claude in terminal)
 - **Claude Code**: Native installer (no Node.js required, auto-updates)
@@ -43,6 +48,7 @@ Chosen for: performance, AI-tool compatibility, mobile-first, security, and DX.
 - **Version Control**: Git + GitHub (PR-based workflow)
 
 ### Frontend
+
 - **Framework**: Next.js 15+ (App Router, React Server Components, Edge Functions)
   - WHY: Largest ecosystem, best AI-tool compatibility, built-in performance (code splitting, image optimization, streaming SSR)
 - **Language**: TypeScript (strict mode)
@@ -55,12 +61,14 @@ Chosen for: performance, AI-tool compatibility, mobile-first, security, and DX.
   - WHY: Tree-shakeable, consistent, open source
 
 ### Backend (included in Next.js)
+
 - **API**: Next.js Route Handlers + Server Actions
   - WHY: Full-stack in one framework, type-safe, edge-deployable
 - **Validation**: Zod
   - WHY: TypeScript-first schema validation, works client and server, tiny bundle
 
 ### Database & Auth
+
 - **Database**: Supabase (PostgreSQL + real-time + storage + edge functions)
   - WHY: Open source, generous free tier, built-in Row Level Security, real-time subscriptions, file storage
   - ALTERNATIVE: Neon (serverless PostgreSQL) if you don't need real-time
@@ -71,31 +79,38 @@ Chosen for: performance, AI-tool compatibility, mobile-first, security, and DX.
   - WHY: OAuth providers, magic links, MFA, session management built-in
 
 ### Payments (when needed)
+
 - **Stripe** — the only serious option for global payments
   - Use Stripe Checkout for hosted payment pages (PCI compliant out of the box)
 
 ### Email (when needed)
+
 - **Resend** — modern email API, React Email for templates
   - WHY: Developer-first, reliable delivery, fair pricing
 
 ### Testing
+
 - **Unit/Integration**: Vitest (Vite-native, fast, Jest-compatible API)
 - **E2E**: Playwright (cross-browser, mobile viewport testing, auto-waiting)
 - **Component**: Testing Library (tests user behavior, not implementation)
 
 ### Deployment Pipeline
+
 ```
 Local dev → Git push → GitHub PR → Vercel Preview Deploy → Review → Merge → Vercel Production
 ```
+
 Every PR gets its own preview URL automatically. No manual staging needed.
 
 ## Performance Characteristics
+
 - Initial JS bundle: <100KB (Next.js code splitting + Tailwind purge)
 - LCP: <1.5s (Server Components + streaming SSR)
 - Mobile-first: Tailwind breakpoints start at 320px
 - Edge-deployed: Vercel Edge Network (global, <50ms TTFB)
 
 ## Security Characteristics
+
 - TypeScript strict: catches null/undefined at compile time
 - Zod validation: server-side input validation by default
 - Supabase RLS: database-level access control
@@ -103,7 +118,9 @@ Every PR gets its own preview URL automatically. No manual staging needed.
 - Vercel: automatic HTTPS, DDoS protection
 
 ## Only Official Libraries
+
 We ONLY install packages that are:
+
 1. Published by the official maintainer (npm verified publisher)
 2. Actively maintained (commit in last 6 months)
 3. No known critical CVEs (`npm audit`)

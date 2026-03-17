@@ -30,9 +30,18 @@ if [ -z "$APEX_VERSION" ]; then
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
-# ── Random Grogu mood for easter egg ──
-GROGU_MOODS=(
-  "          (__) \n         (°bg°)\n        <|  |>\n         || ||\n        Grogu is watching your code."
+# ── Random Grogu poses (animated variety — different pose each time) ──
+GROGU_POSES=(
+  # Pose 0: Normal — curious look
+  "         ╭───╮\n    ╭───( • • )───╮\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 1: Happy — eyes up, celebrating
+  "         ╭───╮\n   ╭────( ◠ ◠ )────╮\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 2: Sleepy — zzz
+  "         ╭───╮     z\n    ╭───( - - )───╮  z\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 3: Surprised — wide eyes
+  "         ╭───╮\n   ╭────( ◉ ◉ )────╮  !\n         ╰─┬─╯\n          ╭┴╮\n          ╰─╯"
+  # Pose 4: Using the Force
+  "         ╭───╮    *\n    ╭───( • • )───╮ ~*\n         ╰─┬─╯   ~\n          ╭┴╮\n          ╰─╯"
 )
 GROGU_QUOTES=(
   "\"Patu!\" — Grogu (approving your commit)"
@@ -85,16 +94,11 @@ if [ "$SOURCE" = "startup" ]; then
   # ── Grogu Easter Egg (10% chance on normal startup) ──
   GROGU_CHANCE=$((RANDOM % 10))
   if [ "$GROGU_CHANCE" -eq 0 ]; then
-    echo "  ┌──────────────────────────────────────────┐"
-    echo "  │        ╭───╮                              │"
-    echo "  │    ╭──(  ·  )──╮    The Child is here.    │"
-    echo "  │     ╰─( °bg° )─╯    Protect the code,    │"
-    echo "  │        ╰─┬─╯        protect the foundling.│"
-    echo "  │         /|\\                                │"
-    echo "  │        / | \\                               │"
-    echo "  │                                            │"
-    echo "  │  $GROGU_QUOTE  │"
-    echo "  └──────────────────────────────────────────┘"
+    POSE_IDX=$((RANDOM % ${#GROGU_POSES[@]}))
+    echo ""
+    printf "  %b\n" "${GROGU_POSES[$POSE_IDX]}"
+    echo ""
+    echo "  $GROGU_QUOTE"
     echo ""
   fi
 fi
@@ -150,11 +154,11 @@ if [ "$TODAY_MD" = "03-13" ]; then
   echo "  ║                                                  ║"
   echo "  ║   \"Whatever you do, do it well.\" — Walt Disney   ║"
   echo "  ║                                                  ║"
-  echo "  ║        ╭───╮                                     ║"
-  echo "  ║    ╭──(  ·  )──╮   🎂                            ║"
-  echo "  ║     ╰─( ^bg^ )─╯   Grogu says: Patu!            ║"
-  echo "  ║        ╰─┬─╯       (Happy birthday!)             ║"
-  echo "  ║         /|\\                                      ║"
+  echo "  ║          ╭───╮                                  ║"
+  echo "  ║     ╭───( • • )───╮                            ║"
+  echo "  ║          ╰─┬─╯     Grogu says: Patu!           ║"
+  echo "  ║           ╭┴╮      (Happy birthday!)           ║"
+  echo "  ║           ╰─╯                                  ║"
   echo "  ║                                                  ║"
   echo "  ╚══════════════════════════════════════════════════╝"
 fi
@@ -180,6 +184,12 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
     echo "⚠️  Git hooks not installed:$MISSING_HOOKS"
     echo "   Run: cp .claude/git-hooks/pre-commit .git/hooks/pre-commit && cp .claude/git-hooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/pre-commit .git/hooks/commit-msg"
   fi
+fi
+
+# ── Auto-intro instruction (startup only) ──
+if [ "$SOURCE" = "startup" ]; then
+  echo ""
+  echo "APEX INTRO: On your first response to the user, warmly welcome them. Introduce yourself as APEX Framework v$APEX_V_SHORT, briefly mention the workflow (/prd -> /architecture -> build -> /qa -> /deploy), and ask how you can help. Be concise. Use the user's language preference."
 fi
 
 # ── Watermark (always) ──
