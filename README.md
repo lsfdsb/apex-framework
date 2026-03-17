@@ -184,6 +184,9 @@ APEX tests its own hooks:
 - `dev-monitor.sh` — Stop hook that monitors dev server logs for errors, warnings, and crashes
 - `claude-code.yml` — GitHub Actions workflow with `anthropics/claude-code-action@v1` for automated PR review and interactive `@claude` mentions
 - Session cleanup now kills the dev server on SessionEnd
+- `/debug` skill rewritten with "Definitive Solutions Only" philosophy — root cause analysis, impact mapping, fix hierarchy (type system > tests > runtime), anti-pattern detection
+- `handle-failure.sh` enhanced with retry-loop detection (warns after 3+ failures in 60s) and definitive fix guidance
+- Core rules updated: "Definitive fixes only" and "Impact analysis before changes" added to CLAUDE.md
 
 **Removed:**
 - `.github/workflows/claude-pr-review.yml` — replaced by official Claude Code GitHub Action
