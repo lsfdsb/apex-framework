@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 21 hook scripts, 4 agents, 5 rules, and 2 output styles** that enforce a disciplined development workflow.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **26 skills, 25 hook scripts, 4 agents, 7 rules, and 2 output styles** that enforce a disciplined development workflow with a self-learning feedback loop.
 
 ### The Workflow
 
@@ -153,6 +153,145 @@ APEX tests its own hooks:
 ```
 
 83 tests covering: dangerous command blocking, commit message validation, file protection, workflow enforcement, library install detection, file permissions, jq warnings, and macOS compatibility.
+
+---
+
+## How to Extract the Best from APEX — Step by Step
+
+### Step 1: Start Every Project Right
+
+```bash
+# Initialize APEX in your project
+cd ~/your-project
+~/.apex-framework/apex-init-project.sh
+```
+
+This gives you project-level skills (prd, architecture, qa, security) and git hooks (pre-commit, commit-msg). Now APEX enforces quality on this specific project.
+
+### Step 2: Always Start with a PRD
+
+Before writing any code, tell Claude what you want to build:
+
+```
+"I want to build a task management app with authentication"
+```
+
+APEX will **automatically block code** until you have a PRD. Say `/prd` to generate one. This prevents scope creep and wasted tokens — the PRD becomes your contract.
+
+### Step 3: Follow the Workflow
+
+The enforced workflow saves you from yourself:
+
+| Step | Command | What It Does |
+|------|---------|-------------|
+| 1 | `/prd` | Define what you're building — scope, features, constraints |
+| 2 | `/architecture` | Plan the system — database schema, API design, component tree |
+| 3 | `/research` | Verify APIs and libraries exist — never hallucinate an endpoint |
+| 4 | Build | Write code — APEX auto-formats, enforces standards, validates types |
+| 5 | `/qa` | Run 5-phase quality gate — lint, types, tests, security, review |
+| 6 | `/security` | OWASP audit on auth, payments, PII handling |
+| 7 | `/a11y` | WCAG 2.2 AA accessibility check |
+| 8 | `/cx-review` | Customer experience review — is this good enough to ship? |
+| 9 | `/commit` | Clean conventional commit with pre-commit hooks |
+
+### Step 4: Use the Right Skill for the Job
+
+**While building:**
+- `/debug` — Structured debugging when something breaks (no band-aids)
+- `/e2e` — Write Playwright end-to-end tests for critical flows
+- `/teach` — Ask Claude to explain what it's doing and why
+
+**Before installing anything:**
+- `/research` — Check docs first. APEX blocks hallucinated APIs.
+- Libraries are auto-verified before install (security, license, maintenance)
+
+**For database work:**
+- `/supabase` — Full Supabase integration (auth, RLS, migrations, edge functions)
+- SQL rules auto-load when writing queries — prevents N+1, enforces indexes
+
+**For design work:**
+- Design system rules auto-load on `.tsx` files — mobile-first, radical simplicity
+- `/cx-review` before users see it — Walt Disney level of polish
+
+### Step 5: Let the Agents Work for You
+
+APEX has 4 specialized agents that Claude spawns automatically:
+
+| Agent | Model | When It Activates |
+|-------|-------|------------------|
+| **code-reviewer** | Sonnet | Reviews code quality, security, patterns |
+| **design-reviewer** | Sonnet | Reviews UI against design system, a11y |
+| **researcher** | Haiku | Fetches docs, verifies APIs (cheap and fast) |
+| **framework-evolver** | Sonnet | Analyzes sessions for improvements (`/evolve`) |
+
+You don't call these directly — Claude decides when to use them.
+
+### Step 6: Trust the Safety Net
+
+APEX has 3 layers of protection running automatically:
+
+**You can't accidentally:**
+- Push directly to main (hook blocks it)
+- Commit with bad message format (hook blocks it)
+- Delete files with `rm -rf` (hook blocks it)
+- Edit `.env` files (permission denies it)
+- Skip the PRD (hook blocks new files without one)
+- Forget to run tests (stop-gate warns you)
+
+**You get automatically:**
+- Code formatted with Prettier after every edit
+- Changelog updated after every commit
+- Dev server managed (auto-start, auto-monitor, auto-cleanup)
+- Context preserved across compaction
+- Agent token usage tracked in the statusline
+
+### Step 7: Evolve the Framework
+
+At the end of productive sessions, say `/evolve`. The framework-evolver agent will:
+
+1. Read the full session transcript
+2. Read accumulated session logs (errors, blocks, corrections)
+3. Cross-reference against all hooks, skills, and rules
+4. Propose specific, evidence-based improvements
+5. Wait for your approval before any changes
+
+The `session-learner.sh` hook runs automatically at session end, logging errors, hook blocks, and user corrections. Over time, this data shows patterns — the framework literally learns from your usage.
+
+### Step 8: Use the StatusLine
+
+The statusline at the bottom shows real-time session data:
+
+```
+APEX | opus MAX | 🟢 ████▓▒░░░░ 42% 420K/1.0M | ↑200K ↓50K | 🤖 3 agents 12.5K | +150/-20 (+130 net) | 15m | This is the way.
+```
+
+| Segment | Meaning |
+|---------|---------|
+| `opus MAX` | Current model + plan |
+| `🟢 ████▓▒░░░░ 42%` | Context window health (green/yellow/red) |
+| `420K/1.0M` | Tokens used / total window |
+| `↑200K ↓50K` | Input / output tokens |
+| `🤖 3 agents 12.5K` | Agents spawned + their total tokens |
+| `+150/-20 (+130 net)` | Lines added / removed |
+| `15m` | Session duration |
+
+When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
+
+### Step 9: Choose Your Output Style
+
+- **Educational** (default) — Warm mentor that explains everything. Best for learning.
+- **Mandalorian** — Disciplined narrative style. "This is the way." Best for focus.
+
+Switch with `/output-style` in Claude Code.
+
+### Pro Tips
+
+1. **Start sessions on a feature branch** — never work on main. APEX blocks push to main anyway.
+2. **Say "teach me" often** — the teach skill turns every interaction into a learning moment.
+3. **Review PRDs before approving** — the PRD drives everything downstream. Get it right.
+4. **Run `/qa` before every PR** — it catches what you miss.
+5. **Say `/evolve` at session end** — the framework gets better every time.
+6. **Use Portuguese** — say "trocar para portugues" for full pt-br support.
 
 ---
 

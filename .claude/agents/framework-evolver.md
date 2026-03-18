@@ -47,6 +47,7 @@ This gives you the actual conversation: what the user asked, how Claude responde
 - **Slow loops** — Multiple read/search cycles for something that should be faster.
 
 Also check:
+- **Session logs** (`ls -t .claude/session-logs/session-*.md | head -5`) — automated reports from `session-learner.sh` with error counts, hook blocks, and user corrections across recent sessions. These are your trend data.
 - Recent git history (`git log --oneline -20`)
 - Project structure and what files were touched
 - `.apex-state.json` breadcrumbs if they exist
