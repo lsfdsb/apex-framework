@@ -47,7 +47,7 @@ cd ~/your-project
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **26 skills, 25 hook scripts, 4 agents, 7 rules, and 2 output styles** that enforce a disciplined development workflow with a self-learning feedback loop.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 25 hook scripts, 4 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning feedback loop.
 
 ### The Workflow
 
@@ -80,11 +80,11 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 15 | code-standards, design-system, cx-review, teach, apex-stack, verify-lib, sql-practices, debug, a11y, set-language, cost-management, about, performance, security, evolve |
+| Skills | 14 | code-standards, design-system, cx-review, teach, apex-stack, verify-lib, sql-practices, debug, a11y, cost-management, about, performance, security, evolve |
 | Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Sonnet) |
 | Hook Scripts | 24 | Dangerous command blocking, commit msg validation, PRD enforcement, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent tracking, dev server, dev monitor, auto-changelog, notifications |
 | Rules | 7 | Path-based: testing, components, api, sql, supabase, nextjs, error-handling |
-| Output Styles | 2 | Educational + Mandalorian |
+| Output Styles | 1 | Educational |
 | StatusLine | 1 | Real-time: model, tokens, context %, lines changed, agent tracking |
 | Sandbox | 1 | Filesystem restrictions: blocks writes to /etc, ~/.ssh, ~/.aws |
 
@@ -277,13 +277,6 @@ APEX | opus MAX | 🟢 ████▓▒░░░░ 42% 420K/1.0M | ↑200K �
 
 When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
-### Step 9: Choose Your Output Style
-
-- **Educational** (default) — Warm mentor that explains everything. Best for learning.
-- **Mandalorian** — Disciplined narrative style. "This is the way." Best for focus.
-
-Switch with `/output-style` in Claude Code.
-
 ### Pro Tips
 
 1. **Start sessions on a feature branch** — never work on main. APEX blocks push to main anyway.
@@ -291,7 +284,6 @@ Switch with `/output-style` in Claude Code.
 3. **Review PRDs before approving** — the PRD drives everything downstream. Get it right.
 4. **Run `/qa` before every PR** — it catches what you miss.
 5. **Say `/evolve` at session end** — the framework gets better every time.
-6. **Use Portuguese** — say "trocar para portugues" for full pt-br support.
 
 ---
 
@@ -299,10 +291,8 @@ Switch with `/output-style` in Claude Code.
 
 | Guide | Language |
 |-------|----------|
-| [Install Guide EN-US](docs/guides/install-guide-en-us.md) | English |
-| [Install Guide PT-BR](docs/guides/install-guide-pt-br.md) | Português |
-| [Claude.ai Skills EN-US](claude-web/install-skills-guide-en-us.md) | English |
-| [Claude.ai Skills PT-BR](claude-web/install-skills-guide-pt-br.md) | Português |
+| [Install Guide](docs/guides/install-guide-en-us.md) | English |
+| [Claude.ai Skills](claude-web/install-skills-guide-en-us.md) | English |
 
 ---
 
@@ -317,7 +307,6 @@ Switch with `/output-style` in Claude Code.
 - `framework-evolver` agent — autonomous self-improvement agent that proposes targeted framework changes
 - Session transcript extraction script (`extract-session.sh`) for `/evolve` analysis
 - `VERSION` file — single source of truth for version, resolved dynamically by session banner
-- `/set-language` skill — persists language preference (en-us / pt-br) across sessions
 - `/dev` skill — dev server management (status, logs, restart, stop)
 - `dev-server.sh` — SessionStart hook that auto-starts the dev server in background and captures logs
 - `dev-monitor.sh` — Stop hook that monitors dev server logs for errors, warnings, and crashes
@@ -390,10 +379,9 @@ Switch with `/output-style` in Claude Code.
 
 ### v5.2.0 (2026-03-13) — Initial Release
 
-- 25 skills, 3 agents, 10 hook scripts, 4 rules, 2 output styles
+- 25 skills, 3 agents, 10 hook scripts, 4 rules, 1 output style
 - Full workflow: PRD → Architecture → Research → Build → QA → Security → CX Review → Deploy
 - 3-tier model strategy (Opus/Sonnet/Haiku)
-- Bilingual support (en-us / pt-br)
 - StatusLine with real-time metrics
 
 ---
