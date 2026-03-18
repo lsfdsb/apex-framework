@@ -28,7 +28,9 @@ APEX_BRANCH="${APEX_BRANCH:-main}"
 # ── Project dir ──
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-}"
 if [ -z "$PROJECT_DIR" ] || [ ! -d "$PROJECT_DIR/.claude/scripts" ]; then
-  # No APEX-initialized project — nothing to update
+  # No .claude/ = APEX not installed in this project.
+  # The /init skill handles bootstrap, not auto-update.
+  # session-context.sh will show the user a hint to run /init.
   exit 0
 fi
 

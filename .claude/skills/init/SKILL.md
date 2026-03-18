@@ -7,77 +7,99 @@ allowed-tools: Read, Write, Bash, Glob, Edit, Grep
 
 # Initialize APEX in This Project
 
-## What This Does
+## Step 0: Check If Already Installed
 
-Installs the full APEX Framework into the current project by running the official init script. This copies skills, hooks, scripts, rules, settings, git hooks, and CLAUDE.md from the APEX source. Then it customizes CLAUDE.md for the project's specific stack.
-
-## CRITICAL: Use the Init Script
-
-The APEX framework ships with `apex-init-project.sh` which handles ALL file copying. **You MUST run this script** — do NOT manually recreate files.
-
-### Step 1: Find the APEX Framework Source
-
-Look for the APEX framework in these locations (in order):
-1. `~/apex-framework/` (git clone / development)
-2. `~/.apex-framework/` (installed via auto-update)
-
-Verify by checking for the `VERSION` file and `apex-init-project.sh` in that directory.
-
-If neither exists, tell the user:
-```
-APEX Framework source not found. Please clone it first:
-  git clone https://github.com/lsfdsb/apex-framework.git ~/apex-framework
-```
-
-### Step 2: Run the Init Script
+First, check if APEX is already installed:
 
 ```bash
-# Run from the PROJECT directory (current working directory)
-bash ~/apex-framework/apex-init-project.sh
-# OR if installed via auto-update:
-bash ~/.apex-framework/apex-init-project.sh
+ls .claude/skills/ 2>/dev/null | head -5
 ```
 
-This script will:
-- Copy 12+ project skills (prd, architecture, research, qa, security, etc.)
-- Copy hook scripts and make them executable
-- Copy path-based rules
-- Copy output styles
-- Copy settings.json (hooks, permissions, sandbox, statusLine)
-- Install git hooks (pre-commit, commit-msg)
-- Copy CLAUDE.md (or preserve existing one)
-- Update .gitignore with APEX entries
-- Create docs directories (docs/prd, docs/architecture, docs/research, docs/reviews)
+**If `.claude/skills/` exists and has files:**
+Tell the user: "APEX is already installed in this project! You have [count] skills ready. Use `/evolve` to improve the framework, or just start building — your safety net is active."
+Then STOP — do not reinstall.
 
-**Wait for the script to finish and show its output to the user.**
+## Step 1: Find the APEX Framework Source
 
-### Step 3: Detect Existing Stack
+Look for `apex-init-project.sh` in these locations (in order):
 
-After the script runs, read the project's config files to detect the stack:
+```bash
+# Check each location
+for dir in "${APEX_FRAMEWORK_REPO:-}" "$HOME/.apex-framework" "$HOME/apex-framework" "$HOME/projects/apex-framework"; do
+  [ -f "$dir/apex-init-project.sh" ] && echo "Found: $dir" && break
+done
+```
+
+**If found:** Confirm with the user before running:
+
+```
+📚 I found the APEX Framework at [path]. Here's what /init will install:
+
+  📋 Skills — slash commands like /prd, /qa, /security, /commit
+     These are knowledge modules that guide each phase of building.
+
+  🔧 Hooks — automated safety gates that run on every action
+     They block dangerous commands, enforce PRDs, validate commits,
+     and auto-format your code. You can't accidentally break things.
+
+  🤖 Agents — 4 autonomous sub-agents (code review, research, etc.)
+     Claude spawns these automatically when needed.
+
+  📏 Rules — auto-load when you edit certain file types (React, SQL, etc.)
+
+  🎨 Output Style — educational mode (explains What/Why/How)
+
+  🪝 Git Hooks — pre-commit (type check + lint) and commit-msg (format)
+
+Shall I install it? (This copies files into .claude/ — safe and reversible)
+```
+
+**If NOT found:** Show the user exactly what to do:
+
+```
+⚔️ APEX Framework not found on this machine.
+
+📚 WHAT IS APEX?
+APEX is a configuration framework for Claude Code. It adds 26 skills,
+safety hooks, and an educational workflow so you can build world-class
+apps while learning engineering.
+
+To install:
+
+  Step 1 — Clone the framework (once, ever):
+  git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework
+
+  Step 2 — Run the installer (from your project directory):
+  ~/.apex-framework/install.sh
+
+Then come back and start building!
+```
+
+## Step 2: Run the Init Script
+
+Once the user confirms, run the installer:
+
+```bash
+bash [path-to-apex]/apex-init-project.sh
+```
+
+**Show the output to the user** — it explains what's being installed. Wait for it to complete.
+
+## Step 3: Detect Existing Stack
+
+After install, read the project's config files to detect the stack:
 - `package.json` → framework, dependencies, scripts
-- `requirements.txt` / `pyproject.toml` → Python stack
-- `Cargo.toml` → Rust stack
-- `go.mod` → Go stack
 - `tsconfig.json` → TypeScript config
-- Existing `src/` structure
+- Lock files → package manager (pnpm-lock.yaml, yarn.lock, bun.lockb)
+- `src/` structure, `app/` directory
 
-Detect:
-- Framework (Next.js, Remix, Vite, Django, Rails, etc.)
-- Language (TypeScript, Python, Rust, Go, etc.)
-- Database (Supabase, Prisma, Drizzle, etc.)
-- Testing (Vitest, Jest, Pytest, etc.)
-- Package manager (npm, pnpm, yarn, bun)
-- Dev/build/test/lint commands from package.json scripts
+Detect: framework, language, database, testing, package manager, build commands.
 
-### Step 4: Customize CLAUDE.md for This Project
+## Step 4: Customize CLAUDE.md for This Project
 
-The init script copies the generic APEX CLAUDE.md. Now **edit it** to add project-specific information. Use the Edit tool to prepend or append project-specific sections:
+The init script copies the generic APEX CLAUDE.md. Now **edit it** to add project-specific info:
 
 ```markdown
-# [Project Name]
-
-> Powered by APEX Framework v[version from VERSION file]
-
 ## Stack
 
 - [Detected framework + version]
@@ -91,57 +113,48 @@ The init script copies the generic APEX CLAUDE.md. Now **edit it** to add projec
 - `[package-manager] build` — production build
 - `[package-manager] test` — run tests
 - `[package-manager] lint` — lint check
-
-## Project-Specific Rules
-
-- Use `[detected package manager]` (not npm) for all commands
-- [Any detected conventions from existing code]
-- [Path aliases from tsconfig, if any]
 ```
 
-**IMPORTANT:** Merge with existing CLAUDE.md content if one already existed. Never lose project-specific information.
+**IMPORTANT:** Merge with existing CLAUDE.md if one already existed. Never lose project-specific information.
 
-### Step 5: Supabase Setup (if applicable)
-
-If Supabase is detected in package.json dependencies, ask the user if they want to set it up:
-
-1. **Create client files** — Run `/supabase setup`
-2. **Create `.env.local.example`** with Supabase vars
-3. **Add db scripts** to `package.json`
-4. **Offer to link** — Ask if they want to run `npx supabase link`
-5. **Ensure `.env.local` is in `.gitignore`**
-
-### Step 6: First Commit
+## Step 5: First Commit
 
 ```bash
 git add .claude/ CLAUDE.md docs/ .gitignore
 git commit -m "chore: initialize APEX Framework v[version]"
 ```
 
-### Step 7: Welcome Message
+## Step 6: Welcome Message
 
-Show the APEX version and what was installed:
+Show the user what they now have:
 
 ```
-⚔️ APEX Framework v[version] initialized!
+⚔️ APEX Framework v[version] installed!
 
 Your project now has:
-  📋 /prd — Generate PRDs before building
-  🏗️ /architecture — Design before coding
-  🔍 /research — Research before integrating
-  ✅ /qa — Quality gate before shipping
-  🔒 /security — Security audit on sensitive code
-  🎯 /cx-review — Customer experience review
-  🚀 /qa deploy — Deployment readiness check
-  📝 /commit — Clean conventional commits
-  🔄 /changelog — Auto-maintain docs
-  🐛 /debug — Structured debugging
-  🧪 /e2e — Playwright E2E tests
+
+  📋 /prd         — Define what you're building before writing code
+  🏗️ /architecture — Plan the system design
+  🔍 /research    — Verify APIs and docs before integrating
+  ✅ /qa          — 6-phase quality gate before shipping
+  🔒 /security    — OWASP audit on sensitive code
+  📝 /commit      — Clean conventional commits
+  🐛 /debug       — Structured debugging (root cause, not band-aids)
+  📚 /teach       — Ask me to explain anything
+
+Your safety net is active:
+  🛡️ Dangerous commands are blocked (rm -rf, force push)
+  📄 Code without a PRD is blocked (new app/component files)
+  ✅ Commits are validated (conventional format required)
+  🔐 Secrets in code are blocked (API keys, tokens)
+  📐 Code is auto-formatted after every edit
 
 Stack detected: [framework] + [language] + [database]
 Package manager: [detected pm]
 
-Start with: /prd [your first feature]
+📚 WHAT'S NEXT?
+Tell me what you want to build! I'll guide you through:
+  /prd → /architecture → build → /qa → /commit
 
-This is the way. ⚔️
+What are we building? ⚔️
 ```

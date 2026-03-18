@@ -10,6 +10,29 @@ fi
 INPUT=$(cat)
 SOURCE=$(echo "$INPUT" | jq -r '.source // "startup"')
 
+# ── Bootstrap detection: is APEX installed in this project? ──
+# If .claude/skills/ doesn't exist, this project hasn't been initialized.
+# Show a helpful hint and skip the full banner.
+if [ "$SOURCE" = "startup" ]; then
+  PROJECT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
+  if [ ! -d "$PROJECT/.claude/skills" ]; then
+    echo ""
+    echo "⚔️  APEX Framework is not installed in this project."
+    echo ""
+    echo "Type /init to set it up, or just tell me what you want to build"
+    echo "and I'll guide you through setup."
+    echo ""
+    # Check if the framework source exists so we can give a better hint
+    if [ -d "$HOME/.apex-framework/apex-init-project.sh" ] || [ -f "$HOME/.apex-framework/apex-init-project.sh" ]; then
+      echo "   (APEX source found at ~/.apex-framework/ — /init will use it)"
+    else
+      echo "   Quick install: git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.apex-framework/install.sh"
+    fi
+    echo ""
+    exit 0
+  fi
+fi
+
 # ── Resolve version dynamically ──
 APEX_VERSION=""
 # Priority 1: VERSION file in project dir

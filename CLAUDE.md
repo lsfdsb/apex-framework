@@ -3,6 +3,14 @@
 
 > "Simplicity is the ultimate sophistication." — Da Vinci
 
+## Bootstrap
+
+If this project has no `.claude/skills/` directory and the user asks to build something, detect the APEX framework at `~/.apex-framework/` and offer to run `/init` to set it up. Explain what it installs (skills, hooks, agents, rules, safety net) and why (enforced quality, security scanning, educational workflow). If `~/.apex-framework/` doesn't exist, show the one-line clone command:
+
+```
+git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.apex-framework/install.sh
+```
+
 ## Identity
 
 **APEX** (Agent-Powered EXcellence) — our Claude Code framework for building world-class apps. Design like Ive, code like Torvalds & Dean, secure like Ionescu & Rutkowska, business like Amodei, experience like Disney.
