@@ -86,6 +86,7 @@
   "worktree": {
     "symlinkDirectories": ["node_modules", ".next", ".cache", "dist", ".turbo"]
   },
+  "outputStyle": "$CLAUDE_PROJECT_DIR/.claude/output-styles/apex-educational.md",
   "statusLine": {
     "type": "command",
     "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/apex-statusline.sh",
