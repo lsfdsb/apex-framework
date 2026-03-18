@@ -141,8 +141,7 @@ else
 fi
 
 # ── Agents ──
-SESSION_ID="${CLAUDE_SESSION_ID:-default}"
-AGENT_FILE="/tmp/apex-agents-${SESSION_ID}.json"
+AGENT_FILE="/tmp/apex-agents.json"
 AGENT_STR=""
 if [ -f "$AGENT_FILE" ]; then
   AGENT_COUNT=$(jq -r '.count // 0' "$AGENT_FILE" 2>/dev/null || echo "0")

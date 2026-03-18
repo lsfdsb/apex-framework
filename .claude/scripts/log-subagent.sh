@@ -19,10 +19,12 @@ AGENT_ID=$(echo "$INPUT" | jq -r '.agent_id // "unknown"' 2>/dev/null)
 AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type // "unknown"' 2>/dev/null)
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.agent_transcript_path // ""' 2>/dev/null)
 
+# Get session_id from the hook input JSON (CLAUDE_SESSION_ID env var doesn't exist)
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "default"' 2>/dev/null)
+
 # Dedup: hook fires from both global and project settings.
 # Use a lock file per agent_id to prevent double-counting.
-SESSION_ID="${CLAUDE_SESSION_ID:-default}"
-LOCK_FILE="/tmp/apex-agent-${SESSION_ID}-${AGENT_ID}.done"
+LOCK_FILE="/tmp/apex-agent-${AGENT_ID}.done"
 if [ -f "$LOCK_FILE" ]; then
   exit 0
 fi
@@ -40,7 +42,7 @@ if [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ]; then
 fi
 
 # Accumulate to session file
-AGENT_FILE="/tmp/apex-agents-${SESSION_ID}.json"
+AGENT_FILE="/tmp/apex-agents.json"
 
 if [ ! -f "$AGENT_FILE" ]; then
   echo '{"count":0,"total_tokens":0,"total_tool_uses":0}' > "$AGENT_FILE"
