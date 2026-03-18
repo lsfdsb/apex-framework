@@ -80,7 +80,7 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 20 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, evolve, dev, set-language, and more |
+| Skills | 15 | code-standards, design-system, cx-review, teach, apex-stack, verify-lib, sql-practices, debug, a11y, set-language, cost-management, about, performance, security, evolve |
 | Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Sonnet) |
 | Hook Scripts | 24 | Dangerous command blocking, commit msg validation, PRD enforcement, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent tracking, dev server, dev monitor, auto-changelog, notifications |
 | Rules | 7 | Path-based: testing, components, api, sql, supabase, nextjs, error-handling |
