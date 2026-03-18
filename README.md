@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.9
+# ⚔️ APEX Framework v5.11
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.9             ║
+  ║          ⚔️  APEX Framework v5.11            ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
