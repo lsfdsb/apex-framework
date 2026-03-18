@@ -7,7 +7,7 @@ model: sonnet
 permissionMode: plan
 maxTurns: 30
 memory: user
-skills: code-standards
+skills: code-standards, security
 hooks:
   Stop:
     - hooks:

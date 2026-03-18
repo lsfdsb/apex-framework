@@ -5,6 +5,37 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
+
+### Added
+- **6 new agents**: watcher, builder, debugger, qa, technical-writer, sentinel (Batman)
+- `/teams` skill — orchestrated agent parallelism with 4 presets (build, fix, review, full)
+- `/self-test` skill (aka `/batman`) — summons the Sentinel for full framework verification
+- `test-integration.sh` — 111+ wiring checks (hooks→scripts, agents→skills, settings coherence)
+- `TaskCompleted` hook — notifies lead when team tasks complete
+- `TeammateIdle` hook — suppresses noise from idle teammates
+- Breathing Loop — autonomous Watcher→Debugger→QA→Builder cycle
+- Autonomous Spawn Rules in CLAUDE.md — lead auto-selects team based on task complexity
+- Standardized message format for all team agents
+- Timeout/escalation rules — agents escalate after 3 turns stuck
+- Framework health monitoring — Watcher checks .claude/ integrity
+- Knowledge base — Claude Code docs verified and stored in memory
+
+### Changed
+- All agents upgraded to 9.5/10 championship level
+- Code Reviewer + Design Reviewer now team-aware (SendMessage, Task tools)
+- Builder: +3 skills (design-system, performance, security), 10-point pre-completion checklist
+- Watcher: +2 skills (code-standards, performance), explicit bash scan commands
+- QA: +1 skill (e2e), full automated command pipeline, 16-point checklist
+- Debugger: +1 skill (performance), strict QA handoff chain
+- Researcher: +2 skills (verify-lib, security), team-aware, structured output templates
+- Framework Evolver: +1 skill (security)
+- Design Reviewer: maxTurns 15→20
+- Statusline: locale fix (commas→dots), all agents abbreviated (W,B,D,QA,CR,DR,TW,R,🦇)
+
+### Fixed
+- Statusline locale bug — numbers showed `0,0K` on pt-BR locale, now `0.0K`
+
 ## [5.10.0] — 2026-03-18 — Update Skill, Pre-Commit Fix, Agent Teams Prep
 
 ### Added

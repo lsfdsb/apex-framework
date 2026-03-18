@@ -327,7 +327,7 @@ section "8. Skills"
 EXPECTED_SKILLS=(
   "about" "a11y" "apex-stack" "architecture" "changelog"
   "cicd" "code-standards" "commit" "cost-management" "cx-review" "debug"
-  "design-system" "dev" "e2e" "evolve" "init" "performance"
+  "design-system" "dev" "e2e" "evolve" "init" "performance" "self-test" "teams"
   "prd" "qa" "research" "security"
   "sql-practices" "supabase" "teach" "verify-lib"
 )
@@ -366,11 +366,38 @@ done
 # ══════════════════════════════════════════════════
 section "9. Agents"
 
-EXPECTED_AGENTS=("code-reviewer.md" "design-reviewer.md" "researcher.md" "framework-evolver.md")
+EXPECTED_AGENTS=("code-reviewer.md" "design-reviewer.md" "researcher.md" "framework-evolver.md" "watcher.md" "builder.md" "debugger.md" "qa.md" "technical-writer.md" "sentinel.md")
 for agent in "${EXPECTED_AGENTS[@]}"; do
   assert_file_exists "$AGENTS/$agent"
   assert_file_contains "$AGENTS/$agent" "^---" "$agent has frontmatter"
 done
+
+# Team agents have required fields
+TEAM_AGENTS=("watcher.md" "builder.md" "debugger.md" "qa.md")
+for agent in "${TEAM_AGENTS[@]}"; do
+  assert_file_contains "$AGENTS/$agent" "SendMessage" "$agent has SendMessage tool (team-aware)"
+  assert_file_contains "$AGENTS/$agent" "TaskCreate|TaskUpdate|TaskList" "$agent has Task tools (team-aware)"
+done
+assert_file_contains "$AGENTS/watcher.md" "background: true" "watcher runs in background"
+assert_file_contains "$AGENTS/builder.md" "isolation: worktree" "builder uses worktree isolation"
+assert_file_contains "$AGENTS/debugger.md" "isolation: worktree" "debugger uses worktree isolation"
+assert_file_contains "$AGENTS/qa.md" "disallowedTools" "qa agent is read-only (no writes)"
+
+# All review agents are team-aware (can communicate)
+REVIEW_AGENTS=("code-reviewer.md" "design-reviewer.md")
+for agent in "${REVIEW_AGENTS[@]}"; do
+  assert_file_contains "$AGENTS/$agent" "SendMessage" "$agent has SendMessage (team-aware)"
+done
+
+# Teams skill exists and has orchestration tools
+assert_file_exists "$SKILLS/teams/SKILL.md" "teams skill exists"
+assert_file_contains "$SKILLS/teams/SKILL.md" "TeamCreate" "teams skill can create teams"
+assert_file_contains "$SKILLS/teams/SKILL.md" "Auto-Spawn" "teams skill has auto-spawn logic"
+assert_file_contains "$SKILLS/teams/SKILL.md" "Breathing Loop" "teams skill has self-maintaining loop"
+assert_file_contains "$SKILLS/teams/SKILL.md" "fix" "teams skill has fix preset"
+
+# Autonomous spawn rules in CLAUDE.md
+assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "Autonomous Spawn Rules" "CLAUDE.md has auto-spawn rules"
 
 # ══════════════════════════════════════════════════
 # 10. RULES

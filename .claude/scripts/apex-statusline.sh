@@ -11,6 +11,9 @@
 #
 # Note: context_window is null before first API call. Handle with // 0.
 
+# Force C locale for numeric formatting (avoid 0,5 instead of 0.5 in pt-BR etc.)
+export LC_NUMERIC=C
+
 if ! command -v jq &> /dev/null; then
   echo "⚔️ APEX | This is the way."
   exit 0
@@ -154,11 +157,24 @@ if [ -f "$AGENT_FILE" ]; then
     if [ -n "$AGENT_TYPES_RAW" ]; then
       IFS=',' read -ra TYPES_ARR <<< "$AGENT_TYPES_RAW"
       TYPE_COUNT=${#TYPES_ARR[@]}
-      if [ "$TYPE_COUNT" -le 3 ]; then
-        TYPES_DISPLAY=" ($(IFS=', '; echo "${TYPES_ARR[*]}"))"
-      else
-        TYPES_DISPLAY=" (${TYPES_ARR[0]}, ${TYPES_ARR[1]} +$((TYPE_COUNT - 2)))"
-      fi
+      # Abbreviate agent names for compact display
+      ABBREV_ARR=()
+      for t in "${TYPES_ARR[@]}"; do
+        case "$t" in
+          watcher)         ABBREV_ARR+=("W") ;;
+          builder)         ABBREV_ARR+=("B") ;;
+          debugger)        ABBREV_ARR+=("D") ;;
+          qa)              ABBREV_ARR+=("QA") ;;
+          code-reviewer)   ABBREV_ARR+=("CR") ;;
+          design-reviewer) ABBREV_ARR+=("DR") ;;
+          researcher)      ABBREV_ARR+=("R") ;;
+          framework-evolver) ABBREV_ARR+=("FE") ;;
+          technical-writer) ABBREV_ARR+=("TW") ;;
+          sentinel)        ABBREV_ARR+=("🦇") ;;
+          *)               ABBREV_ARR+=("$(echo "$t" | cut -c1-3)") ;;
+        esac
+      done
+      TYPES_DISPLAY=" ($(IFS=','; echo "${ABBREV_ARR[*]}"))"
     fi
     AGENT_STR=" ┃ 🤖 ${AGENT_COUNT}${TYPES_DISPLAY} $(fmt_tok "$AGENT_TOKENS")"
   fi

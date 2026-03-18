@@ -79,7 +79,7 @@ This runs a diagnostic that checks every component. If everything is green, you'
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 26 scripts, 4 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning feedback loop.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 28 scripts, 10 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
 
 **Built for leaders and PMs who want to learn engineering while building.** Every action explains What, Why, and How. Over weeks of use, you'll go from "what is a branch?" to reviewing PRs and debugging issues independently.
 
@@ -117,7 +117,7 @@ Everything installs into your project's `.claude/` directory:
 |----------|-------|-------------|
 | **Skills** | 25 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, etc.) — each is a specialized knowledge module |
 | **Scripts** | 26 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, etc.) |
-| **Agents** | 4 | Autonomous sub-agents: code-reviewer, design-reviewer, researcher, framework-evolver |
+| **Agents** | 10 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, sentinel (Batman), framework-evolver |
 | **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
 | **Output Style** | 1 | Educational — explains What/Why/How for every action |
 | **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
@@ -307,16 +307,22 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 4 specialized agents that Claude spawns automatically:
+APEX has 10 specialized agents — a championship roster. Use `/teams` for parallel work, `/batman` to verify everything:
 
-| Agent | Model | When It Activates |
-|-------|-------|------------------|
-| **code-reviewer** | Sonnet | Reviews code quality, security, patterns |
-| **design-reviewer** | Sonnet | Reviews UI against design system, a11y |
-| **researcher** | Haiku | Fetches docs, verifies APIs (cheap and fast) |
+| Agent | Model | Role |
+|-------|-------|------|
+| **watcher** | Haiku | Continuous monitoring — catches errors, security, drift |
+| **builder** | Sonnet | Implements features in isolated worktrees |
+| **debugger** | Sonnet | Root-cause bug fixes — no band-aids |
+| **qa** | Sonnet | 6-phase quality gate — blocks bad code |
+| **code-reviewer** | Sonnet | Deep code review with severity ratings |
+| **design-reviewer** | Sonnet | UI/UX review against design system |
+| **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
+| **researcher** | Haiku | Verifies APIs, libraries, best practices |
+| **sentinel** | Sonnet | The Dark Knight — `/batman` for full self-test |
 | **framework-evolver** | Sonnet | Analyzes sessions for improvements (`/evolve`) |
 
-You don't call these directly — Claude decides when to use them.
+Use `/teams` and Claude auto-selects the right roster. Use `/batman` when you need proof everything works.
 
 ### Step 6: Trust the Safety Net
 

@@ -278,6 +278,28 @@
         ]
       }
     ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\":\"📋 Task completed — check TaskList for next available work or handoff.\"}'",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"suppressOutput\":true}'",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "SubagentStop": [
       {
         "hooks": [
