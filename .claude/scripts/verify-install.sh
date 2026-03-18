@@ -6,7 +6,13 @@ if ! command -v jq &> /dev/null; then
 fi
 # verify-install.sh — PreToolUse hook on Bash
 # Catches package install commands and injects a reminder to verify the lib.
-# Doesn't block (exit 0) but adds context via stdout for Claude.
+# Doesn't block — uses additionalContext to add context for Claude.
+
+deny() {
+  local reason="$1"
+  jq -n --arg reason "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  exit 0
+}
 
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty' 2>/dev/null)

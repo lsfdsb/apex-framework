@@ -4,6 +4,7 @@ description: Expert code review specialist. Reviews code for quality, security, 
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, MultiEdit
 model: sonnet
+permissionMode: plan
 maxTurns: 25
 skills: code-standards, security
 memory: project
