@@ -131,7 +131,7 @@ Your project now has:
   ✅ /qa — Quality gate before shipping
   🔒 /security — Security audit on sensitive code
   🎯 /cx-review — Customer experience review
-  🚀 /deploy — Pre-deployment checklist
+  🚀 /qa deploy — Deployment readiness check
   📝 /commit — Clean conventional commits
   🔄 /changelog — Auto-maintain docs
   🐛 /debug — Structured debugging

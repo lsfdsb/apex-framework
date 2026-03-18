@@ -12,17 +12,16 @@
 5. Enable **Code execution and file creation**
 6. Enable **Skills**
 
-## Step 2: Upload Skills (29 files)
+## Step 2: Upload Skills (26 files)
 
 In **Settings > Customize > Skills**, click **Upload skill** for each `.md` file.
 
-Extract `apex-skills-claude-web.tar.gz` first. Upload all 29 files.
+Extract `apex-skills-claude-web.tar.gz` first. Upload all 26 files.
 
 ### Essential (upload first):
 
 | File | Purpose |
 |------|---------|
-| `workflow-enforcer.md` | Blocks code without PRD |
 | `prd.md` | Generates complete PRD |
 | `code-standards.md` | TypeScript/React patterns |
 | `design-system.md` | UI/UX Jony Ive style |
@@ -35,11 +34,11 @@ Extract `apex-skills-claude-web.tar.gz` first. Upload all 29 files.
 
 ### Workflow skills:
 
-`architecture.md`, `research.md`, `performance.md`, `cx-review.md`, `a11y.md`, `deploy.md`, `commit.md`, `changelog.md`, `e2e.md`, `cicd.md`
+`architecture.md`, `research.md`, `performance.md`, `cx-review.md`, `a11y.md`, `commit.md`, `changelog.md`, `e2e.md`, `cicd.md`
 
 ### Support skills:
 
-`apex-stack.md`, `verify-lib.md`, `cost-management.md`, `set-language.md`, `init.md`, `apex-review.md`
+`apex-stack.md`, `verify-lib.md`, `cost-management.md`, `set-language.md`, `init.md`
 
 ### Reference files:
 
