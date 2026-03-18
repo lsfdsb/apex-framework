@@ -18,6 +18,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
 - Removed flickering pulse animation and dead `CTX_ICON` variable from statusline
 - Cost column removed from statusline (redundant for MAX plan users)
+- audit cleanup — remove redundant skills, fix refs (28422e5)
 
 ### Removed
 - `apex-review` skill — functionality absorbed by `/evolve` and framework-evolver agent

@@ -81,11 +81,11 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 | Category | Count | Details |
 |----------|-------|---------|
 | Skills | 20 | code-standards, design-system, security, a11y, verify-lib, teach, debug, supabase, evolve, dev, set-language, and more |
-| Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Opus) |
-| Hook Scripts | 21 | Dangerous command blocking, commit msg validation, PRD enforcement, test gate, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent logging, dev server, dev monitor |
-| Rules | 5 | Path-based: testing, components, api, sql, supabase |
+| Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Sonnet) |
+| Hook Scripts | 24 | Dangerous command blocking, commit msg validation, PRD enforcement, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent tracking, dev server, dev monitor, auto-changelog, notifications |
+| Rules | 7 | Path-based: testing, components, api, sql, supabase, nextjs, error-handling |
 | Output Styles | 2 | Educational + Mandalorian |
-| StatusLine | 1 | Real-time: model, tokens, cost, context %, lines changed |
+| StatusLine | 1 | Real-time: model, tokens, context %, lines changed, agent tracking |
 | Sandbox | 1 | Filesystem restrictions: blocks writes to /etc, ~/.ssh, ~/.aws |
 
 ### Project-Level (per project, via `apex-init-project.sh`)

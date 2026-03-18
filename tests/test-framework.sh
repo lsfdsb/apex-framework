@@ -372,7 +372,7 @@ done
 # ══════════════════════════════════════════════════
 section "10. Rules"
 
-EXPECTED_RULES=("testing.md" "components.md" "api.md" "sql.md" "supabase.md")
+EXPECTED_RULES=("testing.md" "components.md" "api.md" "sql.md" "supabase.md" "nextjs.md" "error-handling.md")
 for rule in "${EXPECTED_RULES[@]}"; do
   assert_file_exists "$RULES/$rule"
 done

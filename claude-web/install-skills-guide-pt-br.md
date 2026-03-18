@@ -36,42 +36,41 @@ Agora: cada skill é um arquivo individual que o Claude carrega sob demanda — 
 | # | Arquivo | O que faz | Quando ativa |
 |---|---------|-----------|--------------|
 | 1 | `prd.md` | Gera PRD completo | "novo app", "nova feature" |
-| 3 | `code-standards.md` | Padrões TypeScript/React | Toda escrita de código |
-| 4 | `design-system.md` | UI/UX Jony Ive style | Todo trabalho visual |
-| 5 | `design-system-reference.md` | Fontes, cores, espaçamento | Detalhes de design |
-| 6 | `security.md` | Auditoria OWASP | Auth, pagamentos, PII |
-| 7 | `security-reference.md` | Grep patterns, headers | Detalhes de segurança |
-| 8 | `sql-practices.md` | PostgreSQL/Supabase | Toda query/migration |
-| 9 | `sql-practices-reference.md` | EXPLAIN, indexes, RLS | Detalhes de SQL |
-| 10 | `qa.md` | Gate de qualidade 5 fases | Antes de enviar código |
+| 2 | `code-standards.md` | Padrões TypeScript/React | Toda escrita de código |
+| 3 | `design-system.md` | UI/UX Jony Ive style | Todo trabalho visual |
+| 4 | `design-system-reference.md` | Fontes, cores, espaçamento | Detalhes de design |
+| 5 | `security.md` | Auditoria OWASP | Auth, pagamentos, PII |
+| 6 | `security-reference.md` | Grep patterns, headers | Detalhes de segurança |
+| 7 | `sql-practices.md` | PostgreSQL/Supabase | Toda query/migration |
+| 8 | `sql-practices-reference.md` | EXPLAIN, indexes, RLS | Detalhes de SQL |
+| 9 | `qa.md` | Gate de qualidade 5 fases | Antes de enviar código |
 
 ### Skills de Workflow:
 
 | # | Arquivo | O que faz |
 |---|---------|-----------|
-| 11 | `architecture.md` | Design de sistema |
-| 12 | `research.md` | Pesquisa de APIs/libs |
-| 13 | `performance.md` | Otimização zero-lag |
-| 14 | `cx-review.md` | Review de experiência do cliente |
-| 15 | `a11y.md` | Auditoria de acessibilidade WCAG 2.2 |
-| 16 | `commit.md` | Commits convencionais |
-| 17 | `changelog.md` | CHANGELOG + atualização de PRD |
-| 18 | `debug.md` | Protocolo estruturado de debugging |
-| 20 | `e2e.md` | Testes E2E com Playwright |
-| 21 | `cicd.md` | Pipeline GitHub Actions |
+| 10 | `architecture.md` | Design de sistema |
+| 11 | `research.md` | Pesquisa de APIs/libs |
+| 12 | `performance.md` | Otimização zero-lag |
+| 13 | `cx-review.md` | Review de experiência do cliente |
+| 14 | `a11y.md` | Auditoria de acessibilidade WCAG 2.2 |
+| 15 | `commit.md` | Commits convencionais |
+| 16 | `changelog.md` | CHANGELOG + atualização de PRD |
+| 17 | `debug.md` | Protocolo estruturado de debugging |
+| 18 | `e2e.md` | Testes E2E com Playwright |
+| 19 | `cicd.md` | Pipeline GitHub Actions |
 
 ### Skills de Suporte:
 
 | # | Arquivo | O que faz |
 |---|---------|-----------|
-| 22 | `apex-stack.md` | Stack padrão verificado |
-| 23 | `verify-lib.md` | Verificação de segurança de libs |
-| 24 | `teach.md` | Ensina terminal e programação |
-| 25 | `cost-management.md` | Otimização de modelos e tokens |
-| 26 | `set-language.md` | Salvar idioma (pt-br/en-us) |
-| 27 | `init.md` | Inicializar APEX em projeto |
-| 28 | `about.md` | Easter egg — créditos |
-| 29 | `about.md` | Easter egg — créditos ⚔️ |
+| 20 | `apex-stack.md` | Stack padrão verificado |
+| 21 | `verify-lib.md` | Verificação de segurança de libs |
+| 22 | `teach.md` | Ensina terminal e programação |
+| 23 | `cost-management.md` | Otimização de modelos e tokens |
+| 24 | `set-language.md` | Salvar idioma (pt-br/en-us) |
+| 25 | `init.md` | Inicializar APEX em projeto |
+| 26 | `about.md` | Easter egg — créditos ⚔️ |
 
 ---
 
@@ -127,13 +126,13 @@ Resultado: desperdício de tokens, contexto poluído
 
 ### Skills Individuais (o correto):
 ```
-Upload: 29 arquivos pequenos e focados
+Upload: 26 arquivos pequenos e focados
 Claude: lê só o frontmatter (name + description) de cada um
 Quando relevante: carrega APENAS a skill necessária
 Resultado: eficiente, focado, progressive disclosure
 ```
 
-📚 *Sabedoria da Armeira*: Isso é exatamente como funciona no Claude Code. O frontmatter (~100 tokens por skill) fica sempre disponível para o Claude decidir qual skill carregar. O conteúdo completo (<500 linhas cada) só carrega quando necessário. Com 29 skills, o custo base é ~2900 tokens — bem dentro do budget. Este é o caminho.
+📚 *Sabedoria da Armeira*: Isso é exatamente como funciona no Claude Code. O frontmatter (~100 tokens por skill) fica sempre disponível para o Claude decidir qual skill carregar. O conteúdo completo (<500 linhas cada) só carrega quando necessário. Com 26 skills, o custo base é ~2600 tokens — bem dentro do budget. Este é o caminho.
 
 ---
 

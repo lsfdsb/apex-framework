@@ -375,7 +375,7 @@ echo "  📦 ${#UNIVERSAL_SKILLS[@]} skills (code-standards, design-system, secu
 echo "  🤖 3 subagents (code-reviewer, researcher, design-reviewer)"
 echo "  🎨 Output styles (educational + mandalorian)"
 echo "  🔧 11 hook scripts (security, formatting, workflow enforcement)"
-echo "  📏 4 path-based rules (testing, components, api, sql)"
+echo "  📏 7 path-based rules (testing, components, api, sql, supabase, nextjs, error-handling)"
 echo "  🛡️ Permissions + sandbox (blocks rm -rf, protects secrets)"
 echo "  📊 Status line (model, tokens, cost, context %)"
 echo ""

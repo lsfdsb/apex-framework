@@ -123,16 +123,16 @@ if [ -f "$AGENT_FILE" ]; then
   AGENT_COUNT=$(jq -r '.count // 0' "$AGENT_FILE" 2>/dev/null || echo "0")
   AGENT_TOKENS=$(jq -r '.total_tokens // 0' "$AGENT_FILE" 2>/dev/null || echo "0")
   if [ "$AGENT_COUNT" -gt 0 ] 2>/dev/null; then
-    AGENT_STR=" ┃ 🤖${AGENT_COUNT} agents $(fmt_tok "$AGENT_TOKENS")"
+    AGENT_STR=" ┃ 🤖 ${AGENT_COUNT} agents $(fmt_tok "$AGENT_TOKENS")"
   fi
 fi
 
 # ── Alerts ──
 A=""
-[ "$CTX_INT" -gt 80 ] 2>/dev/null && A=" ⚠️CTX"
+[ "$CTX_INT" -gt 80 ] 2>/dev/null && A=" ⚠️ CTX"
 PREF="$HOME/.claude/apex-preferences.json"
 TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
-command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️COST"
+command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️ COST"
 
 # ── Output ──
 echo "⚔️ APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A} ┃ This is the way."

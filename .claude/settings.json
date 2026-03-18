@@ -82,6 +82,9 @@
       ]
     }
   },
+  "worktree": {
+    "symlinkDirectories": ["node_modules", ".next", ".cache", "dist", ".turbo"]
+  },
   "statusLine": {
     "type": "command",
     "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/apex-statusline.sh",

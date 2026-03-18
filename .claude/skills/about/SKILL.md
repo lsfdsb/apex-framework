@@ -41,9 +41,9 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     26 Skills · 5 Rules · 4 Agents · 19 Hooks            ║
-     ║     22 Scripts · 2 Output Styles · 1 Sandbox             ║
-     ║     7 versions · 1 conversation · ∞ ambition              ║
+     ║     26 Skills · 7 Rules · 4 Agents · 19 Hooks            ║
+     ║     24 Scripts · 2 Output Styles · 1 Sandbox             ║
+     ║     8 versions · 1 conversation · ∞ ambition              ║
      ║                                                           ║
      ║   A Head of CX who dreamed of building world-class        ║
      ║   apps, and an AI who believed in teaching while doing.   ║
