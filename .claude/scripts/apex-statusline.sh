@@ -147,10 +147,20 @@ fi
 AGENT_FILE="/tmp/apex-agents.json"
 AGENT_STR=""
 if [ -f "$AGENT_FILE" ]; then
-  AGENT_DATA=$(jq -r '[(.count // 0 | tostring), (.total_tokens // 0 | tostring)] | join("\t")' "$AGENT_FILE" 2>/dev/null)
-  IFS=$'\t' read -r AGENT_COUNT AGENT_TOKENS <<< "$AGENT_DATA"
+  AGENT_DATA=$(jq -r '[(.count // 0 | tostring), (.total_tokens // 0 | tostring), ((.types // []) | join(","))] | join("\t")' "$AGENT_FILE" 2>/dev/null)
+  IFS=$'\t' read -r AGENT_COUNT AGENT_TOKENS AGENT_TYPES_RAW <<< "$AGENT_DATA"
   if [ "${AGENT_COUNT:-0}" -gt 0 ] 2>/dev/null; then
-    AGENT_STR=" ┃ 🤖 ${AGENT_COUNT} agents $(fmt_tok "$AGENT_TOKENS")"
+    TYPES_DISPLAY=""
+    if [ -n "$AGENT_TYPES_RAW" ]; then
+      IFS=',' read -ra TYPES_ARR <<< "$AGENT_TYPES_RAW"
+      TYPE_COUNT=${#TYPES_ARR[@]}
+      if [ "$TYPE_COUNT" -le 3 ]; then
+        TYPES_DISPLAY=" ($(IFS=', '; echo "${TYPES_ARR[*]}"))"
+      else
+        TYPES_DISPLAY=" (${TYPES_ARR[0]}, ${TYPES_ARR[1]} +$((TYPE_COUNT - 2)))"
+      fi
+    fi
+    AGENT_STR=" ┃ 🤖 ${AGENT_COUNT}${TYPES_DISPLAY} $(fmt_tok "$AGENT_TOKENS")"
   fi
 fi
 
@@ -161,5 +171,25 @@ PREF="$HOME/.claude/apex-preferences.json"
 TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
 command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️ COST"
 
+# ── PR detection (clickable link + merge status) ──
+PR_STR=""
+if command -v gh &>/dev/null; then
+  PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
+  if [ -n "$PR_DATA" ]; then
+    PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
+    PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')
+    PR_URL=$(echo "$PR_DATA" | jq -r '.url // empty')
+    if [ -n "$PR_NUM" ]; then
+      case "$PR_STATE" in
+        MERGED) PR_ICON="🟣" ;;
+        OPEN)   PR_ICON="🟢" ;;
+        CLOSED) PR_ICON="🔴" ;;
+        *)      PR_ICON="PR" ;;
+      esac
+      PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
+    fi
+  fi
+fi
+
 # ── Output ──
-echo "⚔️ APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A} ┃ This is the way."
+printf "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"

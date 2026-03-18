@@ -95,3 +95,18 @@ export default function robots(): MetadataRoute.Robots {
   }
 }
 ```
+
+## Internationalization (i18n)
+When the project needs multiple languages:
+- Use next-intl (App Router native, type-safe)
+- Structure: messages/en.json, messages/es.json, messages/pt.json
+- URL: path-based (/en/about, /pt/about) for SEO
+- Always extract strings from day one — retrofitting i18n is 10x harder
+- RTL: use dir="rtl", logical CSS properties (margin-inline-start)
+
+## Progressive Web App (PWA)
+When the project needs offline or install-to-homescreen:
+- Use @serwist/next (successor to next-pwa)
+- Minimum: manifest.json with name, icons (192+512px), theme_color
+- Service worker: cache-first for assets, network-first for API
+- Offline page: cached content + "You're offline" banner

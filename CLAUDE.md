@@ -44,7 +44,20 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 
 ## Build Commands
 
+For projects using APEX:
 - `npm run dev` / `npm run build` / `npm run test` / `npm run lint` / `npm run format`
+
+For the APEX Framework itself:
+- `bash tests/test-framework.sh` — 288 structural and functional tests
+- `bash tests/test-hooks.sh` — 115 hook behavior tests
+- `bash -n .claude/scripts/*.sh` — syntax validation for all scripts
+
+## Commit Message Rules
+
+- Subject line max **72 characters** (enforced by commit-msg hook)
+- Format: `type(scope): description` (e.g., `feat(statusline): add PR link`)
+- Use the commit body for details — keep subject concise
+- When using `gh pr edit`, use REST API (`gh api repos/OWNER/REPO/pulls/N -X PATCH`) if GraphQL fails
 
 ## Workflow
 

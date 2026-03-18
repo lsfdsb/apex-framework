@@ -66,6 +66,16 @@ allowed-tools: Read, Glob, Grep
 - No hover-dependent interactions (hover doesn't exist on touch)
 - Input fields: appropriate keyboard type (email, tel, number)
 
+### 10. Content Quality
+- Buttons: verb + noun? Consistent patterns across the app?
+- Errors: empathetic + actionable + specific? No technical jargon?
+- Empty states: explain value + include CTA? Not just "No data"?
+- Confirmations: state consequences? Destructive button matches action?
+- No lorem ipsum, TODO, placeholder text in production
+- Tone consistent across all pages and states
+- Numbers formatted for locale (1,234.56 not 1234.56)
+- Dates human-readable ("2 hours ago" not "2026-03-18T16:00:00Z")
+
 ## Scoring: 1-5 per dimension
 - 5: Delightful — user tells a friend
 - 4: Smooth — no friction
@@ -85,3 +95,6 @@ allowed-tools: Read, Glob, Grep
 - Destructive actions without confirmation
 - Frozen UI during network requests
 - Generic "Error" messages without recovery path
+- Buttons that say "Submit" or "Click here"
+- Error messages showing stack traces or error codes to users
+- Empty pages with no guidance

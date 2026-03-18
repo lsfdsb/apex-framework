@@ -134,6 +134,54 @@ When building a new page, start from these patterns:
 - Let user override with toggle, persist in `localStorage`
 - Test BOTH themes — dark mode is not optional, it's expected
 
+## UX Writing — Words Are Interface
+
+> "A user interface is a conversation between the user and the product."
+
+### Button Labels
+- Always: verb + noun ("Create project", "Save changes", "Delete account")
+- Never: "Submit", "Click here", "OK", "Yes/No" without context
+- Destructive: state the action ("Delete project", not "Remove")
+- Loading state: "Creating..." (match the verb from the label)
+
+### Error Messages
+- Formula: What happened + Why + How to fix
+- Good: "Email already registered. Try logging in, or use a different email."
+- Bad: "Error: duplicate entry", "Invalid input", "Something went wrong"
+- Never blame the user: "That password is too short" not "You entered an invalid password"
+
+### Empty States
+- Formula: What this is + Why it's empty + What to do
+- Good: "No projects yet. Projects help you organize tasks by client. Create your first one."
+- Bad: "No data", "Nothing here", blank white page
+- Always include a primary CTA button
+
+### Confirmation Dialogs
+- State the consequence explicitly
+- Good: "Delete 'My Project'? This removes 47 tasks permanently and cannot be undone."
+- Bad: "Are you sure?" / "Confirm deletion"
+- Destructive button label matches the action: "Delete project" not "OK"
+
+### Loading & Progress
+- Specific: "Loading your projects..." not "Please wait..."
+- Long operations: show progress ("Importing 234 of 1,000 contacts...")
+- After completion: confirm what happened ("3 files uploaded successfully")
+
+### Success Messages
+- Celebrate proportionally: toast for saves, page change for creation
+- Don't over-celebrate minor actions (no confetti for saving a form)
+
+### Tooltips & Help Text
+- Explain WHY, not WHAT: "Projects help you organize tasks by client" not "Click to view projects"
+- Keep under 15 words. Show on focus AND hover (accessible).
+
+### Tone of Voice
+- Professional but human — not robotic, not overly casual
+- First person plural for product: "We couldn't find that page"
+- Second person for user: "Your project was created"
+- Present tense: "This deletes your account" not "This will delete your account"
+- Consistent across the entire app
+
 ## Anti-Patterns — NEVER
 
 - Purple-to-blue gradient backgrounds

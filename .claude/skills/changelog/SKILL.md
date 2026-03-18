@@ -7,6 +7,8 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 
 # Changelog & Documentation Keeper
 
+> **NOTE:** The auto-changelog hook captures commits made during Claude sessions. GitHub squash merges happen server-side and don't trigger hooks. After merging a PR, run `/changelog` to sync the CHANGELOG with merged commits.
+
 ## Current Context
 
 Recent commits: !`git log --oneline -10 2>/dev/null`
