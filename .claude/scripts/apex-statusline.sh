@@ -202,7 +202,15 @@ if command -v gh &>/dev/null; then
   fi
   # Fetch if no cache or stale
   if [ -z "$PR_DATA" ] && [ -n "$BRANCH" ]; then
-    PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
+    # macOS has no coreutils `timeout` — use background + kill pattern instead
+    PR_DATA=$(
+      gh pr view --json number,state,url 2>/dev/null &
+      GH_PID=$!
+      ( sleep 2 && kill "$GH_PID" 2>/dev/null ) &
+      KILL_PID=$!
+      wait "$GH_PID" 2>/dev/null
+      kill "$KILL_PID" 2>/dev/null
+    )
     if [ -n "$PR_DATA" ]; then
       echo "$PR_DATA" > "$PR_CACHE"
     else
@@ -221,13 +229,8 @@ if command -v gh &>/dev/null; then
         CLOSED) PR_ICON="🔴" ;;
         *)      PR_ICON="PR" ;;
       esac
-      # OSC 8 clickable link for supported terminals, raw URL for others
-      # Terminal.app, GNOME Terminal, etc. auto-detect raw URLs as Cmd/Ctrl+clickable
-      if [[ "${TERM_PROGRAM:-}" =~ ^(iTerm|iTerm2|WezTerm)$ ]] || [[ "${TERM:-}" =~ ^(xterm-kitty) ]]; then
-        PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
-      else
-        PR_STR=" ┃ ${PR_ICON} #${PR_NUM} ${PR_URL}"
-      fi
+      # Always use OSC 8 for clickable link — Claude Code TUI supports it
+      PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
     fi
   fi
 fi
