@@ -15,8 +15,18 @@ fi
 
 INPUT=$(cat)
 
+AGENT_ID=$(echo "$INPUT" | jq -r '.agent_id // "unknown"' 2>/dev/null)
 AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type // "unknown"' 2>/dev/null)
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.agent_transcript_path // ""' 2>/dev/null)
+
+# Dedup: hook fires from both global and project settings.
+# Use a lock file per agent_id to prevent double-counting.
+SESSION_ID="${CLAUDE_SESSION_ID:-default}"
+LOCK_FILE="/tmp/apex-agent-${SESSION_ID}-${AGENT_ID}.done"
+if [ -f "$LOCK_FILE" ]; then
+  exit 0
+fi
+touch "$LOCK_FILE"
 
 # Extract token usage from agent transcript
 TOKENS=0
@@ -30,7 +40,6 @@ if [ -n "$TRANSCRIPT" ] && [ -f "$TRANSCRIPT" ]; then
 fi
 
 # Accumulate to session file
-SESSION_ID="${CLAUDE_SESSION_ID:-default}"
 AGENT_FILE="/tmp/apex-agents-${SESSION_ID}.json"
 
 if [ ! -f "$AGENT_FILE" ]; then
