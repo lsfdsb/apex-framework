@@ -39,6 +39,33 @@ allowed-tools: Read, Glob, Grep
 - No dark patterns? No unnecessary notifications?
 - Clear path to help?
 
+### 6. Resilience
+
+- Offline: does the app degrade gracefully? Cached content shown? Retry with feedback?
+- Slow network: skeleton screens, not frozen UI? Timeout with helpful message after 10s?
+- API errors: user sees "Something went wrong, try again" not a stack trace?
+
+### 7. Destructive Actions
+
+- Delete/remove: confirmation with consequences ("This will delete 47 tasks permanently")
+- Irreversible actions: require typing confirmation (like GitHub's "type repo name to delete")
+- Undo available for 10s after soft-deletes (toast with "Undo" button)
+
+### 8. First-Time Experience
+
+- Progressive disclosure: don't show everything on first visit
+- Empty states guide the user: "Create your first project" with illustration + button
+- Tooltips for complex features, dismissible, don't repeat
+- Quick wins: let user accomplish something valuable in <60 seconds
+
+### 9. Mobile Excellence
+
+- Thumb zone: primary actions in bottom 1/3 of screen
+- Bottom sheets instead of modals on mobile
+- Swipe gestures for common actions (swipe to delete, pull to refresh)
+- No hover-dependent interactions (hover doesn't exist on touch)
+- Input fields: appropriate keyboard type (email, tel, number)
+
 ## Scoring: 1-5 per dimension
 - 5: Delightful — user tells a friend
 - 4: Smooth — no friction
@@ -54,3 +81,7 @@ allowed-tools: Read, Glob, Grep
 - Infinite loading without timeout
 - Forced account creation before showing value
 - Asking for info we don't need yet
+- Hover-only interactions with no touch alternative
+- Destructive actions without confirmation
+- Frozen UI during network requests
+- Generic "Error" messages without recovery path

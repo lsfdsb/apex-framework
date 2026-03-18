@@ -68,6 +68,37 @@ Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults
 - Skip navigation link on every page
 - Screen reader: announce dynamic content with aria-live
 
+## Interaction Patterns
+
+- **Forms**: inline validation on blur, not on submit. Show success states. Multi-step forms show progress. Autosave for long forms with "Draft saved" feedback.
+- **Navigation**: sidebar for apps with 5+ sections, tabs for 2-4 views, breadcrumbs for deep hierarchies. Bottom nav on mobile for primary actions.
+- **Data display**: tables for comparison, cards for browsing. Paginate at 20+ items, virtualize at 100+. Always show total count.
+- **Notifications**: toast bottom-right, auto-dismiss 5s, stack max 3, most recent on top. Errors persist until dismissed.
+- **Modals**: only for critical confirmations. Drawers for forms/details. Inline expansion for progressive disclosure. Never modal-in-modal.
+- **Search**: instant results after 300ms debounce. Show recent searches. Empty results suggest alternatives.
+
+## Page Templates
+
+When building a new page, start from these patterns:
+
+- **Landing**: hero with one CTA → social proof (logos/testimonials) → 3 features with icons → pricing → final CTA
+- **Dashboard**: sidebar nav (collapsible on mobile) + header (search, notifications, avatar) + content grid with cards
+- **Settings**: grouped sections with headers, save button fixed at bottom on mobile, success toast on save
+- **Auth**: centered card, social login buttons first, then divider, then email/password. "Forgot password" link under password field.
+- **List/table**: filters on top, bulk actions bar appears on selection, empty state with illustration + CTA to create first item
+
+## Dark Mode Implementation
+
+```css
+:root { --bg: #ffffff; --text: #1a1a2e; --accent: #6366f1; }
+[data-theme="dark"] { --bg: #0f172a; --text: #f1f5f9; --accent: #818cf8; }
+```
+
+- Use CSS custom properties, not Tailwind `dark:` alone
+- Detect system preference: `prefers-color-scheme`
+- Let user override with toggle, persist in `localStorage`
+- Test BOTH themes — dark mode is not optional, it's expected
+
 ## Anti-Patterns — NEVER
 
 - Purple-to-blue gradient backgrounds

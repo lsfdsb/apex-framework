@@ -13,6 +13,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `auto-changelog.sh` — PostToolUse hook that auto-documents every commit to CHANGELOG.md
 - Auto-changelog registered in project and global settings (PostToolUse on Bash)
 - auto-changelog hook + statusline Beskar Edition (cd6774d)
+- gold standard — self-learning, install, health check (512c0c6)
+- enforce docs-first API integration across all skills (ab88052)
+- close the learning loop + adaptive tooling (571c421)
+- deterministic security + performance enforcement (f5a3e07)
 
 ### Changed
 - StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
