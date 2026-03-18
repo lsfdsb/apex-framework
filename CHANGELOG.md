@@ -9,6 +9,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
 - `install.sh` now symlinks `bin/` tools to `~/.local/bin` and adds to PATH
 - Split pane prerequisites documented in CLAUDE.md
+- **Always-On Agents** — Watcher and Technical Writer now mandatory in every coding session
+- Technical Writer added to all team presets (build, fix, review), not just full
+
+### Changed
+- Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
+- Output style enforces always-on agent rule — blocks commits/PRs without Technical Writer
+- CLAUDE.md: "Always-On Agents" section added above team spawn rules
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
