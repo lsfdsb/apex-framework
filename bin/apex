@@ -1,0 +1,16 @@
+#!/bin/bash
+# apex — Open Claude Code. Split panes auto-enabled in iTerm2 + tmux.
+# Usage: apex [project-dir]
+set -euo pipefail
+
+DIR="${1:-$(pwd)}"
+DIR="$(cd "$DIR" 2>/dev/null && pwd)" || { echo "Not found: $1" >&2; exit 1; }
+
+# iTerm2 + tmux available → split panes
+if [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]] && command -v tmux &>/dev/null; then
+  tmux kill-session -t apex 2>/dev/null || true
+  exec tmux -CC new-session -s apex -c "$DIR" "claude --teammate-mode tmux"
+fi
+
+# Fallback: regular claude
+cd "$DIR" && exec claude
