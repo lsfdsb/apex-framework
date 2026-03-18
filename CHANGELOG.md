@@ -5,6 +5,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- Block `git commit` on main/master — catches mistakes at commit time, not push time
+- Branch pre-flight check in `/commit` skill — Step 0 verifies branch before staging
+- Push-to-main error now includes exact recovery recipe (branch, reset, push)
+- Stop-gate exempts `.sh`/`.json`/`.md` files — no false "run tests" nudge on scripts
+- Session-context warns about uncommitted changes on main at startup
+- Chore version bumps (`v*`, `polish`, `release`) now logged to changelog as "Changed"
+- PR link: universal terminal support — OSC 8 for iTerm2/Kitty/WezTerm, raw URL for Terminal.app
+- PR cache: 60s per-branch cache + "no PR" sentinel to eliminate redundant `gh pr view` calls
+- PR cache cleanup on session start
+
 ## [5.9.0] — 2026-03-18 — UX Writing, Statusline PR Link, Extended Patterns
 
 ### Added
