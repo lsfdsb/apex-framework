@@ -4,7 +4,8 @@ description: Documentation specialist that keeps CHANGELOG, README, and docs in 
 tools: Read, Glob, Grep, Bash, Edit, Write, TaskCreate, TaskUpdate, TaskList, SendMessage
 disallowedTools: MultiEdit
 model: haiku
-permissionMode: default
+permissionMode: dontAsk
+background: true
 maxTurns: 25
 memory: project
 skills: changelog, code-standards

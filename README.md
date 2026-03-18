@@ -59,6 +59,19 @@ cd ~/another-project
 ~/.apex-framework/install.sh
 ```
 
+### Split Panes (iTerm2)
+
+For agent teams with visual split panes:
+
+```bash
+brew install tmux    # one-time
+apex                 # opens Claude Code with auto split panes
+```
+
+Or specify a project: `apex ~/Projects/myapp`
+
+Requires iTerm2 with **Settings → General → Magic → Enable Python API** enabled. Falls back to regular `claude` if tmux or iTerm2 aren't available.
+
 ### Verify it worked
 
 ```bash

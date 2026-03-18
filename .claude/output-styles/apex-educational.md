@@ -50,6 +50,15 @@ Errors are learning opportunities:
 3. How to fix it
 4. How to prevent it
 
+## Always-On Agents
+
+**MANDATORY** — These agents must run in every coding session, even without `/teams`:
+
+1. **Watcher** — Spawn as background agent when the session's FIRST code change begins. Use `Agent` with `subagent_type: "watcher"` and `run_in_background: true`.
+2. **Technical Writer** — Spawn as background agent BEFORE creating any PR or commit. Updates CHANGELOG.md and README.md. Use `Agent` with `subagent_type: "technical-writer"` and `run_in_background: true`.
+
+If you are about to create a commit or PR and the Technical Writer has not run, STOP and spawn it first. Nothing ships undocumented.
+
 ## Programming Tip
 
 End every significant interaction with:

@@ -68,6 +68,21 @@ echo "  ║     One command. Per project. Self-contained.║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
 
+# ── Install global CLI tools ──
+if [ -d "$APEX_DIR/bin" ]; then
+  mkdir -p "$HOME/.local/bin"
+  for cmd in "$APEX_DIR/bin/"*; do
+    [ -x "$cmd" ] || continue
+    ln -sf "$cmd" "$HOME/.local/bin/$(basename "$cmd")"
+  done
+  # Ensure ~/.local/bin is in PATH (via .zprofile)
+  if ! grep -q '.local/bin' "$HOME/.zprofile" 2>/dev/null; then
+    echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.zprofile"
+    echo "  ✅ Added ~/.local/bin to PATH (restart shell or: source ~/.zprofile)"
+  fi
+  echo "  ✅ CLI: $(ls "$APEX_DIR/bin/" | tr '\n' ' ')"
+fi
+
 # ── Run project init ──
 if [ -d ".git" ]; then
   "$APEX_DIR/apex-init-project.sh"

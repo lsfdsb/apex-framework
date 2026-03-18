@@ -88,7 +88,16 @@ When in doubt, ask the user. Don't assume.
 
 Teams are the APEX force multiplier. The Lead (main session) auto-spawns coordinated teams when a task warrants it — no manual `/teams` required for complex work.
 
-### Autonomous Spawn Rules
+### Always-On Agents
+
+These agents run in EVERY coding session, even without `/teams`:
+
+1. **Watcher** — Spawn as background agent at the START of any session that involves code changes. No team required. Use `Agent` with `subagent_type: "watcher"` and `run_in_background: true`.
+2. **Technical Writer** — Spawn BEFORE creating any PR or commit that changes code. Updates CHANGELOG.md and README.md automatically. Use `Agent` with `subagent_type: "technical-writer"` and `run_in_background: true`. **Nothing ships undocumented.**
+
+These are NOT optional. The Lead MUST spawn them. If you forget, you are failing the framework.
+
+### Autonomous Team Spawn Rules
 
 When the user gives a task, evaluate complexity and **auto-invoke `/teams`** if:
 - Task touches 3+ files or 2+ concerns (frontend + backend, etc.)
@@ -96,10 +105,12 @@ When the user gives a task, evaluate complexity and **auto-invoke `/teams`** if:
 - Task explicitly mentions "team", "parallel", "agents", or "swarm"
 - User says "build", "implement", "create" for non-trivial features
 
-Do NOT spawn a team for:
+Do NOT spawn a full team for:
 - Single-file edits, quick fixes, questions, or explanations
 - Tasks completable in < 5 turns
 - Research-only or documentation tasks
+
+**But ALWAYS spawn Watcher + Technical Writer regardless of task size.**
 
 ### The Roster
 | Role | Agent | Model | Purpose |
@@ -116,9 +127,9 @@ Do NOT spawn a team for:
 | Sentinel | sentinel | sonnet | The Dark Knight — /self-test, /batman |
 
 ### Presets
-- `build` — Watcher + Builder + QA (features, refactoring)
-- `fix` — Watcher + Debugger + QA (bugs, errors)
-- `review` — Code Reviewer + Design Reviewer + QA (PR review)
+- `build` — Watcher + Builder + QA + Technical Writer (features, refactoring)
+- `fix` — Watcher + Debugger + QA + Technical Writer (bugs, errors)
+- `review` — Code Reviewer + Design Reviewer + QA + Technical Writer (PR review)
 - `full` — All roles (major features, critical paths)
 
 ### The Breathing Loop
@@ -131,17 +142,16 @@ The team operates autonomously. No human intervention needed in the loop.
 Prerequisites (one-time setup):
 ```bash
 brew install tmux                                          # split pane engine
-curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash  # it2 CLI
-echo 'export PATH="$HOME/.iterm2:$PATH"' >> ~/.zprofile    # add it2 to PATH
-source ~/.zprofile
 ```
 Then enable: **iTerm2 → Settings → General → Magic → Enable Python API**
 
-Launch with split panes:
+Launch with split panes (one command):
 ```bash
-tmux -CC                          # iTerm2 control mode
-claude --teammate-mode tmux       # enable split panes
+apex                              # current directory
+apex ~/Projects/myapp             # specific project
 ```
+
+The `apex` command (installed to `~/.local/bin/` by `install.sh`) auto-detects iTerm2 + tmux and launches `tmux -CC` + `claude --teammate-mode tmux`. Falls back to regular `claude` if tmux/iTerm2 aren't available.
 
 ### Principles
 1. **Always use TeamCreate** — Never spawn regular subagents for team work. Use TeamCreate + Agent with team_name
