@@ -185,9 +185,14 @@ if command -v gh &>/dev/null; then
   # Fetch if no cache or stale
   if [ -z "$PR_DATA" ] && [ -n "$BRANCH" ]; then
     PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
-    [ -n "$PR_DATA" ] && echo "$PR_DATA" > "$PR_CACHE"
+    if [ -n "$PR_DATA" ]; then
+      echo "$PR_DATA" > "$PR_CACHE"
+    else
+      # Cache "no PR" to avoid re-fetching every render
+      echo '{"none":true}' > "$PR_CACHE"
+    fi
   fi
-  if [ -n "$PR_DATA" ]; then
+  if [ -n "$PR_DATA" ] && [ "$PR_DATA" != '{"none":true}' ]; then
     PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
     PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')
     PR_URL=$(echo "$PR_DATA" | jq -r '.url // empty')
