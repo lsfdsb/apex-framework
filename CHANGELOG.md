@@ -5,24 +5,48 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-
-### Fixed
-- auto-detect TTY for git hook animations (77e76be)
-
 ### Added
+- Statusline: clickable PR link with merge status (🟢 open, 🟣 merged, 🔴 closed) via OSC 8 hyperlinks
+- Statusline: agent tracking shows types — "🤖 3 (Explore, Plan, reviewer) 45.2K"
+- Agent tracking: `types` array in /tmp/apex-agents.json, debug log for validation
+- UX Writing guidelines — button labels, error messages, empty states, confirmations, loading, success, tooltips, tone of voice (design-system)
+- Content Quality review dimension (#10) — microcopy checklist, locale formatting (cx-review)
+- Squash-merge reminder added to /changelog skill
+- i18n patterns — next-intl, path-based URLs, RTL support (nextjs rule)
+- PWA patterns — @serwist/next, service worker, offline page (nextjs rule)
+- Payments patterns — Stripe Checkout/Elements, webhook verification (architecture)
+- Transactional email patterns — Resend, React Email, CAN-SPAM compliance (architecture)
+- Analytics & privacy patterns — Plausible, Vercel Analytics, Do Not Track (architecture)
+- SEO patterns — meta tags, Open Graph, sitemap, structured data, canonical URLs, robots.txt (#35)
+- Form patterns — react-hook-form + zod, inline validation on blur, loading states (#35)
+- State management decision tree — zustand + TanStack Query + nuqs (#35)
+- Animation implementation — framer-motion patterns with reduced-motion check (#35)
+- Production observability — Sentry, Vercel Analytics, health endpoint pattern (#35)
+- Interaction patterns — forms, navigation, data display, notifications, modals, search (#34)
+- Page templates — landing, dashboard, settings, auth, list/table (#34)
+- Dark mode implementation guide with CSS custom properties (#34)
+- CX review dimensions 6-9: resilience, destructive actions, first-time experience, mobile excellence (#34)
+- E2E testing — axe-core/playwright integration for automated a11y (#34)
+- Self-learning loop — session-learner.sh, extract-session.sh, lessons on startup (#33)
+- Deterministic security — scan-security-patterns.sh blocks hardcoded keys, eval(), SQL injection (#33)
+- Docs-first API integration — /research and /verify-lib mandate WebFetch to official docs (#33)
+- `/claude-api` skill for Claude API and Anthropic SDK integration (#33)
+- Bootstrap flow — fresh projects auto-detect missing .claude/ and guide through /init (#33)
 - `auto-changelog.sh` — PostToolUse hook that auto-documents every commit to CHANGELOG.md
-- Auto-changelog registered in project and global settings (PostToolUse on Bash)
 - auto-changelog hook + statusline Beskar Edition (cd6774d)
-- gold standard — self-learning, install, health check (512c0c6)
-- enforce docs-first API integration across all skills (ab88052)
-- close the learning loop + adaptive tooling (571c421)
-- deterministic security + performance enforcement (f5a3e07)
 
 ### Changed
 - StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
-- Removed flickering pulse animation and dead `CTX_ICON` variable from statusline
+- StatusLine output switched from echo to printf for OSC 8 escape sequence support
+- Supabase skill refactored — split 623-line SKILL.md into 49-line SKILL.md + 574-line reference.md (#34)
+- Stack updated to March 2026 — Next.js 16, Tailwind v4, Zod v4, Biome 2, Drizzle 0.45, Prisma 7 (#33)
+- NEVER Ship list expanded with "Submit" buttons, stack traces, blank pages (cx-review)
 - Cost column removed from statusline (redundant for MAX plan users)
 - audit cleanup — remove redundant skills, fix refs (28422e5)
+
+### Fixed
+- outputStyle uses frontmatter `name` field, not file path (#32)
+- auto-detect TTY for git hook animations (77e76be)
 
 ### Removed
 - `apex-review` skill — functionality absorbed by `/evolve` and framework-evolver agent

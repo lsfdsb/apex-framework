@@ -45,16 +45,21 @@ fi
 AGENT_FILE="/tmp/apex-agents.json"
 
 if [ ! -f "$AGENT_FILE" ]; then
-  echo '{"count":0,"total_tokens":0,"total_tool_uses":0}' > "$AGENT_FILE"
+  echo '{"count":0,"types":[],"total_tokens":0,"total_tool_uses":0}' > "$AGENT_FILE"
 fi
 
-PREV=$(cat "$AGENT_FILE" 2>/dev/null || echo '{"count":0,"total_tokens":0,"total_tool_uses":0}')
+PREV=$(cat "$AGENT_FILE" 2>/dev/null || echo '{"count":0,"types":[],"total_tokens":0,"total_tool_uses":0}')
 echo "$PREV" | jq \
   --argjson tok "$TOKENS" \
-  --argjson tools "$TOOL_COUNT" '
+  --argjson tools "$TOOL_COUNT" \
+  --arg atype "$AGENT_TYPE" '
   .count += 1 |
   .total_tokens += $tok |
-  .total_tool_uses += $tools
+  .total_tool_uses += $tools |
+  if (.types // [] | index($atype)) == null then .types = ((.types // []) + [$atype]) else . end
 ' > "${AGENT_FILE}.tmp" 2>/dev/null && mv "${AGENT_FILE}.tmp" "$AGENT_FILE"
+
+# Debug log (temporary — remove after validation)
+echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') type=${AGENT_TYPE} id=${AGENT_ID} transcript=${TRANSCRIPT} tokens=${TOKENS}" >> /tmp/apex-agent-debug.log
 
 exit 0

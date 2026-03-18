@@ -66,3 +66,23 @@ export async function GET() {
 2. Health endpoint — deploy with v1, wire to uptime monitor
 3. Analytics — add when first users arrive
 4. Performance monitoring — add before scaling
+
+## Payments
+When the app needs payments:
+- Use Stripe. Verify API version with /research first.
+- Stripe Checkout for simple, Stripe Elements for custom UI
+- NEVER store card numbers. NEVER process without Stripe SDK.
+- Webhook: always verify stripe-signature header
+- Test mode first with test keys and test cards (4242...)
+
+## Transactional Email
+When the app sends email:
+- Use Resend or Postmark + React Email for templates
+- Send from subdomain (mail.yourapp.com) on day one
+- Required: unsubscribe link, physical address (CAN-SPAM), plain-text version
+
+## Analytics & Privacy
+- Vercel Analytics or Plausible (privacy-first, no cookie banner)
+- NEVER Google Analytics unless specifically requested (requires EU cookie consent)
+- Event naming: noun_verb (project_created, plan_upgraded)
+- Respect Do Not Track header
