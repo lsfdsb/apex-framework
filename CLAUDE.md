@@ -127,10 +127,19 @@ Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop
 ```
 The team operates autonomously. No human intervention needed in the loop.
 
+### Split Panes (iTerm2)
+For visual split panes, launch Claude inside tmux:
+```bash
+tmux -CC   # iTerm2 control mode (recommended)
+claude --teammate-mode tmux
+```
+Or set permanently: `claude --teammate-mode tmux` or add to shell: `export CLAUDE_TEAMMATE_MODE=tmux`
+
 ### Principles
-1. **Smart spawn** — Right-size the team. Don't over-staff simple tasks
-2. **Watcher always first** — Monitoring starts before any code changes
-3. **Aggressive parallelism** — QA auto-starts when Builder/Debugger finishes
-4. **Tasks are source of truth** — TaskCreate/TaskUpdate coordinate work
-5. **Auto-handoff** — Builder→QA→Reviewer chain runs without manual triggers
-6. **Always shutdown** — Clean up teammates and teams when done
+1. **Always use TeamCreate** — Never spawn regular subagents for team work. Use TeamCreate + Agent with team_name
+2. **Smart spawn** — Right-size the team. Don't over-staff simple tasks
+3. **Watcher always first** — Monitoring starts before any code changes
+4. **Aggressive parallelism** — QA auto-starts when Builder/Debugger finishes
+5. **Tasks are source of truth** — TaskCreate/TaskUpdate coordinate work
+6. **Auto-handoff** — Builder→QA→Reviewer chain runs without manual triggers
+7. **Always shutdown** — Clean up teammates and teams when done
