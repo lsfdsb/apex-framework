@@ -66,7 +66,7 @@ When the user says "update apex", "update framework", "pull latest", or `/update
 ```bash
 # Step 1: Pull latest from GitHub (gh works inside Claude Code sandbox)
 if [ -d ~/.apex-framework/.git ]; then
-  cd ~/.apex-framework && git pull origin main
+  cd ~/.apex-framework && git fetch origin main --depth=1 && git reset --hard origin/main
 else
   gh repo clone lsfdsb/apex-framework ~/.apex-framework -- --depth=1 --branch main
 fi
