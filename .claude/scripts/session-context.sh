@@ -87,7 +87,7 @@ GROGU_QUOTE="${GROGU_QUOTES[$GROGU_IDX]}"
 if [ "$SOURCE" = "startup" ]; then
 
   # ── Reset session state for new session ──
-  rm -f /tmp/apex-agents.json /tmp/apex-agent-*.done /tmp/apex-pr-cache-*.json 2>/dev/null
+  rm -f /tmp/apex-agents.json /tmp/apex-agent-*.done /tmp/apex-pr-cache-*.json /tmp/apex-session-errors.count 2>/dev/null
 
   # ── Animated banner (stderr → terminal) ──
   # Detect if stderr is a terminal for animations
