@@ -5,6 +5,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
+- `install.sh` now symlinks `bin/` tools to `~/.local/bin` and adds to PATH
+- Split pane prerequisites documented in CLAUDE.md
+
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
 ### Added
