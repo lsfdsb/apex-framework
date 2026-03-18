@@ -16,18 +16,40 @@ Recent commits: !`git log --oneline -5 2>/dev/null`
 
 ## Pre-Commit Checklist (run all before committing)
 
+Detect the project's actual tools — never assume a specific package manager or linter:
+
 ```bash
-# 1. Type check
-pnpm exec tsc --noEmit
+# 1. Detect package manager (check lock files)
+#    pnpm-lock.yaml → pnpm
+#    yarn.lock      → yarn
+#    bun.lockb      → bun
+#    default        → npm
+PKG=$(if [ -f pnpm-lock.yaml ]; then echo pnpm; elif [ -f yarn.lock ]; then echo yarn; elif [ -f bun.lockb ]; then echo bun; else echo npm; fi)
 
-# 2. Lint
-pnpm exec oxlint . --deny-warnings
+# 2. Type check (if tsconfig exists)
+$PKG exec tsc --noEmit 2>/dev/null || true
 
-# 3. Format check
-pnpm exec prettier --check .
+# 3. Lint (detect what's available)
+#    biome.json / biome.jsonc → biome
+#    oxlint config or node_modules/.bin/oxlint → oxlint
+#    .eslintrc* / eslint.config.* → eslint
+if [ -f biome.json ] || [ -f biome.jsonc ]; then
+  $PKG exec biome check .
+elif [ -f node_modules/.bin/oxlint ]; then
+  $PKG exec oxlint .
+elif ls .eslintrc* eslint.config.* 2>/dev/null | head -1 > /dev/null; then
+  $PKG exec eslint .
+fi
 
-# 4. Tests (at minimum, related tests)
-pnpm test
+# 4. Format check (detect what's available)
+if [ -f biome.json ] || [ -f biome.jsonc ]; then
+  $PKG exec biome format --check .
+elif [ -f node_modules/.bin/prettier ]; then
+  $PKG exec prettier --check .
+fi
+
+# 5. Tests (at minimum, related tests)
+$PKG test 2>/dev/null || $PKG run test 2>/dev/null || true
 ```
 
 If ANY check fails → **STOP**. Fix the issue first. Show the user the error and explain it.

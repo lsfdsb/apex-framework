@@ -10,6 +10,29 @@ fi
 INPUT=$(cat)
 SOURCE=$(echo "$INPUT" | jq -r '.source // "startup"')
 
+# ── Bootstrap detection: is APEX installed in this project? ──
+# If .claude/skills/ doesn't exist, this project hasn't been initialized.
+# Show a helpful hint and skip the full banner.
+if [ "$SOURCE" = "startup" ]; then
+  PROJECT="${CLAUDE_PROJECT_DIR:-$(pwd)}"
+  if [ ! -d "$PROJECT/.claude/skills" ]; then
+    echo ""
+    echo "⚔️  APEX Framework is not installed in this project."
+    echo ""
+    echo "Type /init to set it up, or just tell me what you want to build"
+    echo "and I'll guide you through setup."
+    echo ""
+    # Check if the framework source exists so we can give a better hint
+    if [ -d "$HOME/.apex-framework/apex-init-project.sh" ] || [ -f "$HOME/.apex-framework/apex-init-project.sh" ]; then
+      echo "   (APEX source found at ~/.apex-framework/ — /init will use it)"
+    else
+      echo "   Quick install: git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.apex-framework/install.sh"
+    fi
+    echo ""
+    exit 0
+  fi
+fi
+
 # ── Resolve version dynamically ──
 APEX_VERSION=""
 # Priority 1: VERSION file in project dir
@@ -297,7 +320,42 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   fi
 fi
 
-# ── Dynamic context only (behavioral instructions live in outputStyle) ──
+# ── Lessons from recent sessions (close the learning loop) ──
+# Reads the last 3 session-learner reports that had errors/corrections
+# and injects a brief summary so Claude starts each session informed.
+if [ "$SOURCE" = "startup" ]; then
+  LOG_DIR="${CLAUDE_PROJECT_DIR:-.}/.claude/session-logs"
+  if [ -d "$LOG_DIR" ]; then
+    # Get last 3 non-clean reports (those with Errors or Corrections sections with content)
+    LESSONS=""
+    while IFS= read -r report; do
+      [ -z "$report" ] && continue
+      # Skip clean sessions (one-liner reports)
+      if grep -q "Clean ✅" "$report" 2>/dev/null; then
+        continue
+      fi
+      # Extract key info
+      R_DATE=$(grep -m1 'Session Report' "$report" 2>/dev/null | sed 's/# Session Report — //')
+      R_ERRORS=$(grep -A20 '^## Errors' "$report" 2>/dev/null | grep '^- ' | head -3)
+      R_CORRECTIONS=$(grep -A20 '^## User Corrections' "$report" 2>/dev/null | grep '^- ' | head -3)
+      R_SIGNALS=$(grep -A10 '^## Improvement Signals' "$report" 2>/dev/null | grep '^- ' | head -3)
+      if [ -n "$R_ERRORS" ] || [ -n "$R_CORRECTIONS" ]; then
+        LESSONS="${LESSONS}Session ${R_DATE:-(unknown date)}:"
+        [ -n "$R_ERRORS" ] && LESSONS="${LESSONS}\n  Errors: $(echo "$R_ERRORS" | head -2 | tr '\n' '; ')"
+        [ -n "$R_CORRECTIONS" ] && LESSONS="${LESSONS}\n  User said: $(echo "$R_CORRECTIONS" | head -2 | tr '\n' '; ')"
+        [ -n "$R_SIGNALS" ] && LESSONS="${LESSONS}\n  Signal: $(echo "$R_SIGNALS" | head -1)"
+        LESSONS="${LESSONS}\n"
+      fi
+    done < <(ls -t "$LOG_DIR"/session-*.md 2>/dev/null | head -5)
+
+    if [ -n "$LESSONS" ]; then
+      echo ""
+      echo "📖 Lessons from recent sessions:"
+      printf "%b" "$LESSONS"
+      echo "  (Use /evolve to address recurring patterns)"
+    fi
+  fi
+fi
 
 # ── Watermark (always) ──
 echo ""

@@ -23,15 +23,18 @@ APEX does not prescribe a fixed set of tools. Every recommendation must be **ear
 
 If a better tool exists today than what we recommended yesterday, we switch. No loyalty to tools — only loyalty to performance and quality.
 
-## Rule #3: Research Before Recommending
+## Rule #3: Verify Before Recommending
 
-Before recommending ANY stack for a new project, run `/research` to verify:
+Before recommending ANY stack for a new project, **verify current versions**:
 
-- Current version and release date
-- Bundle size impact (bundlephobia.com)
-- Build performance benchmarks
-- Known issues or breaking changes
-- Comparison with alternatives
+```bash
+npm view [package] version
+```
+
+And **WebFetch official docs** to confirm the tool still works as expected:
+```
+WebFetch("https://[official-docs-url]")
+```
 
 Never recommend from memory alone. The ecosystem moves fast. Verify.
 
@@ -65,70 +68,98 @@ Every choice must satisfy these non-negotiable targets:
 
 ### Step 3: Select by Category
 
-For each category, choose the tool that best meets the performance targets above. Here are the current leading options (as of early 2026), but **always verify with /research**:
+Current ecosystem leaders verified from npm registry (March 2026). **Always re-verify with `npm view` and /research before recommending.**
 
 #### Language
 - **TypeScript** (strict mode) — non-negotiable for any JS/TS project
   - Catches bugs at compile time, self-documenting, best AI code generation
 
 #### Framework (pick based on project type)
-- **SSR/Full-stack**: Research current leaders (Next.js, Nuxt, SvelteKit, Astro, etc.)
-- **SPA**: Research current leaders (React + Vite, Svelte, Solid, etc.)
-- **Static/Content**: Research current leaders (Astro, Eleventy, etc.)
-- **API-only**: Research current leaders (Hono, Fastify, Express, etc.)
-- **Mobile**: Research current leaders (React Native, Expo, Flutter, etc.)
 
-Decision criteria: bundle size, build speed, ecosystem maturity, deployment flexibility.
+| Use case | Current leader | Version | Why | Alternatives to evaluate |
+|----------|---------------|---------|-----|------------------------|
+| **SSR/Full-stack** | Next.js | 16.x | App Router, React Server Components, mature ecosystem | SvelteKit, Nuxt, Astro |
+| **SPA** | React + Vite | — | Fastest dev server, HMR, tree-shaking | Svelte, Solid |
+| **Static/Content** | Astro | — | Zero JS by default, partial hydration | Eleventy |
+| **API-only** | Hono | — | Edge-native, ultra-fast, tiny | Fastify, Express |
+| **Mobile** | React Native + Expo | — | One codebase, native performance | Flutter |
 
 #### Styling
-- **Tailwind CSS** — utility-first, zero runtime cost, mobile-first by default, purges unused styles
-  - This remains the performance leader. No CSS-in-JS runtime overhead.
+- **Tailwind CSS v4** — utility-first, zero runtime cost, mobile-first, purges unused styles
+  - v4 is stable (4.2.x). Major changes from v3: new engine, CSS-first config, faster builds.
+  - Still the performance leader. No CSS-in-JS runtime overhead.
 
 #### Components
 - **shadcn/ui** — copy-paste (you own the code), accessible, Radix primitives
   - No version lock-in, no dependency bloat, fully customizable
 
 #### Database
-- Evaluate based on project needs:
-  - **PostgreSQL** (via Supabase, Neon, or self-hosted) — for most apps
-  - **SQLite** (via Turso/libSQL) — for edge-first, low-latency reads
-  - **Redis** — for caching, sessions, real-time counters
-  - Decision criteria: latency, cost, real-time needs, edge compatibility
+
+| Use case | Recommendation | Why |
+|----------|---------------|-----|
+| Most apps | PostgreSQL (via Supabase) | Auth + DB + realtime + storage in one |
+| Edge-first | SQLite (via Turso/libSQL) | Low-latency reads, globally distributed |
+| Caching | Redis (via Upstash) | Serverless, edge-compatible |
+
+Supabase remains the leading BaaS — combines PostgreSQL, auth, realtime, storage, and edge functions in one platform with a generous free tier.
 
 #### ORM / Query Builder
-- Evaluate based on performance:
-  - Research current leaders for type safety, query performance, and bundle size
-  - Decision criteria: generated SQL quality, migration tooling, runtime overhead
+
+| Tool | Version | Strengths | Best for |
+|------|---------|-----------|----------|
+| Drizzle ORM | 0.45.x | Type-safe, SQL-like, lightweight, fast queries | New projects, performance-critical |
+| Prisma | 7.x | Mature, great migrations, rich ecosystem | Existing Prisma projects, complex schemas |
+
+Both are actively maintained. Drizzle has lower runtime overhead and generates cleaner SQL. Prisma has better migration tooling and a larger ecosystem. Choose based on project needs.
 
 #### Auth
-- Evaluate based on requirements:
-  - Research current options for OAuth, MFA, session management
-  - Decision criteria: security defaults, provider coverage, token handling
+- **Supabase Auth** — for Supabase projects (built-in, zero extra deps)
+- **Auth.js (NextAuth)** — for Next.js without Supabase
+- **Clerk** — for fast-to-market with prebuilt components
+- Evaluate based on: provider coverage, MFA support, session handling, pricing
 
 #### Validation
-- **Zod** — TypeScript-first, works client and server, tiny bundle
-  - Check for newer alternatives that may be faster (e.g., Valibot, ArkType)
+
+| Tool | Version | Bundle (gzip) | Best for |
+|------|---------|---------------|----------|
+| **Valibot** | 1.3.x | ~1KB (tree-shakeable) | New projects — smaller, faster, actively maintained |
+| **Zod** | 4.3.x | ~13KB | Existing Zod projects — mature ecosystem, v4 improved perf |
+
+Valibot has gained momentum with smaller bundle and faster compilation. Zod remains solid for existing projects. For new projects where bundle size matters, prefer Valibot.
 
 #### Testing
-- **Unit/Integration**: Vitest (fast, Vite-native, Jest-compatible)
-- **E2E**: Playwright (cross-browser, mobile viewports, auto-waiting)
-- **Component**: Testing Library (tests behavior, not implementation)
+- **Unit/Integration**: Vitest — fast, Vite-native, Jest-compatible
+- **E2E**: Playwright — cross-browser, mobile viewports, auto-waiting
+- **Component**: Testing Library — tests behavior, not implementation
 
 #### Linting & Formatting
-- Research the fastest option available:
-  - Oxlint, Biome, ESLint — compare speed benchmarks
-  - Prettier or Biome for formatting
-  - Decision criteria: speed, zero-config, correctness
+
+| Tool | Version | Speed | What it replaces |
+|------|---------|-------|-----------------|
+| Biome | 2.x | ~100x faster than ESLint | ESLint + Prettier in one tool |
+| Oxlint | 1.x | Fastest linter available | ESLint (lint only, no formatting) |
+| ESLint + Prettier | — | Slowest but most mature | Legacy, still works fine |
+
+**Recommendation**: Biome for new projects (replaces both ESLint and Prettier). ESLint + Prettier for existing projects that already use them.
 
 #### Package Manager
-- Research current benchmarks:
-  - pnpm, bun, npm, yarn — compare install speed, disk usage, lockfile reliability
-  - Use whatever is fastest and most reliable today
+
+| Tool | Speed | Disk usage | Notes |
+|------|-------|-----------|-------|
+| pnpm | Fast | Efficient (content-addressable) | Best for monorepos |
+| bun | Fastest install | Standard | Also a runtime |
+| npm | Standard | Standard | Universal, zero setup |
+
+**Recommendation**: pnpm for most projects. npm if simplicity matters more.
 
 #### Deployment
-- Evaluate based on framework and requirements:
-  - Vercel, Cloudflare, Netlify, Fly.io, Railway, AWS — compare for the specific use case
-  - Decision criteria: cold start time, edge network, preview deploys, cost
+
+| Platform | Best for | Key advantage |
+|----------|---------|--------------|
+| Vercel | Next.js projects | Zero-config, preview deploys |
+| Cloudflare | Edge-first, Hono | Fastest global edge network |
+| Fly.io | Containers, custom runtimes | Closest to bare metal |
+| Railway | Quick deployments | Simple pricing, GitHub integration |
 
 ## Performance Characteristics (Non-Negotiable)
 

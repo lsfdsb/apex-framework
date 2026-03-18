@@ -18,10 +18,27 @@ fi
 
 INPUT=$(cat)
 
-# ── Model ──
-MODEL_DISPLAY=$(echo "$INPUT" | jq -r '.model.display_name // "—"')
-MODEL_ID=$(echo "$INPUT" | jq -r '.model.id // ""')
+# ── Extract all values in a SINGLE jq call (perf: ~5ms vs ~50ms for 10 calls) ──
+PARSED=$(echo "$INPUT" | jq -r '
+  [
+    (.model.display_name // "—"),
+    (.model.id // ""),
+    (.context_window.used_percentage // 0 | tostring),
+    (.context_window.context_window_size // 0 | tostring),
+    (.context_window.total_input_tokens // 0 | tostring),
+    (.context_window.total_output_tokens // 0 | tostring),
+    ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100 | floor | tostring),
+    (.cost.total_cost_usd // 0 | tostring),
+    (.cost.total_lines_added // 0 | tostring),
+    (.cost.total_lines_removed // 0 | tostring),
+    (.cost.total_duration_ms // 0 | tostring)
+  ] | join("\t")
+' 2>/dev/null)
 
+# Split parsed values (tab-separated)
+IFS=$'\t' read -r MODEL_DISPLAY MODEL_ID CTX_PCT CTX_SIZE TOK_IN TOK_OUT TOK_USED COST_RAW LA LR DUR_MS <<< "$PARSED"
+
+# ── Model ──
 case "$MODEL_DISPLAY" in
   *Opus*)   M="opus" ;;
   *Sonnet*) M="sonnet" ;;
@@ -31,18 +48,7 @@ esac
 echo "$MODEL_ID" | grep -qi "opusplan" 2>/dev/null && M="opus→sonnet"
 
 # ── Context window ──
-CTX_PCT=$(echo "$INPUT" | jq -r '.context_window.used_percentage // 0' 2>/dev/null)
 CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
-CTX_SIZE=$(echo "$INPUT" | jq -r '.context_window.context_window_size // 0' 2>/dev/null)
-
-# ── Tokens ──
-TOK_IN=$(echo "$INPUT" | jq -r '.context_window.total_input_tokens // 0' 2>/dev/null)
-TOK_OUT=$(echo "$INPUT" | jq -r '.context_window.total_output_tokens // 0' 2>/dev/null)
-# Actual context usage: percentage × window size (includes system prompts, tools, etc.)
-TOK_USED=$(echo "$INPUT" | jq -r '
-  ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100)
-  | floor
-' 2>/dev/null || echo "0")
 
 # ── Context size correction based on known model limits ──
 # Claude Code may report stale/wrong context_window_size after model switch.
@@ -80,17 +86,14 @@ fmt_tok() {
   fi
 }
 
-# ── Cost ──
-COST=$(printf '%.2f' "$(echo "$INPUT" | jq -r '.cost.total_cost_usd // 0' 2>/dev/null)" 2>/dev/null || echo "0.00")
+# ── Cost (already extracted above) ──
+COST=$(printf '%.2f' "$COST_RAW" 2>/dev/null || echo "0.00")
 
-# ── Lines ──
-LA=$(echo "$INPUT" | jq -r '.cost.total_lines_added // 0' 2>/dev/null)
-LR=$(echo "$INPUT" | jq -r '.cost.total_lines_removed // 0' 2>/dev/null)
+# ── Lines (already extracted above) ──
 NET=$((LA - LR))
 [ "$NET" -ge 0 ] 2>/dev/null && NET_FMT="+${NET}" || NET_FMT="${NET}"
 
-# ── Duration ──
-DUR_MS=$(echo "$INPUT" | jq -r '.cost.total_duration_ms // 0' 2>/dev/null)
+# ── Duration (already extracted above) ──
 DUR_SEC=$((DUR_MS / 1000))
 if [ "$DUR_SEC" -ge 3600 ] 2>/dev/null; then
   DUR_H=$((DUR_SEC / 3600))
@@ -140,13 +143,13 @@ else
   HEALTH="🟢"
 fi
 
-# ── Agents ──
+# ── Agents (single jq call) ──
 AGENT_FILE="/tmp/apex-agents.json"
 AGENT_STR=""
 if [ -f "$AGENT_FILE" ]; then
-  AGENT_COUNT=$(jq -r '.count // 0' "$AGENT_FILE" 2>/dev/null || echo "0")
-  AGENT_TOKENS=$(jq -r '.total_tokens // 0' "$AGENT_FILE" 2>/dev/null || echo "0")
-  if [ "$AGENT_COUNT" -gt 0 ] 2>/dev/null; then
+  AGENT_DATA=$(jq -r '[(.count // 0 | tostring), (.total_tokens // 0 | tostring)] | join("\t")' "$AGENT_FILE" 2>/dev/null)
+  IFS=$'\t' read -r AGENT_COUNT AGENT_TOKENS <<< "$AGENT_DATA"
+  if [ "${AGENT_COUNT:-0}" -gt 0 ] 2>/dev/null; then
     AGENT_STR=" ┃ 🤖 ${AGENT_COUNT} agents $(fmt_tok "$AGENT_TOKENS")"
   fi
 fi

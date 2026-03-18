@@ -12,14 +12,29 @@ if ! command -v python3 &>/dev/null; then
   exit 1
 fi
 
-PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$HOME/.claude/projects}"
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 MAX_LINES="${1:-500}"
 
-# Find the most recent session JSONL (by modification time)
-LATEST_SESSION=$(ls -t "$PROJECT_DIR"/*.jsonl 2>/dev/null | head -1)
+# Claude Code stores sessions in ~/.claude/projects/{sanitized-project-path}/
+# CLAUDE_PROJECT_DIR points to the actual project, not the session storage dir.
+SESSIONS_BASE="$HOME/.claude/projects"
+SANITIZED=$(echo "$PROJECT_DIR" | sed 's|/|-|g')
+SESSION_DIR="${SESSIONS_BASE}/${SANITIZED}"
+
+# Strategy 1: Look in the sanitized project directory
+LATEST_SESSION=""
+if [ -d "$SESSION_DIR" ]; then
+  LATEST_SESSION=$(ls -t "$SESSION_DIR"/*.jsonl 2>/dev/null | head -1)
+fi
+
+# Strategy 2: Search across all project directories
+if [ -z "$LATEST_SESSION" ] && [ -d "$SESSIONS_BASE" ]; then
+  LATEST_SESSION=$(find "$SESSIONS_BASE" -name "*.jsonl" -type f -exec ls -t {} + 2>/dev/null | head -1)
+fi
 
 if [ -z "$LATEST_SESSION" ]; then
-  echo "ERROR: No session logs found in $PROJECT_DIR"
+  echo "ERROR: No session logs found in $SESSION_DIR or $SESSIONS_BASE"
+  echo "  (PROJECT_DIR=$PROJECT_DIR, SANITIZED=$SANITIZED)"
   exit 1
 fi
 

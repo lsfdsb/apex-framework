@@ -13,6 +13,42 @@
 
 set -e
 
+# ── Help ──
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+  echo "⚔️ APEX Framework Installer"
+  echo ""
+  echo "Usage: cd your-project && /path/to/install.sh"
+  echo ""
+  echo "Installs APEX into the current project's .claude/ directory."
+  echo "Each project gets its own complete copy — no global install."
+  echo ""
+  echo "Requirements: git, jq, Claude Code CLI"
+  exit 0
+fi
+
+# ── Prerequisite checks ──
+MISSING=""
+if ! command -v git &>/dev/null; then
+  MISSING="$MISSING git"
+fi
+if ! command -v jq &>/dev/null; then
+  MISSING="$MISSING jq"
+fi
+if ! command -v claude &>/dev/null; then
+  MISSING="$MISSING claude"
+fi
+
+if [ -n "$MISSING" ]; then
+  echo "❌ Missing required tools:$MISSING"
+  echo ""
+  [ -z "$(command -v git 2>/dev/null)" ] && echo "  git    → comes with macOS (xcode-select --install)"
+  [ -z "$(command -v jq 2>/dev/null)" ] && echo "  jq     → https://jqlang.github.io/jq/download/"
+  [ -z "$(command -v claude 2>/dev/null)" ] && echo "  claude → https://docs.anthropic.com/en/docs/claude-code"
+  echo ""
+  echo "Install the missing tools, then run this script again."
+  exit 1
+fi
+
 # ── Find APEX source ──
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 if [ -f "$SCRIPT_DIR/CLAUDE.md" ] && [ -d "$SCRIPT_DIR/.claude/skills" ]; then

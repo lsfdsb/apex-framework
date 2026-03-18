@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.7
+# ⚔️ APEX Framework v5.8
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.7             ║
+  ║          ⚔️  APEX Framework v5.8             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -22,44 +22,79 @@
 
 ---
 
-## Install (One Command)
+## Install
+
+Three steps. Each one teaches you something.
+
+### Step 1: Clone the framework (once, ever)
 
 ```bash
-git clone https://github.com/YOUR_USER/apex-framework.git ~/.apex-framework && ~/.apex-framework/install.sh
+git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework
 ```
 
-That's it. APEX is now active in **every project** you open with Claude Code.
+**What this does:** Downloads the APEX source code into a hidden folder (`~/.apex-framework`) in your home directory. The `~` means "my home folder" — this is where your personal tools live. The `.` prefix makes it hidden (won't clutter your Finder). You only do this once.
 
-### For an existing project (adds project-specific skills)
+### Step 2: Go into your project
 
 ```bash
-cd ~/your-project
-~/.apex-framework/apex-init-project.sh
+cd ~/my-project
 ```
+
+**What this does:** `cd` means "change directory" — you're telling the terminal where to work. APEX installs per-project, so you need to be inside the project you want to set up. If you don't have a project yet: `mkdir ~/my-project && cd ~/my-project && git init`
+
+### Step 3: Run the installer
+
+```bash
+~/.apex-framework/install.sh
+```
+
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It also installs git hooks that enforce code quality, creates doc directories for your PRDs, and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+
+### For additional projects
+
+Repeat steps 2-3 for each new project:
+
+```bash
+cd ~/another-project
+~/.apex-framework/install.sh
+```
+
+### Verify it worked
+
+```bash
+.claude/scripts/health-check.sh
+```
+
+This runs a diagnostic that checks every component. If everything is green, you're ready. If something is yellow, it tells you exactly what to fix and why.
 
 ### Requirements
 
-- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code)
-- [jq](https://jqlang.github.io/jq/download/) (required for hooks)
-- git
+| Tool | Why you need it | Install |
+|------|----------------|---------|
+| **git** | Version control — tracks every change you make | Comes with macOS (`xcode-select --install`) |
+| **jq** | JSON parser — APEX hooks use it to read Claude's tool data | [jqlang.github.io/jq](https://jqlang.github.io/jq/download/) |
+| **Claude Code** | The AI coding assistant that APEX configures | [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code) |
 
 ---
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 25 hook scripts, 4 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning feedback loop.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **25 skills, 26 scripts, 4 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning feedback loop.
+
+**Built for leaders and PMs who want to learn engineering while building.** Every action explains What, Why, and How. Over weeks of use, you'll go from "what is a branch?" to reviewing PRs and debugging issues independently.
 
 ### The Workflow
 
 ```
-📜 PRD        → Define before building (deterministic hook blocks code without PRD)
-🗺️ Architecture → Plan the system
-🔍 Research   → Verify docs, never hallucinate APIs
-⚒️ Build      → Execute with precision
-✅ QA         → 5-phase quality gate
-🛡️ Security   → OWASP checklist + dependency audit
-🎯 CX Review  → Customer experience review
-📝 Commit     → Clean conventional commits
+📜 /prd         → Define what you're building (APEX blocks code without one)
+🗺️ /architecture → Plan the system design
+🔍 /research    → Verify APIs exist before using them
+⚒️  Build       → Write code (APEX auto-formats, enforces standards)
+✅ /qa          → 6-phase quality gate
+🛡️ /security    → OWASP checklist on sensitive code
+♿ /a11y        → Accessibility audit (WCAG 2.2 AA)
+🎯 /cx-review   → Customer experience review
+📝 /commit      → Clean conventional commit
 ```
 
 ### The Philosophy
@@ -76,51 +111,49 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 ## What You Get
 
-### User-Level (global — all projects)
+Everything installs into your project's `.claude/` directory:
 
-| Category | Count | Details |
-|----------|-------|---------|
-| Skills | 14 | code-standards, design-system, cx-review, teach, apex-stack, verify-lib, sql-practices, debug, a11y, cost-management, about, performance, security, evolve |
-| Agents | 4 | code-reviewer (Sonnet), design-reviewer (Sonnet), researcher (Haiku), framework-evolver (Sonnet) |
-| Hook Scripts | 24 | Dangerous command blocking, commit msg validation, PRD enforcement, auto-format, file protection, context preservation, workflow skip guard, failure diagnostics, session cleanup, subagent tracking, dev server, dev monitor, auto-changelog, notifications |
-| Rules | 7 | Path-based: testing, components, api, sql, supabase, nextjs, error-handling |
-| Output Styles | 1 | Educational |
-| StatusLine | 1 | Real-time: model, tokens, context %, lines changed, agent tracking |
-| Sandbox | 1 | Filesystem restrictions: blocks writes to /etc, ~/.ssh, ~/.aws |
-
-### Project-Level (per project, via `apex-init-project.sh`)
-
-| Category | Count | Details |
-|----------|-------|---------|
-| Skills | 11 | prd, architecture, research, qa, security, performance, commit, changelog, init, e2e, cicd |
-| Git Hooks | 2 | pre-commit (TypeScript, lint, secrets scan), commit-msg (conventional commits) |
+| Category | Count | What it does |
+|----------|-------|-------------|
+| **Skills** | 25 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, etc.) — each is a specialized knowledge module |
+| **Scripts** | 26 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, etc.) |
+| **Agents** | 4 | Autonomous sub-agents: code-reviewer, design-reviewer, researcher, framework-evolver |
+| **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
+| **Output Style** | 1 | Educational — explains What/Why/How for every action |
+| **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
+| **StatusLine** | 1 | Real-time dashboard: model, context %, tokens, agents, lines changed |
+| **Sandbox** | 1 | OS-level protection: blocks writes to /etc, ~/.ssh, ~/.aws |
 
 ---
 
-## Enforcement Layers
+## Safety Net — 3 Layers of Defense
 
-APEX uses **3 layers of defense** — hooks are deterministic, skills are probabilistic:
+APEX uses **3 layers** so you can build confidently:
 
 ```
-Layer 1: settings.json deny list
-  → Blocks rm -rf, push to main, reading .env/.ssh at the permission level
+Layer 1: Permission deny list (settings.json)
+  → "You can't even ASK to do these things"
+  → Blocks: rm -rf, push to main, reading .env/.ssh
 
-Layer 2: Sandbox config
-  → OS-level filesystem restrictions (blocks writes to /etc, /usr, ~/.ssh)
+Layer 2: OS Sandbox (filesystem restrictions)
+  → "The operating system won't let you"
+  → Blocks writes to: /etc, /usr, ~/.ssh, ~/.aws, ~/.gnupg
 
-Layer 3: Hook scripts (PreToolUse, PostToolUse, Stop, UserPromptSubmit, PostToolUseFailure, PostCompact, SubagentStop, SessionEnd)
-  → Runtime enforcement: blocks dangerous commands, validates commit messages,
-    enforces PRD-before-code, checks test execution, auto-formats code,
-    guards workflow skips, provides failure diagnostics, preserves context
+Layer 3: Hook scripts (runtime enforcement)
+  → "APEX catches it and explains why"
+  → Blocks: dangerous commands, bad commit messages, code without PRD
+  → Warns: code without tests, workflow shortcuts
 ```
 
-### What's Deterministic (cannot be skipped)
+**What's deterministic (cannot be bypassed):**
 
-- `block-dangerous-commands.sh` — blocks `rm -rf`, force push, `DROP TABLE`
-- `enforce-commit-msg.sh` — blocks non-conventional commit messages
-- `protect-files.sh` — blocks edits to `.env`, lock files, `node_modules`
-- `enforce-workflow.sh` — blocks new app/component files without a PRD
-- `stop-gate.sh` — warns when code is written but tests aren't run
+| Hook | What it catches | Why it matters |
+|------|----------------|----------------|
+| `block-dangerous-commands.sh` | `rm -rf`, force push, `DROP TABLE` | Prevents irreversible data loss |
+| `enforce-commit-msg.sh` | Non-conventional commit messages | Keeps git history readable |
+| `protect-files.sh` | Direct edits to `.env`, lock files, `node_modules` | Protects secrets and generated files |
+| `enforce-workflow.sh` | New app/component files without a PRD | Prevents building without a plan |
+| `stop-gate.sh` | Code written but tests not run | Reminds you to verify your work |
 
 ---
 
@@ -128,45 +161,104 @@ Layer 3: Hook scripts (PreToolUse, PostToolUse, Stop, UserPromptSubmit, PostTool
 
 | Tier | Model | Used For |
 |------|-------|----------|
-| **Architect** | Opus | PRD, architecture, Plan mode |
-| **Builder** | Sonnet | Code writing, reviews, building |
-| **Scout** | Haiku | Research agent, Stop hook evaluation |
-
-Default: `opusplan` — Opus plans, Sonnet executes.
+| **Architect** | Opus | PRD, architecture, planning — the deep thinker |
+| **Builder** | Sonnet | Code writing, reviews — fast and precise |
+| **Scout** | Haiku | Research — cheap and quick for doc lookups |
 
 ---
 
 ## StatusLine
 
+The bar at the bottom of your terminal shows real-time session data:
+
 ```
-⚔️ APEX | opus→sonnet MAX | ▓▓░░░░░░░░ 20% | ↑15.2K ↓3.1K | $0.12 | +47/-12 | 5m | by L.B. & Claude
+⚔️ APEX ┃ opus MAX ┃ 🟢 ████▓▒░░░░ 42% 420K/1.0M ┃ ↑200K ↓50K ┃ 🤖 3 agents 12.5K ┃ +150/-20 (+130 net) ┃ 15m ┃ This is the way.
 ```
+
+| Segment | What it means |
+|---------|--------------|
+| `opus MAX` | Which AI model is active + your plan tier |
+| `🟢 ████▓▒░░░░ 42%` | How full the context window is (green = plenty of room) |
+| `420K/1.0M` | Tokens used / total available |
+| `🤖 3 agents` | How many sub-agents were spawned this session |
+| `+150/-20` | Lines of code added / removed |
+
+When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space.
 
 ---
 
 ## Testing
 
-APEX tests its own hooks:
+APEX tests itself with two test suites:
 
 ```bash
-./tests/test-hooks.sh
+./tests/test-hooks.sh      # 105 tests — validates every hook script
+./tests/test-framework.sh  # 278 tests — validates the entire framework structure
 ```
-
-83 tests covering: dangerous command blocking, commit message validation, file protection, workflow enforcement, library install detection, file permissions, jq warnings, and macOS compatibility.
 
 ---
 
-## How to Extract the Best from APEX — Step by Step
+## Learning to Code with APEX
 
-### Step 1: Start Every Project Right
+APEX is designed to teach you engineering while you build. Here's how to get the most out of it:
+
+### Week 1: Get Comfortable
+
+- Let Claude do the coding while you learn the terminal (`cd`, `ls`, `git status`)
+- Say `/teach` whenever you don't understand something
+- Watch what Claude does — it explains every command before running it
+
+### Week 2: Understand Git
+
+- Learn branches (`git checkout -b feat/my-feature`), commits, and push/pull
+- Review the diffs Claude shows you — start noticing patterns
+- Run `/qa` yourself to see what quality checks look like
+
+### Week 3: Start Contributing
+
+- Edit small things yourself (copy text, fix typos, adjust styling)
+- Run `npm run dev` to see your changes in real-time
+- Read error messages with Claude's help (`/debug`)
+
+### Month 2: Review and Debug
+
+- Review PRs on GitHub — look at the diff, understand what changed
+- Debug issues using `/debug` — follow the root cause, not band-aids
+- Run `/security` on your auth code — understand why each check matters
+
+### Month 3+: Independence
+
+- Write features with less hand-holding
+- Set up CI/CD pipelines (`/cicd`)
+- Run `/evolve` to improve the framework itself
+
+---
+
+## Step-by-Step Guide
+
+### Starting a New Feature
 
 ```bash
-# Initialize APEX in your project
-cd ~/your-project
-~/.apex-framework/apex-init-project.sh
-```
+# 1. Create a feature branch (isolates your work from main)
+git checkout -b feat/my-feature
 
-This gives you project-level skills (prd, architecture, qa, security) and git hooks (pre-commit, commit-msg). Now APEX enforces quality on this specific project.
+# 2. Start Claude Code
+claude
+
+# 3. Define what you're building
+/prd
+
+# 4. Plan the architecture
+/architecture
+
+# 5. Build it (Claude writes code, APEX enforces quality)
+
+# 6. Quality check before shipping
+/qa
+
+# 7. Commit with a clean message
+/commit
+```
 
 ### Step 2: Always Start with a PRD
 
@@ -297,6 +389,32 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 ---
 
 ## Changelog
+
+### v5.8.0 (2026-03-18) — Gold Standard
+
+**New:**
+- Health-check script (`health-check.sh`) — validates all components with educational explanations
+- `/teach` skill expanded to 8-level learning progression (terminal → git → debugging → architecture)
+- README rewritten with educational install instructions — explains What/Why for every step
+- Install guide rewritten for v5.8 one-command flow
+
+**Fixed:**
+- Self-learning loop: `session-learner.sh` now extracts `session_id` from JSON payload (env var didn't exist)
+- Self-learning loop: `extract-session.sh` now correctly resolves `~/.claude/projects/` session paths
+- `protect-files.sh` no longer blocks `vite.config.ts`, `tsconfig.json`, `.d.ts` (false positives)
+- `auto-update.sh` no longer overwrites customized `settings.json`
+- Framework test suite: fixed `set -e` abort on block-dangerous-commands test
+- `install.sh` now checks prerequisites (git, jq, claude) with helpful error messages
+- About skill stats updated to match reality (25 skills, 26 scripts, 4 agents, 383 tests)
+- README counts fact-checked and corrected
+
+**Performance:**
+- StatusLine consolidated from 10+ jq calls to 1 (process overhead reduced ~90%)
+
+**Testing:**
+- Hook test suite: 99 → 105 tests (added session-learner and extract-session coverage)
+- Framework test suite: 278 tests (fixed exit code bug)
+- Total: 387 tests across 2 suites
 
 ### v5.7.0 (2026-03-17) — Auto-Update & Self-Evolution
 

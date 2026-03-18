@@ -24,9 +24,10 @@ Env files present: !`ls -la .env* 2>/dev/null || echo "No .env files found"`
 ## Scan Process
 
 1. **Grep for danger patterns** in changed/relevant files:
-   - SQL injection: raw queries, string concatenation in queries
-   - Secrets: hardcoded passwords, API keys, tokens
-   - Dangerous functions: `eval`, `innerHTML`, `dangerouslySetInnerHTML`, `exec`
+   - SQL injection: raw queries, template literals with `${user_input}` in SQL
+   - Secrets: hardcoded passwords, API keys (`sk-*`, `ghp_*`, `AKIA*`), tokens (`Bearer` hardcoded, `token=`)
+   - Sensitive data in logs: `console.log` with password, token, secret, key variables
+   - Dangerous functions: `eval()`, `new Function()`, `innerHTML =`, `dangerouslySetInnerHTML`, `exec()`
    - Open redirects: unvalidated URL redirects
 
 2. **Review auth flows**: trace every authentication and authorization path

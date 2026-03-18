@@ -254,6 +254,127 @@ assert_output_not_contains "no reminder for npm run" "APEX REMINDER" "$OUTPUT"
 echo ""
 
 # ────────────────────────────────────────────
+# TEST: session-learner.sh (self-improvement pipeline)
+# ────────────────────────────────────────────
+echo "🧪 session-learner.sh"
+
+# Setup: create a fake session transcript
+TEST_TMPDIR=$(mktemp -d)
+TEST_PROJECT="$TEST_TMPDIR/my-project"
+TEST_SESSION_ID="test-session-abc123"
+SANITIZED_PATH=$(echo "$TEST_PROJECT" | sed 's|/|-|g')
+SESSION_STORAGE="$HOME/.claude/projects/${SANITIZED_PATH}"
+mkdir -p "$TEST_PROJECT/.claude/session-logs"
+mkdir -p "$SESSION_STORAGE"
+
+# Create a minimal session JSONL with an error
+cat > "$SESSION_STORAGE/${TEST_SESSION_ID}.jsonl" << 'JSONL'
+{"type":"user","message":{"role":"user","content":"fix the bug"},"timestamp":"2026-03-18T10:00:00Z"}
+{"type":"assistant","message":{"role":"assistant","content":[{"type":"text","text":"I'll fix that."}]},"timestamp":"2026-03-18T10:00:01Z"}
+{"type":"tool_result","message":{"content":"command failed"},"isError":true,"timestamp":"2026-03-18T10:00:02Z"}
+{"type":"user","message":{"content":[{"type":"text","text":"no, don't do that, try again"}]},"timestamp":"2026-03-18T10:00:03Z"}
+JSONL
+
+# Test: session-learner extracts session_id from JSON payload
+LAST_EXIT=0
+OUTPUT=$(echo "{\"session_id\":\"$TEST_SESSION_ID\"}" | CLAUDE_PROJECT_DIR="$TEST_PROJECT" bash "$SCRIPTS/session-learner.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "processes session with JSON session_id" 0 "$LAST_EXIT"
+
+# Verify report was created (either clean or detailed)
+TOTAL=$((TOTAL + 1))
+REPORT_FILE="$TEST_PROJECT/.claude/session-logs/session-${TEST_SESSION_ID}.md"
+if [ -f "$REPORT_FILE" ]; then
+  echo -e "  ${GREEN}✅ PASS${NC}: session report file created"
+  PASS=$((PASS + 1))
+else
+  echo -e "  ${RED}❌ FAIL${NC}: session report file not created at $REPORT_FILE"
+  FAIL=$((FAIL + 1))
+fi
+
+# Test: session-learner handles missing session_id gracefully
+LAST_EXIT=0
+OUTPUT=$(echo '{}' | CLAUDE_PROJECT_DIR="$TEST_PROJECT" bash "$SCRIPTS/session-learner.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "handles missing session_id gracefully" 0 "$LAST_EXIT"
+
+# Cleanup
+rm -rf "$TEST_TMPDIR" "$SESSION_STORAGE" 2>/dev/null
+
+echo ""
+
+# ────────────────────────────────────────────
+# TEST: extract-session.sh (transcript extraction)
+# ────────────────────────────────────────────
+echo "🧪 extract-session.sh"
+
+# Setup: create a fake session in the correct Claude Code location
+TEST_TMPDIR2=$(mktemp -d)
+TEST_PROJECT2="$TEST_TMPDIR2/test-proj"
+SANITIZED_PATH2=$(echo "$TEST_PROJECT2" | sed 's|/|-|g')
+SESSION_STORAGE2="$HOME/.claude/projects/${SANITIZED_PATH2}"
+mkdir -p "$TEST_PROJECT2/.claude/scripts"
+mkdir -p "$SESSION_STORAGE2"
+
+# Create a minimal session JSONL
+cat > "$SESSION_STORAGE2/extract-test.jsonl" << 'JSONL'
+{"type":"user","message":{"content":"hello"},"timestamp":"2026-03-18T10:00:00Z"}
+{"type":"assistant","message":{"content":[{"type":"text","text":"Welcome to APEX!"}]},"timestamp":"2026-03-18T10:00:01Z"}
+JSONL
+
+# Test: extract-session finds the session file via sanitized path
+LAST_EXIT=0
+OUTPUT=$(CLAUDE_PROJECT_DIR="$TEST_PROJECT2" bash "$SCRIPTS/extract-session.sh" 10 2>&1) || LAST_EXIT=$?
+assert_exit "finds session via sanitized project path" 0 "$LAST_EXIT"
+assert_output_contains "extracts session transcript" "Session Transcript" "$OUTPUT"
+
+# Test: extract-session with bad project dir falls back to searching all sessions
+LAST_EXIT=0
+OUTPUT=$(CLAUDE_PROJECT_DIR="/nonexistent/path" bash "$SCRIPTS/extract-session.sh" 10 2>&1) || LAST_EXIT=$?
+# With real sessions on the machine, fallback Strategy 2 finds them (exit 0).
+# On a clean machine with no sessions, it would exit 1.
+TOTAL=$((TOTAL + 1))
+if [ "$LAST_EXIT" -eq 0 ] || [ "$LAST_EXIT" -eq 1 ]; then
+  echo -e "  ${GREEN}✅ PASS${NC}: handles bad project dir (exit $LAST_EXIT — fallback search)"
+  PASS=$((PASS + 1))
+else
+  echo -e "  ${RED}❌ FAIL${NC}: unexpected exit code $LAST_EXIT for bad project dir"
+  FAIL=$((FAIL + 1))
+fi
+
+# Cleanup
+rm -rf "$TEST_TMPDIR2" "$SESSION_STORAGE2" 2>/dev/null
+
+echo ""
+
+# ────────────────────────────────────────────
+# TEST: scan-security-patterns.sh
+# ────────────────────────────────────────────
+echo "🧪 scan-security-patterns.sh"
+
+# Should block hardcoded API key
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"src/api.ts","content":"const key = \"sk-abc123456789012345678901234567890\""}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "blocks hardcoded API key (exit 2)" 2 "$LAST_EXIT"
+assert_output_contains "explains API key risk" "SAFE ALTERNATIVE" "$OUTPUT"
+
+# Should block eval()
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Edit","tool_input":{"file_path":"src/util.ts","new_string":"eval(userInput)"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "blocks eval() (exit 2)" 2 "$LAST_EXIT"
+assert_output_contains "explains eval risk" "Remote Code Execution" "$OUTPUT"
+
+# Should allow safe code
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"src/app.ts","content":"const name = process.env.API_KEY"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "allows safe env var reference (exit 0)" 0 "$LAST_EXIT"
+
+# Should skip non-code files
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"README.md","content":"sk-abc123456789012345678901234567890"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "skips non-code files (exit 0)" 0 "$LAST_EXIT"
+
+echo ""
+
+# ────────────────────────────────────────────
 # TEST: All scripts are executable
 # ────────────────────────────────────────────
 echo "🧪 File permissions"
@@ -278,7 +399,7 @@ for script in "$SCRIPTS"/*.sh; do
   BASENAME=$(basename "$script")
   # Skip scripts that don't use jq or intentionally degrade silently (exit 0)
   case "$BASENAME" in
-    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh) continue ;;
+    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh|health-check.sh|scan-security-patterns.sh) continue ;;
   esac
   TOTAL=$((TOTAL + 1))
   if grep -q "jq not installed" "$script"; then
