@@ -79,22 +79,24 @@ This runs a diagnostic that checks every component. If everything is green, you'
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 28 scripts, 10 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 29 scripts, 10 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
 
 **Built for leaders and PMs who want to learn engineering while building.** Every action explains What, Why, and How. Over weeks of use, you'll go from "what is a branch?" to reviewing PRs and debugging issues independently.
 
 ### The Workflow
 
 ```
-📜 /prd         → Define what you're building (APEX blocks code without one)
-🗺️ /architecture → Plan the system design
-🔍 /research    → Verify APIs exist before using them
-⚒️  Build       → Write code (APEX auto-formats, enforces standards)
-✅ /qa          → 6-phase quality gate
-🛡️ /security    → OWASP checklist on sensitive code
-♿ /a11y        → Accessibility audit (WCAG 2.2 AA)
-🎯 /cx-review   → Customer experience review
-📝 /commit      → Clean conventional commit
+📜 /prd          → Define what you're building (APEX blocks code without one)
+🗺️ /architecture  → Plan the system design
+🔍 /research     → Verify APIs exist before using them
+🤖 /teams        → Auto-spawn agent team (Watcher, Builder, QA, Debugger)
+⚒️  Build         → Write code (agents work in parallel, APEX enforces standards)
+✅ /qa           → 6-phase quality gate (or QA agent runs automatically)
+🛡️ /security     → OWASP checklist on sensitive code
+♿ /a11y         → Accessibility audit (WCAG 2.2 AA)
+🎯 /cx-review    → Customer experience review
+📝 /commit       → Clean conventional commit
+🦇 /batman       → Summon the Sentinel — full framework self-test
 ```
 
 ### The Philosophy
