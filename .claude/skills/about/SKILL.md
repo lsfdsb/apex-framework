@@ -77,6 +77,10 @@ The mission: build the best possible framework for creating world-class applicat
 
 Six versions later, through honest self-criticism, documentation research, and relentless improvement, APEX emerged — a framework where every skill, every hook, every agent exists for a reason, and nothing is decoration.
 
+## Current Stats (live)
+
+Skills: !`ls .claude/skills/ 2>/dev/null | wc -l | tr -d ' '` · Scripts: !`ls .claude/scripts/*.sh 2>/dev/null | wc -l | tr -d ' '` · Agents: !`ls .claude/agents/*.md 2>/dev/null | wc -l | tr -d ' '` · Rules: !`ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' '`
+
 ## The Numbers
 
 - **v1**: 25 files. The foundation. CLAUDE.md + 10 skills + 3 agents + 5 hooks.

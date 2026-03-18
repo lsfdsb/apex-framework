@@ -175,9 +175,29 @@ else
   warn "rules/ directory missing" "Rules auto-load when you edit certain file types" "Re-run: ~/.apex-framework/install.sh"
 fi
 
-# Output styles
+# Output styles — verify file exists AND matches settings.json reference
 if [ -d "$CLAUDE_DIR/output-styles" ] && ls "$CLAUDE_DIR/output-styles/"*.md &>/dev/null; then
-  ok "Output style installed" "The 'APEX Educational' style — explains What/Why/How for every action"
+  ok "Output style file(s) installed" "The 'APEX Educational' style — explains What/Why/How for every action"
+  # Cross-reference: check that settings.json outputStyle points to an existing style
+  if command -v jq &>/dev/null && [ -f "$CLAUDE_DIR/settings.json" ]; then
+    STYLE_REF=$(jq -r '.outputStyle // empty' "$CLAUDE_DIR/settings.json" 2>/dev/null)
+    if [ -n "$STYLE_REF" ]; then
+      # The outputStyle can be a name (matched against frontmatter) or a path
+      STYLE_FOUND=false
+      for style_file in "$CLAUDE_DIR/output-styles/"*.md; do
+        STYLE_NAME=$(grep -m1 '^name:' "$style_file" 2>/dev/null | sed 's/^name: *//')
+        if [ "$STYLE_NAME" = "$STYLE_REF" ] || [ "$(basename "$style_file" .md)" = "$STYLE_REF" ]; then
+          STYLE_FOUND=true
+          break
+        fi
+      done
+      if [ "$STYLE_FOUND" = true ]; then
+        ok "Output style '$STYLE_REF' matches installed file" "settings.json references a style that exists"
+      else
+        warn "Output style '$STYLE_REF' referenced in settings.json but no matching file" "The style name in settings.json doesn't match any file in output-styles/" ""
+      fi
+    fi
+  fi
 else
   warn "Output style missing" "Without it, Claude won't teach as you build" "Re-run: ~/.apex-framework/install.sh"
 fi
@@ -270,6 +290,15 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
     ok "commit-msg hook installed" "Enforces conventional commit format (feat:, fix:, docs:, etc.)"
   else
     warn "commit-msg hook missing" "Commit messages won't follow the standard format" "cp .claude/git-hooks/commit-msg .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg"
+  fi
+
+  # Check git user identity
+  GIT_USER=$(git config user.name 2>/dev/null)
+  GIT_EMAIL=$(git config user.email 2>/dev/null)
+  if [ -n "$GIT_USER" ] && [ -n "$GIT_EMAIL" ]; then
+    ok "Git identity: $GIT_USER <$GIT_EMAIL>" "Your commits will be attributed to this identity"
+  else
+    warn "Git identity not configured" "Commits need a name and email to identify who made them" "git config user.name \"Your Name\" && git config user.email \"you@example.com\""
   fi
 
   # Check if on main/master

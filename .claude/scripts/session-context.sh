@@ -297,7 +297,42 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   fi
 fi
 
-# ── Dynamic context only (behavioral instructions live in outputStyle) ──
+# ── Lessons from recent sessions (close the learning loop) ──
+# Reads the last 3 session-learner reports that had errors/corrections
+# and injects a brief summary so Claude starts each session informed.
+if [ "$SOURCE" = "startup" ]; then
+  LOG_DIR="${CLAUDE_PROJECT_DIR:-.}/.claude/session-logs"
+  if [ -d "$LOG_DIR" ]; then
+    # Get last 3 non-clean reports (those with Errors or Corrections sections with content)
+    LESSONS=""
+    while IFS= read -r report; do
+      [ -z "$report" ] && continue
+      # Skip clean sessions (one-liner reports)
+      if grep -q "Clean ✅" "$report" 2>/dev/null; then
+        continue
+      fi
+      # Extract key info
+      R_DATE=$(grep -m1 'Session Report' "$report" 2>/dev/null | sed 's/# Session Report — //')
+      R_ERRORS=$(grep -A20 '^## Errors' "$report" 2>/dev/null | grep '^- ' | head -3)
+      R_CORRECTIONS=$(grep -A20 '^## User Corrections' "$report" 2>/dev/null | grep '^- ' | head -3)
+      R_SIGNALS=$(grep -A10 '^## Improvement Signals' "$report" 2>/dev/null | grep '^- ' | head -3)
+      if [ -n "$R_ERRORS" ] || [ -n "$R_CORRECTIONS" ]; then
+        LESSONS="${LESSONS}Session ${R_DATE:-(unknown date)}:"
+        [ -n "$R_ERRORS" ] && LESSONS="${LESSONS}\n  Errors: $(echo "$R_ERRORS" | head -2 | tr '\n' '; ')"
+        [ -n "$R_CORRECTIONS" ] && LESSONS="${LESSONS}\n  User said: $(echo "$R_CORRECTIONS" | head -2 | tr '\n' '; ')"
+        [ -n "$R_SIGNALS" ] && LESSONS="${LESSONS}\n  Signal: $(echo "$R_SIGNALS" | head -1)"
+        LESSONS="${LESSONS}\n"
+      fi
+    done < <(ls -t "$LOG_DIR"/session-*.md 2>/dev/null | head -5)
+
+    if [ -n "$LESSONS" ]; then
+      echo ""
+      echo "📖 Lessons from recent sessions:"
+      printf "%b" "$LESSONS"
+      echo "  (Use /evolve to address recurring patterns)"
+    fi
+  fi
+fi
 
 # ── Watermark (always) ──
 echo ""

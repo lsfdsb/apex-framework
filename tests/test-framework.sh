@@ -199,6 +199,7 @@ EXPECTED_SCRIPTS=(
   "session-learner.sh"
   "stop-gate.sh"
   "verify-install.sh"
+  "health-check.sh"
 )
 
 for script in "${EXPECTED_SCRIPTS[@]}"; do
