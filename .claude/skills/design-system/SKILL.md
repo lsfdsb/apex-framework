@@ -59,6 +59,41 @@ Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults
 - Always respect `prefers-reduced-motion`
 - Use `transform` and `opacity` only (GPU-accelerated)
 
+## Animation Implementation
+
+- Use **framer-motion** for complex animations (page transitions, layout animations, gestures)
+- Use **CSS transitions** for simple hover/focus states (don't import a library for opacity changes)
+- `AnimatePresence` for enter/exit animations
+- Always wrap in `motion.div` with `initial`, `animate`, `exit` props
+- **ALWAYS** check `prefers-reduced-motion` before any animation
+
+```typescript
+import { motion, AnimatePresence } from 'framer-motion'
+
+// Respect reduced motion preference
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+<AnimatePresence>
+  {isVisible && (
+    <motion.div
+      initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={prefersReducedMotion ? {} : { opacity: 0, y: -20 }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+    >
+      {children}
+    </motion.div>
+  )}
+</AnimatePresence>
+```
+
+Decision tree:
+- Opacity/color change on hover → CSS transition
+- Element appearing/disappearing → framer-motion `AnimatePresence`
+- Page transitions → framer-motion layout animations
+- Drag/swipe gestures → framer-motion gesture handlers
+- Loading spinner → CSS `@keyframes` animation
+
 ## Accessibility (WCAG 2.2 AA minimum)
 
 - Semantic HTML first, ARIA only when needed

@@ -127,6 +127,37 @@ Both are actively maintained. Drizzle has lower runtime overhead and generates c
 
 Valibot has gained momentum with smaller bundle and faster compilation. Zod remains solid for existing projects. For new projects where bundle size matters, prefer Valibot.
 
+#### Forms
+- **react-hook-form** + **zod** — performant (uncontrolled inputs), schema-driven validation, minimal re-renders
+  - Use `zodResolver` to connect. Define schema first, derive types with `z.infer`.
+  - NOT formik (heavier, more re-renders). NOT manual `useState` (doesn't scale).
+
+#### State Management
+
+| Concern | Tool | Why not alternatives |
+|---------|------|---------------------|
+| **Server state** | TanStack Query | Caching, background refetch, stale-while-revalidate. NOT useEffect + fetch. |
+| **Client (global)** | zustand | Tiny (1KB), no boilerplate, devtools. NOT Redux (too much ceremony). |
+| **URL state** | nuqs | Type-safe query params, works with Next.js App Router. NOT manual searchParams. |
+
+#### Animation
+- **framer-motion** — declarative, gesture support, layout animations, AnimatePresence for enter/exit
+  - CSS transitions for simple hover/focus (no library needed for opacity)
+  - Always respect `prefers-reduced-motion`
+
+#### SEO
+- **Next.js Metadata API** — built-in, zero deps for title/description/OG tags
+- **next-sitemap** — for complex sitemap needs beyond `app/sitemap.ts`
+
+#### Monitoring
+- **@sentry/nextjs** — error tracking, performance, session replay. Free tier covers most projects.
+- **Vercel Analytics** — privacy-first, zero-config for Next.js deployments
+- **Vercel Speed Insights** — Core Web Vitals monitoring in production
+
+#### Date Handling
+- **date-fns** — tree-shakeable (import only what you use), immutable, TypeScript-first
+  - NOT moment.js (deprecated, massive bundle). NOT dayjs (less tree-shakeable).
+
 #### Testing
 - **Unit/Integration**: Vitest — fast, Vite-native, Jest-compatible
 - **E2E**: Playwright — cross-browser, mobile viewports, auto-waiting
