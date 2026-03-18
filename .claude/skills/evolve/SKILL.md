@@ -2,6 +2,7 @@
 name: evolve
 description: Evolve the APEX Framework based on real session usage. Spawns the framework-evolver agent to analyze the current session for gaps, friction, and improvements — then asks for authorization before applying changes. Use when the user says "evolve", "improve framework", "session review", "what could be better", "framework gaps", or proactively at the end of productive sessions.
 context: fork
+agent: general-purpose
 ---
 
 # APEX Evolve — Framework Self-Improvement

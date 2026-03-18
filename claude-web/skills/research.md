@@ -2,7 +2,8 @@
 name: research
 description: Research APIs, libraries, documentation, and best practices BEFORE building anything. Use before integrating any new API, library, or external service. Triggers on research, docs, documentation, find the best, what library, how to integrate, API docs, best practices. We ALWAYS check documentation — never assume, never hallucinate an API.
 context: fork
-agent: researcher
+agent: Explore
+allowed-tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 ---
 
 # Research — Documentation First

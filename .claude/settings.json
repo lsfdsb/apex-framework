@@ -172,6 +172,19 @@
         ]
       }
     ],
+    "PermissionRequest": [
+      {
+        "matcher": "Bash|Read|Glob|Grep",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-approve-safe.sh",
+            "timeout": 5,
+            "statusMessage": "Checking permissions..."
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write|MultiEdit",
@@ -245,6 +258,17 @@
         ]
       }
     ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\":\"🤖 Agent spawned\"}'",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
     "SubagentStop": [
       {
         "hooks": [
@@ -280,6 +304,28 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/notify.sh",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "ConfigChange": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\":\"⚔️ APEX: Settings changed. Hooks and permissions reloaded.\"}'",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "InstructionsLoaded": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"suppressOutput\":true}'",
+            "timeout": 2
           }
         ]
       }
