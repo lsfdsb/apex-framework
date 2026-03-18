@@ -42,6 +42,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 Best for: New features, refactoring, migrations
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, worktree) — Implements the feature
+- **Design Reviewer** (sonnet, plan) — Reviews UI components as they're built (auto-included when task creates .tsx files)
 - **QA** (sonnet, worktree) — Tests when Builder finishes
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
@@ -93,12 +94,25 @@ The framework *breathes* when the team operates as a continuous cycle without hu
 
 ### How it works:
 
-1. **Builder** creates code → marks task complete
-2. **Watcher** continuously monitors → detects issues → creates bug tasks
-3. **Debugger** claims bug tasks → fixes root cause → notifies QA
-4. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
-5. **Code Reviewer** does final review when all QA passes
-6. **Lead** makes the ship decision
+1. **Builder** creates code → marks task complete → lists ALL created/modified files
+2. **Lead verifies file persistence** → confirms files exist in main project (not just worktree)
+3. **Design Reviewer** reviews any .tsx/.jsx components for design token compliance
+4. **Watcher** continuously monitors → detects issues → creates bug tasks
+5. **Debugger** claims bug tasks → fixes root cause → notifies QA
+6. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
+7. **Code Reviewer** does final review when all QA passes
+8. **Lead** makes the ship decision
+
+### Post-Builder Verification (CRITICAL)
+
+After ANY builder agent completes (whether in worktree or not):
+
+1. **Check file existence** — Verify every file the builder claims to have created/modified actually exists in the main project
+2. **Check file content** — Read the first few lines of each file to confirm it's not empty or corrupted
+3. **If files are missing** — Do NOT proceed. The worktree may have been cleaned up prematurely. Re-create the files or re-run the builder.
+4. **Report to lead** — Include a file verification status in the completion message
+
+This step exists because worktree isolation can cause file loss. NEVER skip it.
 
 ### Key principle: No human intervention needed in the loop
 
@@ -306,3 +320,7 @@ User: "Build the authentication flow with OAuth"
 8. **No orphans** — Always shutdown teammates and delete team when done
 9. **Right-size the team** — Don't spawn `full` for a bug fix
 10. **The loop breathes** — Detect→Fix→Verify→Ship runs autonomously
+11. **Verify after build** — After ANY builder completes, verify files exist in main project before proceeding
+12. **Design review on UI** — If the task creates .tsx/.jsx files, Design Reviewer MUST review before QA
+13. **QA is a gate, not optional** — No task is marked complete without QA verification. If QA wasn't invoked, the task is NOT done
+14. **Research before integration** — If a task involves external APIs, `/research` runs BEFORE builder starts
