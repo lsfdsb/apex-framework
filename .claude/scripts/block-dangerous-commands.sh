@@ -55,6 +55,19 @@ Recovery (if you already committed to main):
 Then open a PR: gh pr create --title \"...\" --body \"...\""
 fi
 
+# Block gh pr merge without explicit user approval
+# This is the GitHub CLI equivalent of pushing to main — equally dangerous.
+if echo "$COMMAND" | grep -qE 'gh\s+pr\s+merge'; then
+  deny "BLOCKED: gh pr merge requires explicit user approval.
+
+⚔️ APEX RULE: Claude creates PRs, the user merges them.
+
+Show the PR URL to the user and ask:
+  'PR ready for review: <URL>. Would you like me to merge it?'
+
+Only run gh pr merge if the user explicitly says 'merge it' or 'yes, merge'."
+fi
+
 # Block force push (but allow --force-with-lease which is safe)
 if echo "$COMMAND" | grep -qE 'git\s+push\s+.*(-f\b|--force($|\s))' && ! echo "$COMMAND" | grep -q 'force-with-lease'; then
   deny "BLOCKED: Force push is not allowed. It rewrites history and can cause data loss. Use --force-with-lease if you must, or create a new commit."
