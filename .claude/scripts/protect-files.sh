@@ -27,7 +27,9 @@ if [ -z "$FILE_PATH" ]; then
   exit 0
 fi
 
-# Protected patterns — NEVER edit these directly
+# Protected patterns — secrets and generated files that should not be directly edited.
+# Config files (vite.config.ts, tsconfig.json, .d.ts) are NOT protected — developers
+# legitimately need to edit them. Only protect what is truly dangerous or generated.
 PROTECTED_PATTERNS=(
   "\.env$"
   "\.env\.local$"
@@ -37,10 +39,6 @@ PROTECTED_PATTERNS=(
   "pnpm-lock\.yaml$"
   "\.git/"
   "node_modules/"
-  "vite\.config\.ts$"
-  "tsconfig.*\.json$"
-  "\.skip\.config\.json$"
-  "\.d\.ts$"
 )
 
 for pattern in "${PROTECTED_PATTERNS[@]}"; do

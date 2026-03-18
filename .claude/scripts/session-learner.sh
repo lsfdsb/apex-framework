@@ -14,7 +14,11 @@ if ! command -v jq &> /dev/null; then
 fi
 
 INPUT=$(cat)
-SESSION_ID="${CLAUDE_SESSION_ID:-unknown}"
+# CLAUDE_SESSION_ID env var doesn't exist — extract from hook JSON payload
+SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
+if [ -z "$SESSION_ID" ]; then
+  SESSION_ID="unknown"
+fi
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 LOG_DIR="${PROJECT_DIR}/.claude/session-logs"
 mkdir -p "$LOG_DIR"
@@ -24,16 +28,32 @@ TIMESTAMP=$(date '+%Y-%m-%d %H:%M')
 BRANCH=$(git -C "$PROJECT_DIR" branch --show-current 2>/dev/null || echo "unknown")
 
 # Find session transcript
+# Claude Code stores sessions in ~/.claude/projects/{sanitized-project-path}/
 TRANSCRIPT_DIR="$HOME/.claude/projects"
-SANITIZED=$(echo "$PROJECT_DIR" | sed 's|/|-|g')
-TRANSCRIPT="${TRANSCRIPT_DIR}/${SANITIZED}/${SESSION_ID}.jsonl"
+TRANSCRIPT=""
 
-if [ ! -f "$TRANSCRIPT" ]; then
-  # Try alternate transcript path
-  TRANSCRIPT=$(find "$TRANSCRIPT_DIR" -name "${SESSION_ID}.jsonl" 2>/dev/null | head -1)
+if [ "$SESSION_ID" != "unknown" ]; then
+  # Strategy 1: Sanitized project path (Claude Code convention: /path → -path)
+  SANITIZED=$(echo "$PROJECT_DIR" | sed 's|/|-|g')
+  CANDIDATE="${TRANSCRIPT_DIR}/${SANITIZED}/${SESSION_ID}.jsonl"
+  [ -f "$CANDIDATE" ] && TRANSCRIPT="$CANDIDATE"
+
+  # Strategy 2: Find by session ID across all project directories
+  if [ -z "$TRANSCRIPT" ]; then
+    TRANSCRIPT=$(find "$TRANSCRIPT_DIR" -name "${SESSION_ID}.jsonl" -type f 2>/dev/null | head -1)
+  fi
 fi
 
-if [ ! -f "$TRANSCRIPT" ]; then
+# Strategy 3: Most recent JSONL in the sanitized project dir (fallback for unknown session)
+if [ -z "$TRANSCRIPT" ]; then
+  SANITIZED=$(echo "$PROJECT_DIR" | sed 's|/|-|g')
+  CANDIDATE_DIR="${TRANSCRIPT_DIR}/${SANITIZED}"
+  if [ -d "$CANDIDATE_DIR" ]; then
+    TRANSCRIPT=$(ls -t "$CANDIDATE_DIR"/*.jsonl 2>/dev/null | head -1)
+  fi
+fi
+
+if [ -z "$TRANSCRIPT" ] || [ ! -f "$TRANSCRIPT" ]; then
   exit 0
 fi
 

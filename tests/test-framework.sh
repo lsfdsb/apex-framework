@@ -529,7 +529,7 @@ fi
 TOTAL=$((TOTAL + 1))
 # Use base64 to avoid the hook catching "rm -rf" in our test command
 BLOCK_INPUT=$(printf '{"tool_input":{"command":"%s"}}' "$(echo 'cm0gLXJmIC8=' | base64 -d)")
-BLOCK_OUTPUT=$(echo "$BLOCK_INPUT" | bash "$SCRIPTS/block-dangerous-commands.sh" 2>/dev/null)
+BLOCK_OUTPUT=$(echo "$BLOCK_INPUT" | bash "$SCRIPTS/block-dangerous-commands.sh" 2>&1) || true
 if echo "$BLOCK_OUTPUT" | grep -q '"permissionDecision":"deny"' || echo "$BLOCK_OUTPUT" | grep -qi 'BLOCKED'; then
   if [ "$APEX_COLORS" = true ]; then
     printf "    ${OK}✓${RST} block-dangerous-commands blocks rm -rf\n"

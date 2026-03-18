@@ -1,7 +1,7 @@
-# APEX Framework v5.2 — Complete Installation Guide
+# APEX Framework v5.7 — Complete Installation Guide
 
 > Every step is explained. Nothing is assumed. Official sources only. Zero Homebrew.
-> Forged by Lucas Bueno & Claude · São Paulo, March 2026
+> Forged by L.B. & Claude · São Paulo, March 2026
 
 ---
 
@@ -9,9 +9,9 @@
 
 | Requirement | Why | Verify |
 |-------------|-----|--------|
-| macOS 13+ (Tahoe ✅) | Claude Code runs on macOS 13+ | Apple → About This Mac |
+| macOS 13+ or Linux | Claude Code runs on macOS 13+ and Linux | Apple → About This Mac |
 | Claude Max ($100/200 month) | Claude Code + higher limits | claude.ai/settings |
-| ~30 minutes | One-time setup, then automatic | — |
+| ~15 minutes | One-time setup, then automatic | — |
 
 ---
 
@@ -19,7 +19,7 @@
 
 ### 1.1 Node.js — from the official website
 
-📚 *What it is*: The engine that runs JavaScript outside the browser. Your Next.js apps need it.
+*What it is*: The engine that runs JavaScript outside the browser. Your Next.js apps need it.
 
 1. Open **https://nodejs.org**
 2. Click the green **LTS** button
@@ -40,7 +40,7 @@ Expected: `v22+` and `10+`.
 
 ### 1.2 jq — from the official GitHub repo
 
-📚 *What it is*: A single binary that reads JSON. Our hooks use it. Zero dependencies.
+*What it is*: A single binary that reads JSON. APEX hooks use it for parsing tool inputs. Zero dependencies.
 
 Check your chip:
 
@@ -52,25 +52,16 @@ If `arm64` (Mac M1/M2/M3/M4):
 
 ```
 mkdir -p ~/.local/bin
-```
-
-```
 curl -fsSL https://github.com/jqlang/jq/releases/download/jq-1.7.1/jq-macos-arm64 -o ~/.local/bin/jq
-```
-
-```
 chmod +x ~/.local/bin/jq
 ```
 
 If `x86_64` (Intel Mac), replace `arm64` with `amd64` in the curl command above.
 
-Add to PATH:
+Add to PATH (if not already there):
 
 ```
 echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
-```
-
-```
 source ~/.zshrc
 ```
 
@@ -85,23 +76,13 @@ Expected: `jq-1.7.1`.
 ### 1.3 Claude Code — Anthropic native installer
 
 ```
-/bin/bash -c "$(curl -fsSL https://storage.googleapis.com/claude-code-dist-86c565f3-f756-42ad-8dfa-d59b1c096819/install.sh)"
+npm install -g @anthropic-ai/claude-code
 ```
 
 **Close and reopen Terminal**, then:
 
 ```
 claude --version
-```
-
-If `command not found`:
-
-```
-echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc
-```
-
-```
-source ~/.zshrc
 ```
 
 ### 1.4 First Login
@@ -126,7 +107,7 @@ Browser opens. Login with Claude Max. Authorize. Return to Terminal. Type `/exit
 
 1. `Cmd + Shift + X` (Extensions)
 2. Search **"Claude Code"**
-3. Publisher: **Anthropic** (verified, 2M+ installs)
+3. Publisher: **Anthropic** (verified)
 4. Install
 
 **Configure the integrated terminal:**
@@ -142,22 +123,7 @@ Browser opens. Login with Claude Max. Authorize. Return to Terminal. Type `/exit
 }
 ```
 
-**Keyboard shortcut for Claude Code:**
-
-`Cmd + Shift + P` → "Open Keyboard Shortcuts JSON" → add:
-
-```json
-[
-  {
-    "key": "cmd+shift+c",
-    "command": "workbench.action.terminal.sendSequence",
-    "args": { "text": "claude\n" },
-    "when": "terminalFocus"
-  }
-]
-```
-
-📚 *Tip*: Drag the terminal panel to the right side. Code on the left, Claude on the right. Changes appear in real-time. This is the way.
+*Tip*: Drag the terminal panel to the right side. Code on the left, Claude on the right. Changes appear in real-time. This is the way.
 
 ### 2.2 iTerm2 (optional, for Agent Teams)
 
@@ -165,142 +131,42 @@ Browser opens. Login with Claude Max. Authorize. Return to Terminal. Type `/exit
 2. Drag to Applications
 3. Preferences (`Cmd + ,`) → Profiles → Keys → Left Option key: **Esc+**
 
-📚 *Why*: Agent Teams use split panes. iTerm2 handles this natively.
-
-### 2.3 Local Preview
-
-No installation needed. When you run `npm run dev`, the app opens at:
-
-```
-http://localhost:3000
-```
-
-Hot reload updates automatically when code changes.
+*Why*: Agent Teams use split panes. iTerm2 handles this natively.
 
 ---
 
-## PHASE 3 — Install APEX Globally (once)
-
-### 3.1 Extract
+## PHASE 3 — Clone APEX (once)
 
 ```
-cd ~/Downloads
+git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework
 ```
 
-```
-mkdir -p ~/apex-framework
-```
-
-```
-tar xf apex-framework-v5.2-complete.tar -C ~/apex-framework
-```
-
-### 3.2 Install
-
-```
-cd ~/apex-framework
-```
-
-```
-chmod +x install-user-level.sh
-```
-
-```
-./install-user-level.sh
-```
-
-### 3.3 Complete the 2 skills the installer skips
-
-```
-cp -r ~/apex-framework/.claude/skills/debug ~/.claude/skills/debug
-```
-
-```
-cp -r ~/apex-framework/.claude/skills/a11y ~/.claude/skills/a11y
-```
-
-### 3.4 Verify
-
-```
-ls ~/.claude/skills/ | wc -l
-```
-
-Expected: **15**.
+That's it. The framework is now on your machine. Updates are automatic — APEX checks GitHub for new versions on every session start.
 
 ---
 
-## PHASE 4 — Create Your First Project
+## PHASE 4 — Install APEX in Your Project (once per project)
 
 ```
-mkdir -p ~/my-first-apex-app && cd ~/my-first-apex-app
+cd ~/your-project
+~/.apex-framework/install.sh
 ```
 
-```
-git init
-```
+**One command.** The installer:
+
+1. Checks prerequisites (git, jq, claude)
+2. Copies all 25 skills, 4 agents, 21 hook scripts, 7 rules into `.claude/`
+3. Installs `settings.json` with hooks, permissions, sandbox, statusline
+4. Installs git hooks (pre-commit + commit-msg)
+5. Copies `CLAUDE.md` (project constitution)
+6. Creates doc directories (`docs/prd`, `docs/architecture`, `docs/research`, `docs/reviews`)
+7. Updates `.gitignore` with APEX entries
+
+If you don't have a project yet:
 
 ```
-mkdir -p .claude/skills
-```
-
-```
-for skill in prd architecture research qa security performance deploy commit changelog init e2e cicd; do cp -r ~/apex-framework/.claude/skills/$skill .claude/skills/; done
-```
-
-```
-cp -r ~/apex-framework/.claude/scripts .claude/
-```
-
-```
-cp -r ~/apex-framework/.claude/rules .claude/
-```
-
-```
-cp ~/apex-framework/.claude/settings.json .claude/settings.json
-```
-
-```
-cp ~/apex-framework/.claude/settings.local.json .claude/settings.local.json
-```
-
-```
-cp -r ~/apex-framework/.claude/git-hooks .claude/
-```
-
-```
-mkdir -p .git/hooks
-```
-
-```
-cp .claude/git-hooks/pre-commit .git/hooks/pre-commit
-```
-
-```
-cp .claude/git-hooks/commit-msg .git/hooks/commit-msg
-```
-
-```
-chmod +x .claude/scripts/*.sh .claude/git-hooks/* .git/hooks/*
-```
-
-```
-cp ~/apex-framework/CLAUDE.md .
-```
-
-```
-cp ~/apex-framework/.gitignore .
-```
-
-```
-mkdir -p docs/prd docs/architecture docs/research docs/reviews
-```
-
-```
-git add .
-```
-
-```
-git commit -m "chore: initialize APEX Framework v5.2"
+mkdir ~/my-first-app && cd ~/my-first-app && git init
+~/.apex-framework/install.sh
 ```
 
 ---
@@ -311,7 +177,7 @@ git commit -m "chore: initialize APEX Framework v5.2"
 code .
 ```
 
-In VS Code terminal (`Ctrl + `` `):
+In VS Code terminal:
 
 ```
 claude
@@ -323,16 +189,42 @@ claude
 Build me a task management app
 ```
 
-Claude should BLOCK and ask for a PRD first. If it blocks: **APEX is 100% operational**. ✅
+Claude should BLOCK and ask for a PRD first. If it blocks: **APEX is 100% operational**.
 
 ---
 
 ## Next Projects
 
-Only Phase 4. Or inside Claude Code:
+Just Phase 4:
+
+```
+cd ~/another-project
+~/.apex-framework/install.sh
+```
+
+Or inside an active Claude Code session:
 
 ```
 /init
+```
+
+---
+
+## Updates
+
+APEX auto-updates on session start. It checks GitHub for newer versions and pulls changes into your project's `.claude/` directory automatically.
+
+To manually update the source:
+
+```
+cd ~/.apex-framework && git pull
+```
+
+To re-install in a project (after manual update):
+
+```
+cd ~/your-project
+~/.apex-framework/install.sh
 ```
 
 ---
@@ -343,7 +235,7 @@ Only Phase 4. Or inside Claude Code:
 |------|--------|-------------|
 | Node.js | nodejs.org | OpenJS Foundation |
 | jq | github.com/jqlang/jq | MIT, official binary |
-| Claude Code | Anthropic | Signed + Apple notarized |
+| Claude Code | npmjs.com/@anthropic-ai/claude-code | Anthropic |
 | VS Code | code.visualstudio.com | Microsoft, MIT |
 | Claude extension | Anthropic (Marketplace) | Verified publisher |
 | iTerm2 | iterm2.com | GPLv2, 15+ years |
@@ -351,6 +243,6 @@ Only Phase 4. Or inside Claude Code:
 
 ---
 
-*Forged by Lucas Bueno & Claude · `/about` for the full story*
+*Forged by L.B. & Claude · `/about` for the full story*
 
-**This is the way.** ⚔️
+**This is the way.**

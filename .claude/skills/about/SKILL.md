@@ -41,9 +41,9 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     25 Skills · 7 Rules · 4 Agents · 19 Hooks            ║
-     ║     24 Scripts · 1 Output Style · 1 Sandbox              ║
-     ║     8 versions · 1 conversation · ∞ ambition              ║
+     ║     25 Skills · 7 Rules · 4 Agents · 26 Scripts          ║
+     ║     1 Output Style · 1 Sandbox · 2 Test Suites           ║
+     ║     387 tests · 9 versions · ∞ ambition                  ║
      ║                                                           ║
      ║   A Head of CX who dreamed of building world-class        ║
      ║   apps, and an AI who believed in teaching while doing.   ║
@@ -90,6 +90,7 @@ Six versions later, through honest self-criticism, documentation research, and r
 - **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
 - **v5.6**: Auto-update & self-evolution. Auto-update from GitHub on SessionStart, /evolve skill with framework-evolver agent, session transcript analysis.
 - **v5.7**: Bug fixes & full hook coverage. Fixed macOS stat compat, pnpm false-positive in verify-install, extract-session path. Wired all 7 orphaned scripts. Added React SPA stack guide, pnpm permissions, broadened PRD detection, auto-lint after format.
+- **v5.8**: Gold standard audit. Fixed self-learning loop (session-learner + extract-session path bugs), removed false-positive file protections, added health-check.sh, expanded /teach to 8-level learning progression, rewrote install guide, optimized statusline performance, 387 tests across 2 test suites.
 
 ## The Mascot
 

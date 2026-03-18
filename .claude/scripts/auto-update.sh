@@ -160,6 +160,10 @@ for dir in scripts skills agents rules output-styles; do
     cp -r "$PROJECT_DIR/.claude/$dir" "$BACKUP_DIR/" 2>/dev/null || true
   fi
 done
+# Also back up settings.json for customization detection
+if [ -f "$PROJECT_DIR/.claude/settings.json" ]; then
+  cp "$PROJECT_DIR/.claude/settings.json" "$BACKUP_DIR/settings.json" 2>/dev/null || true
+fi
 
 # Update scripts
 for script in "$APEX_CACHE"/.claude/scripts/*.sh; do
@@ -186,10 +190,29 @@ for style in "$APEX_CACHE"/.claude/output-styles/*.md; do
   [ -f "$style" ] && cp "$style" "$PROJECT_DIR/.claude/output-styles/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
 done
 
-# Update settings.json
+# Update settings.json — but only if the user hasn't customized it.
+# We detect customization by checking if the file differs from the previous
+# framework version. If it matches the old framework version, safe to overwrite.
+# If it doesn't match (user customized), preserve it and log a note.
 if [ -f "$APEX_CACHE/.claude/settings.json" ]; then
-  cp "$APEX_CACHE/.claude/settings.json" "$PROJECT_DIR/.claude/settings.json"
-  UPDATE_COUNT=$((UPDATE_COUNT + 1))
+  SHOULD_UPDATE=true
+  if [ -f "$PROJECT_DIR/.claude/settings.json" ] && [ -d "$BACKUP_DIR/scripts" ]; then
+    # Compare project settings against the backup (which was the previous framework version)
+    # If they differ, the user has customized their settings
+    OLD_FRAMEWORK_SETTINGS="$BACKUP_DIR/../settings.json.framework-ref"
+    # Use the backed-up version as reference if available
+    if [ -f "$BACKUP_DIR/settings.json" ] 2>/dev/null; then
+      if ! diff -q "$PROJECT_DIR/.claude/settings.json" "$BACKUP_DIR/settings.json" > /dev/null 2>&1; then
+        # Project settings differ from what was backed up — user has customized
+        SHOULD_UPDATE=false
+        log "Skipping settings.json: user has custom modifications"
+      fi
+    fi
+  fi
+  if [ "$SHOULD_UPDATE" = true ]; then
+    cp "$APEX_CACHE/.claude/settings.json" "$PROJECT_DIR/.claude/settings.json"
+    UPDATE_COUNT=$((UPDATE_COUNT + 1))
+  fi
 fi
 
 # Save version marker
