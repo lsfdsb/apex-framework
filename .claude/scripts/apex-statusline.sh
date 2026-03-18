@@ -175,7 +175,9 @@ command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] 
 PR_STR=""
 if command -v gh &>/dev/null; then
   BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-  PR_CACHE="/tmp/apex-pr-cache-${BRANCH}.json"
+  # Sanitize branch name for cache filename (feat/foo → feat-foo)
+  BRANCH_SAFE=$(echo "$BRANCH" | tr '/' '-')
+  PR_CACHE="/tmp/apex-pr-cache-${BRANCH_SAFE}.json"
   PR_DATA=""
   # Use cache if fresh (< 60s old)
   if [ -f "$PR_CACHE" ]; then
