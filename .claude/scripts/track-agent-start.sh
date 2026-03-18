@@ -6,7 +6,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
-  echo '{"systemMessage":"🤖 Agent spawned"}'
+  echo "⚠️ APEX: jq not installed — agent tracking disabled." >&2
   exit 0
 fi
 
