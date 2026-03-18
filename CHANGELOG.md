@@ -5,6 +5,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- `/update` skill — manual framework update command for when auto-update can't self-update (#49)
+
+### Fixed
+- Pre-commit hook skips TS/lint/prettier when only framework files staged (#49)
+- Pre-commit hook shows actual error output instead of swallowing with 2>/dev/null (#49)
+
 ## [5.9.1] — 2026-03-18 — Self-Improving Loop, No Silent Skips
 
 ### Added
