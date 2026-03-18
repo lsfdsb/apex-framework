@@ -225,7 +225,7 @@ if command -v gh &>/dev/null; then
     if [ -n "$PR_NUM" ]; then
       case "$PR_STATE" in
         MERGED) PR_ICON="🟣" ;;
-        OPEN)   PR_ICON="🟢" ;;
+        OPEN)   PR_ICON="🟠" ;;
         CLOSED) PR_ICON="🔴" ;;
         *)      PR_ICON="PR" ;;
       esac
