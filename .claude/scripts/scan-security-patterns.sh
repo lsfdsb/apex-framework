@@ -7,6 +7,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX Security: jq not installed — security pattern scanning disabled."
   exit 0
 fi
 

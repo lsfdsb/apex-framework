@@ -5,7 +5,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX: jq not installed — dangerous command blocking disabled." >&2
+  echo "⚠️ APEX Safety: jq not installed — dangerous command blocking disabled. Install: https://jqlang.github.io/jq/download/"
   exit 0
 fi
 

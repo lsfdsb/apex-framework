@@ -10,6 +10,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX Session Learner: jq not installed — session learning disabled."
   exit 0
 fi
 
@@ -54,6 +55,7 @@ if [ -z "$TRANSCRIPT" ]; then
 fi
 
 if [ -z "$TRANSCRIPT" ] || [ ! -f "$TRANSCRIPT" ]; then
+  echo "📝 APEX Session Learner: transcript not found. Learning skipped."
   exit 0
 fi
 
