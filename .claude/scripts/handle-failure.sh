@@ -101,4 +101,10 @@ if [ -n "$SUGGESTIONS" ]; then
   echo "$SUGGESTIONS"
 fi
 
+# ── Increment error counter for proactive /evolve ──
+ERROR_COUNTER="/tmp/apex-session-errors.count"
+PREV=0
+[ -f "$ERROR_COUNTER" ] && PREV=$(cat "$ERROR_COUNTER" 2>/dev/null || echo "0")
+echo $((PREV + 1)) > "$ERROR_COUNTER"
+
 exit 0

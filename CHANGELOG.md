@@ -6,6 +6,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- Proactive `/evolve` suggestion — error counter tracks failures, suggests `/evolve` at 5/10/20 errors (#46)
+- `/prd` skill auto-generates README.md from PRD content after document creation (#46)
+- No silent skips — all hooks provide feedback for every exit path (#45)
 - Block `git commit` on main/master — catches mistakes at commit time, not push time (#38)
 - Branch pre-flight check in `/commit` skill — Step 0 verifies branch before staging (#38)
 - Push-to-main error now includes exact recovery recipe (#38)

@@ -73,5 +73,22 @@ Phase 1 (MVP), Phase 2 (enhance), Phase 3 (scale).
 Unresolved items.
 ```
 
-### Step 4: Summary
+### Step 4: Update README.md
+
+After writing the PRD, update the project's `README.md` to reflect the actual project:
+
+1. **Read** the existing README.md (if any)
+2. **Replace** template/boilerplate content with project-specific information from the PRD:
+   - Project name and one-line description (from Vision & Purpose)
+   - What it does (from Problem Statement)
+   - Tech stack (from Technical Architecture)
+   - Setup instructions (`git clone`, `npm install`, `npm run dev`)
+   - Key features (from Functional Requirements, P0 items)
+   - Project structure overview
+3. **Keep** any existing content that's still relevant (contributing guidelines, license, etc.)
+4. If no README.md exists, create one from scratch using the PRD content.
+
+The README is the first thing users and contributors see — it must describe THIS project, not a template.
+
+### Step 5: Summary
 Return a brief summary of key decisions and any open questions needing user input.

@@ -64,6 +64,24 @@ if echo "$RESPONSE" | grep -qiE '(documentation|readme|changelog|\.md|comment|ty
   EXEMPT=true
 fi
 
+# ── Proactive /evolve suggestion — track errors across the session ──
+ERROR_COUNTER="/tmp/apex-session-errors.count"
+TOOL_ERRORS=$(echo "$INPUT" | jq '[.tool_uses[]? | select(.is_error == true)] | length' 2>/dev/null || echo "0")
+if [ "$TOOL_ERRORS" -gt 0 ] 2>/dev/null; then
+  PREV_COUNT=0
+  [ -f "$ERROR_COUNTER" ] && PREV_COUNT=$(cat "$ERROR_COUNTER" 2>/dev/null || echo "0")
+  NEW_COUNT=$((PREV_COUNT + TOOL_ERRORS))
+  echo "$NEW_COUNT" > "$ERROR_COUNTER"
+  # Suggest /evolve at thresholds: 5, 10, 20 errors
+  if { [ "$NEW_COUNT" -ge 5 ] && [ "$PREV_COUNT" -lt 5 ]; } || \
+     { [ "$NEW_COUNT" -ge 10 ] && [ "$PREV_COUNT" -lt 10 ]; } || \
+     { [ "$NEW_COUNT" -ge 20 ] && [ "$PREV_COUNT" -lt 20 ]; }; then
+    echo ""
+    echo "🔧 APEX detected $NEW_COUNT errors this session. Consider running /evolve to analyze and fix recurring patterns."
+    echo ""
+  fi
+fi
+
 if [ "$WROTE_CODE" = true ] && [ "$TESTS_RAN" = false ] && [ "$EXEMPT" = false ]; then
   echo ""
   echo "┌──────────────────────────────────────────────────────────────┐"
