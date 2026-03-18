@@ -7,6 +7,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - Proactive `/evolve` suggestion — error counter tracks failures, suggests `/evolve` at 5/10/20 errors (#46)
+
+### Fixed
+- PR cache: sanitize branch names with `/` (e.g., `feat/foo` → `feat-foo`) to prevent invalid file paths (#47)
 - `/prd` skill auto-generates README.md from PRD content after document creation (#46)
 - No silent skips — all hooks provide feedback for every exit path (#45)
 - Block `git commit` on main/master — catches mistakes at commit time, not push time (#38)
