@@ -8,6 +8,7 @@
 #          refactor/perf/docs→Changed, chore/test→skipped
 
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — auto-changelog disabled."
   exit 0
 fi
 

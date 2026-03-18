@@ -5,6 +5,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ APEX: jq not installed — auto-approve disabled."
   exit 0
 fi
 

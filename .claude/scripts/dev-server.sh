@@ -6,6 +6,7 @@
 
 # Skip if not in a project directory
 if [ -z "${CLAUDE_PROJECT_DIR:-}" ]; then
+  echo "⚙️ Dev server: no project directory detected. Skipped."
   exit 0
 fi
 
@@ -17,17 +18,20 @@ PID_FILE="$LOG_DIR/.dev-server.pid"
 
 # Skip if no package.json
 if [ ! -f "$PACKAGE_JSON" ]; then
+  echo "⚙️ Dev server: no package.json found. Not a Node.js project."
   exit 0
 fi
 
 # Skip if no jq
 if ! command -v jq &> /dev/null; then
+  echo "⚠️ Dev server: jq not installed — auto-start disabled."
   exit 0
 fi
 
 # Skip if no "dev" script in package.json
 DEV_SCRIPT=$(jq -r '.scripts.dev // empty' "$PACKAGE_JSON" 2>/dev/null)
 if [ -z "$DEV_SCRIPT" ]; then
+  echo "⚙️ Dev server: no 'dev' script in package.json. Auto-start skipped."
   exit 0
 fi
 

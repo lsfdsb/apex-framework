@@ -5,6 +5,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if [ -z "${CLAUDE_PROJECT_DIR:-}" ]; then
+  # No project dir — dev monitor not applicable
   exit 0
 fi
 

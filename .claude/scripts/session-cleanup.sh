@@ -8,7 +8,10 @@ if ! command -v jq &> /dev/null; then
   echo "⚠️ APEX: jq not installed — session cleanup limited. Install: https://jqlang.github.io/jq/download/" >&2
   exit 0
 fi
-if ! command -v git &> /dev/null; then exit 0; fi
+if ! command -v git &> /dev/null; then
+  echo "⚠️ APEX Cleanup: git not found — session cleanup skipped."
+  exit 0
+fi
 
 # Check for uncommitted changes
 if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
