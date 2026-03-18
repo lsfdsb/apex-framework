@@ -5,14 +5,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.10.0] — 2026-03-18 — Update Skill, Pre-Commit Fix, Agent Teams Prep
+
 ### Added
-- `/update` skill — manual framework update command for when auto-update can't self-update (#49)
-- Update instructions in CLAUDE.md — works even on projects with outdated APEX versions (#50)
+- `/update` skill — manual framework update from within any Claude session (#49)
+- Update instructions in CLAUDE.md — works even on outdated APEX versions (#50)
 - Auto-update appends `## Update` section to CLAUDE.md if missing (#50)
+- Agent Teams architecture documented — Watcher, Builder, Reviewer roles (next: implementation)
 
 ### Fixed
 - Pre-commit hook skips TS/lint/prettier when only framework files staged (#49)
-- Pre-commit hook shows actual error output instead of swallowing with 2>/dev/null (#49)
+- Pre-commit hook shows actual error output instead of hiding with 2>/dev/null (#49)
+- PR cache: sanitize branch names with `/` for valid file paths (#47)
 
 ## [5.9.1] — 2026-03-18 — Self-Improving Loop, No Silent Skips
 
