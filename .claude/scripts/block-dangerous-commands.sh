@@ -28,9 +28,31 @@ if echo "$COMMAND" | grep -qE 'rm\s+(-[a-zA-Z]*r[a-zA-Z]*f|--recursive\s+--force
   deny "BLOCKED: rm -rf is not allowed. Use 'trash' or remove specific files individually. Use 'rm -r <specific-path>' without -f."
 fi
 
+# Block committing directly to main/master
+if echo "$COMMAND" | grep -qE '^git\s+commit'; then
+  CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ "$CURRENT_BRANCH" = "main" ] || [ "$CURRENT_BRANCH" = "master" ]; then
+    deny "BLOCKED: You are on $CURRENT_BRANCH. Do not commit directly to main/master.
+
+Recovery:
+  git checkout -b feat/your-description
+  (then commit from the new branch)
+
+The APEX workflow requires all changes to go through feature branches and PRs."
+  fi
+fi
+
 # Block direct push to main/master
 if echo "$COMMAND" | grep -qE 'git\s+push\s+.*\b(main|master)\b'; then
-  deny "BLOCKED: Direct push to main/master is not allowed. Create a feature branch (feat/description or fix/description) and push there instead."
+  deny "BLOCKED: Direct push to main/master is not allowed.
+
+Recovery (if you already committed to main):
+  git branch feat/your-description
+  git reset --hard origin/main
+  git checkout feat/your-description
+  git push -u origin feat/your-description
+
+Then open a PR: gh pr create --title \"...\" --body \"...\""
 fi
 
 # Block force push (but allow --force-with-lease which is safe)

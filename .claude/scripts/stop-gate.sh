@@ -38,6 +38,14 @@ if [ "$WROTE_CODE" = false ]; then
   exit 0
 fi
 
+# Exempt shell scripts, config files, and docs — no JS/TS tests applicable
+WRITTEN_PATHS=$(echo "$INPUT" | jq -r '.tool_uses[]? | select(.tool_name | test("Write|Edit|MultiEdit")) | .tool_input.file_path // empty' 2>/dev/null)
+if [ -n "$WRITTEN_PATHS" ]; then
+  if ! echo "$WRITTEN_PATHS" | grep -qvE '\.(sh|json|yaml|yml|md|env|toml|cfg)$'; then
+    exit 0  # All changes are scripts/config — test nudge doesn't apply
+  fi
+fi
+
 # Detect if tests were run
 TESTS_RAN=false
 if echo "$RESPONSE" | grep -qiE '(vitest|jest|playwright|npm test|npm run test|npx vitest|npx playwright|test.*pass|tests? (passed|failed|running)|✅.*test)'; then

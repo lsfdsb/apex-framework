@@ -57,7 +57,15 @@ case "$TYPE" in
   refactor) CATEGORY="Changed" ;;
   perf)     CATEGORY="Changed" ;;
   docs)     CATEGORY="Changed" ;;
-  *)        exit 0 ;;  # chore, test, merge commits — skip
+  chore)
+    # Log version bumps and named releases; skip trivial chores
+    if echo "$SUBJECT" | grep -qE 'v[0-9]+\.[0-9]+|polish|release|bump'; then
+      CATEGORY="Changed"
+    else
+      exit 0
+    fi
+    ;;
+  *)        exit 0 ;;  # test, merge commits — skip
 esac
 
 # Clean description: strip "type(scope): " or "type: " prefix
