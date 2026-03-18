@@ -117,7 +117,27 @@ if [ ! -f "CLAUDE.md" ]; then
   cp "$APEX_DIR/CLAUDE.md" .
   echo "   ✅ CLAUDE.md (project constitution)"
 else
-  echo "   ⚠️  CLAUDE.md already exists, keeping yours"
+  echo "   📋 CLAUDE.md exists — checking for missing sections..."
+  SECTIONS_ADDED=0
+  # Check for critical sections that may have been added in newer versions
+  REQUIRED_SECTIONS=("## Agent Teams" "## Update" "## Workflow" "## Code Standards" "## Git Workflow")
+  for section in "${REQUIRED_SECTIONS[@]}"; do
+    if ! grep -q "$section" "CLAUDE.md" 2>/dev/null; then
+      # Extract section from framework CLAUDE.md (from header to next ## or EOF)
+      SECTION_CONTENT=$(sed -n "/^${section}$/,/^## [^${section:3:1}]/{ /^## [^${section:3:1}]/!p; }" "$APEX_DIR/CLAUDE.md" 2>/dev/null)
+      if [ -n "$SECTION_CONTENT" ]; then
+        echo "" >> "CLAUDE.md"
+        echo "$SECTION_CONTENT" >> "CLAUDE.md"
+        echo "   ✅ Added missing section: $section"
+        SECTIONS_ADDED=$((SECTIONS_ADDED + 1))
+      fi
+    fi
+  done
+  if [ "$SECTIONS_ADDED" -eq 0 ]; then
+    echo "   ✅ CLAUDE.md is up to date (all sections present)"
+  else
+    echo "   ✅ Added $SECTIONS_ADDED missing section(s) to CLAUDE.md"
+  fi
 fi
 
 # ── VERSION marker ──
