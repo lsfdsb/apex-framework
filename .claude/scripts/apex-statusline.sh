@@ -171,10 +171,22 @@ PREF="$HOME/.claude/apex-preferences.json"
 TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
 command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️ COST"
 
-# ── PR detection (clickable link + merge status) ──
+# ── PR detection (clickable link + merge status, cached 60s) ──
 PR_STR=""
 if command -v gh &>/dev/null; then
-  PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
+  BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  PR_CACHE="/tmp/apex-pr-cache-${BRANCH}.json"
+  PR_DATA=""
+  # Use cache if fresh (< 60s old)
+  if [ -f "$PR_CACHE" ]; then
+    CACHE_AGE=$(( $(date +%s) - $(stat -f %m "$PR_CACHE" 2>/dev/null || echo "0") ))
+    [ "$CACHE_AGE" -lt 60 ] && PR_DATA=$(cat "$PR_CACHE" 2>/dev/null)
+  fi
+  # Fetch if no cache or stale
+  if [ -z "$PR_DATA" ] && [ -n "$BRANCH" ]; then
+    PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
+    [ -n "$PR_DATA" ] && echo "$PR_DATA" > "$PR_CACHE"
+  fi
   if [ -n "$PR_DATA" ]; then
     PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
     PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')

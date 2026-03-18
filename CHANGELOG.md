@@ -5,10 +5,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.9.0] — 2026-03-18 — UX Writing, Statusline PR Link, Extended Patterns
+
 ### Added
 - Statusline: clickable PR link with merge status (🟢 open, 🟣 merged, 🔴 closed) via OSC 8 hyperlinks
 - Statusline: agent tracking shows types — "🤖 3 (Explore, Plan, reviewer) 45.2K"
-- Agent tracking: `types` array in /tmp/apex-agents.json, debug log for validation
+- Agent tracking: `types` array in /tmp/apex-agents.json
 - UX Writing guidelines — button labels, error messages, empty states, confirmations, loading, success, tooltips, tone of voice (design-system)
 - Content Quality review dimension (#10) — microcopy checklist, locale formatting (cx-review)
 - Squash-merge reminder added to /changelog skill
