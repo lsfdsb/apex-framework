@@ -128,12 +128,20 @@ Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop
 The team operates autonomously. No human intervention needed in the loop.
 
 ### Split Panes (iTerm2)
-For visual split panes, launch Claude inside tmux:
+Prerequisites (one-time setup):
 ```bash
-tmux -CC   # iTerm2 control mode (recommended)
-claude --teammate-mode tmux
+brew install tmux                                          # split pane engine
+curl -L https://iterm2.com/shell_integration/install_shell_integration_and_utilities.sh | bash  # it2 CLI
+echo 'export PATH="$HOME/.iterm2:$PATH"' >> ~/.zprofile    # add it2 to PATH
+source ~/.zprofile
 ```
-Or set permanently: `claude --teammate-mode tmux` or add to shell: `export CLAUDE_TEAMMATE_MODE=tmux`
+Then enable: **iTerm2 → Settings → General → Magic → Enable Python API**
+
+Launch with split panes:
+```bash
+tmux -CC                          # iTerm2 control mode
+claude --teammate-mode tmux       # enable split panes
+```
 
 ### Principles
 1. **Always use TeamCreate** — Never spawn regular subagents for team work. Use TeamCreate + Agent with team_name
