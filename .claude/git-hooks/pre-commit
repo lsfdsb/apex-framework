@@ -30,6 +30,29 @@ else
 fi
 echo ""
 
+# ═══════════════════════════════════════
+# 0. Check for merged PR on current branch
+# ═══════════════════════════════════════
+# If this branch already has a merged PR, committing here is almost certainly
+# a mistake — the work should go on a new branch instead.
+CURRENT_BRANCH=$(git symbolic-ref --short HEAD 2>/dev/null || true)
+if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "main" ] && [ "$CURRENT_BRANCH" != "master" ] && command -v gh &>/dev/null; then
+  MERGED_PR=$(gh pr list --head "$CURRENT_BRANCH" --state merged --json number,url --jq '.[0].url' 2>/dev/null || true)
+  if [ -n "$MERGED_PR" ]; then
+    if [ "$APEX_COLORS" = true ]; then
+      printf "  ${ERR_BOLD}🛑 This branch already has a merged PR:${RST}\n"
+      printf "  ${STEEL}   %s${RST}\n" "$MERGED_PR"
+      printf "  ${WARN}   Create a new branch for new work.${RST}\n\n"
+    else
+      echo "  🛑 This branch already has a merged PR:"
+      echo "     $MERGED_PR"
+      echo "     Create a new branch for new work."
+      echo ""
+    fi
+    exit 1
+  fi
+fi
+
 # Get staged files
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
 
