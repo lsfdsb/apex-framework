@@ -47,13 +47,30 @@ else
   echo ""
 fi
 
+# Check if ONLY framework/config files are staged (skip TS/lint/prettier)
+ONLY_FRAMEWORK=true
+for FILE in $STAGED_FILES; do
+  if ! echo "$FILE" | grep -qE '^\.(claude|git)/|\.md$|\.sh$|\.json$|\.yaml$|\.yml$|\.txt$|^CHANGELOG|^README|^VERSION|^LICENSE'; then
+    ONLY_FRAMEWORK=false
+    break
+  fi
+done
+
+if [ "$ONLY_FRAMEWORK" = true ]; then
+  if [ "$APEX_COLORS" = true ]; then
+    apex_status "info" "Only framework/config files staged — skipping TS/lint/format" 2>/dev/null || echo "  ○ Only framework/config files — TS/lint/format skipped"
+  else
+    echo "  ○ Only framework/config files — TS/lint/format skipped"
+  fi
+fi
+
 # Check for TypeScript project
 HAS_TS=false
-[ -f "tsconfig.json" ] && HAS_TS=true
+[ "$ONLY_FRAMEWORK" = false ] && [ -f "tsconfig.json" ] && HAS_TS=true
 
 # Check for Node project
 HAS_NODE=false
-[ -f "package.json" ] && HAS_NODE=true
+[ "$ONLY_FRAMEWORK" = false ] && [ -f "package.json" ] && HAS_NODE=true
 
 ERRORS=0
 TOTAL_CHECKS=0
@@ -138,7 +155,9 @@ if [ "$HAS_TS" = true ] && command -v npx &> /dev/null; then
     echo "  📐 Type checking..."
   fi
 
-  if ! npx tsc --noEmit --pretty 2>/dev/null; then
+  TSC_OUTPUT=$(npx tsc --noEmit --pretty 2>&1)
+  if [ $? -ne 0 ]; then
+    echo "$TSC_OUTPUT" | tail -10
     if [ "$APEX_COLORS" = true ]; then
       apex_spinner_stop "fail" "TypeScript errors found"
     else
@@ -168,7 +187,9 @@ if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/eslint" ]; then
 
   STAGED_JS=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
   if [ -n "$STAGED_JS" ]; then
-    if ! npx eslint $STAGED_JS --max-warnings=0 --quiet 2>/dev/null; then
+    LINT_OUTPUT=$(npx eslint $STAGED_JS --max-warnings=0 --quiet 2>&1)
+    if [ $? -ne 0 ]; then
+      echo "$LINT_OUTPUT" | tail -10
       if [ "$APEX_COLORS" = true ]; then
         apex_spinner_stop "fail" "Lint errors found"
       else
@@ -206,7 +227,9 @@ if [ "$HAS_NODE" = true ] && [ -f "node_modules/.bin/prettier" ]; then
 
   STAGED_FORMAT=$(echo "$STAGED_FILES" | grep -E '\.(ts|tsx|js|jsx|css|json|md)$' | tr '\n' ' ')
   if [ -n "$STAGED_FORMAT" ]; then
-    if ! npx prettier --check $STAGED_FORMAT 2>/dev/null; then
+    FMT_OUTPUT=$(npx prettier --check $STAGED_FORMAT 2>&1)
+    if [ $? -ne 0 ]; then
+      echo "$FMT_OUTPUT" | tail -5
       if [ "$APEX_COLORS" = true ]; then
         apex_spinner_stop "fail" "Format errors (run: npx prettier --write .)"
       else
