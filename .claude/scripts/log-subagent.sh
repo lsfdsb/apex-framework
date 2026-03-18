@@ -59,7 +59,4 @@ echo "$PREV" | jq \
   if (.types // [] | index($atype)) == null then .types = ((.types // []) + [$atype]) else . end
 ' > "${AGENT_FILE}.tmp" 2>/dev/null && mv "${AGENT_FILE}.tmp" "$AGENT_FILE"
 
-# Debug log (temporary — remove after validation)
-echo "$(date -u '+%Y-%m-%dT%H:%M:%SZ') type=${AGENT_TYPE} id=${AGENT_ID} transcript=${TRANSCRIPT} tokens=${TOKENS}" >> /tmp/apex-agent-debug.log
-
 exit 0
