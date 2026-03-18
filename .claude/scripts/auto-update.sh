@@ -11,7 +11,7 @@
 #   - Fast: uses GitHub raw content (no full clone needed)
 #   - Safe: backs up before updating, validates before applying
 #   - Project-scoped: only updates the current project's .claude/
-#   - Minimal output: only reports when something actually updates
+#   - Verbose: always reports status (up-to-date, updated, error, throttled)
 
 set -euo pipefail
 
@@ -55,6 +55,7 @@ if [ -f "$APEX_LOCK" ]; then
     LOCK_AGE=$(( $(date +%s) - $(stat -c %Y "$APEX_LOCK" 2>/dev/null || echo "0") ))
   fi
   if [ "$LOCK_AGE" -lt 300 ]; then
+    echo "⏳ APEX Auto-Update: another update is in progress. Skipping."
     exit 0
   fi
   rm -f "$APEX_LOCK"
@@ -69,7 +70,10 @@ if [ -f "$LAST_CHECK_FILE" ]; then
   NOW=$(date +%s)
   DIFF=$(( NOW - LAST_CHECK ))
   if [ "$DIFF" -lt 3600 ]; then
+    MINS_AGO=$(( DIFF / 60 ))
+    MINS_LEFT=$(( (3600 - DIFF) / 60 ))
     log "Skipped: checked ${DIFF}s ago (< 1 hour)"
+    echo "✅ APEX v$(cat "$PROJECT_DIR/.claude/.apex-version" 2>/dev/null || cat "$APEX_CACHE/VERSION" 2>/dev/null || echo "?") — checked ${MINS_AGO}m ago (next check in ${MINS_LEFT}m)"
     exit 0
   fi
 fi
@@ -131,6 +135,7 @@ date +%s > "$LAST_CHECK_FILE"
 
 if ! version_gt "$REMOTE_VERSION" "$LOCAL_VERSION"; then
   log "Up to date (v$LOCAL_VERSION)"
+  echo "✅ APEX v${LOCAL_VERSION} — up to date"
   exit 0
 fi
 
@@ -163,6 +168,7 @@ fi
 # ── Validate the downloaded repo ──
 if [ ! -f "$APEX_CACHE/VERSION" ] || [ ! -d "$APEX_CACHE/.claude/scripts" ] || [ ! -d "$APEX_CACHE/.claude/skills" ]; then
   log "ERROR: Downloaded repo is invalid"
+  echo "⚠️ APEX Auto-Update: downloaded repo is invalid (missing VERSION, scripts, or skills). Update skipped."
   exit 0
 fi
 
