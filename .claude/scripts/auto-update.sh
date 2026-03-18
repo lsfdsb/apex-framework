@@ -240,19 +240,18 @@ fi
 # Save version marker
 echo "$REMOTE_VERSION" > "$PROJECT_DIR/.claude/.apex-version"
 
-# Ensure CLAUDE.md has the Update section (append if missing, never overwrite)
-if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
-  if ! grep -q '## Update' "$PROJECT_DIR/CLAUDE.md" 2>/dev/null; then
-    if [ -f "$APEX_CACHE/CLAUDE.md" ]; then
-      # Extract the ## Update section from the framework CLAUDE.md and append
-      UPDATE_SECTION=$(sed -n '/^## Update$/,/^## /{ /^## Update$/p; /^## [^U]/!p; }' "$APEX_CACHE/CLAUDE.md" 2>/dev/null | head -n -1)
-      if [ -n "$UPDATE_SECTION" ]; then
+# Ensure CLAUDE.md has all critical sections (append if missing, never overwrite)
+if [ -f "$PROJECT_DIR/CLAUDE.md" ] && [ -f "$APEX_CACHE/CLAUDE.md" ]; then
+  for SECTION_NAME in "## Agent Teams" "## Update" "## Workflow" "## Code Standards" "## Git Workflow"; do
+    if ! grep -q "$SECTION_NAME" "$PROJECT_DIR/CLAUDE.md" 2>/dev/null; then
+      SECTION_CONTENT=$(sed -n "/^${SECTION_NAME}$/,/^## [^${SECTION_NAME:3:1}]/{ /^## [^${SECTION_NAME:3:1}]/!p; }" "$APEX_CACHE/CLAUDE.md" 2>/dev/null)
+      if [ -n "$SECTION_CONTENT" ]; then
         echo "" >> "$PROJECT_DIR/CLAUDE.md"
-        echo "$UPDATE_SECTION" >> "$PROJECT_DIR/CLAUDE.md"
-        log "Appended ## Update section to CLAUDE.md"
+        echo "$SECTION_CONTENT" >> "$PROJECT_DIR/CLAUDE.md"
+        log "Appended $SECTION_NAME section to CLAUDE.md"
       fi
     fi
-  fi
+  done
 fi
 
 # NOTE: We do NOT overwrite:
