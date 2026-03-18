@@ -1,6 +1,7 @@
 ---
 name: init
 description: Initialize the APEX Framework in the current project. Sets up project-level skills, hooks, scripts, docs structure, and CLAUDE.md. Use when starting a new project or when the user says "init", "initialize", "setup APEX", "start project", "new project", or "scaffold".
+disable-model-invocation: true
 allowed-tools: Read, Write, Bash, Glob, Edit, Grep
 ---
 

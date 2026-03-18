@@ -1,6 +1,7 @@
 ---
 name: sql-practices
 description: SQL and database best practices for PostgreSQL and Supabase. Auto-loads when Claude writes queries, migrations, schema changes, or works with database code. Triggers on SQL, query, database, migration, schema, index, Supabase, Drizzle, Prisma, table, SELECT, INSERT, UPDATE, JOIN, or any database operation. Our apps have zero lag — every query matters.
+user-invocable: false
 ---
 
 # SQL Best Practices — Every Query Matters

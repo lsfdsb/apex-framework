@@ -1,10 +1,11 @@
 ---
 name: researcher
 description: Technical research specialist. Investigates APIs, libraries, documentation, and best practices. Uses Haiku for cost efficiency — research is mostly reading and summarizing, not complex reasoning.
-tools: Read, Glob, Grep, Bash
+tools: Read, Glob, Grep, Bash, WebFetch, WebSearch
 disallowedTools: Write, Edit, MultiEdit
 model: haiku
 permissionMode: dontAsk
+background: true
 maxTurns: 20
 memory: user
 ---

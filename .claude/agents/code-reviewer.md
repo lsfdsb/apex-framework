@@ -5,6 +5,7 @@ tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, MultiEdit
 model: sonnet
 permissionMode: plan
+isolation: worktree
 maxTurns: 25
 skills: code-standards, security
 memory: project

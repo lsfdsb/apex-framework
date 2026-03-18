@@ -8,6 +8,11 @@ permissionMode: plan
 maxTurns: 30
 memory: user
 skills: code-standards
+hooks:
+  Stop:
+    - hooks:
+        - type: command
+          command: "echo '{\"systemMessage\":\"Framework evolution analysis complete. Review findings above.\"}'"
 ---
 
 # Framework Evolver — The APEX Self-Improvement Agent
