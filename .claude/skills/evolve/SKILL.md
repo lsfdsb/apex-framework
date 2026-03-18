@@ -72,15 +72,31 @@ For each approved change:
 3. Explain what was changed and why
 4. Verify the change doesn't break anything (run tests if applicable)
 
-### Step 5: Update the Framework
+### Step 5: Update the Global Install
 
-After all changes are applied:
+After approved changes are applied to the current project's `.claude/`:
 
-1. Bump the patch version in the `VERSION` file (e.g., 5.6.0 → 5.6.1)
+1. Copy changed files to `~/.claude/` (global install) so they apply to ALL projects
+2. Verify files were synced: `diff ~/.claude/scripts/ .claude/scripts/` etc.
+
+### Step 5.5: Sync Back to the Framework Repo
+
+If improvements were made and the user is NOT already in the apex-framework repo:
+
+1. Ask: "These improvements should be shared back to the APEX repo. Sync now?"
+2. If yes, run: `bash ~/.claude/scripts/apex-sync.sh`
+3. This creates a PR on the apex-framework repo with the changes
+4. The auto-update system will then propagate to all other projects on next SessionStart
+
+If the user IS in the apex-framework repo, skip this — changes are already in the right place. Just commit normally.
+
+### Step 6: Bump Version
+
+1. Bump the patch version in the `VERSION` file (e.g., 5.7.0 → 5.7.1)
 2. Commit with message: `feat(evolve): [brief description of improvements]`
-3. Ask the user if they want to push to GitHub (so auto-update propagates to other projects)
+3. Push to a feature branch and create a PR (NEVER push to main directly)
 
-### Step 6: Log the Evolution
+### Step 7: Log the Evolution
 
 Add an entry to the evolution log so we can track framework growth over time:
 
