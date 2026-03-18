@@ -1,6 +1,6 @@
 ---
 name: qa
-description: Runs comprehensive quality assurance on any feature, PR, or code change. This skill should be used when the user says "test", "QA", "quality check", "review code", "is this ready", "check for bugs", "verify", or before any merge/deploy. Claude should also invoke this after completing any implementation task — no code ships without QA.
+description: Runs comprehensive quality assurance on any feature, PR, or code change. Also handles deployment readiness checks (replaces /deploy). Use when the user says "test", "QA", "quality check", "review code", "is this ready", "check for bugs", "verify", "deploy", "ship", "release", "go live", or before any merge/deploy. Claude should also invoke this after completing any implementation task — no code ships without QA.
 argument-hint: "[feature or PR name]"
 allowed-tools: Read, Grep, Glob, Bash
 ---
@@ -59,6 +59,16 @@ SCENARIO: Setup → Action → Expected Result
 - No unnecessary re-renders?
 - Bundle impact reasonable?
 - API calls deduplicated/cached?
+
+## Phase 6: Deployment Readiness (when deploying)
+
+Only run this phase if deploying (`/qa deploy` or `/qa production`):
+
+- All required env vars set in target? Run: `grep -oE '[A-Z_]+' .env.example | sort`
+- Database migrations ready and tested?
+- Rollback plan exists? Previous version restorable in ≤5 min?
+- Feature flags available for risky changes?
+- SSL valid? CORS configured? Security headers set?
 
 ## Output
 

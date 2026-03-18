@@ -114,7 +114,7 @@ The best time to catch framework gaps is **during the session that exposes them*
 - The user builds muscle memory for approving/rejecting improvements
 
 ### When NOT to run autonomously
-- During time-critical deployments (check if `/deploy` is active)
+- During time-critical deployments (check if `/qa deploy` is active)
 - If the session has < 10 interactions (not enough data)
 - If the user has explicitly said "no more evolve" or "stop improving"
 

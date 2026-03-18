@@ -44,7 +44,7 @@ Your VERY FIRST message in EVERY session MUST follow the APEX Educational output
 
 ## Workflow
 
-`/prd` → `/architecture` → `/research` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit` → `/deploy`
+`/prd` → `/architecture` → `/research` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit`
 
 Skills load on-demand. Hooks are deterministic. Both are enforced.
 When in doubt, ask the user. Don't assume.

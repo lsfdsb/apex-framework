@@ -89,7 +89,7 @@ After implementing any feature:
 ## When to Run
 
 - After `/commit` — update changelog with new commits
-- After `/deploy` — move Unreleased to versioned section
+- After `/qa deploy` — move Unreleased to versioned section
 - After completing a feature — update PRD status
 - User asks "update docs" — run full update
 

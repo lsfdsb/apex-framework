@@ -320,11 +320,11 @@ done
 section "8. Skills"
 
 EXPECTED_SKILLS=(
-  "about" "a11y" "apex-review" "apex-stack" "architecture" "changelog"
+  "about" "a11y" "apex-stack" "architecture" "changelog"
   "cicd" "code-standards" "commit" "cost-management" "cx-review" "debug"
-  "deploy" "design-system" "dev" "e2e" "evolve" "init" "performance"
+  "design-system" "dev" "e2e" "evolve" "init" "performance"
   "prd" "qa" "research" "security" "set-language"
-  "sql-practices" "supabase" "teach" "verify-lib" "workflow-enforcer"
+  "sql-practices" "supabase" "teach" "verify-lib"
 )
 
 for skill in "${EXPECTED_SKILLS[@]}"; do

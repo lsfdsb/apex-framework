@@ -206,8 +206,8 @@ fi
 
 # Update universal skills
 UNIVERSAL_SKILLS=(
-  "code-standards" "design-system" "cx-review" "teach" "workflow-enforcer"
-  "apex-stack" "verify-lib" "sql-practices" "debug" "apex-review" "a11y"
+  "code-standards" "design-system" "cx-review" "teach"
+  "apex-stack" "verify-lib" "sql-practices" "debug" "a11y"
   "set-language" "cost-management" "about" "performance" "security" "evolve"
 )
 for skill in "${UNIVERSAL_SKILLS[@]}"; do
@@ -287,7 +287,7 @@ if [ -n "$PROJECT_DIR" ] && [ -d "$PROJECT_DIR/.claude/scripts" ] && [ "$PROJECT
   fi
 
   # Update project-level skills
-  PROJECT_SKILLS=(prd architecture research qa security performance deploy commit changelog init e2e cicd)
+  PROJECT_SKILLS=(prd architecture research qa security performance commit changelog init e2e cicd)
   mkdir -p "$PROJECT_DIR/.claude/skills"
   for skill in "${PROJECT_SKILLS[@]}"; do
     if [ -d "$APEX_CACHE/.claude/skills/$skill" ]; then

@@ -52,7 +52,7 @@ When introducing a command:
 
 ### Level 4: Claude Code Power User (Week 4)
 - `claude` — start Claude Code
-- `/prd`, `/qa`, `/security`, `/deploy` — APEX skills
+- `/prd`, `/qa`, `/security`, `/commit` — APEX skills
 - `/compact` — free up context window
 - `/agents` — see available subagents
 - `/hooks` — manage hooks

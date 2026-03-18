@@ -25,7 +25,7 @@ Agora: cada skill é um arquivo individual que o Claude carrega sob demanda — 
 
 ---
 
-## Passo 2: Upload das Skills (26 skills + 3 references)
+## Passo 2: Upload das Skills (23 skills + 3 references)
 
 1. Ainda em **Settings > Customize > Skills**
 2. Clique em **"Upload skill"** (ou "Add skill")
@@ -35,8 +35,7 @@ Agora: cada skill é um arquivo individual que o Claude carrega sob demanda — 
 
 | # | Arquivo | O que faz | Quando ativa |
 |---|---------|-----------|--------------|
-| 1 | `workflow-enforcer.md` | Bloqueia código sem PRD | Toda task de build |
-| 2 | `prd.md` | Gera PRD completo | "novo app", "nova feature" |
+| 1 | `prd.md` | Gera PRD completo | "novo app", "nova feature" |
 | 3 | `code-standards.md` | Padrões TypeScript/React | Toda escrita de código |
 | 4 | `design-system.md` | UI/UX Jony Ive style | Todo trabalho visual |
 | 5 | `design-system-reference.md` | Fontes, cores, espaçamento | Detalhes de design |
@@ -55,10 +54,9 @@ Agora: cada skill é um arquivo individual que o Claude carrega sob demanda — 
 | 13 | `performance.md` | Otimização zero-lag |
 | 14 | `cx-review.md` | Review de experiência do cliente |
 | 15 | `a11y.md` | Auditoria de acessibilidade WCAG 2.2 |
-| 16 | `deploy.md` | Checklist pré-deploy |
-| 17 | `commit.md` | Commits convencionais |
-| 18 | `changelog.md` | CHANGELOG + atualização de PRD |
-| 19 | `debug.md` | Protocolo estruturado de debugging |
+| 16 | `commit.md` | Commits convencionais |
+| 17 | `changelog.md` | CHANGELOG + atualização de PRD |
+| 18 | `debug.md` | Protocolo estruturado de debugging |
 | 20 | `e2e.md` | Testes E2E com Playwright |
 | 21 | `cicd.md` | Pipeline GitHub Actions |
 
@@ -72,7 +70,7 @@ Agora: cada skill é um arquivo individual que o Claude carrega sob demanda — 
 | 25 | `cost-management.md` | Otimização de modelos e tokens |
 | 26 | `set-language.md` | Salvar idioma (pt-br/en-us) |
 | 27 | `init.md` | Inicializar APEX em projeto |
-| 28 | `apex-review.md` | Auto-auditoria do framework |
+| 28 | `about.md` | Easter egg — créditos |
 | 29 | `about.md` | Easter egg — créditos ⚔️ |
 
 ---
@@ -105,7 +103,7 @@ REGRAS OBRIGATÓRIAS:
 Abra uma conversa dentro do projeto e teste:
 
 **Teste 1** — "Constrói um app de tarefas"
-→ Deve BLOQUEAR e pedir PRD (workflow-enforcer skill ativa)
+→ Deve BLOQUEAR e pedir PRD (hook de workflow enforcement ativo)
 
 **Teste 2** — "Cria um PRD para app de tarefas"
 → Deve gerar PRD completo (prd skill ativa)

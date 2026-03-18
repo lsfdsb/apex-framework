@@ -59,7 +59,7 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 ✅ QA         → 5-phase quality gate
 🛡️ Security   → OWASP checklist + dependency audit
 🎯 CX Review  → Customer experience review
-🚀 Deploy     → Pre-deployment checklist
+📝 Commit     → Clean conventional commits
 ```
 
 ### The Philosophy
@@ -92,7 +92,7 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 | Category | Count | Details |
 |----------|-------|---------|
-| Skills | 12 | prd, architecture, research, qa, security, performance, deploy, commit, changelog, init, e2e, cicd |
+| Skills | 11 | prd, architecture, research, qa, security, performance, commit, changelog, init, e2e, cicd |
 | Git Hooks | 2 | pre-commit (TypeScript, lint, secrets scan), commit-msg (conventional commits) |
 
 ---

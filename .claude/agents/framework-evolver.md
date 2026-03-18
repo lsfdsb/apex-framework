@@ -6,7 +6,7 @@ disallowedTools: Write, Edit, MultiEdit
 model: sonnet
 maxTurns: 30
 memory: user
-skills: apex-review, code-standards
+skills: code-standards
 ---
 
 # Framework Evolver — The APEX Self-Improvement Agent
