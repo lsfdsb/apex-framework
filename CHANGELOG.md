@@ -1,6 +1,37 @@
 # Changelog
 
 All notable changes to the APEX Framework will be documented in this file.
+Format based on [Keep a Changelog](https://keepachangelog.com/).
+
+## [Unreleased]
+
+### Added
+- `auto-changelog.sh` — PostToolUse hook that auto-documents every commit to CHANGELOG.md
+- Auto-changelog registered in project and global settings (PostToolUse on Bash)
+
+### Changed
+- StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
+- Removed flickering pulse animation and dead `CTX_ICON` variable from statusline
+- Cost column removed from statusline (redundant for MAX plan users)
+
+## [5.7.0] — 2026-03-17 — Animated UI, Prettier, Bug Fixes
+
+### Added
+- Real animated intro banner on session startup (45ff479)
+- Braille Grogu ASCII art with animated poses and auto-intro (d60e752)
+- Animations, colors, and Grogu easter eggs in session context (f68daab)
+- `apex-launch.sh` tracked and git hooks installed (bf20623)
+- Broader PRD detection, React SPA stack guide, pnpm support (055e7ca)
+- Full hook coverage across all Claude Code lifecycle events (6096f79)
+
+### Fixed
+- APEX Educational output style enforced from first message (a3d0b01)
+- `verify-install` no longer triggers false positives in quoted strings (76e1cbb)
+- `apex-init-project.sh` used instead of manual file creation (5688851)
+- Grogu art redesigned, borders and statusline fixed (47fcb94)
+
+### Removed
+- Claude Code CI workflow removed (missing API key) (639714a)
 
 ## [5.6.0] — 2026-03-17 — Auto-Update, Self-Evolution & Definitive Debug
 

@@ -8,7 +8,7 @@
 # ── Source color library ──
 SCRIPT_DIR="$(cd "$(dirname "$0")/../.." 2>/dev/null && pwd)/.claude/scripts"
 if [ -f "$SCRIPT_DIR/apex-colors.sh" ]; then
-  FORCE_COLOR=1 source "$SCRIPT_DIR/apex-colors.sh"
+  source "$SCRIPT_DIR/apex-colors.sh"
 fi
 
 COMMIT_MSG_FILE=$1
