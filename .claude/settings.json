@@ -272,7 +272,29 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"\ud83e\udd16 Agent spawned\"}'",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/track-agent-start.sh",
+            "timeout": 3
+          }
+        ]
+      }
+    ],
+    "TaskCompleted": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"systemMessage\":\"📋 Task completed — check TaskList for next available work or handoff.\"}'",
+            "timeout": 2
+          }
+        ]
+      }
+    ],
+    "TeammateIdle": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"suppressOutput\":true}'",
             "timeout": 2
           }
         ]
