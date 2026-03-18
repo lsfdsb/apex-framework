@@ -119,10 +119,13 @@ Both are actively maintained. Drizzle has lower runtime overhead and generates c
 - Evaluate based on: provider coverage, MFA support, session handling, pricing
 
 #### Validation
-- **Zod v4** — TypeScript-first, works client and server
-  - v4 is stable (4.3.x). Significant performance improvements over v3.
-- **Valibot** (v1.3.x) — smaller bundle alternative if size is critical
-  - Tree-shakeable, ~1KB vs Zod's ~13KB
+
+| Tool | Version | Bundle (gzip) | Best for |
+|------|---------|---------------|----------|
+| **Valibot** | 1.3.x | ~1KB (tree-shakeable) | New projects — smaller, faster, actively maintained |
+| **Zod** | 4.3.x | ~13KB | Existing Zod projects — mature ecosystem, v4 improved perf |
+
+Valibot has gained momentum with smaller bundle and faster compilation. Zod remains solid for existing projects. For new projects where bundle size matters, prefer Valibot.
 
 #### Testing
 - **Unit/Integration**: Vitest — fast, Vite-native, Jest-compatible
