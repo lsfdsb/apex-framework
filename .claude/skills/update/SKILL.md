@@ -19,9 +19,9 @@ echo "Cache: $(cat ~/.apex-framework/VERSION 2>/dev/null || echo 'not cached')"
 
 ### Step 2: Pull latest from GitHub
 ```bash
-# Use gh CLI (works inside Claude Code sandbox)
+# Fetch + force reset (handles divergent branches on macOS)
 if [ -d ~/.apex-framework/.git ]; then
-  cd ~/.apex-framework && git pull origin main
+  cd ~/.apex-framework && git fetch origin main --depth=1 && git reset --hard origin/main
 else
   gh repo clone lsfdsb/apex-framework ~/.apex-framework -- --depth=1 --branch main
 fi
