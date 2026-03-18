@@ -203,10 +203,15 @@ if command -v gh &>/dev/null; then
         CLOSED) PR_ICON="🔴" ;;
         *)      PR_ICON="PR" ;;
       esac
-      PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
+      # OSC 8 clickable link (iTerm2, Kitty, WezTerm) with plain text fallback
+      if [[ "${TERM_PROGRAM:-}" =~ ^(iTerm|iTerm2|WezTerm)$ ]] || [[ "${TERM:-}" =~ ^(xterm-kitty) ]]; then
+        PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
+      else
+        PR_STR=" ┃ ${PR_ICON} #${PR_NUM}"
+      fi
     fi
   fi
 fi
 
-# ── Output ──
-printf "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"
+# ── Output (printf %b for reliable OSC 8 escape interpretation) ──
+printf '%b' "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"

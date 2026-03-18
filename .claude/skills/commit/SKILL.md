@@ -8,6 +8,15 @@ allowed-tools: Read, Bash, Grep, Glob
 
 # Commit — Ship Clean Code
 
+## Step 0: Branch Check (before anything else)
+
+Current branch: !`git rev-parse --abbrev-ref HEAD 2>/dev/null`
+
+**If you are on `main` or `master`: STOP.** Do not stage or commit anything.
+Tell the user: "You're on main. Let me create a branch for this work first."
+Create the branch: `git checkout -b feat/[description-of-work]`
+Then proceed with the commit flow from that branch.
+
 ## Current Context
 
 Staged files: !`git diff --cached --stat 2>/dev/null || echo "Nothing staged"`

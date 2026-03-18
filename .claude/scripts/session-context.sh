@@ -86,8 +86,8 @@ GROGU_QUOTE="${GROGU_QUOTES[$GROGU_IDX]}"
 # ══════════════════════════════════════════════════
 if [ "$SOURCE" = "startup" ]; then
 
-  # ── Reset agent counter for new session ──
-  rm -f /tmp/apex-agents.json /tmp/apex-agent-*.done 2>/dev/null
+  # ── Reset session state for new session ──
+  rm -f /tmp/apex-agents.json /tmp/apex-agent-*.done /tmp/apex-pr-cache-*.json 2>/dev/null
 
   # ── Animated banner (stderr → terminal) ──
   # Detect if stderr is a terminal for animations
@@ -248,7 +248,12 @@ if command -v git &> /dev/null && git rev-parse --is-inside-work-tree &> /dev/nu
   BRANCH=$(git branch --show-current 2>/dev/null)
   [ -n "$BRANCH" ] && echo "" && echo "🌿 Current branch: $BRANCH"
   CHANGES=$(git status --short 2>/dev/null | wc -l | tr -d ' ')
-  [ "$CHANGES" -gt 0 ] && echo "📝 Uncommitted changes: $CHANGES files"
+  if [ "$CHANGES" -gt 0 ]; then
+    echo "📝 Uncommitted changes: $CHANGES files"
+    if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "master" ]; then
+      echo "   ⚠️  You have uncommitted changes on $BRANCH — create a branch before committing!"
+    fi
+  fi
 fi
 
 # ── Language preference ──
