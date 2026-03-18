@@ -41,7 +41,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     25 Skills · 7 Rules · 4 Agents · 26 Scripts          ║
+     ║     26 Skills · 7 Rules · 4 Agents · 26 Scripts          ║
      ║     1 Output Style · 1 Sandbox · 2 Test Suites           ║
      ║     387 tests · 9 versions · ∞ ambition                  ║
      ║                                                           ║
