@@ -102,7 +102,7 @@ if [ -z "$REMOTE_VERSION" ] && command -v wget &>/dev/null; then
 fi
 if [ -z "$REMOTE_VERSION" ] && command -v gh &>/dev/null; then
   # Fallback: gh CLI works inside Claude Code sandbox when curl/wget are blocked
-  REMOTE_VERSION=$(timeout "$TIMEOUT_SECONDS" gh api "repos/${APEX_REPO}/contents/VERSION" \
+  REMOTE_VERSION=$(gh api "repos/${APEX_REPO}/contents/VERSION" \
     --jq '.content' 2>/dev/null | base64 -d 2>/dev/null | tr -d '[:space:]' || true)
 fi
 
