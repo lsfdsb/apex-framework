@@ -90,6 +90,7 @@ if [ -z "$LOCAL_VERSION" ]; then
 fi
 
 # ── Get remote version from GitHub ──
+# Try multiple methods: curl → wget → gh CLI (gh works inside Claude Code sandbox)
 REMOTE_VERSION=""
 if command -v curl &>/dev/null; then
   REMOTE_VERSION=$(curl -sf --connect-timeout "$TIMEOUT_SECONDS" --max-time "$TIMEOUT_SECONDS" \
@@ -99,9 +100,15 @@ if [ -z "$REMOTE_VERSION" ] && command -v wget &>/dev/null; then
   REMOTE_VERSION=$(wget -qO- --timeout="$TIMEOUT_SECONDS" \
     "https://raw.githubusercontent.com/${APEX_REPO}/${APEX_BRANCH}/VERSION" 2>/dev/null | tr -d '[:space:]' || true)
 fi
+if [ -z "$REMOTE_VERSION" ] && command -v gh &>/dev/null; then
+  # Fallback: gh CLI works inside Claude Code sandbox when curl/wget are blocked
+  REMOTE_VERSION=$(timeout "$TIMEOUT_SECONDS" gh api "repos/${APEX_REPO}/contents/VERSION" \
+    --jq '.content' 2>/dev/null | base64 -d 2>/dev/null | tr -d '[:space:]' || true)
+fi
 
 if [ -z "$REMOTE_VERSION" ]; then
-  log "Skipped: could not reach GitHub"
+  log "Skipped: could not reach GitHub (network issue or rate limit)"
+  echo "⚠️ APEX Auto-Update: could not reach GitHub (curl, wget, and gh all failed). Update skipped."
   date +%s > "$LAST_CHECK_FILE"
   exit 0
 fi
@@ -133,16 +140,24 @@ log "Update available: v$LOCAL_VERSION → v$REMOTE_VERSION"
 # Clone or pull the repo cache
 if [ -d "$APEX_CACHE/.git" ]; then
   cd "$APEX_CACHE"
-  git fetch origin "$APEX_BRANCH" --depth=1 2>/dev/null || { log "Failed to fetch"; exit 0; }
-  git reset --hard "origin/$APEX_BRANCH" 2>/dev/null || { log "Failed to reset"; exit 0; }
+  git fetch origin "$APEX_BRANCH" --depth=1 2>/dev/null || { log "Failed to fetch"; echo "⚠️ APEX Auto-Update: git fetch failed. Run manually: cd ~/.apex-framework && git pull"; exit 0; }
+  git reset --hard "origin/$APEX_BRANCH" 2>/dev/null || { log "Failed to reset"; echo "⚠️ APEX Auto-Update: git reset failed."; exit 0; }
 else
   rm -rf "$APEX_CACHE"
-  git clone --depth=1 --branch "$APEX_BRANCH" \
-    "https://github.com/${APEX_REPO}.git" "$APEX_CACHE" 2>/dev/null || {
-    log "Failed to clone"
+  # Try gh repo clone first (works inside Claude Code sandbox), fall back to git clone
+  if command -v gh &>/dev/null; then
+    gh repo clone "${APEX_REPO}" "$APEX_CACHE" -- --depth=1 --branch "$APEX_BRANCH" 2>/dev/null
+  fi
+  if [ ! -d "$APEX_CACHE/.git" ]; then
+    git clone --depth=1 --branch "$APEX_BRANCH" \
+      "https://github.com/${APEX_REPO}.git" "$APEX_CACHE" 2>/dev/null
+  fi
+  if [ ! -d "$APEX_CACHE/.git" ]; then
+    log "Failed to clone (tried gh and git)"
+    echo "⚠️ APEX Auto-Update: failed to clone repo. Check network or run manually: gh repo clone ${APEX_REPO} ~/.apex-framework"
     mkdir -p "$APEX_CACHE"
     exit 0
-  }
+  fi
 fi
 
 # ── Validate the downloaded repo ──
