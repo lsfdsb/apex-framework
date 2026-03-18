@@ -7,6 +7,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Added
 - `/update` skill — manual framework update command for when auto-update can't self-update (#49)
+- Update instructions in CLAUDE.md — works even on projects with outdated APEX versions (#50)
+- Auto-update appends `## Update` section to CLAUDE.md if missing (#50)
 
 ### Fixed
 - Pre-commit hook skips TS/lint/prettier when only framework files staged (#49)
