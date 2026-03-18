@@ -39,8 +39,8 @@ if echo "$COMMAND" | grep -qE 'git\s+push\s+.*\b(main|master)\b'; then
   deny "BLOCKED: Direct push to main/master is not allowed. Create a feature branch (feat/description or fix/description) and push there instead."
 fi
 
-# Block force push
-if echo "$COMMAND" | grep -qE 'git\s+push\s+.*(-f|--force)\b'; then
+# Block force push (but allow --force-with-lease which is safe)
+if echo "$COMMAND" | grep -qE 'git\s+push\s+.*(-f\b|--force($|\s))' && ! echo "$COMMAND" | grep -q 'force-with-lease'; then
   deny "BLOCKED: Force push is not allowed. It rewrites history and can cause data loss. Use --force-with-lease if you must, or create a new commit."
 fi
 
