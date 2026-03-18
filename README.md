@@ -411,143 +411,16 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### v5.8.0 (2026-03-18) — Gold Standard
+### v5.11.0 (2026-03-18) — Agent Teams: The Championship Roster
 
-**New:**
-- Health-check script (`health-check.sh`) — validates all components with educational explanations
-- `/teach` skill expanded to 8-level learning progression (terminal → git → debugging → architecture)
-- README rewritten with educational install instructions — explains What/Why for every step
-- Install guide rewritten for v5.8 one-command flow
+- **10 championship-grade agents** — Watcher, Builder, Debugger, QA, Code Reviewer, Design Reviewer, Technical Writer, Researcher, Sentinel (Batman), Framework Evolver
+- **`/teams` skill** — orchestrated parallelism with 4 presets: build, fix, review, full
+- **`/batman` (`/self-test`)** — summons the Sentinel for complete framework verification
+- **Breathing Loop** — autonomous Watcher→Debugger→QA→Builder cycle
+- **559 tests** across 3 suites (structural, hooks, integration)
+- **100% Claude Code docs compliant** — verified against official specs
 
-**Fixed:**
-- Self-learning loop: `session-learner.sh` now extracts `session_id` from JSON payload (env var didn't exist)
-- Self-learning loop: `extract-session.sh` now correctly resolves `~/.claude/projects/` session paths
-- `protect-files.sh` no longer blocks `vite.config.ts`, `tsconfig.json`, `.d.ts` (false positives)
-- `auto-update.sh` no longer overwrites customized `settings.json`
-- Framework test suite: fixed `set -e` abort on block-dangerous-commands test
-- `install.sh` now checks prerequisites (git, jq, claude) with helpful error messages
-- About skill stats updated to match reality (25 skills, 26 scripts, 4 agents, 383 tests)
-- README counts fact-checked and corrected
-
-**Performance:**
-- StatusLine consolidated from 10+ jq calls to 1 (process overhead reduced ~90%)
-
-**Testing:**
-- Hook test suite: 99 → 105 tests (added session-learner and extract-session coverage)
-- Framework test suite: 278 tests (fixed exit code bug)
-- Total: 387 tests across 2 suites
-
-### v5.9.0 (2026-03-18) — UX Writing, Statusline PR Link, Extended Patterns
-
-**New:**
-- Statusline: clickable PR link with merge status icons, 60s per-branch cache, universal terminal support
-- Statusline: agent tracking shows types — `🤖 3 (Explore, Plan, reviewer) 45.2K`
-- UX Writing guidelines — button labels, error messages, empty states, tone of voice
-- SEO, forms, state management, animation, and observability patterns
-- Interaction patterns, page templates, dark mode guide
-- CX review dimensions 6-10: resilience, destructive actions, first-time experience, mobile, content quality
-- Self-learning loop: session-learner captures errors/corrections, surfaces on startup, feeds `/evolve`
-- Deterministic security: blocks hardcoded keys, eval(), SQL injection
-- `/claude-api` skill for Claude API and Anthropic SDK integration
-- Bootstrap flow: auto-detect missing `.claude/` and guide through `/init`
-
-**Self-Improvement (via `/evolve`):**
-- Block `git commit` on main/master — catches mistakes at commit time
-- Branch pre-flight in `/commit` skill — verifies branch before staging
-- Push-to-main error includes recovery recipe
-- Stop-gate exempts shell scripts and config files
-- Session-context warns about uncommitted changes on main
-
-**Testing:**
-- Hook test suite: 115 tests
-- Framework test suite: 288 tests
-- Total: 403 tests across 2 suites
-
-### v5.7.0 (2026-03-17) — Auto-Update & Self-Evolution
-
-**New:**
-- Auto-update system — APEX checks for GitHub updates on SessionStart (pulls latest skills, hooks, agents automatically)
-- Project-level auto-update on SessionStart — keeps project-installed APEX files in sync with the user-level source
-- `/evolve` skill — spawns framework-evolver agent to analyze session transcripts for gaps and improvements
-- `framework-evolver` agent — autonomous self-improvement agent that proposes targeted framework changes
-- Session transcript extraction script (`extract-session.sh`) for `/evolve` analysis
-- `VERSION` file — single source of truth for version, resolved dynamically by session banner
-- `/dev` skill — dev server management (status, logs, restart, stop)
-- `dev-server.sh` — SessionStart hook that auto-starts the dev server in background and captures logs
-- `dev-monitor.sh` — Stop hook that monitors dev server logs for errors, warnings, and crashes
-- `claude-code.yml` — GitHub Actions workflow with `anthropics/claude-code-action@v1` for automated PR review and interactive `@claude` mentions
-- Session cleanup now kills the dev server on SessionEnd
-- `/debug` skill rewritten with "Definitive Solutions Only" philosophy — root cause analysis, impact mapping, fix hierarchy (type system > tests > runtime), anti-pattern detection
-- `handle-failure.sh` enhanced with retry-loop detection (warns after 3+ failures in 60s) and definitive fix guidance
-- Core rules updated: "Definitive fixes only" and "Impact analysis before changes" added to CLAUDE.md
-
-**Removed:**
-- `.github/workflows/claude-pr-review.yml` — replaced by official Claude Code GitHub Action
-
-### v5.5.0 (2026-03-16) — Supabase Integration & Skill Fixes
-
-**New:**
-- `/supabase` skill — comprehensive Supabase helper with subcommands: setup, auth, migration, types, realtime, storage, edge-functions
-- `supabase.md` rule — auto-loads when working with Supabase-related files
-- `/init` skill updated with Supabase scaffolding step
-- `sql-practices` reference expanded with multi-tenant RLS, role-based RLS, storage policies, realtime setup, connection pooling, and migration templates
-- `.mcp.json.template` updated with Supabase MCP server as primary option
-
-**Fixed:**
-- Removed `disable-model-invocation` flag from 7 skills (about, prd, init, cicd, apex-review, deploy, commit) — the flag was blocking `/slash` command invocation entirely
-- Updated Opus context window from 200K to 1M in cost-management skill (no longer needs `[1m]` suffix)
-
-### v5.4.0 (2026-03-16) — Full Claude Code Integration
-
-**New:**
-- `guard-workflow-skip.sh` — UserPromptSubmit hook: nudges users when they try to skip PRD/tests/security
-- `handle-failure.sh` — PostToolUseFailure hook: diagnostic hints for TypeScript, test, npm, build, and permission errors
-- `post-compact.sh` — PostCompact hook: verifies critical context survived compaction
-- `log-subagent.sh` — SubagentStop hook: logs agent completions for visibility
-- `session-cleanup.sh` — SessionEnd hook: warns about uncommitted files, cleans up state
-- `.mcp.json.template` — MCP server template with GitHub, Postgres, Filesystem, Sentry configs
-- `.github/workflows/claude-pr-review.yml` — GitHub Actions workflow for Claude Code automated PR reviews
-- Network sandbox: `allowedDomains` restricts outbound to GitHub, npm, Anthropic, Supabase, Vercel, Sentry
-- `argument-hint` on all 14 user-invocable skills (autocomplete hints in `/slash` commands)
-- Shell injection (`!`cmd``) on qa, security, deploy, commit, changelog skills (live context)
-- `$SKILL_DIR/reference.md` on design-system skill (proper relative paths)
-- Skill-scoped hooks on deploy and security skills (block dangerous commands during audits)
-- `memory: project` on design-reviewer agent (persistent design knowledge)
-- `async: true` on auto-format PostToolUse hook (non-blocking)
-- Extended context documentation (`sonnet[1m]`, `opus[1m]`) in cost-management skill
-- `max` effort level documented in cost-management skill
-- Debug checkpointing section (git stash save/restore for debugging sessions)
-- Claude PR review workflow documented in cicd skill
-
-**Fixed:**
-- `session-cleanup.sh` now warns (not silently passes) when jq is missing
-- Test suite expanded from 68 to 83 tests (all passing)
-
-### v5.3.0 (2026-03-16) — Quality Hardening
-
-**New:**
-- `stop-gate.sh` — Stop hook that warns when code is written but tests aren't run
-- `enforce-workflow.sh` — Deterministic PRD enforcement (blocks new app/component files without PRD)
-- `install.sh` — One-command installer with language selection
-- `tests/test-hooks.sh` — 68-test suite for all hook scripts
-
-**Fixed:**
-- All hook scripts now warn (not silently pass) when jq is missing
-- `enforce-commit-msg.sh` — replaced `grep -oP` (PCRE) with POSIX-compatible `sed` for macOS
-- User-level installer now carries full config: hooks, permissions, sandbox, statusLine
-- Project-level `settings.json` now includes `outputStyle`
-- `apex-init-project.sh` — now finds APEX relative to script location (not hardcoded `~/apex-framework`)
-- Language preference defaults to `"ask"` instead of hardcoded `pt-br`
-
-**Removed:**
-- `.claude-plugin/plugin.json` — decorative, Claude Code has no plugin system
-
-### v5.2.0 (2026-03-13) — Initial Release
-
-- 25 skills, 3 agents, 10 hook scripts, 4 rules, 1 output style
-- Full workflow: PRD → Architecture → Research → Build → QA → Security → CX Review → Deploy
-- 3-tier model strategy (Opus/Sonnet/Haiku)
-- StatusLine with real-time metrics
+See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
 ---
 
