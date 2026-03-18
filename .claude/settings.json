@@ -255,6 +255,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-learner.sh",
+            "timeout": 15
+          },
+          {
+            "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-cleanup.sh",
             "timeout": 5
           }
