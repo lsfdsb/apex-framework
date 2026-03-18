@@ -10,7 +10,9 @@ agent: Plan
 
 ultrathink
 
-You are a senior product manager. Create a PRD that serves as the single source of truth for what we build and why. This runs in an isolated Plan agent to keep the main conversation clean.
+You are a senior product manager following Marty Cagan's "Inspired" methodology. Create a PRD that serves as the single source of truth for what we build and why. This runs in an isolated Plan agent to keep the main conversation clean.
+
+**Quality bar**: Every PRD must be comprehensive enough that a new engineer joining the project can understand the full system from this document alone. If you'd be embarrassed by a section, rewrite it before shipping.
 
 ## Process
 
@@ -41,50 +43,108 @@ Create `docs/prd/$ARGUMENTS-prd.md` (slugified) with this structure:
 One paragraph. Why this exists.
 
 ## 2. Problem Statement
-Pain points, impact, who's affected.
+Pain points, impact, who's affected. Include quantified cost of inaction (revenue lost, time wasted, churn rate).
 
-## 3. User Personas
-Name, role, goals, frustrations, tech comfort.
+## 3. Competitive Landscape
+| Competitor | Strengths | Weaknesses | Our Differentiator |
+|------------|-----------|------------|-------------------|
+Analyze 3-5 existing solutions. What do they get right? Where do they fail? Why build instead of buy?
 
-## 4. User Stories & Acceptance Criteria
+## 4. User Personas
+For each persona include:
+- Name, role, goals, frustrations, tech comfort level
+- A day-in-the-life scenario showing their current workflow pain
+- Key metrics they care about
+
+## 5. User Stories & Acceptance Criteria
 As a [persona], I want [action] so that [outcome].
 Priority: P0 (must) / P1 (should) / P2 (nice).
-Acceptance criteria for each.
+Acceptance criteria for each (Given/When/Then format).
 
-## 4.5. Persona → Page Mapping
-| Page/View | Primary Persona | Purpose | Key Actions |
-|-----------|----------------|---------|-------------|
+## 5.5. User Journey Maps
+For each primary persona, document the step-by-step flow:
+```
+[Entry Point] → [Step 1] → [Decision Point] → [Step 2] → [Success State]
+                                    ↓
+                             [Error Recovery]
+```
+Include: happy path, error paths, edge cases. Every screen referenced must exist in the persona→page mapping.
+
+## 6. Persona → Page Mapping
+| Page/View | Route | Primary Persona | View Type | Key Actions |
+|-----------|-------|----------------|-----------|-------------|
 Map every page to its primary persona. A dashboard for managers is NOT the same as an operational view for agents. Never mix management views (KPIs, reports) with operational views (queues, tasks, forms) on the same page unless the PRD explicitly calls for it.
 
-## 5. Functional Requirements
+## 7. Functional Requirements
 By feature area: description, inputs/outputs, validations, error handling.
 
-## 5.5. Integration Requirements
+## 8. Integration Requirements
 For EVERY external API or service mentioned:
-| Integration | Purpose | API to Research | Priority |
-|-------------|---------|-----------------|----------|
+| Integration | Purpose | Auth Method | Rate Limits | Priority |
+|-------------|---------|-------------|-------------|----------|
 **RULE**: Each integration listed here MUST have `/research` invoked before implementation begins. Never design integration architecture without checking actual API documentation first.
 
-## 6. Non-Functional Requirements
-Performance targets, security model, accessibility (WCAG 2.2 AA), scalability, reliability.
+## 9. Non-Functional Requirements
+- **Performance**: Page load < 2s, API response < 200ms, Lighthouse > 90
+- **Security**: Auth model, data encryption, RBAC, audit logging
+- **Accessibility**: WCAG 2.2 AA compliance, keyboard navigation, screen readers
+- **Scalability**: Expected user count at 6/12/24 months
+- **Reliability**: Uptime target, error budget, graceful degradation strategy
+- **Internationalization**: Languages, date/currency formats, RTL support (if needed)
 
-## 7. Design Direction
-Aesthetic tone, key screens, interaction patterns, breakpoints.
+## 10. Data Model
+Entity relationship overview. For each core entity:
+| Entity | Key Fields | Relationships | Indexes |
+|--------|-----------|---------------|---------|
+Include: primary keys (UUID), timestamps (created_at, updated_at), soft deletes, audit fields.
 
-## 8. Technical Architecture
-System overview, stack selection with justification, DB schema, API design.
+## 11. API Contract Specs
+For each major API endpoint:
+| Method | Endpoint | Request | Response | Auth |
+|--------|----------|---------|----------|------|
+Include: pagination strategy, error format, rate limiting, versioning.
 
-## 9. Success Metrics
-Primary KPIs with targets.
+## 12. Design Direction
+- Aesthetic tone, color palette, typography
+- Key screens (list every screen with wireframe description)
+- Interaction patterns, animation philosophy
+- Breakpoints: mobile (320-768px), tablet (768-1024px), desktop (1024px+)
+- Dark mode strategy
 
-## 10. Risks & Mitigations
-Risk, probability, impact, mitigation.
+## 13. Technical Architecture
+- System overview diagram (ASCII is fine)
+- Stack selection with justification for EACH choice
+- Deployment architecture (hosting, CDN, edge functions)
+- Service layer abstraction (for mock→real data swap)
 
-## 11. Milestones
-Phase 1 (MVP), Phase 2 (enhance), Phase 3 (scale).
+## 14. Success Metrics & SLAs
+| Metric | Baseline (Current) | Target (V1) | Measurement Method |
+|--------|-------------------|-------------|-------------------|
+Include both business KPIs and technical SLAs (uptime, response time, error rate).
 
-## 12. Open Questions
-Unresolved items.
+## 15. Risks & Mitigations
+| Risk | Probability | Impact | Mitigation | Owner |
+|------|------------|--------|------------|-------|
+
+## 16. Rollback & Recovery Plan
+- How to roll back each phase if it fails
+- Data migration reversibility
+- Feature flags for gradual rollout
+
+## 17. Testing Strategy
+- Unit test coverage targets
+- Integration test plan
+- E2E critical user flows to test
+- Performance testing approach
+- Accessibility audit plan
+
+## 18. Milestones
+Phase 1 (MVP): scope, deliverables, definition of done
+Phase 2 (enhance): scope, deliverables
+Phase 3 (scale): scope, deliverables
+
+## 19. Open Questions
+Unresolved items requiring stakeholder input.
 ```
 
 ### Step 4: Update README.md

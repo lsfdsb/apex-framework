@@ -45,6 +45,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 - Never push to `main`/`master` directly.
 - Feature branches: `feat/description`, `fix/description`
 - Squash merge. Clean history.
+- **Merge approval**: Never run `gh pr merge` unless the user explicitly says "merge", "merge it", "yes merge", or similar. Show the PR URL first and ask. This is a conversation-level rule — Claude can read context and follow it.
 
 ## Build Commands
 
