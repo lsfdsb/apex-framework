@@ -146,7 +146,44 @@ else
   HEALTH="🟢"
 fi
 
-# ── Agents (single jq call) ──
+# ── Agent name abbreviation ──
+abbrev_agent() {
+  case "$1" in
+    watcher)           echo "W" ;;
+    builder)           echo "B" ;;
+    debugger)          echo "D" ;;
+    qa)                echo "QA" ;;
+    code-reviewer)     echo "CR" ;;
+    design-reviewer)   echo "DR" ;;
+    researcher)        echo "R" ;;
+    framework-evolver) echo "FE" ;;
+    technical-writer)  echo "TW" ;;
+    sentinel)          echo "🦇" ;;
+    Explore)           echo "Ex" ;;
+    Plan)              echo "Pl" ;;
+    general-purpose)   echo "GP" ;;
+    *)                 echo "$1" | cut -c1-3 ;;
+  esac
+}
+
+# ── Running agents (live) ──
+RUNNING_FILE="/tmp/apex-agents-running.json"
+RUNNING_STR=""
+if [ -f "$RUNNING_FILE" ]; then
+  RUNNING_TYPES=$(jq -r '[.running[].type] | unique | join(",")' "$RUNNING_FILE" 2>/dev/null)
+  RUNNING_COUNT=$(jq -r '.running | length' "$RUNNING_FILE" 2>/dev/null)
+  if [ "${RUNNING_COUNT:-0}" -gt 0 ] 2>/dev/null; then
+    RUNNING_ABBREV=""
+    IFS=',' read -ra RTYPES <<< "$RUNNING_TYPES"
+    for t in "${RTYPES[@]}"; do
+      [ -n "$RUNNING_ABBREV" ] && RUNNING_ABBREV="${RUNNING_ABBREV},"
+      RUNNING_ABBREV="${RUNNING_ABBREV}$(abbrev_agent "$t")"
+    done
+    RUNNING_STR=" ┃ ⚡ ${RUNNING_COUNT} (${RUNNING_ABBREV})"
+  fi
+fi
+
+# ── Completed agents (cumulative) ──
 AGENT_FILE="/tmp/apex-agents.json"
 AGENT_STR=""
 if [ -f "$AGENT_FILE" ]; then
@@ -156,25 +193,12 @@ if [ -f "$AGENT_FILE" ]; then
     TYPES_DISPLAY=""
     if [ -n "$AGENT_TYPES_RAW" ]; then
       IFS=',' read -ra TYPES_ARR <<< "$AGENT_TYPES_RAW"
-      TYPE_COUNT=${#TYPES_ARR[@]}
-      # Abbreviate agent names for compact display
-      ABBREV_ARR=()
+      ABBREV_JOINED=""
       for t in "${TYPES_ARR[@]}"; do
-        case "$t" in
-          watcher)         ABBREV_ARR+=("W") ;;
-          builder)         ABBREV_ARR+=("B") ;;
-          debugger)        ABBREV_ARR+=("D") ;;
-          qa)              ABBREV_ARR+=("QA") ;;
-          code-reviewer)   ABBREV_ARR+=("CR") ;;
-          design-reviewer) ABBREV_ARR+=("DR") ;;
-          researcher)      ABBREV_ARR+=("R") ;;
-          framework-evolver) ABBREV_ARR+=("FE") ;;
-          technical-writer) ABBREV_ARR+=("TW") ;;
-          sentinel)        ABBREV_ARR+=("🦇") ;;
-          *)               ABBREV_ARR+=("$(echo "$t" | cut -c1-3)") ;;
-        esac
+        [ -n "$ABBREV_JOINED" ] && ABBREV_JOINED="${ABBREV_JOINED},"
+        ABBREV_JOINED="${ABBREV_JOINED}$(abbrev_agent "$t")"
       done
-      TYPES_DISPLAY=" ($(IFS=','; echo "${ABBREV_ARR[*]}"))"
+      TYPES_DISPLAY=" (${ABBREV_JOINED})"
     fi
     AGENT_STR=" ┃ 🤖 ${AGENT_COUNT}${TYPES_DISPLAY} $(fmt_tok "$AGENT_TOKENS")"
   fi
@@ -225,8 +249,8 @@ if command -v gh &>/dev/null; then
     if [ -n "$PR_NUM" ]; then
       case "$PR_STATE" in
         MERGED) PR_ICON="🟣" ;;
-        OPEN)   PR_ICON="🟠" ;;
-        CLOSED) PR_ICON="🔴" ;;
+        OPEN)   PR_ICON="🟢" ;;
+        CLOSED) PR_ICON="⚪" ;;
         *)      PR_ICON="PR" ;;
       esac
       # Always use OSC 8 for clickable link — Claude Code TUI supports it
@@ -236,4 +260,4 @@ if command -v gh &>/dev/null; then
 fi
 
 # ── Output (printf %b for reliable OSC 8 escape interpretation) ──
-printf '%b' "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"
+printf '%b' "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${RUNNING_STR}${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"

@@ -20,6 +20,13 @@ AGENT_ID=$(echo "$INPUT" | jq -r '.agent_id // "unknown"' 2>/dev/null)
 AGENT_TYPE=$(echo "$INPUT" | jq -r '.agent_type // "unknown"' 2>/dev/null)
 TRANSCRIPT=$(echo "$INPUT" | jq -r '.agent_transcript_path // ""' 2>/dev/null)
 
+# Remove from running agents list
+RUNNING_FILE="/tmp/apex-agents-running.json"
+if [ -f "$RUNNING_FILE" ]; then
+  jq --arg id "$AGENT_ID" '.running = [.running[] | select(.id != $id)]' \
+    "$RUNNING_FILE" > "${RUNNING_FILE}.tmp" 2>/dev/null && mv "${RUNNING_FILE}.tmp" "$RUNNING_FILE"
+fi
+
 # Get session_id from the hook input JSON (CLAUDE_SESSION_ID env var doesn't exist)
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // "default"' 2>/dev/null)
 

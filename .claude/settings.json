@@ -272,8 +272,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"\ud83e\udd16 Agent spawned\"}'",
-            "timeout": 2
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/track-agent-start.sh",
+            "timeout": 3
           }
         ]
       }
