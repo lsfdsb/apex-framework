@@ -256,6 +256,36 @@ if command -v git &> /dev/null && git rev-parse --is-inside-work-tree &> /dev/nu
   fi
 fi
 
+# ── Hook status (verify all hooks are present and executable) ──
+if [ "$SOURCE" = "startup" ]; then
+  echo ""
+  echo "🔧 Hooks status:"
+  HOOK_OK=0
+  HOOK_MISSING=0
+  HOOK_LIST=""
+  for hook in auto-update session-context dev-server session-learner session-cleanup \
+              block-dangerous-commands enforce-commit-msg enforce-workflow stop-gate \
+              handle-failure guard-workflow-skip protect-files log-subagent \
+              scan-security-patterns auto-changelog post-compact; do
+    SCRIPT="$PROJECT/.claude/scripts/${hook}.sh"
+    if [ -x "$SCRIPT" ]; then
+      HOOK_OK=$((HOOK_OK + 1))
+    elif [ -f "$SCRIPT" ]; then
+      HOOK_LIST="${HOOK_LIST}   ⚠️  ${hook}.sh exists but not executable\n"
+      HOOK_MISSING=$((HOOK_MISSING + 1))
+    else
+      HOOK_LIST="${HOOK_LIST}   ❌ ${hook}.sh missing\n"
+      HOOK_MISSING=$((HOOK_MISSING + 1))
+    fi
+  done
+  if [ "$HOOK_MISSING" -eq 0 ]; then
+    echo "   ✅ All ${HOOK_OK} hooks installed and executable"
+  else
+    echo "   ✅ ${HOOK_OK} hooks OK | ⚠️ ${HOOK_MISSING} issues:"
+    printf "%b" "$HOOK_LIST"
+  fi
+fi
+
 # ── Language preference ──
 PREF_FILE="$HOME/.claude/apex-preferences.json"
 if [ -f "$PREF_FILE" ] && command -v jq &> /dev/null; then
