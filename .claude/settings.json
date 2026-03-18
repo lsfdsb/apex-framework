@@ -101,12 +101,7 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-update.sh",
             "timeout": 30
           },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/language-preference.sh",
-            "timeout": 5
-          },
-          {
+{
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-context.sh",
             "timeout": 10

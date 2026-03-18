@@ -208,7 +208,7 @@ fi
 UNIVERSAL_SKILLS=(
   "code-standards" "design-system" "cx-review" "teach"
   "apex-stack" "verify-lib" "sql-practices" "debug" "a11y"
-  "set-language" "cost-management" "about" "performance" "security" "evolve"
+  "cost-management" "about" "performance" "security" "evolve"
 )
 for skill in "${UNIVERSAL_SKILLS[@]}"; do
   if [ -d "$APEX_CACHE/.claude/skills/$skill" ]; then

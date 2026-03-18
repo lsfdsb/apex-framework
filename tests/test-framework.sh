@@ -185,7 +185,6 @@ EXPECTED_SCRIPTS=(
   "extract-session.sh"
   "guard-workflow-skip.sh"
   "handle-failure.sh"
-  "language-preference.sh"
   "log-subagent.sh"
   "notify.sh"
   "post-compact.sh"
@@ -238,7 +237,6 @@ SCRIPTS_NEEDING_JQ=(
   "stop-gate.sh"
   "handle-failure.sh"
   "dev-server.sh"
-  "language-preference.sh"
   "block-dangerous-commands.sh"
   "enforce-commit-msg.sh"
   "enforce-workflow.sh"
@@ -323,7 +321,7 @@ EXPECTED_SKILLS=(
   "about" "a11y" "apex-stack" "architecture" "changelog"
   "cicd" "code-standards" "commit" "cost-management" "cx-review" "debug"
   "design-system" "dev" "e2e" "evolve" "init" "performance"
-  "prd" "qa" "research" "security" "set-language"
+  "prd" "qa" "research" "security"
   "sql-practices" "supabase" "teach" "verify-lib"
 )
 
@@ -384,9 +382,6 @@ section "11. Output Styles"
 
 assert_file_exists "$OUTPUT_STYLES/apex-educational.md"
 assert_file_contains "$OUTPUT_STYLES/apex-educational.md" "keep-coding-instructions: true" "educational preserves coding"
-assert_file_exists "$OUTPUT_STYLES/apex-mandalorian.md"
-assert_file_contains "$OUTPUT_STYLES/apex-mandalorian.md" "keep-coding-instructions: true" "mandalorian preserves coding"
-assert_file_contains "$OUTPUT_STYLES/apex-mandalorian.md" "This is the way" "mandalorian has creed"
 
 # ══════════════════════════════════════════════════
 # 12. SETTINGS.JSON

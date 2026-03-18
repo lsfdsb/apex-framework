@@ -38,7 +38,7 @@ Extract `apex-skills-claude-web.tar.gz` first. Upload all 26 files.
 
 ### Support skills:
 
-`apex-stack.md`, `verify-lib.md`, `cost-management.md`, `set-language.md`, `init.md`
+`apex-stack.md`, `verify-lib.md`, `cost-management.md`, `init.md`
 
 ### Reference files:
 

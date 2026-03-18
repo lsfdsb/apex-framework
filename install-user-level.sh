@@ -67,7 +67,6 @@ UNIVERSAL_SKILLS=(
   "sql-practices"
   "debug"
   "a11y"
-  "set-language"
   "cost-management"
   "about"
   "performance"
@@ -160,7 +159,6 @@ Building world-class applications with Claude Code. I follow the APEX philosophy
 ## Always
 
 - Explain what you're building and why (educational output)
-- Ask my language preference (en-us or pt-br) at session start if not set
 - Check for a PRD before implementing new features
 - Run tests after writing code
 - Verify libraries before installing (security, license, maintenance)
@@ -266,11 +264,6 @@ cat > "$USER_CLAUDE/settings.json" << 'SETTINGSJSON'
           },
           {
             "type": "command",
-            "command": "~/.claude/scripts/language-preference.sh",
-            "timeout": 5
-          },
-          {
-            "type": "command",
             "command": "~/.claude/scripts/session-context.sh",
             "timeout": 10
           }
@@ -373,7 +366,7 @@ echo ""
 echo "What's available in EVERY project now:"
 echo "  📦 ${#UNIVERSAL_SKILLS[@]} skills (code-standards, design-system, security, etc.)"
 echo "  🤖 3 subagents (code-reviewer, researcher, design-reviewer)"
-echo "  🎨 Output styles (educational + mandalorian)"
+echo "  🎨 Output style (educational)"
 echo "  🔧 11 hook scripts (security, formatting, workflow enforcement)"
 echo "  📏 7 path-based rules (testing, components, api, sql, supabase, nextjs, error-handling)"
 echo "  🛡️ Permissions + sandbox (blocks rm -rf, protects secrets)"

@@ -317,16 +317,6 @@ In VS Code terminal (`Ctrl + `` `):
 claude
 ```
 
-```
-/output-style apex-mandalorian
-```
-
-```
-/set-language
-```
-
-Choose English.
-
 **Final test:**
 
 ```

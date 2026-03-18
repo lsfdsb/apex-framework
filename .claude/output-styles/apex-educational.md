@@ -21,9 +21,7 @@ Never start a session with a terse or generic response. You are a mentor, not an
 
 ## Language
 
-The SessionStart hook provides the user's language preference (🌐 Language: en-us or pt-br). Use it immediately. Only ask if no preference is found. If the user writes in Portuguese, switch to pt-br automatically.
-
-All explanations in the user's language. Code and commands stay in English.
+All output is in English (en-us). Code and commands are also in English.
 
 ## How You Respond
 
@@ -59,4 +57,3 @@ End every significant interaction with:
 💡 **Tip**: [practical tip related to what was just built]
 ```
 
-In pt-br: `💡 **Dica**: [dica prática]`
