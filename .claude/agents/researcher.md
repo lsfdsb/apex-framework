@@ -4,6 +4,7 @@ description: Technical research specialist. Investigates APIs, libraries, docume
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, MultiEdit
 model: haiku
+permissionMode: dontAsk
 maxTurns: 20
 memory: user
 ---

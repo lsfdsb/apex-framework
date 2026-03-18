@@ -4,6 +4,7 @@ description: APEX Framework self-improvement agent. Analyzes the current session
 tools: Read, Glob, Grep, Bash
 disallowedTools: Write, Edit, MultiEdit
 model: sonnet
+permissionMode: plan
 maxTurns: 30
 memory: user
 skills: code-standards

@@ -5,8 +5,13 @@ if ! command -v jq &> /dev/null; then
   exit 0
 fi
 # protect-files.sh — PreToolUse hook
-# Blocks edits to protected files. Exit 2 = block. Exit 0 = allow.
-# Claude receives stderr as feedback to adjust its approach.
+# Blocks edits to protected files using the official JSON deny format.
+
+deny() {
+  local reason="$1"
+  jq -n --arg reason "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  exit 0
+}
 
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
@@ -40,11 +45,7 @@ PROTECTED_PATTERNS=(
 
 for pattern in "${PROTECTED_PATTERNS[@]}"; do
   if echo "$FILE_PATH" | grep -qE "$pattern"; then
-    echo "BLOCKED: Cannot directly edit $FILE_PATH. This is a protected file." >&2
-    echo "For .env files: edit .env.example instead and document the variable." >&2
-    echo "For lock files: use the package manager (npm install, yarn add, etc)." >&2
-    echo "For .git/: use git commands instead." >&2
-    exit 2
+    deny "BLOCKED: Cannot directly edit $FILE_PATH. This is a protected file. For .env files: edit .env.example instead and document the variable. For lock files: use the package manager (npm install, yarn add, etc). For .git/: use git commands instead."
   fi
 done
 

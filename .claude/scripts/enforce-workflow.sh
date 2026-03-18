@@ -4,7 +4,7 @@
 # if no PRD exists in docs/prd/. This makes "PRD before code" a RULE,
 # not a suggestion.
 #
-# Exit 2 = block with feedback. Exit 0 = allow.
+# Uses official JSON deny format. Exit 0 = allow.
 #
 # Exemptions:
 # - Editing existing files (bug fixes, refactoring)
@@ -17,6 +17,12 @@ if ! command -v jq &> /dev/null; then
   echo "⚠️ APEX: jq not installed — workflow enforcement disabled. Install jq: https://jqlang.github.io/jq/download/" >&2
   exit 0
 fi
+
+deny() {
+  local reason="$1"
+  jq -n --arg reason "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
+  exit 0
+}
 
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty')
@@ -73,17 +79,4 @@ if prd_exists "."; then exit 0; fi
 if [ -d "docs" ] && find docs -name "*prd*" -o -name "*PRD*" -o -name "*requirements*" 2>/dev/null | grep -qE '\.(md|txt)$'; then exit 0; fi
 
 # --- BLOCK: No PRD found ---
-echo "BLOCKED: No PRD found in docs/prd/." >&2
-echo "" >&2
-echo "APEX enforces: PRD before code. Creating new app/component files" >&2
-echo "requires a Product Requirements Document first." >&2
-echo "" >&2
-echo "To unblock:" >&2
-echo "  1. Run /prd [feature name] to generate a PRD" >&2
-echo "  2. Or create docs/prd/your-feature-prd.md manually" >&2
-echo "" >&2
-echo "Exemptions (these always pass):" >&2
-echo "  - Editing existing files (bug fixes, refactoring)" >&2
-echo "  - Test files, docs, config, migrations, scripts" >&2
-echo "  - Files outside src/app/, src/components/, app/, components/" >&2
-exit 2
+deny "BLOCKED: No PRD found in docs/prd/. APEX enforces: PRD before code. Creating new app/component files requires a Product Requirements Document first. To unblock: (1) Run /prd [feature name] to generate a PRD, or (2) create docs/prd/your-feature-prd.md manually. Exemptions (these always pass): editing existing files, test files, docs, config, migrations, scripts, files outside src/app/, src/components/, app/, components/."

@@ -137,17 +137,20 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh",
-            "timeout": 5
+            "timeout": 5,
+            "statusMessage": "Checking command safety..."
           },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/verify-install.sh",
-            "timeout": 5
+            "timeout": 5,
+            "statusMessage": "Verifying dependency..."
           },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/enforce-commit-msg.sh",
-            "timeout": 5
+            "timeout": 5,
+            "statusMessage": "Validating commit message..."
           }
         ]
       },
@@ -157,12 +160,14 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/protect-files.sh",
-            "timeout": 5
+            "timeout": 5,
+            "statusMessage": "Checking file protection..."
           },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/enforce-workflow.sh",
-            "timeout": 5
+            "timeout": 5,
+            "statusMessage": "Verifying workflow compliance..."
           }
         ]
       }

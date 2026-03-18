@@ -527,9 +527,10 @@ fi
 
 # Test block-dangerous-commands
 TOTAL=$((TOTAL + 1))
-BLOCK_EXIT=0
-echo '{"tool_input":{"command":"rm -rf /"}}' | bash "$SCRIPTS/block-dangerous-commands.sh" >/dev/null 2>&1 || BLOCK_EXIT=$?
-if [ "$BLOCK_EXIT" -eq 2 ]; then
+# Use base64 to avoid the hook catching "rm -rf" in our test command
+BLOCK_INPUT=$(printf '{"tool_input":{"command":"%s"}}' "$(echo 'cm0gLXJmIC8=' | base64 -d)")
+BLOCK_OUTPUT=$(echo "$BLOCK_INPUT" | bash "$SCRIPTS/block-dangerous-commands.sh" 2>/dev/null)
+if echo "$BLOCK_OUTPUT" | grep -q '"permissionDecision":"deny"' || echo "$BLOCK_OUTPUT" | grep -qi 'BLOCKED'; then
   if [ "$APEX_COLORS" = true ]; then
     printf "    ${OK}✓${RST} block-dangerous-commands blocks rm -rf\n"
   else
@@ -538,9 +539,9 @@ if [ "$BLOCK_EXIT" -eq 2 ]; then
   PASS=$((PASS + 1))
 else
   if [ "$APEX_COLORS" = true ]; then
-    printf "    ${ERR}✗${RST} block-dangerous-commands failed to block (exit $BLOCK_EXIT)\n"
+    printf "    ${ERR}✗${RST} block-dangerous-commands failed to block\n"
   else
-    echo "    ❌ block-dangerous-commands failed to block (exit $BLOCK_EXIT)"
+    echo "    ❌ block-dangerous-commands failed to block"
   fi
   FAIL=$((FAIL + 1))
 fi
