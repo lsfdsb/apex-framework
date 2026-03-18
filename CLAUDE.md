@@ -59,6 +59,24 @@ For the APEX Framework itself:
 - Use the commit body for details — keep subject concise
 - When using `gh pr edit`, use REST API (`gh api repos/OWNER/REPO/pulls/N -X PATCH`) if GraphQL fails
 
+## Update
+
+When the user says "update apex", "update framework", "pull latest", or `/update`:
+
+```bash
+# Step 1: Pull latest from GitHub (gh works inside Claude Code sandbox)
+if [ -d ~/.apex-framework/.git ]; then
+  cd ~/.apex-framework && git pull origin main
+else
+  gh repo clone lsfdsb/apex-framework ~/.apex-framework -- --depth=1 --branch main
+fi
+
+# Step 2: Install into current project
+~/.apex-framework/install.sh
+```
+
+This works even if the project has an outdated APEX version without the `/update` skill.
+
 ## Workflow
 
 `/prd` → `/architecture` → `/research` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit`

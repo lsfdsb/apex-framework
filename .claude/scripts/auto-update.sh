@@ -240,8 +240,23 @@ fi
 # Save version marker
 echo "$REMOTE_VERSION" > "$PROJECT_DIR/.claude/.apex-version"
 
+# Ensure CLAUDE.md has the Update section (append if missing, never overwrite)
+if [ -f "$PROJECT_DIR/CLAUDE.md" ]; then
+  if ! grep -q '## Update' "$PROJECT_DIR/CLAUDE.md" 2>/dev/null; then
+    if [ -f "$APEX_CACHE/CLAUDE.md" ]; then
+      # Extract the ## Update section from the framework CLAUDE.md and append
+      UPDATE_SECTION=$(sed -n '/^## Update$/,/^## /{ /^## Update$/p; /^## [^U]/!p; }' "$APEX_CACHE/CLAUDE.md" 2>/dev/null | head -n -1)
+      if [ -n "$UPDATE_SECTION" ]; then
+        echo "" >> "$PROJECT_DIR/CLAUDE.md"
+        echo "$UPDATE_SECTION" >> "$PROJECT_DIR/CLAUDE.md"
+        log "Appended ## Update section to CLAUDE.md"
+      fi
+    fi
+  fi
+fi
+
 # NOTE: We do NOT overwrite:
-#   - CLAUDE.md (user may have customized for their project)
+#   - CLAUDE.md (user may have customized — we only append missing sections)
 #   - settings.local.json (user's local overrides)
 #   - .apex-state.json (session state)
 #   - git hooks in .git/hooks/ (may have custom hooks)
