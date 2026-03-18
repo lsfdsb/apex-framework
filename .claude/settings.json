@@ -52,14 +52,14 @@
   },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "APEX_FRAMEWORK_REPO": "/Users/lsfdsb/apex-framework"
+    "APEX_FRAMEWORK_REPO": "/Users/lsfdsb/projects/apex-framework"
   },
   "sandbox": {
     "filesystem": {
       "denyWrite": [
-        "/etc/**",
-        "/usr/**",
-        "/System/**",
+        "//etc/**",
+        "//usr/**",
+        "//System/**",
         "~/.ssh/**",
         "~/.aws/**",
         "~/.gnupg/**",
@@ -67,7 +67,8 @@
       ],
       "denyRead": [
         "~/.ssh/id_*",
-        "~/.aws/credentials"
+        "~/.aws/credentials",
+        "~/.gnupg/private-keys-v1.d/**"
       ]
     },
     "network": {
@@ -265,7 +266,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"🤖 Agent spawned\"}'",
+            "command": "echo '{\"systemMessage\":\"\ud83e\udd16 Agent spawned\"}'",
             "timeout": 2
           }
         ]
@@ -315,7 +316,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"⚔️ APEX: Settings changed. Hooks and permissions reloaded.\"}'",
+            "command": "echo '{\"systemMessage\":\"\u2694\ufe0f APEX: Settings changed. Hooks and permissions reloaded.\"}'",
             "timeout": 2
           }
         ]

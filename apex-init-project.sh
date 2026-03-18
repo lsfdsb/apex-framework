@@ -1,7 +1,10 @@
 #!/bin/bash
-# apex-init-project.sh — Apply APEX Framework to any project
-# Usage: ~/apex-framework/apex-init-project.sh
+# apex-init-project.sh — Install APEX Framework into any project
+# Usage: /path/to/apex-framework/apex-init-project.sh
 # Run from inside your project directory (where .git/ is)
+#
+# This is the PRIMARY installer. Each project gets its own complete
+# copy of the framework in .claude/ — no user-level install needed.
 #
 # by L.B. & Claude · São Paulo, 2026
 
@@ -18,15 +21,16 @@ if [ ! -d ".git" ]; then
 fi
 
 # ── Verify apex-framework exists ──
-if [ ! -d "$APEX_DIR" ]; then
-  echo "❌ ~/apex-framework not found. Extract the APEX package first."
+if [ ! -d "$APEX_DIR/.claude" ]; then
+  echo "❌ APEX framework not found at $APEX_DIR. Clone the repo first."
   exit 1
 fi
 
+APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.7.0")
+APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
+
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.6.0")
-APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 echo "  ║    ⚔️  APEX Framework v${APEX_V_SHORT} — Project Setup   ║"
 echo "  ║     by L.B. & Claude · São Paulo, 2026      ║"
 echo "  ╚══════════════════════════════════════════════╝"
@@ -34,23 +38,37 @@ echo ""
 echo "📁 Project: $PROJECT_DIR"
 echo ""
 
-# ── Project-level skills ──
-echo "📦 Installing project skills..."
+# ── ALL skills (complete framework copy) ──
+echo "📦 Installing all skills..."
 mkdir -p .claude/skills
-PROJECT_SKILLS=(prd architecture research qa security performance deploy commit changelog init e2e cicd)
-for skill in "${PROJECT_SKILLS[@]}"; do
-  if [ -d "$APEX_DIR/.claude/skills/$skill" ]; then
-    cp -r "$APEX_DIR/.claude/skills/$skill" .claude/skills/
-    echo "   ✅ $skill"
-  else
-    echo "   ⚠️  $skill not found"
+INSTALLED_SKILLS=0
+for skill_dir in "$APEX_DIR"/.claude/skills/*/; do
+  if [ -d "$skill_dir" ]; then
+    skill=$(basename "$skill_dir")
+    cp -r "$skill_dir" .claude/skills/
+    INSTALLED_SKILLS=$((INSTALLED_SKILLS + 1))
   fi
 done
+echo "   ✅ $INSTALLED_SKILLS skills installed"
+
+# ── Agents ──
+echo ""
+echo "🤖 Installing agents..."
+mkdir -p .claude/agents
+INSTALLED_AGENTS=0
+for agent in "$APEX_DIR"/.claude/agents/*.md; do
+  if [ -f "$agent" ]; then
+    cp "$agent" .claude/agents/
+    INSTALLED_AGENTS=$((INSTALLED_AGENTS + 1))
+  fi
+done
+echo "   ✅ $INSTALLED_AGENTS agents installed"
 
 # ── Scripts (hooks) ──
 echo ""
 echo "🔧 Installing hook scripts..."
-cp -r "$APEX_DIR/.claude/scripts" .claude/
+mkdir -p .claude/scripts
+cp "$APEX_DIR"/.claude/scripts/*.sh .claude/scripts/
 chmod +x .claude/scripts/*.sh
 echo "   ✅ $(ls .claude/scripts/*.sh | wc -l | tr -d ' ') scripts installed"
 
@@ -73,8 +91,11 @@ fi
 # ── Settings ──
 echo ""
 echo "⚙️  Installing settings..."
+if [ -f ".claude/settings.json" ]; then
+  cp ".claude/settings.json" ".claude/settings.json.backup"
+  echo "   📋 Backed up existing settings.json"
+fi
 cp "$APEX_DIR/.claude/settings.json" .claude/settings.json
-cp "$APEX_DIR/.claude/settings.local.json" .claude/settings.local.json 2>/dev/null || true
 echo "   ✅ settings.json (hooks, permissions, sandbox, statusLine)"
 
 # ── Git hooks ──
@@ -85,7 +106,7 @@ if [ -d "$APEX_DIR/.claude/git-hooks" ]; then
   mkdir -p .git/hooks
   cp .claude/git-hooks/pre-commit .git/hooks/pre-commit 2>/dev/null || true
   cp .claude/git-hooks/commit-msg .git/hooks/commit-msg 2>/dev/null || true
-  chmod +x .claude/git-hooks/* .git/hooks/* 2>/dev/null || true
+  chmod +x .claude/git-hooks/* .git/hooks/pre-commit .git/hooks/commit-msg 2>/dev/null || true
   echo "   ✅ pre-commit + commit-msg"
 fi
 
@@ -99,6 +120,9 @@ else
   echo "   ⚠️  CLAUDE.md already exists, keeping yours"
 fi
 
+# ── VERSION marker ──
+echo "$APEX_VERSION" > .claude/.apex-version
+
 # ── .gitignore additions ──
 echo ""
 echo "📝 Checking .gitignore..."
@@ -108,6 +132,7 @@ if [ -f ".gitignore" ]; then
     echo "# APEX Framework" >> .gitignore
     echo ".claude/settings.local.json" >> .gitignore
     echo ".claude/.apex-state.json" >> .gitignore
+    echo ".claude/.apex-version" >> .gitignore
     echo "   ✅ Added APEX entries to .gitignore"
   else
     echo "   ✅ .gitignore already has APEX entries"
@@ -123,16 +148,20 @@ mkdir -p docs/prd docs/architecture docs/research docs/reviews
 # ── Summary ──
 echo ""
 echo "═══════════════════════════════════════════════════"
-echo "✅ APEX installed in $(basename "$PROJECT_DIR")!"
+echo "✅ APEX v$APEX_VERSION installed in $(basename "$PROJECT_DIR")!"
 echo ""
-echo "   ${#PROJECT_SKILLS[@]} project skills"
+echo "   $INSTALLED_SKILLS skills"
+echo "   $INSTALLED_AGENTS agents"
 echo "   $(ls .claude/scripts/*.sh | wc -l | tr -d ' ') hook scripts"
 echo "   $(ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' ') path-based rules"
 echo "   2 git hooks (pre-commit + commit-msg)"
 echo "   StatusLine + Sandbox + Permissions configured"
 echo ""
-echo "Now run:"
-echo "   claude"
+echo "To update the framework later:"
+echo "   cd $APEX_DIR && git pull"
+echo "   cd $PROJECT_DIR && $APEX_DIR/apex-init-project.sh"
+echo ""
+echo "Or during a Claude session, use /evolve"
 echo ""
 echo "⚔️ This is the way."
 echo ""

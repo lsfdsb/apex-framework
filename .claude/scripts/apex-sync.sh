@@ -2,15 +2,15 @@
 # apex-sync.sh — Sync framework improvements back to the apex-framework repo
 #
 # When you use APEX in any project and /evolve makes improvements,
-# those changes live in ~/.claude/ (global install). This script
+# those changes live in the project's .claude/. This script
 # detects what changed and creates a PR on the apex-framework repo.
 #
-# Usage: bash ~/.claude/scripts/apex-sync.sh
+# Usage: bash .claude/scripts/apex-sync.sh
 #   or:  Claude invokes it via the /evolve skill after user approves changes
 #
 # Flow:
 #   1. Find the apex-framework source repo
-#   2. Diff ~/.claude/ against the repo's .claude/
+#   2. Diff current project's .claude/ against the repo's .claude/
 #   3. Copy changed files to a new branch
 #   4. Create a PR with a summary of improvements
 #
@@ -37,7 +37,9 @@ if [ ! -d "$APEX_REPO/.git" ]; then
 fi
 
 # ── Check for changes ──
-USER_CLAUDE="$HOME/.claude"
+# Use current project's .claude/ as the source (not ~/.claude/)
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
+USER_CLAUDE="$PROJECT_DIR/.claude"
 REPO_CLAUDE="$APEX_REPO/.claude"
 CHANGED_FILES=()
 
@@ -104,7 +106,7 @@ for style in "$USER_CLAUDE"/output-styles/*.md; do
 done
 
 if [ ${#CHANGED_FILES[@]} -eq 0 ]; then
-  echo '{"systemMessage":"APEX sync: No changes detected between ~/.claude/ and the repo. Framework is up to date."}'
+  echo '{"systemMessage":"APEX sync: No changes detected between project .claude/ and the repo. Framework is up to date."}'
   exit 0
 fi
 
@@ -133,7 +135,7 @@ done
 git commit -m "$(cat <<EOF
 evolve: sync framework improvements from usage
 
-Auto-synced ${#CHANGED_FILES[@]} files from ~/.claude/ to the repo.
+Auto-synced ${#CHANGED_FILES[@]} files from project .claude/ to the repo.
 Changes detected by apex-sync.sh after /evolve improvements.
 
 Files changed:
@@ -162,8 +164,8 @@ $(printf '%s\n' "${CHANGED_FILES[@]}" | sed 's/^/- `/' | sed 's/$/`/')
 
 1. User ran \`/evolve\` in a project using APEX
 2. Framework-evolver proposed improvements
-3. User approved changes (applied to \`~/.claude/\`)
-4. \`apex-sync.sh\` detected drift between \`~/.claude/\` and this repo
+3. User approved changes (applied to project \`.claude/\`)
+4. \`apex-sync.sh\` detected drift between project \`.claude/\` and this repo
 5. This PR was created to sync improvements back
 
 ### Review checklist

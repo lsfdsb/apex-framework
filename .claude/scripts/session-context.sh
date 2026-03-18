@@ -26,7 +26,7 @@ if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/.installed-version" ]; 
 fi
 # Fallback
 if [ -z "$APEX_VERSION" ]; then
-  APEX_VERSION="5.6.0"
+  APEX_VERSION="5.7.0"
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 

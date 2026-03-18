@@ -17,7 +17,7 @@ Changed files: !`git diff --name-only HEAD~1 2>/dev/null | head -20`
 
 ## What This Skill Does
 
-This runs a 5-phase quality gate. It checks code quality, logic, test coverage, UX, and performance. Every issue is categorized by severity so you know exactly what must be fixed before shipping.
+This runs a 6-phase quality gate. It checks code quality, logic, test coverage, UX, and performance. Every issue is categorized by severity so you know exactly what must be fixed before shipping.
 
 ## Phase 1: Static Analysis
 

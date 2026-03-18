@@ -11,6 +11,9 @@ if ! command -v jq &> /dev/null; then
   exit 0
 fi
 
+# Portable sed in-place (macOS vs Linux)
+_sed_i() { if [[ "$OSTYPE" == "darwin"* ]]; then sed -i '' "$@"; else sed -i "$@"; fi; }
+
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 
@@ -81,8 +84,8 @@ if [ -z "$UNRELEASED_LINE" ]; then
   # Build the new section
   SECTION="\n## [Unreleased]\n\n### ${CATEGORY}\n${ENTRY}\n"
 
-  # Insert using sed (BSD-compatible)
-  sed -i '' "${INSERT_AT}a\\
+  # Insert using portable sed
+  _sed_i "${INSERT_AT}a\\
 \\
 ## [Unreleased]\\
 \\
@@ -134,7 +137,7 @@ if [ -n "$CATEGORY_LINE" ]; then
     INSERT_AT=$((LINE_NUM - 1))
   fi
 
-  sed -i '' "${INSERT_AT}a\\
+  _sed_i "${INSERT_AT}a\\
 ${ENTRY}" "$CHANGELOG"
 else
   # Category doesn't exist — insert it after [Unreleased] header
@@ -171,13 +174,13 @@ else
 
   if [ "$BEST_INSERT" -eq "$INSERT_AFTER" ]; then
     # No later category found — insert right after [Unreleased] (+ blank line)
-    sed -i '' "${INSERT_AFTER}a\\
+    _sed_i "${INSERT_AFTER}a\\
 \\
 ### ${CATEGORY}\\
 ${ENTRY}" "$CHANGELOG"
   else
     # Insert before a later category
-    sed -i '' "${BEST_INSERT}a\\
+    _sed_i "${BEST_INSERT}a\\
 \\
 ### ${CATEGORY}\\
 ${ENTRY}\\

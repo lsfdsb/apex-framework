@@ -14,7 +14,10 @@ MESSAGE=$(echo "$INPUT" | jq -r '.message // "Needs your attention"')
 
 # macOS
 if command -v osascript &> /dev/null; then
-  osascript -e "display notification \"$MESSAGE\" with title \"$TITLE\"" 2>/dev/null
+  # Escape quotes to prevent AppleScript injection from JSON-derived strings
+  SAFE_MSG=$(printf '%s' "$MESSAGE" | sed 's/\\/\\\\/g; s/"/\\"/g')
+  SAFE_TITLE=$(printf '%s' "$TITLE" | sed 's/\\/\\\\/g; s/"/\\"/g')
+  osascript -e "display notification \"$SAFE_MSG\" with title \"$SAFE_TITLE\"" 2>/dev/null
 # Linux
 elif command -v notify-send &> /dev/null; then
   notify-send "$TITLE" "$MESSAGE" 2>/dev/null

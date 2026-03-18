@@ -18,14 +18,8 @@ fi
 
 deny() {
   local reason="$1"
-  jq -n --arg reason "$reason" '{
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      permissionDecision: "deny",
-      permissionDecisionReason: $reason
-    }
-  }'
-  exit 0
+  echo "$reason" >&2
+  exit 2
 }
 
 # Only check git commit commands
@@ -34,7 +28,11 @@ if echo "$COMMAND" | grep -qE '^git\s+commit'; then
   # 1. -m "message"  or  -m 'message'
   # 2. HEREDOC: -m "$(cat <<'EOF'\nmessage\nEOF\n)"
   # 3. No -m flag (editor-based) — skip
-  MSG=$(echo "$COMMAND" | sed -n 's/^[^-]*-m ["\x27]\([^"\x27]*\)["\x27].*/\1/p' | head -1)
+  MSG=$(echo "$COMMAND" | sed -n 's/.*-m "\([^"]*\)".*/\1/p' | head -1)
+  # Also try single-quoted messages
+  if [ -z "$MSG" ]; then
+    MSG=$(echo "$COMMAND" | sed -n "s/.*-m '\([^']*\)'.*/\1/p" | head -1)
+  fi
 
   # If simple -m extraction failed, try HEREDOC pattern
   if [ -z "$MSG" ]; then

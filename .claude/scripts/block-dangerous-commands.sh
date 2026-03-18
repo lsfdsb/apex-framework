@@ -16,17 +16,11 @@ if [ -z "$COMMAND" ]; then
   exit 0
 fi
 
-# Helper: deny with official JSON format
+# Helper: block with exit code 2 (per Claude Code docs, exit 2 = block in PreToolUse)
 deny() {
   local reason="$1"
-  jq -n --arg reason "$reason" '{
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      permissionDecision: "deny",
-      permissionDecisionReason: $reason
-    }
-  }'
-  exit 0
+  echo "$reason" >&2
+  exit 2
 }
 
 # Block rm -rf (suggest trash or specific paths instead)
