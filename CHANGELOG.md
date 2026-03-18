@@ -5,13 +5,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.9.1] — 2026-03-18 — Self-Improving Loop, No Silent Skips
+
 ### Added
 - Proactive `/evolve` suggestion — error counter tracks failures, suggests `/evolve` at 5/10/20 errors (#46)
-
-### Fixed
-- PR cache: sanitize branch names with `/` (e.g., `feat/foo` → `feat-foo`) to prevent invalid file paths (#47)
 - `/prd` skill auto-generates README.md from PRD content after document creation (#46)
 - No silent skips — all hooks provide feedback for every exit path (#45)
+- Auto-update: `gh api` fallback when curl/wget are blocked by sandbox (#41)
+- Auto-update: verbose feedback for every scenario (#43)
+- Session-context: hook installation status on startup (#43)
+- Dev-server: skips startup when `node_modules` missing (#44)
 - Block `git commit` on main/master — catches mistakes at commit time, not push time (#38)
 - Branch pre-flight check in `/commit` skill — Step 0 verifies branch before staging (#38)
 - Push-to-main error now includes exact recovery recipe (#38)
