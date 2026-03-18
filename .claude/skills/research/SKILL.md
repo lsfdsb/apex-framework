@@ -64,6 +64,15 @@ WebFetch("https://bundlephobia.com/package/[name]")     → bundle size (minifie
 
 Compare: weekly downloads, bundle size, last release date, TypeScript support, license.
 
+## Red Lines
+
+These are non-negotiable. Violating any of these invalidates the entire research output:
+
+- **NEVER** fabricate an API endpoint or parameter
+- **NEVER** assume request/response format without checking official docs
+- **NEVER** skip WebFetch of official documentation
+- If docs are unavailable or ambiguous, say **"UNVERIFIED"** explicitly
+
 ## For API/Service Integration, Verify:
 
 | Must verify | How | Source |

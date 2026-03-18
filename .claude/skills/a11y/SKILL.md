@@ -59,6 +59,45 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 - [ ] Dynamic content announced to screen readers (aria-live="polite")
 - [ ] Works with assistive technology (VoiceOver on macOS: Cmd+F5)
 
+## Essential Patterns
+
+### Skip Navigation
+First focusable element on every page:
+```html
+<a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
+```
+
+### Heading Hierarchy
+Always maintain proper heading order: `h1` → `h2` → `h3`. Never skip levels. Each page gets exactly one `h1`.
+
+### Focus-Visible
+Custom focus styles for keyboard users:
+```css
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+```
+
+### System Theme Detection
+Respect user's system preference:
+```css
+@media (prefers-color-scheme: dark) {
+  :root { /* dark mode tokens */ }
+}
+```
+Let users override with a toggle. Persist preference in `localStorage`.
+
+### Live Regions
+Announce dynamic content to screen readers:
+- `aria-live="polite"` — for status updates (toast notifications, save confirmations)
+- `aria-live="assertive"` — for errors (form validation, critical alerts)
+
+```html
+<div aria-live="polite" role="status">Draft saved</div>
+<div aria-live="assertive" role="alert">Email is required</div>
+```
+
 ## Testing Tools
 ```bash
 # Install axe for automated testing

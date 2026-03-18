@@ -61,6 +61,42 @@ test.describe('User Authentication', () => {
 3. **Payment** (if applicable): Checkout flow with Stripe test mode
 4. **Error Recovery**: What happens when the API is down?
 
+## Accessibility Integration (axe-core)
+
+Every E2E test should include an accessibility check. Add axe-core to catch violations automatically:
+
+```typescript
+import AxeBuilder from '@axe-core/playwright';
+
+// In every test:
+const results = await new AxeBuilder({ page }).analyze();
+expect(results.violations).toEqual([]);
+```
+
+Include axe checks at the end of each critical flow — not just on initial page load, but after interactions that change the DOM (opening modals, loading new content, form submissions).
+
+## Viewport Testing
+
+Test critical flows at both mobile and desktop breakpoints:
+
+```typescript
+// Mobile viewport (iPhone SE)
+test.use({ viewport: { width: 375, height: 667 } });
+
+test('should complete checkout on mobile', async ({ page }) => {
+  // Test the full flow at 375px width
+});
+
+// Desktop viewport
+test.use({ viewport: { width: 1280, height: 720 } });
+
+test('should complete checkout on desktop', async ({ page }) => {
+  // Test the full flow at 1280px width
+});
+```
+
+Always test: navigation (hamburger vs sidebar), forms (stacked vs inline), tables (cards vs rows), and modals (bottom sheet vs centered).
+
 ## Running
 ```bash
 npx playwright test                    # All tests
