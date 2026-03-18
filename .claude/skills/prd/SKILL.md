@@ -23,6 +23,9 @@ Gather or infer answers for:
 3. **Success** — Measurable outcomes.
 4. **Constraints** — Timeline, stack, integrations.
 5. **Feeling** — How should users *feel*? (Our CX philosophy demands this.)
+6. **Communication channels** — Does the business use phone, email, WhatsApp, chat, SMS? If ANY communication channel is mentioned (call center, régua de comunicação, outbound, inbound, support, helpdesk), extract explicit requirements for a messaging/helpdesk module. Don't wait for the user to ask — CX-intensive businesses ALWAYS need this.
+7. **External integrations** — List every API, service, or platform mentioned (Twilio, Resend, WhatsApp, Stripe, etc.). Flag each for `/research` before implementation.
+8. **Real business data** — If the user provides product names, prices, revenue figures, team sizes, or customer counts, record them exactly. Mock data MUST reflect these real values, not generic placeholders.
 
 ### Step 2: Research
 Search the codebase for existing patterns, schemas, and conventions that inform this PRD.
@@ -48,8 +51,19 @@ As a [persona], I want [action] so that [outcome].
 Priority: P0 (must) / P1 (should) / P2 (nice).
 Acceptance criteria for each.
 
+## 4.5. Persona → Page Mapping
+| Page/View | Primary Persona | Purpose | Key Actions |
+|-----------|----------------|---------|-------------|
+Map every page to its primary persona. A dashboard for managers is NOT the same as an operational view for agents. Never mix management views (KPIs, reports) with operational views (queues, tasks, forms) on the same page unless the PRD explicitly calls for it.
+
 ## 5. Functional Requirements
 By feature area: description, inputs/outputs, validations, error handling.
+
+## 5.5. Integration Requirements
+For EVERY external API or service mentioned:
+| Integration | Purpose | API to Research | Priority |
+|-------------|---------|-----------------|----------|
+**RULE**: Each integration listed here MUST have `/research` invoked before implementation begins. Never design integration architecture without checking actual API documentation first.
 
 ## 6. Non-Functional Requirements
 Performance targets, security model, accessibility (WCAG 2.2 AA), scalability, reliability.
@@ -90,5 +104,21 @@ After writing the PRD, update the project's `README.md` to reflect the actual pr
 
 The README is the first thing users and contributors see — it must describe THIS project, not a template.
 
-### Step 5: Summary
-Return a brief summary of key decisions and any open questions needing user input.
+### Step 5: Mock Data Validation
+If the user provided real business data (product names, prices, metrics, team structure):
+1. List all real data points extracted from user input
+2. Verify mock data in the PRD reflects these values exactly
+3. Flag any placeholder data that should be replaced with real values
+4. Create a `docs/prd/mock-data-reference.md` mapping real values to mock usage
+
+**RULE**: Generic mock data (random names, round prices, lorem ipsum) is a red flag. If the user said "Adapta Gold at R$1,188", the mock must use "Adapta Gold at R$1,188" — not "Premium Plan at R$999".
+
+### Step 6: Research Triggers
+List all external integrations identified and output a checklist:
+```
+⬜ /research [integration] — before implementation
+```
+The lead MUST invoke `/research` for each item before any builder touches integration code.
+
+### Step 7: Summary
+Return a brief summary of key decisions, open questions, research items needed, and the persona→page mapping for user review.

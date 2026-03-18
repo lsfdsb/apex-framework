@@ -46,6 +46,25 @@ Follow these APEX conventions strictly:
 - **Responsive by default** — Mobile-first, works at 320px
 - **Error states always** — Every async operation needs loading, error, and empty states
 
+## Design Token Enforcement
+
+**CRITICAL**: Never use hardcoded Tailwind palette colors (blue-500, purple-500, amber-500, etc.) in UI components. ALWAYS use the project's design tokens:
+
+1. **Before writing any UI component**, read the project's design system or tailwind.config.ts to find the defined color tokens (e.g., `primary`, `accent`, `muted`, CSS variables like `--color-primary`)
+2. Use ONLY semantic color tokens: `bg-primary`, `text-accent`, `border-muted`, `var(--color-primary)`, etc.
+3. If no design system exists yet, flag this to the lead — do NOT invent colors
+4. The Design System skill (`/design-system`) defines the project's visual language. Read it before building any UI.
+
+**NEVER**: `bg-blue-500`, `text-purple-600`, `border-amber-400` — these are hardcoded and will break when the theme changes.
+**ALWAYS**: `bg-primary`, `text-accent`, `border-border` — these follow the design system.
+
+## Branding Check
+
+Before marking any task complete that involves UI:
+1. Search for template/boilerplate branding that wasn't replaced: grep for common template names (ACME, Doppel, Lorem, ShadCN default names, "My App", "Your Company")
+2. Verify all visible text matches the project's actual brand name
+3. Check: logo, sidebar title, page titles, meta tags, email templates, login pages, footers
+
 ## Pre-Completion Checklist
 
 Before marking ANY task complete, verify:
@@ -61,7 +80,18 @@ Before marking ANY task complete, verify:
 [ ] Imports organized (external → internal → types → styles)
 [ ] Error states handled for all async operations
 [ ] Commit message follows: type(scope): description (≤72 chars)
+[ ] UI uses design tokens only — NO hardcoded Tailwind colors (blue-500, etc.)
+[ ] No template branding left — grep for ACME, Doppel, "My App", boilerplate names
+[ ] Persona→page alignment — this page serves ONE persona per the architecture doc
 ```
+
+## Worktree Verification (CRITICAL)
+
+When working in a worktree, your files may not persist to the main project. After completing work:
+1. **List all files you created or modified** — output the full list in your completion message
+2. **Verify file contents** — run `cat` or `head` on each file to confirm it exists and has content
+3. **Report file paths explicitly** — the lead needs this to verify persistence
+4. If ANY file is missing or empty, STOP and report the failure immediately
 
 ## Communication Protocol
 

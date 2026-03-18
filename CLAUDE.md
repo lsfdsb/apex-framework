@@ -18,9 +18,9 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 ## Core Rules
 
 1. **PRD before code** — `/prd` before any new app or major feature. Block if missing.
-2. **Research before integration** — `/research` before any new API or library.
+2. **Research before integration** — `/research` before any new API or library. When the PRD mentions external services (Twilio, Stripe, WhatsApp, etc.), research is MANDATORY before the builder touches integration code.
 3. **Verify before installing** — `verify-lib` auto-checks every dependency.
-4. **QA before shipping** — `/qa` before marking any task complete.
+4. **QA before shipping** — `/qa` before marking any task complete. QA is a GATE, not optional. No task is "done" without QA verification.
 5. **Security on sensitive code** — `/security` on auth, payments, PII.
 6. **CX review before users see it** — `/cx-review` before deploying user-facing changes.
 7. **Read before editing** — Always read existing files first. No blind changes.
@@ -28,6 +28,10 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 9. **Impact analysis first** — Trace all dependencies before changing anything.
 10. **Adapt to existing stacks** — Don't force the APEX default stack on existing projects.
 11. **Only verified libraries** — Official publisher, maintained, no critical CVEs, proper license.
+12. **Design tokens only** — UI components MUST use project design tokens (CSS variables, semantic classes). Never hardcode Tailwind palette colors (blue-500, purple-600, etc.). Read the design system first.
+13. **Branding sweep** — After any project init or template scaffolding, grep for template branding (ACME, Doppel, "My App", boilerplate names) and replace ALL instances with the actual project name. No template branding ships to production.
+14. **Persona→page alignment** — Every page serves ONE primary persona. Never mix management views (dashboards, KPIs) with operational views (queues, kanban, forms) on the same page unless the PRD explicitly calls for it.
+15. **Verify worktree output** — After any builder agent completes in a worktree, verify files exist in the main project before proceeding. Worktree cleanup can delete files silently.
 
 ## Code Standards
 
@@ -104,6 +108,8 @@ When the user gives a task, evaluate complexity and **auto-invoke `/teams`** if:
 - Task is a new feature, major refactor, or production bug
 - Task explicitly mentions "team", "parallel", "agents", or "swarm"
 - User says "build", "implement", "create" for non-trivial features
+- Task involves building UI components (auto-include Design Reviewer in the team)
+- Task involves external API integrations (auto-include Researcher in the team)
 
 Do NOT spawn a full team for:
 - Single-file edits, quick fixes, questions, or explanations
@@ -111,6 +117,16 @@ Do NOT spawn a full team for:
 - Research-only or documentation tasks
 
 **But ALWAYS spawn Watcher + Technical Writer regardless of task size.**
+
+### Enforcement: What Failed in Past Sessions
+
+These rules exist because they were violated in real builds. Do NOT repeat these mistakes:
+
+1. **Team orchestration is NOT optional for multi-file work** — If the task creates 5+ files, you MUST use `/teams`. Ad-hoc builder subagents without Watcher/QA is a framework violation.
+2. **QA must run after every build phase** — Not just before commit. After each builder completes a milestone, QA verifies. This is the Breathing Loop.
+3. **Design Reviewer must review UI** — If .tsx/.jsx files are created, Design Reviewer checks design token compliance, persona alignment, and branding. This is part of the `build` preset now.
+4. **Worktree output must be verified** — After any builder in a worktree reports "done", the lead MUST verify files exist in the main project. Do NOT trust "success" messages from worktree agents without checking.
+5. **Research before integration code** — If the PRD lists external APIs, `/research` runs BEFORE the builder writes integration code. Never design against an API you haven't read the docs for.
 
 ### The Roster
 | Role | Agent | Model | Purpose |
@@ -127,7 +143,7 @@ Do NOT spawn a full team for:
 | Sentinel | sentinel | sonnet | The Dark Knight — /self-test, /batman |
 
 ### Presets
-- `build` — Watcher + Builder + QA + Technical Writer (features, refactoring)
+- `build` — Watcher + Builder + Design Reviewer + QA + Technical Writer (features, refactoring — Design Reviewer auto-included when task creates UI)
 - `fix` — Watcher + Debugger + QA + Technical Writer (bugs, errors)
 - `review` — Code Reviewer + Design Reviewer + QA + Technical Writer (PR review)
 - `full` — All roles (major features, critical paths)

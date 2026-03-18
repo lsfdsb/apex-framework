@@ -25,13 +25,29 @@ You are designing: $ARGUMENTS
 
 3. **Design and document** at `docs/architecture/`:
 
+**Persona → Page Mapping** — REQUIRED. Create a table mapping every page/view to its primary persona from the PRD. This prevents mixing management views (dashboards, KPIs, reports) with operational views (queues, tasks, kanban) on the same page. Each page serves ONE primary persona.
+
+```markdown
+## Page → Persona Map
+| Route | Page | Primary Persona | View Type | Key Components |
+|-------|------|----------------|-----------|----------------|
+```
+
+**RULE**: If a page serves two personas, split it into two views. A CEO dashboard is NOT an agent's workspace. Review this table with the user before implementation begins.
+
 **Database Schema** — UUIDs for public IDs. Every table: created_at, updated_at. Soft deletes for user data. 3NF minimum. FKs at DB level. Indexes on FKs and frequent queries. Migrations versioned and reversible.
 
 **API Design** — REST by default. Versioned (/api/v1/). Consistent error format. Pagination on lists. Rate limiting on all endpoints. Request validation.
 
+**Integration Architecture** — For each external integration identified in the PRD:
+1. Confirm `/research` has been run on the actual API docs
+2. Document: auth method, rate limits, webhook patterns, error handling
+3. Design service abstraction layer (never call external APIs directly from components)
+4. Plan for mock/test mode that doesn't hit real APIs
+
 **ADRs** — For every significant choice: Context, Decision, Consequences, Alternatives.
 
-4. **Return summary** of architecture decisions and any trade-offs for user review.
+4. **Return summary** of architecture decisions, the persona→page map, and any trade-offs for user review. Explicitly list any integrations that still need `/research`.
 
 ## Production Observability
 

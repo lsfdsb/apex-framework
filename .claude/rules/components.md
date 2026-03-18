@@ -13,6 +13,7 @@ paths:
 - Accessibility: semantic HTML, aria-labels on icon buttons, keyboard navigation, focus management.
 - Responsive: mobile-first. Test at 320px, 768px, 1280px.
 - No inline styles. Use Tailwind utilities or CSS modules.
+- **Design tokens only** — NEVER use hardcoded Tailwind palette colors (`blue-500`, `purple-600`, etc.). Use the project's semantic tokens (`primary`, `accent`, `muted`, `destructive`). Read `tailwind.config.ts` or `globals.css` first.
 - Memoize only when measured — premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.
 - Co-locate: component file, test file, and styles in the same directory.

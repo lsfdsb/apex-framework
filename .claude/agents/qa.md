@@ -101,7 +101,28 @@ for f in .claude/scripts/*.sh; do [ -x "$f" ] || echo "⚠️ NOT EXECUTABLE: $f
 [ ] Keyboard accessible (if UI)
 [ ] Mobile responsive (if UI)
 [ ] WCAG 2.2 AA contrast ratios (if UI)
+[ ] Design tokens only — NO hardcoded Tailwind palette colors (blue-500, etc.) in .tsx files
+[ ] No template branding — grep for ACME, Doppel, "My App", boilerplate names
+[ ] Persona→page alignment — each page serves ONE persona per architecture doc
+[ ] Mock data reflects real business data (not generic placeholders)
 ```
+
+## Design Token Scan (UI projects)
+
+Run this on ALL .tsx/.jsx files:
+```bash
+# Find hardcoded Tailwind palette colors (VIOLATIONS)
+grep -rnE '(bg|text|border|ring|from|to|via)-(red|blue|green|yellow|purple|pink|indigo|orange|amber|emerald|teal|cyan|violet|fuchsia|rose|lime|sky|slate|gray|zinc|neutral|stone)-[0-9]{2,3}' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null
+```
+Any matches = BLOCK. Components must use semantic tokens (primary, accent, muted, destructive, etc.).
+
+## Branding Scan
+
+```bash
+# Find template branding that wasn't replaced
+grep -rniE '(ACME|Doppel|Your Company|My App|Company Name|lorem ipsum)' --include='*.tsx' --include='*.jsx' --include='*.ts' src/ 2>/dev/null
+```
+Any matches = BLOCK. All branding must match the actual project name.
 
 ## Communication Protocol
 
