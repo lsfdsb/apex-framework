@@ -31,6 +31,13 @@ if [ -z "$DEV_SCRIPT" ]; then
   exit 0
 fi
 
+# Skip if project hasn't been built yet (no node_modules = dependencies not installed)
+# The dev server will start automatically after the first `npm install` + `npm run dev`
+if [ ! -d "$PROJECT_DIR/node_modules" ]; then
+  echo "📦 Dev server skipped — no node_modules found. Run install first, then /dev to start."
+  exit 0
+fi
+
 # Skip if dev server is already running
 if [ -f "$PID_FILE" ]; then
   OLD_PID=$(cat "$PID_FILE" 2>/dev/null)
