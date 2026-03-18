@@ -174,7 +174,11 @@ section "3. Scripts — Existence & Permissions"
 
 EXPECTED_SCRIPTS=(
   "apex-colors.sh"
+  "apex-launch.sh"
   "apex-statusline.sh"
+  "apex-sync.sh"
+  "auto-approve-safe.sh"
+  "auto-changelog.sh"
   "auto-format.sh"
   "auto-update.sh"
   "block-dangerous-commands.sh"
@@ -192,6 +196,7 @@ EXPECTED_SCRIPTS=(
   "protect-files.sh"
   "session-cleanup.sh"
   "session-context.sh"
+  "session-learner.sh"
   "stop-gate.sh"
   "verify-install.sh"
 )

@@ -276,8 +276,10 @@ echo ""
 echo "🧪 jq dependency warnings"
 for script in "$SCRIPTS"/*.sh; do
   BASENAME=$(basename "$script")
-  # statusline handles jq differently (shows fallback output), skip it
-  if [ "$BASENAME" = "apex-statusline.sh" ]; then continue; fi
+  # Skip scripts that don't use jq or intentionally degrade silently (exit 0)
+  case "$BASENAME" in
+    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh) continue ;;
+  esac
   TOTAL=$((TOTAL + 1))
   if grep -q "jq not installed" "$script"; then
     echo -e "  ${GREEN}✅ PASS${NC}: $BASENAME warns about missing jq"

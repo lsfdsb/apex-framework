@@ -20,8 +20,8 @@ fi
 
 deny() {
   local reason="$1"
-  jq -n --arg reason "$reason" '{hookSpecificOutput:{hookEventName:"PreToolUse",permissionDecision:"deny",permissionDecisionReason:$reason}}'
-  exit 0
+  echo "$reason" >&2
+  exit 2
 }
 
 INPUT=$(cat)

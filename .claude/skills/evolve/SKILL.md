@@ -2,7 +2,7 @@
 name: evolve
 description: Evolve the APEX Framework based on real session usage. Spawns the framework-evolver agent to analyze the current session for gaps, friction, and improvements — then asks for authorization before applying changes. Use when the user says "evolve", "improve framework", "session review", "what could be better", "framework gaps", or proactively at the end of productive sessions.
 context: fork
-agent: general-purpose
+agent: framework-evolver
 ---
 
 # APEX Evolve — Framework Self-Improvement
@@ -73,21 +73,14 @@ For each approved change:
 3. Explain what was changed and why
 4. Verify the change doesn't break anything (run tests if applicable)
 
-### Step 5: Update the Global Install
-
-After approved changes are applied to the current project's `.claude/`:
-
-1. Copy changed files to `~/.claude/` (global install) so they apply to ALL projects
-2. Verify files were synced: `diff ~/.claude/scripts/ .claude/scripts/` etc.
-
-### Step 5.5: Sync Back to the Framework Repo
+### Step 5: Sync Back to the Framework Repo
 
 If improvements were made and the user is NOT already in the apex-framework repo:
 
 1. Ask: "These improvements should be shared back to the APEX repo. Sync now?"
-2. If yes, run: `bash ~/.claude/scripts/apex-sync.sh`
+2. If yes, run: `bash .claude/scripts/apex-sync.sh`
 3. This creates a PR on the apex-framework repo with the changes
-4. The auto-update system will then propagate to all other projects on next SessionStart
+4. Other projects get updates via `auto-update.sh` on next SessionStart
 
 If the user IS in the apex-framework repo, skip this — changes are already in the right place. Just commit normally.
 
