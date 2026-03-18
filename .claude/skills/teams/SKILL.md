@@ -119,10 +119,14 @@ If no preset is specified, analyze the task and auto-select:
 
 ## Orchestration Workflow
 
-### Step 1: Create the Team
+**CRITICAL: You MUST use TeamCreate to create a team. Do NOT use regular Agent() calls — those are subagents, not teammates. Only TeamCreate teammates get split panes and inter-agent messaging.**
+
+### Step 1: Create the Team (REQUIRED)
+
+Call the TeamCreate tool FIRST. This is not optional:
 
 ```
-TeamCreate with team_name based on the task (e.g., "feat-auth-flow", "fix-login-bug")
+TeamCreate({ team_name: "feat-landing-page", description: "Build landing page" })
 ```
 
 ### Step 2: Create Tasks
@@ -131,11 +135,12 @@ Break the work into discrete tasks using TaskCreate:
 - Each task should be completable by one agent
 - Set dependencies with addBlockedBy where needed
 - Include enough context for the agent to work independently
-- Tag tasks by type: `[impl]`, `[bug]`, `[test]`, `[review]`
 
 ### Step 3: Spawn Teammates (order matters)
 
-**Always spawn in this order:**
+**IMPORTANT: Use the Agent tool with `team_name` parameter to spawn TEAMMATES (not subagents).**
+
+Spawn in this order:
 
 1. **Watcher FIRST** — monitoring must start before any changes
 2. **Researcher** (if needed) — background research starts early
@@ -143,11 +148,33 @@ Break the work into discrete tasks using TaskCreate:
 4. **QA** — ready to verify as work completes
 5. **Code Reviewer** — final pass
 
-Spawn agents using the Agent tool with:
-- `team_name` — links them to the team
-- `name` — their role name (e.g., "watcher", "builder", "debugger", "qa")
-- `subagent_type` — matches their agent definition name
-- `run_in_background: true` for Watcher and Researcher
+Each teammate MUST have `team_name` set:
+
+```
+Agent({
+  team_name: "feat-landing-page",
+  name: "watcher",
+  subagent_type: "watcher",
+  prompt: "Monitor the project for errors. Run build, tests, lint.",
+  run_in_background: true
+})
+
+Agent({
+  team_name: "feat-landing-page",
+  name: "builder",
+  subagent_type: "builder",
+  prompt: "Implement the landing page with hero, features grid, and CTA."
+})
+
+Agent({
+  team_name: "feat-landing-page",
+  name: "qa",
+  subagent_type: "qa",
+  prompt: "Run QA gate on all completed tasks."
+})
+```
+
+**Without `team_name`, agents spawn as subagents (no split panes, no messaging).**
 
 ### Step 4: The Handoff Chain
 
