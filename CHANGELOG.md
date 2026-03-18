@@ -6,15 +6,27 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
-- Block `git commit` on main/master — catches mistakes at commit time, not push time
-- Branch pre-flight check in `/commit` skill — Step 0 verifies branch before staging
-- Push-to-main error now includes exact recovery recipe (branch, reset, push)
-- Stop-gate exempts `.sh`/`.json`/`.md` files — no false "run tests" nudge on scripts
-- Session-context warns about uncommitted changes on main at startup
-- Chore version bumps (`v*`, `polish`, `release`) now logged to changelog as "Changed"
-- PR link: universal terminal support — OSC 8 for iTerm2/Kitty/WezTerm, raw URL for Terminal.app
-- PR cache: 60s per-branch cache + "no PR" sentinel to eliminate redundant `gh pr view` calls
-- PR cache cleanup on session start
+- Block `git commit` on main/master — catches mistakes at commit time, not push time (#38)
+- Branch pre-flight check in `/commit` skill — Step 0 verifies branch before staging (#38)
+- Push-to-main error now includes exact recovery recipe (#38)
+- Stop-gate exempts `.sh`/`.json`/`.md` files — no false "run tests" nudge (#38)
+- Session-context warns about uncommitted changes on main at startup (#38)
+- Chore version bumps (`v*`, `polish`, `release`) now logged to changelog as "Changed" (#38)
+- PR link: universal terminal support — raw URL for Terminal.app, OSC 8 for iTerm2/Kitty/WezTerm (#39)
+- PR cache: 60s per-branch cache + "no PR" sentinel (#37)
+- PR cache cleanup on session start (#37)
+- Auto-update: `gh api` fallback when curl/wget are blocked by Claude Code sandbox (#41)
+- Auto-update: `gh repo clone` fallback for repo cloning (#41)
+- Auto-update: verbose feedback for every scenario — up-to-date, throttled, updated, errors (#43)
+- Session-context: hook installation status on startup — verifies all 16 hooks (#43)
+- Dev-server: skips startup when `node_modules` missing (fresh/from-scratch projects)
+
+### Fixed
+- Auto-update: removed `timeout` command (not available on macOS) (#42)
+- Auto-update: errors now visible in chat instead of only in log file (#41)
+
+### Removed
+- Temporary debug log from `log-subagent.sh` (#37)
 
 ## [5.9.0] — 2026-03-18 — UX Writing, Statusline PR Link, Extended Patterns
 
