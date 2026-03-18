@@ -8,11 +8,23 @@ Run these against the codebase to find common vulnerabilities:
 # SQL Injection risks
 grep -rn --include="*.ts" --include="*.js" -E '(query|execute|raw)\s*\(' | grep -v node_modules | grep -v '.test.'
 
-# Hardcoded secrets
+# Hardcoded secrets (general)
 grep -rn --include="*.ts" --include="*.js" --include="*.env*" -iE '(password|secret|api_key|apikey|token|private_key)\s*[=:]' | grep -v node_modules | grep -v '.example'
 
-# Dangerous functions
-grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -E '(eval\(|innerHTML|dangerouslySetInnerHTML|document\.write|exec\(|spawn\()' | grep -v node_modules
+# Hardcoded API keys (provider-specific prefixes)
+grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -E "(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[A-Z0-9]{16}|sk_live_|sk_test_|whsec_|re_[a-zA-Z0-9])" | grep -v node_modules | grep -v '.example' | grep -v '.env.example'
+
+# Hardcoded Bearer tokens and token= in URLs
+grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -E "(Bearer ['\"][a-zA-Z0-9._-]{20,}|token=[a-zA-Z0-9._-]{20,})" | grep -v node_modules | grep -v '.test.'
+
+# console.log with sensitive data
+grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -E 'console\.(log|info|debug|warn)\(.*\b(password|token|secret|apiKey|api_key|credential|private_key)\b' | grep -v node_modules | grep -v '.test.'
+
+# Dangerous functions (code execution)
+grep -rn --include="*.ts" --include="*.tsx" --include="*.js" --include="*.jsx" -E '(eval\(|new Function\(|innerHTML\s*=|dangerouslySetInnerHTML|document\.write\(|exec\(|spawn\()' | grep -v node_modules
+
+# SQL injection via template literals (unescaped user input)
+grep -rn --include="*.ts" --include="*.js" -E '(query|execute|sql|raw)\s*\(`[^`]*\$\{' | grep -v node_modules | grep -v '.test.'
 
 # Unvalidated redirects
 grep -rn --include="*.ts" --include="*.js" -E '(redirect|location\.href|window\.location)\s*=' | grep -v node_modules

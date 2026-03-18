@@ -20,12 +20,21 @@ allowed-tools: Read, Grep, Glob, Bash
 
 ## Frontend Checks
 
+### React Server Components & Streaming
+- **Default to Server Components** — they ship zero JS to the client. Only add `"use client"` when the component needs interactivity (useState, useEffect, onClick, etc.)
+- **Streaming SSR with Suspense** — wrap slow data-fetching components in `<Suspense fallback={<Skeleton />}>` so the shell renders instantly while data streams in
+- **Route-based code splitting** — Next.js App Router does this automatically. For manual splits: `const Heavy = dynamic(() => import('./Heavy'), { loading: () => <Skeleton /> })`
+- **Parallel data fetching** — use `Promise.all()` or parallel Server Component children, never sequential awaits in a single component
+
+### Rendering
 - No unnecessary re-renders (measure before adding React.memo)
-- Lists virtualized if >50 items
-- Code-split by route (dynamic imports)
-- Images: WebP/AVIF, srcset, loading="lazy"
+- Lists virtualized if >50 items (use `@tanstack/react-virtual`)
+- Inline objects/functions in JSX cause re-renders — extract to `useMemo`/`useCallback` only when measured
+
+### Assets
+- Images: WebP/AVIF, srcset, loading="lazy", explicit width/height
 - Fonts: display:swap, preloaded, subset
-- Animations: transform/opacity only
+- Animations: transform/opacity only (GPU-composited)
 - Respect `prefers-reduced-motion`
 
 ## Backend Checks

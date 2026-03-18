@@ -346,6 +346,35 @@ rm -rf "$TEST_TMPDIR2" "$SESSION_STORAGE2" 2>/dev/null
 echo ""
 
 # ────────────────────────────────────────────
+# TEST: scan-security-patterns.sh
+# ────────────────────────────────────────────
+echo "🧪 scan-security-patterns.sh"
+
+# Should block hardcoded API key
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"src/api.ts","content":"const key = \"sk-abc123456789012345678901234567890\""}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "blocks hardcoded API key (exit 2)" 2 "$LAST_EXIT"
+assert_output_contains "explains API key risk" "SAFE ALTERNATIVE" "$OUTPUT"
+
+# Should block eval()
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Edit","tool_input":{"file_path":"src/util.ts","new_string":"eval(userInput)"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "blocks eval() (exit 2)" 2 "$LAST_EXIT"
+assert_output_contains "explains eval risk" "Remote Code Execution" "$OUTPUT"
+
+# Should allow safe code
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"src/app.ts","content":"const name = process.env.API_KEY"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "allows safe env var reference (exit 0)" 0 "$LAST_EXIT"
+
+# Should skip non-code files
+LAST_EXIT=0
+OUTPUT=$(echo '{"tool_name":"Write","tool_input":{"file_path":"README.md","content":"sk-abc123456789012345678901234567890"}}' | bash "$SCRIPTS/scan-security-patterns.sh" 2>&1) || LAST_EXIT=$?
+assert_exit "skips non-code files (exit 0)" 0 "$LAST_EXIT"
+
+echo ""
+
+# ────────────────────────────────────────────
 # TEST: All scripts are executable
 # ────────────────────────────────────────────
 echo "🧪 File permissions"
@@ -370,7 +399,7 @@ for script in "$SCRIPTS"/*.sh; do
   BASENAME=$(basename "$script")
   # Skip scripts that don't use jq or intentionally degrade silently (exit 0)
   case "$BASENAME" in
-    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh|health-check.sh) continue ;;
+    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh|health-check.sh|scan-security-patterns.sh) continue ;;
   esac
   TOTAL=$((TOTAL + 1))
   if grep -q "jq not installed" "$script"; then
