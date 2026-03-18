@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.8
+# ⚔️ APEX Framework v5.9
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.8             ║
+  ║          ⚔️  APEX Framework v5.9             ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -192,8 +192,8 @@ When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to
 APEX tests itself with two test suites:
 
 ```bash
-./tests/test-hooks.sh      # 105 tests — validates every hook script
-./tests/test-framework.sh  # 278 tests — validates the entire framework structure
+./tests/test-hooks.sh      # 115 tests — validates every hook script
+./tests/test-framework.sh  # 288 tests — validates the entire framework structure
 ```
 
 ---
@@ -415,6 +415,32 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 - Hook test suite: 99 → 105 tests (added session-learner and extract-session coverage)
 - Framework test suite: 278 tests (fixed exit code bug)
 - Total: 387 tests across 2 suites
+
+### v5.9.0 (2026-03-18) — UX Writing, Statusline PR Link, Extended Patterns
+
+**New:**
+- Statusline: clickable PR link with merge status icons, 60s per-branch cache, universal terminal support
+- Statusline: agent tracking shows types — `🤖 3 (Explore, Plan, reviewer) 45.2K`
+- UX Writing guidelines — button labels, error messages, empty states, tone of voice
+- SEO, forms, state management, animation, and observability patterns
+- Interaction patterns, page templates, dark mode guide
+- CX review dimensions 6-10: resilience, destructive actions, first-time experience, mobile, content quality
+- Self-learning loop: session-learner captures errors/corrections, surfaces on startup, feeds `/evolve`
+- Deterministic security: blocks hardcoded keys, eval(), SQL injection
+- `/claude-api` skill for Claude API and Anthropic SDK integration
+- Bootstrap flow: auto-detect missing `.claude/` and guide through `/init`
+
+**Self-Improvement (via `/evolve`):**
+- Block `git commit` on main/master — catches mistakes at commit time
+- Branch pre-flight in `/commit` skill — verifies branch before staging
+- Push-to-main error includes recovery recipe
+- Stop-gate exempts shell scripts and config files
+- Session-context warns about uncommitted changes on main
+
+**Testing:**
+- Hook test suite: 115 tests
+- Framework test suite: 288 tests
+- Total: 403 tests across 2 suites
 
 ### v5.7.0 (2026-03-17) — Auto-Update & Self-Evolution
 
