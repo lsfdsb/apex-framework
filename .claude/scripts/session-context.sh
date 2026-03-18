@@ -63,6 +63,9 @@ GROGU_QUOTE="${GROGU_QUOTES[$GROGU_IDX]}"
 # ══════════════════════════════════════════════════
 if [ "$SOURCE" = "startup" ]; then
 
+  # ── Reset agent counter for new session ──
+  rm -f /tmp/apex-agents.json /tmp/apex-agent-*.done 2>/dev/null
+
   # ── Animated banner (stderr → terminal) ──
   # Detect if stderr is a terminal for animations
   # Override with APEX_ANIMATE=1 for testing
