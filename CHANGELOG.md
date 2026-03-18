@@ -11,11 +11,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Split pane prerequisites documented in CLAUDE.md
 - **Always-On Agents** — Watcher and Technical Writer now mandatory in every coding session
 - Technical Writer added to all team presets (build, fix, review), not just full
+- **Sentinel Phase 8: Observatory Health Check** — Runtime validation of built APEX apps
+- **Self-Test Dual Mode** — Quick mode (`/self-test`, `/batman`): 7-phase structural audit; Full mode (`/self-test full`, `/batman full`): 10-phase integration proof with full agent team
 
 ### Changed
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
 - Output style enforces always-on agent rule — blocks commits/PRs without Technical Writer
 - CLAUDE.md: "Always-On Agents" section added above team spawn rules
+- Sentinel agent: maxTurns increased from 50 to 60, report format updated for Phase 8
+- Self-Test skill: complete rewrite with quick mode (structural) and full mode (integration proof)
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
