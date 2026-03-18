@@ -397,7 +397,8 @@ assert_file_contains "$SKILLS/teams/SKILL.md" "Breathing Loop" "teams skill has 
 assert_file_contains "$SKILLS/teams/SKILL.md" "fix" "teams skill has fix preset"
 
 # Autonomous spawn rules in CLAUDE.md
-assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "Autonomous Spawn Rules" "CLAUDE.md has auto-spawn rules"
+assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "Always-On Agents" "CLAUDE.md has always-on agent rules"
+assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "Autonomous Team Spawn Rules" "CLAUDE.md has auto-spawn rules"
 
 # ══════════════════════════════════════════════════
 # 10. RULES

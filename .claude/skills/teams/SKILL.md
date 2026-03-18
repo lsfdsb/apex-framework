@@ -32,7 +32,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **QA** | qa | sonnet | worktree | Runs full quality gate, blocks bad code |
 | **Code Reviewer** | code-reviewer | sonnet | worktree | Deep code review for quality and security |
 | **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
-| **Technical Writer** | technical-writer | haiku | default | Keeps CHANGELOG, README, docs in sync |
+| **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
 | **Researcher** | researcher | haiku | background | API/docs investigation |
 | **Sentinel** | sentinel | sonnet | worktree | The Dark Knight — /self-test, /batman |
 
@@ -43,18 +43,21 @@ Best for: New features, refactoring, migrations
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, worktree) — Implements the feature
 - **QA** (sonnet, worktree) — Tests when Builder finishes
+- **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
 ### `fix` — Bug Fix Team
 Best for: Bug reports, error resolution, production issues
 - **Watcher** (haiku, background) — Reproduces and monitors the issue
 - **Debugger** (sonnet, worktree) — Root cause analysis and fix
 - **QA** (sonnet, worktree) — Verifies the fix is definitive
+- **Technical Writer** (haiku, background) — Documents the fix
 
 ### `review` — Review Team
 Best for: PR review, pre-merge checks, code audit
 - **Code Reviewer** (sonnet, worktree) — Deep code review
 - **Design Reviewer** (sonnet) — UI/UX review (if frontend changes)
 - **QA** (sonnet, worktree) — Runs tests in parallel
+- **Technical Writer** (haiku, background) — Verifies docs are current
 
 ### `full` — Championship Team
 Best for: Major features, end-to-end delivery, critical paths
