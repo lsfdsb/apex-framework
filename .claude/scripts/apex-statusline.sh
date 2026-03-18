@@ -203,11 +203,12 @@ if command -v gh &>/dev/null; then
         CLOSED) PR_ICON="🔴" ;;
         *)      PR_ICON="PR" ;;
       esac
-      # OSC 8 clickable link (iTerm2, Kitty, WezTerm) with plain text fallback
+      # OSC 8 clickable link for supported terminals, raw URL for others
+      # Terminal.app, GNOME Terminal, etc. auto-detect raw URLs as Cmd/Ctrl+clickable
       if [[ "${TERM_PROGRAM:-}" =~ ^(iTerm|iTerm2|WezTerm)$ ]] || [[ "${TERM:-}" =~ ^(xterm-kitty) ]]; then
         PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
       else
-        PR_STR=" ┃ ${PR_ICON} #${PR_NUM}"
+        PR_STR=" ┃ ${PR_ICON} #${PR_NUM} ${PR_URL}"
       fi
     fi
   fi
