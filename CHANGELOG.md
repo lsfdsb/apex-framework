@@ -6,6 +6,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **CRM Patterns Expansion** — CRM page scaled from 5 to 15 components: deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring with SVG progress rings, data table with search/filters/pagination, filter bar with active tags, task/follow-up list with due dates, 2 empty state variants, email composer, notes panel
+- **Design DNA Wired into Build Pipeline** — CLAUDE.md rule #16 enforces DNA page lookup; design-system SKILL.md routing table for all 14 pages + 2 JS modules; builder.md agent with mandatory DNA checks; design-reviewer.md agent with DNA compliance gate (BLOCK on violations); components.md and reference.md updated
 - **Design DNA Pattern Library** — 15-page premium UI showcase at `docs/design-dna/`
   - Hub (animated SVG background, constellation nodes, floating orbs)
   - Design System (tokens, typography, spacing scale, 8 motion demos, component states, radii, shadows)
@@ -33,6 +35,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `tests/test-all.sh` — Aggregator runs all 5 test suites
 - `tests/lib/helpers.sh` — Shared test utilities with categorized assertions
 - `tests/fixtures/` — 18 Claude Code hook JSON payloads matching official schema
+- expand CRM — 10 new patterns, wire DNA into pipeline (bdb1a85)
 
 ### Changed
 - `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
