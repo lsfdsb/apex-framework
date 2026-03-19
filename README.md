@@ -187,18 +187,18 @@ Layer 3: Hook scripts (runtime enforcement)
 The bar at the bottom of your terminal shows real-time session data:
 
 ```
-⚔️ APEX ┃ opus MAX ┃ 🟢 ████▓▒░░░░ 42% 420K/1.0M ┃ ↑200K ↓50K ┃ 🤖 3 agents 12.5K ┃ +150/-20 (+130 net) ┃ 15m ┃ This is the way.
+⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
 ```
 
 | Segment | What it means |
 |---------|--------------|
-| `opus MAX` | Which AI model is active + your plan tier |
-| `🟢 ████▓▒░░░░ 42%` | How full the context window is (green = plenty of room) |
-| `420K/1.0M` | Tokens used / total available |
-| `🤖 3 agents` | How many sub-agents were spawned this session |
-| `+150/-20` | Lines of code added / removed |
+| `opus MAX` | Which AI model is active + your plan tier (MAX shown only after first API call) |
+| `🟢 ████░░░░░░ 42%` | How full the context window is (🟢 green / 🟡 yellow >60% / 🔴 red >80%) |
+| `420.0K/1.0M` | Tokens used / total available |
+| `+150/-20 (+130)` | Lines of code added / removed (hidden until first change) |
+| `15m` | Session duration |
 
-When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space.
+When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space. At cold start (before first API call), context shows `🟢 ready` instead of zeros.
 
 ---
 
@@ -385,17 +385,15 @@ The `session-learner.sh` hook runs automatically at session end, logging errors,
 The statusline at the bottom shows real-time session data:
 
 ```
-APEX | opus MAX | 🟢 ████▓▒░░░░ 42% 420K/1.0M | ↑200K ↓50K | 🤖 3 agents 12.5K | +150/-20 (+130 net) | 15m | This is the way.
+⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
 ```
 
 | Segment | Meaning |
 |---------|---------|
 | `opus MAX` | Current model + plan |
-| `🟢 ████▓▒░░░░ 42%` | Context window health (green/yellow/red) |
-| `420K/1.0M` | Tokens used / total window |
-| `↑200K ↓50K` | Input / output tokens |
-| `🤖 3 agents 12.5K` | Agents spawned + their total tokens |
-| `+150/-20 (+130 net)` | Lines added / removed |
+| `🟢 ████░░░░░░ 42%` | Context window health (green/yellow/red) |
+| `420.0K/1.0M` | Tokens used / total window |
+| `+150/-20 (+130)` | Lines added / removed (net change) |
 | `15m` | Session duration |
 
 When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
