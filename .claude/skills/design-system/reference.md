@@ -260,3 +260,147 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
     transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
 }
 ```
+
+---
+
+## DNA → React Translation Guide
+
+The Design DNA templates are HTML/CSS references. When building React components, follow this translation process **exactly**.
+
+### Step 1: Extract the Anatomy
+
+Read the DNA HTML and identify:
+- **Layout structure** — grid columns, flex rows, widths in px or fractions
+- **Spacing** — padding, gaps, margins (convert px to Tailwind: 4px=1, 8px=2, 12px=3, 16px=4, 20px=5, 24px=6)
+- **Typography** — font-size, font-weight, letter-spacing, line-height, text-transform
+- **Colors** — which CSS variable is used (`var(--accent)`, `var(--text-muted)`, etc.)
+- **Border radius** — `var(--radius)` = 12px, `var(--radius-sm)` = 8px, 999px = full
+- **Transitions** — timing function, duration, which properties animate
+
+### Step 2: Map CSS Variables to Tailwind Tokens
+
+| DNA CSS Variable | Tailwind Token | Usage |
+|---|---|---|
+| `var(--bg)` | `bg-background` | Page background |
+| `var(--bg-elevated)` | `bg-elevated` or `bg-card` | Card/panel backgrounds |
+| `var(--bg-surface)` | `bg-surface` or `bg-muted` | Secondary surfaces |
+| `var(--border)` | `border-border` | Default borders |
+| `var(--border-hover)` | `border-border-hover` or `hover:border-muted-foreground/30` | Hover state borders |
+| `var(--text)` | `text-foreground` | Primary text |
+| `var(--text-secondary)` | `text-muted-foreground` | Secondary text |
+| `var(--text-muted)` | `text-muted-foreground` with lower opacity | Tertiary text |
+| `var(--accent)` | `text-primary` / `bg-primary` | Accent color |
+| `var(--accent-glow)` | `bg-primary/10` or `hsl(var(--accent-glow))` | Subtle accent bg |
+| `var(--success)` | `text-success` / `bg-success` | Success green |
+| `var(--warning)` | `text-warning` / `bg-warning` | Warning yellow |
+| `var(--destructive)` | `text-destructive` / `bg-destructive` | Error red |
+
+### Step 3: Convert a DNA Section to React
+
+**Example: DNA filter bar → React component**
+
+DNA HTML:
+```html
+<div class="filter-bar">
+  <div class="filter-group">
+    <span class="filter-group-label">Status</span>
+    <select class="filter-select">...</select>
+  </div>
+  <div class="filter-divider"></div>
+  <div class="active-filters">
+    <span class="active-filter">Hot leads <button>&times;</button></span>
+  </div>
+</div>
+```
+
+React translation:
+```tsx
+<div className="bg-elevated border border-border rounded-xl p-4 flex flex-wrap items-center gap-3">
+  <div className="flex items-center gap-2">
+    <span className="text-[10px] uppercase tracking-[0.06em] text-muted-foreground font-medium">
+      Status
+    </span>
+    <select className="h-7 px-2 rounded-lg bg-background border border-border text-[11px] text-foreground">
+      ...
+    </select>
+  </div>
+  <div className="w-px h-5 bg-border" /> {/* divider */}
+  <div className="flex gap-1">
+    <span className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">
+      Hot leads
+      <button onClick={onRemove} className="hover:text-foreground">&times;</button>
+    </span>
+  </div>
+</div>
+```
+
+### Step 4: Preserve Visual Proportions
+
+These measurements from the DNA MUST be preserved — they are intentional design decisions:
+
+| Element | DNA Value | Tailwind |
+|---|---|---|
+| Section label | `11px uppercase tracking 0.06em` | `text-[11px] uppercase tracking-[0.06em]` |
+| KPI value | `24px weight 700 tracking -0.03em` | `text-2xl font-bold tracking-[-0.03em]` |
+| Card padding | `16px` | `p-4` |
+| Card border radius | `var(--radius-sm)` = 8px | `rounded-lg` |
+| Table cell padding | `12px horizontal, 14px vertical` | `px-3 py-3.5` |
+| Avatar size | `28-32px` | `w-7 h-7` to `w-8 h-8` |
+| Badge | `11px, 2px 8px padding, 999px radius` | `text-[11px] px-2 py-0.5 rounded-full` |
+| Transition | `0.3s cubic-bezier(0.22,1,0.36,1)` | `transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]` |
+
+### Step 5: Page-Level Animation
+
+Every page MUST have these APEX DNA classes:
+
+```tsx
+// Root wrapper
+<div className="apex-enter">
+  {/* Page header */}
+  <div className="mb-6">
+    <p className="apex-label">Page Title</p>
+    <h1 className="font-serif italic text-3xl tracking-[-0.02em] mb-1">
+      Heading here
+    </h1>
+    <p className="text-[15px] text-muted-foreground font-light">
+      Description text
+    </p>
+  </div>
+
+  {/* Content with stagger */}
+  <div className="apex-enter stagger-1">
+    ...content...
+  </div>
+</div>
+```
+
+Add these to `globals.css` or `main.css` if not present:
+```css
+@keyframes apex-enter {
+  from { opacity: 0; transform: translateY(32px) scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+}
+.apex-enter { animation: apex-enter 900ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+.apex-label { @apply text-xs uppercase font-medium mb-3 text-primary; letter-spacing: 0.1em; }
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+```
+
+### Step 6: Verification Checklist
+
+Before marking any UI task complete, open the DNA page and the built component **side by side** and check:
+
+```
+[ ] Font sizes match (±1px)
+[ ] Spacing/padding match (±2px)
+[ ] Border radius matches
+[ ] Colors use correct tokens (no hardcoded hex)
+[ ] Hover states present and match DNA transition timing
+[ ] Active/selected states match DNA pattern
+[ ] Typography hierarchy preserved (label → value → description)
+[ ] Animations present (apex-enter on page load, hover transitions on cards)
+[ ] Dark AND light mode work correctly
+```
+
+If any item fails, fix it before reporting done. The DNA is the source of truth.

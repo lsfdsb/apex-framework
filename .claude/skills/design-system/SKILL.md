@@ -234,7 +234,9 @@ These modules are **production-ready code** that can be directly adapted into an
 ### How to Use Design DNA
 
 1. **Read the matching page** before writing any component
-2. **Match the quality level** — the DNA pages represent our minimum visual bar
-3. **Adapt, don't copy** — extract the patterns, layout structure, and visual language; adapt to the project's stack (React, Vue, etc.)
-4. **Use the SVG backgrounds** — for any page that needs visual texture, reference `patterns.html` and `svg-backgrounds.js`
-5. **Check all 5 palettes** — your implementation should work with any palette from `design-system.html`
+2. **Follow the Translation Guide** in `$SKILL_DIR/reference.md` — it has exact CSS→Tailwind token mappings, a worked React example, proportion rules, and a 9-point verification checklist
+3. **Match, don't interpret** — the DNA is the spec. Font sizes within ±1px, padding within ±2px, same border radius, same transition curves. Open the DNA page side-by-side with your component
+4. **Add page animations** — every page root gets `apex-enter`, content sections get `stagger-1/2/3`, cards get `hover:-translate-y-px transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]`
+5. **Use the SVG backgrounds** — for any page that needs visual texture, reference `patterns.html` and `svg-backgrounds.js`
+6. **Check all 5 palettes** — your implementation should work with any palette from `design-system.html`
+7. **Verify before done** — run the 9-point side-by-side checklist from the Translation Guide. If any item fails, fix it before reporting done

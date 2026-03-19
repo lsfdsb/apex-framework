@@ -71,7 +71,15 @@ Follow these APEX conventions strictly:
 | SVG backgrounds | `docs/design-dna/patterns.html` + `docs/design-dna/svg-backgrounds.js` |
 | Color/typography | `docs/design-dna/design-system.html` |
 
-The Design DNA pages are our **visual quality bar**. Match or exceed them. Adapt patterns to the project's stack — don't copy HTML, extract the design language.
+The Design DNA pages are our **visual quality bar**. Follow the **DNA → React Translation Guide** in `reference.md` to convert patterns correctly:
+
+1. **Extract the anatomy** — layout, spacing (px → Tailwind), typography, colors, radius, transitions
+2. **Map CSS variables** — `var(--accent)` → `text-primary`, `var(--bg-elevated)` → `bg-elevated` (see token mapping table)
+3. **Preserve proportions** — font sizes ±1px, padding ±2px, same radius, same transition timing
+4. **Add page animations** — every page root gets `apex-enter`, sections get `stagger-1/2/3`
+5. **Verify side-by-side** — open the DNA page and your component, check the 9-point checklist before marking done
+
+Do NOT "interpret" or "be inspired by" the DNA. **Match it.** The DNA is the spec.
 
 ### Token Enforcement
 - **NEVER** hardcode Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`)
