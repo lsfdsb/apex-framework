@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute("data-theme",localStorage.getItem("apex-theme")||"dark")</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX DNA — Email Templates</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080a;--bg-elevated:#111114;--bg-surface:#19191d;--border:#222228;--border-hover:#33333a;--text:#ececf0;--text-secondary:#8a8a96;--text-muted:#55555e;--accent:#636bf0;--accent-hover:#5158d4;--accent-glow:rgba(99,107,240,0.12);--success:#34d399;--warning:#fbbf24;--destructive:#f87171;--radius:16px;--radius-sm:8px;--font-body:'Inter',-apple-system,sans-serif;--font-display:'Instrument Serif',Georgia,serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+body,section,.email-frame,.email,footer{transition:background-color 0.4s,color 0.4s,border-color 0.4s}
+.reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all 0.9s cubic-bezier(0.22,1,0.36,1)}.reveal.visible{opacity:1;transform:none;filter:none}
+.reveal-delay-1{transition-delay:0.1s}.reveal-delay-2{transition-delay:0.2s}.reveal-delay-3{transition-delay:0.3s}
+section{padding:100px 32px}.inner{max-width:1200px;margin:0 auto}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:500;margin-bottom:16px}
+.section-header{text-align:center;margin-bottom:64px}
+.section-header h2{font-family:var(--font-display);font-size:clamp(40px,5vw,64px);font-weight:400;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.section-header p{font-size:17px;color:var(--text-secondary);font-weight:300}
+
+/* Email preview frame */
+.email-frame{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;max-width:640px;margin:0 auto 48px}
+.email-frame-bar{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;position:relative}
+.email-frame-bar .dot{width:10px;height:10px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.email-frame-title{position:absolute;left:50%;transform:translateX(-50%);font-size:11px;color:var(--text-muted)}
+.email-meta{padding:16px 24px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text-muted)}
+.email-meta strong{color:var(--text-secondary);font-weight:500}
+.email-meta div{margin-bottom:4px}
+
+/* Email body — simulates email client rendering */
+.email{background:var(--bg);padding:0}
+.email-inner{max-width:560px;margin:0 auto;padding:40px 32px}
+
+/* Shared email components */
+.email-logo{font-weight:600;font-size:16px;letter-spacing:-0.02em;margin-bottom:32px}
+.email-logo span{color:var(--accent)}
+.email-h1{font-size:24px;font-weight:600;letter-spacing:-0.02em;margin-bottom:12px;line-height:1.3}
+.email-h2{font-size:18px;font-weight:600;letter-spacing:-0.01em;margin-bottom:8px;line-height:1.3}
+.email-p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
+.email-btn{display:inline-block;padding:12px 28px;background:var(--accent);color:white;border-radius:var(--radius-sm);font-size:14px;font-weight:500;text-decoration:none;margin:8px 0 16px;transition:opacity 0.2s}
+.email-btn:hover{opacity:0.9}
+.email-btn-ghost{background:none;border:1px solid var(--border);color:var(--text)}
+.email-divider{height:1px;background:var(--border);margin:24px 0}
+.email-footer{font-size:12px;color:var(--text-muted);line-height:1.6;margin-top:32px;padding-top:24px;border-top:1px solid var(--border)}
+.email-footer a{color:var(--text-muted);text-decoration:underline}
+.email-small{font-size:12px;color:var(--text-muted)}
+
+/* Code/token display */
+.email-code{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:32px;font-weight:700;letter-spacing:0.15em;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px 32px;margin:16px 0}
+
+/* Order items */
+.order-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:center}
+.order-item:last-child{border:none}
+.order-thumb{width:56px;height:56px;background:var(--bg-surface);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--text-muted)}
+.order-info{flex:1}
+.order-name{font-size:14px;font-weight:500}
+.order-variant{font-size:12px;color:var(--text-muted)}
+.order-price{font-size:14px;font-weight:600;font-variant-numeric:tabular-nums}
+.order-total{display:flex;justify-content:space-between;padding:16px 0;font-size:16px;font-weight:600;border-top:1px solid var(--border);margin-top:8px}
+
+/* Notification badges */
+.notif-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px;display:flex;gap:12px;align-items:center}
+.notif-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.notif-icon.green{background:rgba(52,211,153,0.1);color:var(--success)}
+.notif-icon.blue{background:rgba(99,107,240,0.1);color:var(--accent)}
+.notif-icon.yellow{background:rgba(251,191,36,0.1);color:var(--warning)}
+.notif-text{font-size:14px;color:var(--text-secondary);line-height:1.5}
+.notif-text strong{color:var(--text);font-weight:500}
+
+/* Progress steps */
+.ship-steps{display:flex;gap:0;margin:20px 0}
+.ship-step{flex:1;text-align:center;position:relative}
+.ship-step::before{content:'';position:absolute;top:14px;left:0;right:0;height:2px;background:var(--border)}
+.ship-step:first-child::before{left:50%}.ship-step:last-child::before{right:50%}
+.ship-step.done::before{background:var(--success)}
+.ship-dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--text-muted);margin:0 auto 8px;position:relative;z-index:1}
+.ship-step.done .ship-dot{border-color:var(--success);background:var(--success);color:white}
+.ship-step.current .ship-dot{border-color:var(--accent);color:var(--accent)}
+.ship-label{font-size:11px;color:var(--text-muted)}
+
+/* Grid for showing multiple emails */
+.email-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+
+@media(max-width:768px){.email-grid{grid-template-columns:1fr}.email-inner{padding:24px 20px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}.reveal{opacity:1;transform:none;filter:none}}
+</style>
+</head>
+<body>
+
+<section style="padding-top:140px;text-align:center">
+  <div class="inner">
+    <div class="label reveal">Email Templates</div>
+    <h1 class="reveal reveal-delay-1" style="font-family:var(--font-display);font-size:clamp(48px,7vw,80px);font-weight:400;letter-spacing:-0.04em;line-height:1;">Emails people<br>actually <em style="font-style:italic;color:var(--accent)">open.</em></h1>
+    <p class="reveal reveal-delay-2" style="font-size:18px;color:var(--text-secondary);font-weight:300;max-width:480px;margin:20px auto 0;">Welcome, verification, receipts, shipping, alerts, password reset, invitations. 8 transactional templates.</p>
+  </div>
+</section>
+
+<!-- 1. WELCOME -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Welcome email.</h2><p>First impression in the inbox.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;hello@acme.com&gt;</div><div><strong>Subject:</strong> Welcome to Acme — let's get started</div></div>
+      <div class="email"><div class="email-inner">
+        <div class="email-logo">acme<span>.</span></div>
+        <div class="email-h1">Welcome aboard, Ana.</div>
+        <div class="email-p">You just joined 12,000+ teams who ship better products with less effort. Here's how to make the most of your first week:</div>
+        <div class="notif-card"><div class="notif-icon blue"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div><div class="notif-text"><strong>Set up your workspace</strong><br>Create your first project and invite your team.</div></div>
+        <div class="notif-card"><div class="notif-icon green"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="notif-text"><strong>Connect your tools</strong><br>Integrate with GitHub, Slack, and Figma in one click.</div></div>
+        <div class="notif-card"><div class="notif-icon yellow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="notif-text"><strong>Book a walkthrough</strong><br>15 minutes with our team. We'll show you the shortcuts.</div></div>
+        <a href="#" class="email-btn">Go to your dashboard</a>
+        <div class="email-footer">You're receiving this because you signed up at acme.com.<br><a href="#">Unsubscribe</a> · <a href="#">Email preferences</a><br><br>© 2026 Acme Inc. · São Paulo, Brazil</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. VERIFICATION CODE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Verification code.</h2><p>Clear, scannable, one action.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;security@acme.com&gt;</div><div><strong>Subject:</strong> Your verification code: 847291</div></div>
+      <div class="email"><div class="email-inner" style="text-align:center">
+        <div class="email-logo" style="text-align:center">acme<span>.</span></div>
+        <div class="email-h1">Verify your email.</div>
+        <div class="email-p" style="max-width:380px;margin:0 auto 8px">Enter this code to confirm your email address. It expires in 10 minutes.</div>
+        <div class="email-code">847291</div>
+        <div class="email-small">If you didn't request this, you can safely ignore this email.</div>
+        <div class="email-footer" style="text-align:center">© 2026 Acme Inc. · <a href="#">Help Center</a></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. ORDER CONFIRMATION -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Order receipt.</h2><p>Every detail, clearly structured.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme Store &lt;orders@acme.com&gt;</div><div><strong>Subject:</strong> Order confirmed — #ORD-2026-1847</div></div>
+      <div class="email"><div class="email-inner">
+        <div class="email-logo">acme<span>.</span></div>
+        <div class="email-h1">Order confirmed.</div>
+        <div class="email-p">Thanks for your purchase, Ana. Here's what you ordered:</div>
+        <div class="order-item"><div class="order-thumb">IMG</div><div class="order-info"><div class="order-name">Midnight Ceramic Vase</div><div class="order-variant">Size M · Matte Black · Qty: 1</div></div><div class="order-price">$89.00</div></div>
+        <div class="order-item"><div class="order-thumb">IMG</div><div class="order-info"><div class="order-name">Linen Throw Blanket</div><div class="order-variant">Natural · King · Qty: 2</div></div><div class="order-price">$124.00</div></div>
+        <div class="email-divider"></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:6px"><span>Subtotal</span><span>$213.00</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-muted);margin-bottom:6px"><span>Shipping</span><span>Free</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--success);margin-bottom:6px"><span>Discount</span><span>-$21.30</span></div>
+        <div class="order-total"><span>Total</span><span>$191.70</span></div>
+        <a href="#" class="email-btn">Track your order</a>
+        <div class="email-small">Order #ORD-2026-1847 · Paid with Visa ····4242</div>
+        <div class="email-footer">Questions? Reply to this email or visit our <a href="#">Help Center</a>.<br><br>© 2026 Acme Store · São Paulo, Brazil</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. SHIPPING UPDATE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Shipping update.</h2><p>Progress visualization. Where is my package?</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme Store &lt;shipping@acme.com&gt;</div><div><strong>Subject:</strong> Your order is on the way!</div></div>
+      <div class="email"><div class="email-inner">
+        <div class="email-logo">acme<span>.</span></div>
+        <div class="email-h1">Your order shipped.</div>
+        <div class="email-p">Estimated delivery: <strong style="color:var(--text)">March 22, 2026</strong></div>
+        <div class="ship-steps">
+          <div class="ship-step done"><div class="ship-dot">✓</div><div class="ship-label">Ordered</div></div>
+          <div class="ship-step done"><div class="ship-dot">✓</div><div class="ship-label">Packed</div></div>
+          <div class="ship-step current"><div class="ship-dot">3</div><div class="ship-label">Shipped</div></div>
+          <div class="ship-step"><div class="ship-dot">4</div><div class="ship-label">Delivered</div></div>
+        </div>
+        <div class="email-divider"></div>
+        <div class="email-small" style="margin-bottom:8px">Tracking: <span style="font-family:monospace">BR1234567890</span></div>
+        <a href="#" class="email-btn">Track package</a>
+        <div class="email-footer">© 2026 Acme Store · <a href="#">Help Center</a> · <a href="#">Unsubscribe</a></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PASSWORD RESET -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Password reset.</h2><p>Urgent but calm. Clear action.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;security@acme.com&gt;</div><div><strong>Subject:</strong> Reset your password</div></div>
+      <div class="email"><div class="email-inner" style="text-align:center">
+        <div class="email-logo" style="text-align:center">acme<span>.</span></div>
+        <div style="width:48px;height:48px;border-radius:12px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 16px"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+        <div class="email-h1">Reset your password.</div>
+        <div class="email-p" style="max-width:380px;margin:0 auto">Click the button below to set a new password. This link expires in 1 hour.</div>
+        <a href="#" class="email-btn">Reset password</a>
+        <div class="email-small">If you didn't request this, your account is safe. No action needed.</div>
+        <div class="email-footer" style="text-align:center">© 2026 Acme Inc. · <a href="#">Help Center</a></div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. TEAM INVITATION -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Team invitation.</h2><p>Personal touch. Who invited, why it matters.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;team@acme.com&gt;</div><div><strong>Subject:</strong> Ana invited you to join Acme on Acme</div></div>
+      <div class="email"><div class="email-inner" style="text-align:center">
+        <div class="email-logo" style="text-align:center">acme<span>.</span></div>
+        <div style="width:48px;height:48px;border-radius:50%;background:var(--accent-glow);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:16px;font-weight:600;color:var(--accent)">AS</div>
+        <div class="email-h1">You're invited.</div>
+        <div class="email-p" style="max-width:400px;margin:0 auto"><strong style="color:var(--text)">Ana Souza</strong> invited you to join the <strong style="color:var(--text)">Acme</strong> team. Accept to start collaborating.</div>
+        <a href="#" class="email-btn">Accept invitation</a>
+        <a href="#" class="email-btn email-btn-ghost" style="margin-left:8px">Decline</a>
+        <div class="email-footer" style="text-align:center">This invitation expires in 7 days.<br><br>© 2026 Acme Inc.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. PAYMENT FAILED -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Payment failed.</h2><p>Urgent without panic. Clear next step.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;billing@acme.com&gt;</div><div><strong>Subject:</strong> Action needed: payment failed for your Pro plan</div></div>
+      <div class="email"><div class="email-inner">
+        <div class="email-logo">acme<span>.</span></div>
+        <div style="background:rgba(248,113,113,0.06);border:1px solid rgba(248,113,113,0.15);border-radius:var(--radius-sm);padding:16px;margin-bottom:20px;display:flex;gap:12px;align-items:center">
+          <div style="width:32px;height:32px;border-radius:8px;background:rgba(248,113,113,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--destructive)" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div style="font-size:14px;color:var(--text-secondary)">Your payment of <strong style="color:var(--text)">$29.00</strong> for the Pro plan failed. We'll retry in 3 days.</div>
+        </div>
+        <div class="email-p">This usually happens when a card expires or has insufficient funds. Update your payment method to keep your account active.</div>
+        <a href="#" class="email-btn">Update payment method</a>
+        <div class="email-small">Your account will remain active for 7 days. After that, you'll be downgraded to the free plan.</div>
+        <div class="email-footer">Need help? Reply to this email or visit <a href="#">billing settings</a>.<br><br>© 2026 Acme Inc.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. WEEKLY DIGEST -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Weekly digest.</h2><p>Summary that respects time. Scannable, actionable.</p></div>
+    <div class="email-frame reveal reveal-delay-1">
+      <div class="email-frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="email-frame-title">Inbox</span></div>
+      <div class="email-meta"><div><strong>From:</strong> Acme &lt;digest@acme.com&gt;</div><div><strong>Subject:</strong> Your week at Acme — Mar 13-19, 2026</div></div>
+      <div class="email"><div class="email-inner">
+        <div class="email-logo">acme<span>.</span></div>
+        <div class="email-h1">Your week in review.</div>
+        <div class="email-p">Here's what happened on your team this week:</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px">
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;font-weight:700;letter-spacing:-0.03em">14</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:4px">Tasks done</div></div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;font-weight:700;letter-spacing:-0.03em;color:var(--success)">+23%</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:4px">Velocity</div></div>
+          <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:16px;text-align:center"><div style="font-size:28px;font-weight:700;letter-spacing:-0.03em">3</div><div style="font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-top:4px">PRs merged</div></div>
+        </div>
+        <div class="email-h2">Highlights</div>
+        <div class="notif-card"><div class="notif-icon green"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><div class="notif-text"><strong>Dashboard v2 shipped</strong> — Marcus deployed the new analytics dashboard to production.</div></div>
+        <div class="notif-card"><div class="notif-icon blue"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="notif-text"><strong>2 new team members</strong> — Julia and David joined the engineering team.</div></div>
+        <div class="notif-card"><div class="notif-icon yellow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="notif-text"><strong>3 tasks overdue</strong> — Review the backlog and reassign if needed.</div></div>
+        <a href="#" class="email-btn">View full report</a>
+        <div class="email-footer">Sent every Monday at 9:00 AM. <a href="#">Manage digest settings</a>.<br><br>© 2026 Acme Inc.</div>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<script src="palette.js"></script>
+<script src="svg-backgrounds.js"></script>
+</body>
+</html>

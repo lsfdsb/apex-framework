@@ -6,7 +6,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
-- **Design DNA Pattern Library** — 14-page premium UI showcase at `docs/design-dna/`
+- **Design DNA Pattern Library** — 15-page premium UI showcase at `docs/design-dna/`
   - Hub (animated SVG background, constellation nodes, floating orbs)
   - Design System (tokens, typography, spacing scale, 8 motion demos, component states, radii, shadows)
   - Landing Page (hero, bento features, pricing, testimonials, CTA, footer)
@@ -19,6 +19,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
   - LMS (course catalog, video player, lesson list, SVG progress rings, certificates)
   - Presentation (10 slide types: title, stats, quote, roadmap, team, pricing, CTA)
   - E-Book (cover, TOC, reading pages with drop caps, sidenotes, chapter nav, progress bar)
+  - Email Templates (welcome, verification, receipt, shipping, password reset, invitation, payment failed, weekly digest)
   - Backoffice (user management, activity logs, invoices, permission matrix)
   - SVG Patterns (14 static patterns + 8 animated backgrounds)
 - **Global Palette Switcher** (`palette.js`) — 5 palettes (SaaS, Editorial, Fintech, Startup, Creative) × 2 modes (dark/light) = 10 themes. Persists across pages via localStorage
