@@ -1,0 +1,1 @@
+{"session_id": "test", "transcript_path": "/tmp/t", "cwd": "/tmp", "permission_mode": "default", "hook_event_name": "PreToolUse", "tool_name": "Bash", "tool_input": {"command": "npm install lodash", "description": "Install lodash"}, "tool_use_id": "toolu_4"}

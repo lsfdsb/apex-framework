@@ -26,11 +26,17 @@ This is NOT a passive file check. You **exercise** the framework like a real use
 
 **Phase 1 — Run Automated Test Suites:**
 ```bash
-bash tests/test-framework.sh 2>&1
-bash tests/test-hooks.sh 2>&1
-bash tests/test-integration.sh 2>&1
+# Preferred: run the aggregator that covers ALL suites
+bash tests/test-all.sh 2>&1
+
+# Individual suites (if test-all.sh not available):
+bash tests/test-framework.sh 2>&1     # Structural
+bash tests/test-hooks.sh 2>&1         # Hook behavior
+bash tests/test-agents.sh 2>&1        # Agent configuration
+bash tests/test-behavioral.sh 2>&1    # Hook behavioral (real Claude Code payloads)
+bash tests/test-observatory.sh 2>&1   # Observatory runtime (starts server, hits API)
 ```
-Parse outputs. Report pass/fail counts. These are the baseline — if these fail, stop and report immediately.
+Parse outputs. Report pass/fail counts per suite. These are the baseline — if these fail, stop and report immediately.
 
 **Phase 2 — Functional Agent Verification:**
 For each agent in `.claude/agents/`, actually parse and validate:
