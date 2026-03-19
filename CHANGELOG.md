@@ -6,6 +6,31 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **Design DNA Pattern Library** — 11-page premium UI showcase at `docs/design-dna/`
+  - Hub (animated SVG background, constellation nodes, floating orbs)
+  - Design System (tokens, typography, spacing scale, 8 motion demos, component states, radii, shadows)
+  - Landing Page (hero, bento features, pricing, testimonials, CTA, footer)
+  - CRM + Helpdesk (pipeline kanban, contact cards, activity timeline, live chat, ticket list)
+  - E-Commerce (product grid, detail view, cart, order summary, checkout steps)
+  - SaaS Dashboard (sidebar nav, stats with sparklines, charts, data table, settings, empty states)
+  - Blog + Editorial (featured article, article grid, reading experience, newsletter)
+  - Portfolio (project showcase, about split, services grid, contact form)
+  - Social Feed (3-column layout, posts, comments, trending, profile cards)
+  - LMS (course catalog, video player, lesson list, SVG progress rings, certificates)
+  - SVG Patterns (14 static patterns + 8 animated backgrounds)
+- **Global Palette Switcher** (`palette.js`) — 5 palettes (SaaS, Editorial, Fintech, Startup, Creative) × 2 modes (dark/light) = 10 themes. Persists across pages via localStorage
+- **SVG Background Library** (`svg-backgrounds.js`) — 14 static patterns (dots, grid, topo, circuit, hexagons, crosses, diamonds, diagonals, triangles, constellation, isometric, waves, dna, noise) + 8 animated backgrounds (orbs, aurora, particles, gradient, rings, matrix, nebula, spotlight)
+- **Background Widget** — Floating pattern/animation picker on every page
+- **Persistent Navigation** — Auto-injected nav + footer across all pages
+- **Visual defaults** — Anti-generic-AI patterns, 5 curated token sets, 8 CSS animation patterns in `reference.md`
+- **Visual Distinctiveness** dimension added to Design Reviewer agent (blocks generic AI look)
+- `tests/test-behavioral.sh` — 33 behavioral tests with real Claude Code JSON payloads
+- `tests/test-observatory.sh` — 20 runtime tests (starts server, hits API endpoints)
+- `tests/test-all.sh` — Aggregator runs all 5 test suites
+- `tests/lib/helpers.sh` — Shared test utilities with categorized assertions
+- `tests/fixtures/` — 18 Claude Code hook JSON payloads matching official schema
+
+### Changed
 - `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
 - `install.sh` now symlinks `bin/` tools to `~/.local/bin` and adds to PATH
 - Split pane prerequisites documented in CLAUDE.md

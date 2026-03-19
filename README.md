@@ -351,6 +351,16 @@ node dashboard/server.js
 
 Shows agents, skills, hooks, workflow chain, live test runner, cross-reference matrix, and agent activity — all in a Gotham-themed dark UI. Zero dependencies.
 
+### Design DNA
+
+Premium UI pattern library with 11 pages, 5 palettes, dark/light mode, and 22 background options:
+
+```bash
+node -e "require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)"
+```
+
+Open `http://localhost:3001` — pattern pages for Landing, CRM, E-Commerce, SaaS, Blog, Portfolio, Social, LMS, plus a Design System reference and SVG patterns library. Global palette switcher and background widget on every page.
+
 ### Step 6: Trust the Safety Net
 
 APEX has 3 layers of protection running automatically:
