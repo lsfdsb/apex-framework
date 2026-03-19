@@ -16,6 +16,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Batman builds apps — dual-mode self-test (7f5177e)
 - **APEX Observatory dashboard** — Real-time framework health monitoring (dashboard/server.js + dashboard/index.html)
 - **Observatory PRD and architecture docs** — Complete documentation (docs/prd/apex-observatory.md, docs/architecture/apex-observatory.md)
+- **Agent Activity section** — `/api/activity` endpoint and dashboard view showing teams, members, and task status
+- **framework-evolver** added to CLAUDE.md roster and teams skill
 
 ### Changed
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
@@ -25,7 +27,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Self-Test skill: complete rewrite with quick mode (structural) and full mode (integration proof)
 
 ### Fixed
-- ANSI escape code stripping in test runner API output — Observatory Phase 2 validation
+- ANSI escape code stripping in test runner API output
+- Hooks test parser — `Pass: N` format now correctly matched (was showing 0)
+- console.log replaced with process.stdout.write in server startup
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 

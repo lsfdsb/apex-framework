@@ -743,6 +743,19 @@
       </div>
     </section>
 
+    <!-- Agent Activity -->
+    <section class="section" id="activity-section" aria-labelledby="activity-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="activity-heading">
+          <span class="icon" aria-hidden="true">👥</span> Agent Activity
+        </h2>
+        <button class="btn" onclick="loadActivity()" aria-label="Refresh agent activity">Refresh</button>
+      </div>
+      <div id="activity-content">
+        <div class="loading"><span class="spinner" aria-hidden="true"></span> Loading activity…</div>
+      </div>
+    </section>
+
     <!-- Issues -->
     <section class="section" id="issues-section" style="display: none;" aria-labelledby="issues-heading">
       <div class="section-header">
@@ -1116,6 +1129,68 @@
     }
   }
 
+  // ── Agent Activity ──────────────────────────────────────────
+  async function loadActivity() {
+    try {
+      const response = await fetchJson("/api/activity");
+      const act = response.data;
+      const el = document.getElementById("activity-content");
+
+      const statusBadge = (s) => {
+        const colors = { completed: "green", in_progress: "blue", pending: "muted" };
+        return `<span class="badge badge-${colors[s] || "muted"}">${esc(s || "pending")}</span>`;
+      };
+
+      let html = "";
+
+      if (act.teams.length > 0) {
+        html += `<h3 style="color: var(--accent-gold); margin: 0 0 12px; font-size: 14px;">Teams</h3>`;
+        for (const team of act.teams) {
+          html += `<div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; margin-bottom: 12px;">`;
+          html += `<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">`;
+          html += `<strong style="color: var(--accent-gold)">${esc(team.name)}</strong>`;
+          html += `<span class="mono" style="font-size: 11px; color: var(--text-muted)">${team.createdAt ? new Date(team.createdAt).toLocaleString() : ""}</span>`;
+          html += `</div>`;
+          if (team.description) html += `<div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">${esc(team.description)}</div>`;
+          html += `<div style="display: flex; flex-wrap: wrap; gap: 6px;">`;
+          for (const m of team.members) {
+            const modelColor = m.model.includes("opus") ? "yellow" : m.model.includes("sonnet") ? "blue" : "green";
+            html += `<div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 10px; font-size: 12px;" title="${esc(m.prompt || "")}">`;
+            html += `<strong style="color: var(--text-primary)">${esc(m.name)}</strong> `;
+            html += `<span class="badge badge-${modelColor}" style="font-size: 10px">${esc(m.model)}</span> `;
+            html += m.active ? '<span class="badge badge-green" style="font-size: 10px">ACTIVE</span>' : '';
+            html += `</div>`;
+          }
+          html += `</div></div>`;
+        }
+      }
+
+      if (act.tasks.length > 0) {
+        html += `<h3 style="color: var(--accent-gold); margin: 16px 0 12px; font-size: 14px;">Tasks (${act.tasks.length})</h3>`;
+        html += `<div class="table-wrap"><table><caption class="sr-only">Agent task list</caption>`;
+        html += `<thead><tr><th scope="col">ID</th><th scope="col">Subject</th><th scope="col">Status</th><th scope="col">Owner</th></tr></thead><tbody>`;
+        for (const t of act.tasks) {
+          html += `<tr>`;
+          html += `<td class="mono" style="font-size: 11px">#${esc(t.id)}</td>`;
+          html += `<td style="max-width: 400px">${esc(t.subject)}</td>`;
+          html += `<td>${statusBadge(t.status)}</td>`;
+          html += `<td class="mono" style="font-size: 11px">${esc(t.owner || "—")}</td>`;
+          html += `</tr>`;
+        }
+        html += `</tbody></table></div>`;
+      }
+
+      if (act.teams.length === 0 && act.tasks.length === 0) {
+        html = `<div style="text-align: center; padding: 24px; color: var(--text-muted);">No active teams or tasks. Run <code style="color: var(--accent-gold)">/batman full</code> to see agents in action.</div>`;
+      }
+
+      el.innerHTML = html;
+    } catch (e) {
+      document.getElementById("activity-content").innerHTML =
+        `<span style="color: var(--red)">Failed to load activity: ${esc(e.message)}</span>`;
+    }
+  }
+
   // ── XSS escape ────────────────────────────────────────────
   function esc(str) {
     return String(str ?? "")
@@ -1127,6 +1202,7 @@
 
   // ── Init ──────────────────────────────────────────────────
   loadOverview();
+  loadActivity();
 </script>
 
 </body>
