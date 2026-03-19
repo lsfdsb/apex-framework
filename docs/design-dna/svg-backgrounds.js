@@ -113,15 +113,17 @@ const ANIMATED_BGS = {
   },
 
   rings: (el) => {
-    for (let i = 0; i < 4; i++) {
+    const vmax = Math.max(window.innerWidth, window.innerHeight);
+    for (let i = 0; i < 5; i++) {
       const ring = document.createElement('div');
       ring.className = 'apex-animated-bg-child';
       Object.assign(ring.style, {
         position:'absolute', borderRadius:'50%', pointerEvents:'none',
         border:'1px solid var(--accent)', opacity:'0',
-        width:'0', height:'0',
-        top:'50%', left:'50%', transform:'translate(-50%,-50%)',
-        animation:`apex-ring-expand 6s ease-out ${i*1.5}s infinite`,
+        width: vmax * 1.5 + 'px', height: vmax * 1.5 + 'px',
+        top:'50%', left:'50%',
+        transform:'translate(-50%,-50%) scale(0)',
+        animation:`apex-ring-expand 8s ease-out ${i*1.6}s infinite`,
       });
       el.appendChild(ring);
     }
@@ -202,7 +204,7 @@ animStyle.textContent = `
   @keyframes apex-aurora-2 { 0%,100%{transform:translateX(0) scaleY(1)} 50%{transform:translateX(6%) scaleY(1.2)} }
   @keyframes apex-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
   @keyframes apex-mesh-shift { 0%,100%{filter:hue-rotate(0deg)} 50%{filter:hue-rotate(30deg)} }
-  @keyframes apex-ring-expand { 0%{width:0;height:0;opacity:0.3} 100%{width:500px;height:500px;opacity:0} }
+  @keyframes apex-ring-expand { 0%{transform:translate(-50%,-50%) scale(0);opacity:0.35} 100%{transform:translate(-50%,-50%) scale(1);opacity:0} }
   @keyframes apex-rain { 0%{transform:translateY(-150px)} 100%{transform:translateY(110vh)} }
   @keyframes apex-spotlight { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5} 50%{transform:translate(-40%,-40%) scale(1.2);opacity:0.8} }
 `;
