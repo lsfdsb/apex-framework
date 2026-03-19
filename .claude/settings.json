@@ -148,12 +148,6 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/verify-install.sh",
             "timeout": 5,
             "statusMessage": "Verifying dependency..."
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/enforce-commit-msg.sh",
-            "timeout": 5,
-            "statusMessage": "Validating commit message..."
           }
         ]
       },
@@ -177,19 +171,6 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/scan-security-patterns.sh",
             "timeout": 5,
             "statusMessage": "Scanning for security patterns..."
-          }
-        ]
-      }
-    ],
-    "PermissionRequest": [
-      {
-        "matcher": "Bash|Read|Glob|Grep",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-approve-safe.sh",
-            "timeout": 5,
-            "statusMessage": "Checking permissions..."
           }
         ]
       }
@@ -224,28 +205,6 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/handle-failure.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "PreCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/pre-compact.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "PostCompact": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/post-compact.sh",
             "timeout": 5
           }
         ]
@@ -300,17 +259,6 @@
         ]
       }
     ],
-    "SubagentStop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/log-subagent.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "SessionEnd": [
       {
         "hooks": [
@@ -327,35 +275,12 @@
         ]
       }
     ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/notify.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
     "ConfigChange": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "echo '{\"systemMessage\":\"\u2694\ufe0f APEX: Settings changed. Hooks and permissions reloaded.\"}'",
-            "timeout": 2
-          }
-        ]
-      }
-    ],
-    "InstructionsLoaded": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"suppressOutput\":true}'",
+            "command": "echo '{\"systemMessage\":\"⚔️ APEX: Settings changed. Hooks and permissions reloaded.\"}'",
             "timeout": 2
           }
         ]

@@ -6,7 +6,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX: jq not installed — failure handler disabled. Install: https://jqlang.github.io/jq/download/" >&2
+  echo '{"systemMessage":"⚠️ APEX: jq not installed — error diagnosis DISABLED. Install: brew install jq"}'
   exit 0
 fi
 
