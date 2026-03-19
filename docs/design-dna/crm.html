@@ -54,7 +54,7 @@
 [data-theme="light"] .pipeline-stage:hover { background: #e8e5e0; }
 [data-theme="light"] .app-layout,
 [data-theme="light"] .workspace { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
-[data-theme="light"] .bubble-dock { box-shadow: 0 8px 32px rgba(0,0,0,0.1); background: #ffffff; }
+[data-theme="light"] .bubble-dock { background: #ffffff; }
 [data-theme="light"] .channel-switcher { background: #ffffff; }
 [data-theme="light"] .channel-sw-btn.active { background: var(--bg); }
 
@@ -580,36 +580,32 @@ tbody tr:last-child td { border-bottom: none; }
 /* ═══════════════════════════════════════
    AGENT WORKSPACE (Ive: conversation-first)
    ═══════════════════════════════════════ */
-.workspace { display: grid; grid-template-columns: 1fr 280px; height: 680px; overflow: hidden;
-  position: relative; }
+.workspace { display: grid; grid-template-columns: 1fr 280px; height: 680px; overflow: hidden; }
 
-/* Floating bubble dock — bottom-left, vertical stack */
-.bubble-dock { position: absolute; bottom: 80px; left: 16px; z-index: 10;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: 10px 8px; background: var(--bg-elevated); border: 1px solid var(--border);
-  border-radius: 28px; box-shadow: 0 8px 32px rgba(0,0,0,0.18);
-  backdrop-filter: blur(12px);
-  transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
-.bubble-dock:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.25); transform: translateY(-2px); }
-.bubble { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center;
+/* Horizontal bubble dock — sits in the reply bar */
+.bubble-dock { display: flex; align-items: center; gap: 8px; padding: 10px 20px;
+  border-top: 1px solid var(--border); background: var(--bg-elevated); }
+.bubble-dock-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted); margin-right: 4px; font-weight: 500; }
+.bubble { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center;
   justify-content: center; font-size: 10px; font-weight: 600; cursor: pointer;
   transition: all 0.3s cubic-bezier(0.22,1,0.36,1); position: relative; border: 2px solid transparent; }
-.bubble:hover { transform: scale(1.15); }
+.bubble:hover { transform: scale(1.12); }
 .bubble:active { transform: scale(0.9); }
-.bubble.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-.bubble-channel { position: absolute; bottom: -2px; right: -2px; width: 14px; height: 14px;
+.bubble.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); transform: scale(1.08); }
+.bubble-channel { position: absolute; bottom: -2px; right: -2px; width: 13px; height: 13px;
   border-radius: 4px; display: flex; align-items: center; justify-content: center;
   font-size: 7px; border: 2px solid var(--bg-elevated); }
-.bubble-unread { position: absolute; top: -2px; right: -2px; width: 10px; height: 10px;
+.bubble-unread { position: absolute; top: -2px; right: -2px; width: 9px; height: 9px;
   border-radius: 50%; background: var(--destructive); border: 2px solid var(--bg-elevated); }
-@keyframes bubble-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); } 50% { box-shadow: 0 0 0 8px transparent; } }
+@keyframes bubble-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); } 50% { box-shadow: 0 0 0 6px transparent; } }
 .bubble.pulse { animation: bubble-pulse 2s ease-in-out infinite; }
-.bubble-divider { width: 20px; height: 1px; background: var(--border); margin: 2px 0; }
-.bubble-counter { width: 38px; height: 38px; border-radius: 50%; background: var(--bg-surface);
+.bubble-divider { width: 1px; height: 24px; background: var(--border); margin: 0 4px; }
+.bubble-counter { width: 36px; height: 36px; border-radius: 50%; background: var(--bg-surface);
   border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
   font-size: 11px; font-weight: 600; color: var(--text-muted); cursor: pointer;
   transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
-.bubble-counter:hover { background: var(--bg-elevated); color: var(--text); transform: scale(1.1); }
+.bubble-counter:hover { background: var(--bg-elevated); color: var(--text); transform: scale(1.08); }
 
 /* Channel switcher (in reply area) */
 .channel-switcher { display: flex; gap: 2px; padding: 8px 20px 0; background: var(--bg-elevated); }
@@ -940,7 +936,7 @@ footer p { font-size: 12px; color: var(--text-muted); }
   .sidebar { display: none; }
   .workspace { grid-template-columns: 1fr; }
   .ws-context { display: none; }
-  .bubble-dock { bottom: 70px; left: 8px; }
+  .bubble-dock { padding: 8px 12px; }
   .kpi-strip { grid-template-columns: 1fr 1fr; }
   .dash-grid { grid-template-columns: 1fr; }
   .sla-grid { grid-template-columns: 1fr; }
@@ -1964,27 +1960,8 @@ footer p { font-size: 12px; color: var(--text-muted); }
           </div>
         </div>
 
-        <!-- Chat + Context (full width) + floating bubbles -->
+        <!-- Chat + Context -->
         <div class="workspace">
-          <!-- Floating bubble dock -->
-          <div class="bubble-dock">
-            <div class="bubble active pulse" style="background:#25D366;color:white;" title="Maria Silva — WhatsApp">
-              MS
-              <div class="bubble-channel" style="background:#25D366;color:white;">W</div>
-            </div>
-            <div class="bubble" style="background:var(--accent-glow);color:var(--accent);" title="Carlos Mendes — Email">
-              CM
-              <div class="bubble-channel" style="background:var(--accent);color:white;">@</div>
-              <div class="bubble-unread"></div>
-            </div>
-            <div class="bubble" style="background:rgba(251,191,36,0.15);color:var(--warning);" title="Ana Ferreira — Phone">
-              AF
-              <div class="bubble-channel" style="background:var(--warning);color:white;">&#9742;</div>
-            </div>
-            <div class="bubble-divider"></div>
-            <div class="bubble-counter" title="4 waiting">+4</div>
-          </div>
-
           <!-- Unified conversation timeline -->
           <div class="ws-chat">
             <div class="ws-chat-header">
@@ -2051,6 +2028,25 @@ footer p { font-size: 12px; color: var(--text-muted); }
               <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/></svg> Transfer</button>
               <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Tag</button>
               <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> Template</button>
+            </div>
+            <!-- Bubble dock — horizontal, in the reply flow -->
+            <div class="bubble-dock">
+              <span class="bubble-dock-label">Active</span>
+              <div class="bubble active pulse" style="background:#25D366;color:white;" title="Maria Silva">
+                MS
+                <div class="bubble-channel" style="background:#25D366;color:white;">W</div>
+              </div>
+              <div class="bubble" style="background:var(--accent-glow);color:var(--accent);" title="Carlos Mendes">
+                CM
+                <div class="bubble-channel" style="background:var(--accent);color:white;">@</div>
+                <div class="bubble-unread"></div>
+              </div>
+              <div class="bubble" style="background:rgba(251,191,36,0.15);color:var(--warning);" title="Ana Ferreira">
+                AF
+                <div class="bubble-channel" style="background:var(--warning);color:white;">&#9742;</div>
+              </div>
+              <div class="bubble-divider"></div>
+              <div class="bubble-counter" title="4 waiting">+4</div>
             </div>
             <div class="channel-switcher">
               <button class="channel-sw-btn active"><span class="ch-dot wpp"></span> WhatsApp</button>
