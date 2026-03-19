@@ -10,7 +10,7 @@
 # by L.B. & Claude · São Paulo, 2026
 
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX Session Learner: jq not installed — session learning disabled."
+  echo '{"systemMessage":"⚠️ APEX: jq not installed — session learning DISABLED. Install: brew install jq"}'
   exit 0
 fi
 

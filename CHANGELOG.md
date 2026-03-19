@@ -18,6 +18,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Observatory PRD and architecture docs** — Complete documentation (docs/prd/apex-observatory.md, docs/architecture/apex-observatory.md)
 - **Agent Activity section** — `/api/activity` endpoint and dashboard view showing teams, members, and task status
 - **framework-evolver** added to CLAUDE.md roster and teams skill
+- `tests/test-agents.sh` — Golden Script: 137-test agent validation suite (frontmatter, tools, skills, conflicts, isolation, model fitness)
 
 ### Changed
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
@@ -28,6 +29,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Sentinel agent: maxTurns increased from 50 to 60, report format updated for Phase 8
 - Self-Test skill: complete rewrite with quick mode (structural) and full mode (integration proof)
 - **StatusLine v2 rewrite** — Simplified from 15 segments to 7; removed custom agent tracking (Claude Code handles natively); graceful cold start; fixed dead code and MAX heuristic
+- **Ive Audit**: 6 redundant scripts deleted (auto-approve-safe, enforce-commit-msg, notify, log-subagent, pre-compact, post-compact)
+- 7 hook sections removed from settings.json (PermissionRequest, PreCompact, PostCompact, SubagentStop, Notification, InstructionsLoaded, enforce-commit-msg)
+- Silent failure pattern fixed: 6 safety-critical scripts now emit `systemMessage` JSON when jq missing instead of silently exiting
 
 ### Fixed
 - ANSI escape code stripping in test runner API output
@@ -44,6 +48,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ### Removed
 - Custom agent tracking in statusline (abbrev_agent, /tmp/apex-agents*.json reading)
 - StatusLine "This is the way." branding suffix
+- `auto-approve-safe.sh` — redundant with settings.json allow list
+- `enforce-commit-msg.sh` — redundant with git's native commit-msg hook
+- `notify.sh` — redundant with Claude Code's native Notification hook
+- `log-subagent.sh` — dead code (was empty)
+- `pre-compact.sh` / `post-compact.sh` — redundant with native compaction + auto-memory
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 

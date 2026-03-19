@@ -122,14 +122,9 @@ if [ "$LA" -gt 0 ] 2>/dev/null || [ "$LR" -gt 0 ] 2>/dev/null; then
   LINES_STR=" ┃ +${LA}/-${LR} (${NET_FMT})"
 fi
 
-# ── Alerts ──
+# ── Alerts (context only — cost is in Claude's native UI) ──
 ALERTS=""
 [ "$CTX_INT" -gt 80 ] 2>/dev/null && ALERTS=" ⚠️ CTX"
-PREF="$HOME/.claude/apex-preferences.json"
-COST=$(printf '%.2f' "$COST_RAW" 2>/dev/null || echo "0.00")
-TH="5.00"
-[ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
-command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && ALERTS="${ALERTS} ⚠️ COST"
 
 # ── PR link (cached 60s, validated) ──
 PR_STR=""

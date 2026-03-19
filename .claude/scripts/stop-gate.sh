@@ -8,7 +8,7 @@
 
 # jq is required to parse the transcript
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX: jq not installed — stop-gate cannot verify test execution. Install jq: https://jqlang.github.io/jq/download/"
+  echo '{"systemMessage":"⚠️ APEX: jq not installed — test enforcement DISABLED. Install: brew install jq"}'
   exit 0
 fi
 

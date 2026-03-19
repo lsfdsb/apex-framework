@@ -131,13 +131,14 @@ Everything installs into your project's `.claude/` directory:
 | Category | Count | What it does |
 |----------|-------|-------------|
 | **Skills** | 25 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, etc.) — each is a specialized knowledge module |
-| **Scripts** | 26 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, etc.) |
+| **Scripts** | 23 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, etc.) |
 | **Agents** | 10 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, sentinel (Batman), framework-evolver |
 | **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
 | **Output Style** | 1 | Educational — explains What/Why/How for every action |
 | **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
 | **StatusLine** | 1 | Real-time dashboard: model, context %, tokens, agents, lines changed |
 | **Sandbox** | 1 | OS-level protection: blocks writes to /etc, ~/.ssh, ~/.aws |
+| **Tests** | 3 suites | framework (288 tests), hooks (115 tests), agents (137 tests) |
 
 ---
 
@@ -204,11 +205,12 @@ When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to
 
 ## Testing
 
-APEX tests itself with two test suites:
+APEX tests itself with three test suites:
 
 ```bash
-./tests/test-hooks.sh      # 115 tests — validates every hook script
 ./tests/test-framework.sh  # 288 tests — validates the entire framework structure
+./tests/test-hooks.sh      # 115 tests — validates every hook script
+./tests/test-agents.sh     # 137 tests — validates agents, skills, tools, isolation, and model fitness
 ```
 
 ---

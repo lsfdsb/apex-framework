@@ -14,7 +14,7 @@
 
 # jq is required to parse hook input
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX: jq not installed — workflow enforcement disabled. Install jq: https://jqlang.github.io/jq/download/" >&2
+  echo '{"systemMessage":"⚠️ APEX: jq not installed — PRD enforcement DISABLED. Install: brew install jq"}'
   exit 0
 fi
 
