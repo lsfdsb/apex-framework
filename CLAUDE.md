@@ -101,6 +101,16 @@ These agents run in EVERY coding session, even without `/teams`:
 1. **Watcher** — Spawn as background agent at the START of any session that involves code changes. No team required. Use `Agent` with `subagent_type: "watcher"` and `run_in_background: true`.
 2. **Technical Writer** — Spawn BEFORE creating any PR or commit that changes code. Updates CHANGELOG.md and README.md automatically. Use `Agent` with `subagent_type: "technical-writer"` and `run_in_background: true`. **Nothing ships undocumented.**
 
+   **How to spawn the Technical Writer properly:**
+   ```
+   Agent({
+     subagent_type: "technical-writer",
+     run_in_background: true,
+     prompt: "Audit and update docs for this session. Changes: [DESCRIBE CHANGES]. PRs: [LIST PR NUMBERS AND TITLES]. Run gap detection first — verify CHANGELOG covers all recent PRs."
+   })
+   ```
+   Always tell the writer WHAT changed and WHICH PRs were merged. Vague prompts = missed entries.
+
 These are NOT optional. The Lead MUST spawn them. If you forget, you are failing the framework.
 
 ### Autonomous Team Spawn Rules
