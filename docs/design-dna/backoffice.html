@@ -89,7 +89,90 @@ section{padding:100px 32px}.inner{max-width:1200px;margin:0 auto}
 .perm-check{color:var(--success);font-size:14px}
 .perm-dash{color:var(--text-muted)}
 
-@media(max-width:768px){.mgmt-layout{grid-template-columns:1fr}.mgmt-nav{display:none}}
+/* Admin Dashboard */
+.admin-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.admin-kpi{padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s cubic-bezier(0.22,1,0.36,1)}
+.admin-kpi:hover{border-color:var(--border-hover);transform:translateY(-1px)}
+.admin-kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-bottom:4px}
+.admin-kpi-value{font-size:22px;font-weight:700;letter-spacing:-0.02em}
+.admin-kpi-sub{font-size:10px;color:var(--text-muted);margin-top:4px}
+.admin-health{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:16px}
+.health-item{display:flex;align-items:center;gap:8px;padding:10px;background:var(--bg);border-radius:var(--radius-sm);font-size:12px}
+.health-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* Settings form */
+.settings-layout{display:grid;grid-template-columns:200px 1fr;min-height:400px}
+.settings-nav{padding:16px 10px;border-right:1px solid var(--border)}
+.settings-nav-item{padding:7px 12px;border-radius:6px;font-size:12px;color:var(--text-muted);cursor:pointer;margin-bottom:2px;transition:all 0.2s}
+.settings-nav-item:hover{color:var(--text);background:var(--bg-surface)}
+.settings-nav-item.active{color:var(--accent);background:var(--accent-glow)}
+.settings-body{padding:24px}
+.settings-group{margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border)}
+.settings-group:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0}
+.settings-group-title{font-size:14px;font-weight:600;margin-bottom:4px}
+.settings-group-desc{font-size:12px;color:var(--text-muted);margin-bottom:16px}
+.settings-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.settings-row-label{font-size:13px}
+.settings-row-desc{font-size:11px;color:var(--text-muted)}
+.toggle{width:36px;height:20px;border-radius:10px;background:var(--bg-surface);border:1px solid var(--border);cursor:pointer;position:relative;transition:all 0.25s}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text-muted);transition:all 0.25s}
+.toggle.on{background:var(--success);border-color:var(--success)}
+.toggle.on::after{left:18px;background:white}
+.field-input{padding:8px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;font-family:var(--font-body);outline:none;width:260px;transition:border-color 0.2s}
+.field-input:focus{border-color:var(--accent)}
+
+/* Notification center */
+.notif-list{display:flex;flex-direction:column;gap:2px;padding:12px}
+.notif-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:var(--radius-sm);cursor:pointer;transition:all 0.2s}
+.notif-item:hover{background:var(--bg-surface)}
+.notif-item.unread{background:var(--bg)}
+.notif-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px}
+.notif-body{flex:1}
+.notif-title{font-size:13px;font-weight:500;margin-bottom:2px}
+.notif-desc{font-size:12px;color:var(--text-muted);line-height:1.4}
+.notif-time{font-size:10px;color:var(--text-muted);flex-shrink:0}
+
+/* API Keys */
+.api-key-row{display:flex;align-items:center;gap:12px;padding:14px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;transition:all 0.2s}
+.api-key-row:hover{border-color:var(--border-hover)}
+.api-key-name{font-size:13px;font-weight:500;min-width:120px}
+.api-key-value{font-family:var(--font-mono);font-size:11px;color:var(--text-muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.api-key-actions{display:flex;gap:4px}
+.api-key-btn{padding:4px 10px;border-radius:6px;font-size:10px;border:1px solid var(--border);background:none;color:var(--text-muted);cursor:pointer;font-family:var(--font-body);transition:all 0.2s}
+.api-key-btn:hover{border-color:var(--text-muted);color:var(--text)}
+.api-key-created{font-size:10px;color:var(--text-muted);min-width:80px}
+
+/* Team cards */
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.team-card{padding:16px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s cubic-bezier(0.22,1,0.36,1)}
+.team-card:hover{border-color:var(--border-hover);transform:translateY(-1px)}
+.team-card-name{font-size:14px;font-weight:600;margin-bottom:2px}
+.team-card-desc{font-size:11px;color:var(--text-muted);margin-bottom:12px}
+.team-members{display:flex;gap:-6px}
+.team-member{width:24px;height:24px;border-radius:50%;background:var(--accent-glow);border:2px solid var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:600;color:var(--accent);margin-left:-6px}
+.team-member:first-child{margin-left:0}
+.team-card-stats{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--text-muted)}
+
+/* Wizard steps */
+.wizard{padding:24px}
+.wizard-steps{display:flex;align-items:center;margin-bottom:32px}
+.wizard-step{display:flex;align-items:center;gap:8px;flex:1}
+.wizard-step-num{width:28px;height:28px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--text-muted);transition:all 0.3s}
+.wizard-step.active .wizard-step-num{border-color:var(--accent);color:var(--accent);background:var(--accent-glow)}
+.wizard-step.done .wizard-step-num{border-color:var(--success);background:var(--success);color:white}
+.wizard-step-label{font-size:12px;color:var(--text-muted)}
+.wizard-step.active .wizard-step-label{color:var(--text);font-weight:500}
+.wizard-step.done .wizard-step-label{color:var(--success)}
+.wizard-line{flex:1;height:1px;background:var(--border);margin:0 8px}
+.wizard-line.done{background:var(--success)}
+.wizard-body{max-width:480px}
+.wizard-field{margin-bottom:16px}
+.wizard-field label{display:block;font-size:12px;color:var(--text-muted);margin-bottom:4px}
+.wizard-field input,.wizard-field select{width:100%;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:13px;font-family:var(--font-body);outline:none}
+.wizard-field input:focus,.wizard-field select:focus{border-color:var(--accent)}
+.wizard-actions{display:flex;gap:8px;margin-top:24px}
+
+@media(max-width:768px){.mgmt-layout,.settings-layout{grid-template-columns:1fr}.mgmt-nav,.settings-nav{display:none}.admin-kpis{grid-template-columns:1fr 1fr}.team-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}.reveal{opacity:1;transform:none;filter:none}}
 </style>
 </head>
@@ -203,6 +286,250 @@ section{padding:100px 32px}.inner{max-width:1200px;margin:0 auto}
             <tr><td>Delete data</td><td class="perm-check">✓</td><td class="perm-dash">—</td><td class="perm-dash">—</td></tr>
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ADMIN DASHBOARD -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Admin dashboard.</h2><p>System health, KPIs, and operations at a glance.</p></div>
+    <div class="frame reveal reveal-delay-1">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">Dashboard</span></div>
+      <div style="padding:20px">
+        <div class="admin-kpis">
+          <div class="admin-kpi"><div class="admin-kpi-label">Total Users</div><div class="admin-kpi-value">2,847</div><div class="admin-kpi-sub" style="color:var(--success);">&uarr; 12% this month</div></div>
+          <div class="admin-kpi"><div class="admin-kpi-label">Active Now</div><div class="admin-kpi-value">184</div><div class="admin-kpi-sub">Peak: 312 yesterday</div></div>
+          <div class="admin-kpi"><div class="admin-kpi-label">Revenue (MRR)</div><div class="admin-kpi-value">$48.2k</div><div class="admin-kpi-sub" style="color:var(--success);">&uarr; 8% vs last month</div></div>
+          <div class="admin-kpi"><div class="admin-kpi-label">Uptime</div><div class="admin-kpi-value" style="color:var(--success);">99.97%</div><div class="admin-kpi-sub">Last incident: 14 days ago</div></div>
+        </div>
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:500;margin-bottom:8px;">System Health</div>
+        <div class="admin-health">
+          <div class="health-item"><span class="health-dot" style="background:var(--success)"></span> API &middot; 12ms avg</div>
+          <div class="health-item"><span class="health-dot" style="background:var(--success)"></span> Database &middot; 3ms avg</div>
+          <div class="health-item"><span class="health-dot" style="background:var(--success)"></span> CDN &middot; 99.99%</div>
+          <div class="health-item"><span class="health-dot" style="background:var(--warning)"></span> Queue &middot; 847 pending</div>
+          <div class="health-item"><span class="health-dot" style="background:var(--success)"></span> Storage &middot; 42% used</div>
+          <div class="health-item"><span class="health-dot" style="background:var(--success)"></span> Email &middot; delivered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SETTINGS PAGE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Settings.</h2><p>Organized by context. Toggles, inputs, saves.</p></div>
+    <div class="frame reveal reveal-delay-1">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">Settings</span></div>
+      <div class="settings-layout">
+        <div class="settings-nav">
+          <div class="settings-nav-item active">General</div>
+          <div class="settings-nav-item">Notifications</div>
+          <div class="settings-nav-item">Security</div>
+          <div class="settings-nav-item">Billing</div>
+          <div class="settings-nav-item">Integrations</div>
+          <div class="settings-nav-item">API</div>
+          <div class="settings-nav-item">Danger zone</div>
+        </div>
+        <div class="settings-body">
+          <div class="settings-group">
+            <div class="settings-group-title">General</div>
+            <div class="settings-group-desc">Basic application settings</div>
+            <div class="settings-row"><div><div class="settings-row-label">App name</div></div><input class="field-input" value="Acme Dashboard"></div>
+            <div class="settings-row"><div><div class="settings-row-label">Timezone</div></div><select class="field-input" style="width:260px"><option>America/Sao_Paulo (BRT -3)</option></select></div>
+            <div class="settings-row"><div><div class="settings-row-label">Language</div></div><select class="field-input" style="width:260px"><option>Portuguese (BR)</option></select></div>
+          </div>
+          <div class="settings-group">
+            <div class="settings-group-title">Notifications</div>
+            <div class="settings-group-desc">Control what triggers notifications</div>
+            <div class="settings-row"><div><div class="settings-row-label">Email notifications</div><div class="settings-row-desc">Receive email for important events</div></div><div class="toggle on"></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">Slack integration</div><div class="settings-row-desc">Post alerts to #ops channel</div></div><div class="toggle on"></div></div>
+            <div class="settings-row"><div><div class="settings-row-label">SMS alerts</div><div class="settings-row-desc">Critical incidents only</div></div><div class="toggle"></div></div>
+          </div>
+          <div class="settings-group" style="border-bottom:none;">
+            <div style="display:flex;gap:8px;justify-content:flex-end;"><button class="btn-sm btn-ghost">Cancel</button><button class="btn-sm btn-primary">Save changes</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- USER PROFILE PAGE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>User profile.</h2><p>Everything about one user. Edit, activity, security.</p></div>
+    <div class="frame reveal reveal-delay-1">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">User Profile</span></div>
+      <div style="padding:24px;">
+        <!-- Profile header -->
+        <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:24px;padding-bottom:24px;border-bottom:1px solid var(--border);">
+          <div style="width:64px;height:64px;border-radius:16px;background:var(--accent-glow);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:var(--accent);flex-shrink:0;">AS</div>
+          <div style="flex:1;">
+            <div style="font-size:20px;font-weight:600;letter-spacing:-0.02em;">Ana Souza</div>
+            <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px;">ana@acme.com &middot; Admin &middot; Active since Jan 2024</div>
+            <div style="display:flex;gap:6px;"><span class="role-badge role-admin">Admin</span><span class="inv-status inv-paid" style="font-size:10px;padding:2px 8px;">Verified</span></div>
+          </div>
+          <div style="display:flex;gap:6px;"><button class="btn-sm btn-ghost">Edit</button><button class="btn-sm btn-primary">Message</button></div>
+        </div>
+        <!-- Profile details grid -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:500;margin-bottom:12px;">Personal Information</div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Full Name</div><div style="font-size:13px;">Ana Paula Souza</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Phone</div><div style="font-size:13px;">+55 11 9876-5432</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Location</div><div style="font-size:13px;">S&atilde;o Paulo, Brazil</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Department</div><div style="font-size:13px;">Engineering</div></div>
+          </div>
+          <div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:500;margin-bottom:12px;">Security</div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Last login</div><div style="font-size:13px;">Today, 14:32 &middot; 189.44.xx.xx</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Two-factor auth</div><div style="font-size:13px;color:var(--success);">Enabled (Authenticator)</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Sessions</div><div style="font-size:13px;">2 active devices</div></div>
+            <div style="margin-bottom:10px;"><div style="font-size:10px;color:var(--text-muted);">Password</div><div style="font-size:13px;">Changed 12 days ago</div></div>
+          </div>
+        </div>
+        <!-- Recent activity -->
+        <div style="margin-top:24px;padding-top:24px;border-top:1px solid var(--border);">
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:500;margin-bottom:12px;">Recent Activity</div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--success);flex-shrink:0;"></span><span style="flex:1;">Deployed v2.4.1 to production</span><span style="color:var(--text-muted);font-size:10px;">2h ago</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--info);flex-shrink:0;"></span><span style="flex:1;">Updated team permissions for Engineering</span><span style="color:var(--text-muted);font-size:10px;">Yesterday</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;"></span><span style="flex:1;">Created API key: "Production Webhook"</span><span style="color:var(--text-muted);font-size:10px;">3 days ago</span></div>
+            <div style="display:flex;align-items:center;gap:10px;font-size:12px;"><span style="width:6px;height:6px;border-radius:50%;background:var(--warning);flex-shrink:0;"></span><span style="flex:1;">Changed password</span><span style="color:var(--text-muted);font-size:10px;">12 days ago</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTIFICATION CENTER -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Notifications.</h2><p>Structured, actionable, never noisy.</p></div>
+    <div class="frame reveal reveal-delay-1" style="max-width:480px;margin:0 auto;">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">Notifications</span></div>
+      <div class="notif-list">
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background:rgba(248,113,113,0.1);color:var(--destructive);">!</div>
+          <div class="notif-body"><div class="notif-title">Payment webhook failed</div><div class="notif-desc">Stripe event evt_1234 returned 502. Retry 2/3 scheduled.</div></div>
+          <div class="notif-time">12m</div>
+        </div>
+        <div class="notif-item unread">
+          <div class="notif-icon" style="background:rgba(52,211,153,0.1);color:var(--success);">&#10003;</div>
+          <div class="notif-body"><div class="notif-title">Deploy completed</div><div class="notif-desc">v2.4.1 deployed to production. 12 files, 0 errors.</div></div>
+          <div class="notif-time">1h</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:var(--accent-glow);color:var(--accent);">@</div>
+          <div class="notif-body"><div class="notif-title">Marcus mentioned you</div><div class="notif-desc">In task #42: "Ana, can you review the API changes?"</div></div>
+          <div class="notif-time">3h</div>
+        </div>
+        <div class="notif-item">
+          <div class="notif-icon" style="background:rgba(251,191,36,0.1);color:var(--warning);">&#9888;</div>
+          <div class="notif-body"><div class="notif-title">Disk usage warning</div><div class="notif-desc">/var/data at 78%. Consider running cleanup.</div></div>
+          <div class="notif-time">5h</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- API KEYS -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>API keys.</h2><p>Create, reveal, revoke. Managed securely.</p></div>
+    <div class="frame reveal reveal-delay-1">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">API Keys</span></div>
+      <div style="padding:20px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><span style="font-size:12px;color:var(--text-muted);">3 active keys</span><button class="btn-sm btn-primary">+ Create key</button></div>
+        <div class="api-key-row">
+          <div class="api-key-name">Production</div>
+          <div class="api-key-value">sk_live_4eC39HqL••••••••••••••••••••</div>
+          <div class="api-key-created">Mar 1, 2026</div>
+          <div class="api-key-actions"><button class="api-key-btn">Reveal</button><button class="api-key-btn">Copy</button><button class="api-key-btn" style="color:var(--destructive);border-color:var(--destructive);">Revoke</button></div>
+        </div>
+        <div class="api-key-row">
+          <div class="api-key-name">Staging</div>
+          <div class="api-key-value">sk_test_7bF92kM••••••••••••••••••••</div>
+          <div class="api-key-created">Feb 15, 2026</div>
+          <div class="api-key-actions"><button class="api-key-btn">Reveal</button><button class="api-key-btn">Copy</button><button class="api-key-btn" style="color:var(--destructive);border-color:var(--destructive);">Revoke</button></div>
+        </div>
+        <div class="api-key-row">
+          <div class="api-key-name">Webhook</div>
+          <div class="api-key-value">whk_8dH21nP••••••••••••••••••••</div>
+          <div class="api-key-created">Jan 20, 2026</div>
+          <div class="api-key-actions"><button class="api-key-btn">Reveal</button><button class="api-key-btn">Copy</button><button class="api-key-btn" style="color:var(--destructive);border-color:var(--destructive);">Revoke</button></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM MANAGEMENT -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Teams.</h2><p>Organize people. Assign access. Track output.</p></div>
+    <div class="reveal reveal-delay-1">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><span style="font-size:12px;color:var(--text-muted);">4 teams</span><button class="btn-sm btn-primary">+ Create team</button></div>
+      <div class="team-grid">
+        <div class="team-card">
+          <div class="team-card-name">Engineering</div>
+          <div class="team-card-desc">Frontend, backend, infrastructure</div>
+          <div class="team-members"><div class="team-member">AS</div><div class="team-member">MC</div><div class="team-member">JP</div><div class="team-member">DL</div><div class="team-member" style="background:var(--bg-surface);color:var(--text-muted);">+3</div></div>
+          <div class="team-card-stats"><span>7 members</span><span>12 projects</span><span>Admin access</span></div>
+        </div>
+        <div class="team-card">
+          <div class="team-card-name">Sales</div>
+          <div class="team-card-desc">Pipeline, CRM, client relations</div>
+          <div class="team-members"><div class="team-member" style="background:rgba(52,211,153,0.1);color:var(--success);">ER</div><div class="team-member" style="background:rgba(251,191,36,0.1);color:var(--warning);">TH</div><div class="team-member" style="background:var(--bg-surface);color:var(--text-muted);">+2</div></div>
+          <div class="team-card-stats"><span>4 members</span><span>$284k pipeline</span><span>Editor access</span></div>
+        </div>
+        <div class="team-card">
+          <div class="team-card-name">Support</div>
+          <div class="team-card-desc">Helpdesk, tickets, customer success</div>
+          <div class="team-members"><div class="team-member">MC</div><div class="team-member">JP</div><div class="team-member" style="background:rgba(96,165,250,0.1);color:var(--info);">ER</div></div>
+          <div class="team-card-stats"><span>3 members</span><span>94% SLA</span><span>Editor access</span></div>
+        </div>
+        <div class="team-card">
+          <div class="team-card-name">Finance</div>
+          <div class="team-card-desc">Billing, invoices, reporting</div>
+          <div class="team-members"><div class="team-member">AS</div><div class="team-member" style="background:var(--bg-surface);color:var(--text-muted);">+1</div></div>
+          <div class="team-card-stats"><span>2 members</span><span>$48.2k MRR</span><span>Admin access</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ONBOARDING WIZARD -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>Onboarding wizard.</h2><p>Multi-step. Progress visible. Never overwhelming.</p></div>
+    <div class="frame reveal reveal-delay-1">
+      <div class="frame-bar"><span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span><span class="frame-title">Setup Wizard</span></div>
+      <div class="wizard">
+        <div class="wizard-steps">
+          <div class="wizard-step done"><div class="wizard-step-num">&#10003;</div><div class="wizard-step-label">Account</div></div>
+          <div class="wizard-line done"></div>
+          <div class="wizard-step done"><div class="wizard-step-num">&#10003;</div><div class="wizard-step-label">Team</div></div>
+          <div class="wizard-line done"></div>
+          <div class="wizard-step active"><div class="wizard-step-num">3</div><div class="wizard-step-label">Integration</div></div>
+          <div class="wizard-line"></div>
+          <div class="wizard-step"><div class="wizard-step-num">4</div><div class="wizard-step-label">Launch</div></div>
+        </div>
+        <div class="wizard-body">
+          <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Connect your tools</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px;">Integrate with your existing stack to unlock full power.</div>
+          <div class="wizard-field"><label>CRM Platform</label><select><option>Salesforce</option><option>HubSpot</option><option>Pipedrive</option></select></div>
+          <div class="wizard-field"><label>Communication</label><select><option>Slack</option><option>Microsoft Teams</option><option>Discord</option></select></div>
+          <div class="wizard-field"><label>API Key</label><input type="text" placeholder="sk_live_your_key_here"></div>
+          <div class="wizard-actions"><button class="btn-sm btn-ghost">Back</button><button class="btn-sm btn-primary">Continue</button></div>
+        </div>
       </div>
     </div>
   </div>
