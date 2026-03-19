@@ -87,27 +87,9 @@ function toggleTheme() {
   applyPalette(palette, current === 'dark' ? 'light' : 'dark');
 }
 
-// Inject palette switcher UI
+// Inject unified palette + background widget
 function injectSwitcher() {
-  const el = document.createElement('div');
-  el.className = 'palette-switcher';
-  el.innerHTML = `
-    <div class="pal-row">
-      ${Object.entries(PALETTES).map(([k,v]) =>
-        `<button class="pal-dot" data-palette="${k}" title="${v.name}"
-          style="background:${v.dark.accent};" onclick="applyPalette('${k}', localStorage.getItem('apex-theme')||'dark')"></button>`
-      ).join('')}
-    </div>
-    <div class="mode-row">
-      <button class="mode-btn" data-mode="dark" onclick="applyPalette(localStorage.getItem('apex-palette')||'saas','dark')" title="Dark">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
-      <button class="mode-btn" data-mode="light" onclick="applyPalette(localStorage.getItem('apex-palette')||'saas','light')" title="Light">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      </button>
-    </div>
-  `;
-  document.body.appendChild(el);
+  // Unified widget replaces old separate switcher + bg widget
 }
 
 // Inject persistent nav
@@ -165,11 +147,31 @@ style.textContent = `
     .apex-nav-links a { font-size: 11px; padding: 4px 8px; }
   }
 
-  .palette-switcher { position: fixed; bottom: 24px; right: 24px; z-index: 200;
+  /* Unified widget — one icon, all controls */
+  .apex-widget { position: fixed; bottom: 24px; left: 24px; z-index: 200; }
+  .apex-widget-toggle { width: 40px; height: 40px; border-radius: 50%;
+    background: var(--bg-elevated); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-secondary);
+    transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+    backdrop-filter: blur(12px); box-shadow: 0 4px 16px rgba(0,0,0,0.15); }
+  .apex-widget-toggle:hover { border-color: var(--accent); color: var(--accent);
+    transform: scale(1.1) rotate(90deg); box-shadow: 0 0 20px var(--accent-glow); }
+  .apex-widget-toggle:active { transform: scale(0.95); }
+  .apex-widget.open .apex-widget-toggle { border-color: var(--accent); color: var(--accent);
+    transform: rotate(180deg); }
+  .apex-widget-panel { position: absolute; bottom: 52px; left: 0;
     background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 16px;
-    padding: 12px; display: flex; flex-direction: column; gap: 10px; align-items: center;
-    backdrop-filter: blur(12px); box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    transition: background 0.4s, border-color 0.4s; }
+    padding: 16px; min-width: 230px; backdrop-filter: blur(16px);
+    box-shadow: 0 12px 48px rgba(0,0,0,0.25);
+    opacity: 0; transform: translateY(10px) scale(0.92); pointer-events: none;
+    transition: all 0.45s cubic-bezier(0.22,1,0.36,1); }
+  .apex-widget.open .apex-widget-panel { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
+  .apex-widget-section { margin-bottom: 10px; }
+  .apex-widget-section:last-child { margin-bottom: 0; }
+  .apex-widget-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+  .apex-widget-divider { height: 1px; background: var(--border); margin: 12px 0; }
   .pal-row { display: flex; gap: 6px; }
   .pal-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent;
     cursor: pointer; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
@@ -179,9 +181,12 @@ style.textContent = `
   .mode-row { display: flex; gap: 4px; }
   .mode-btn { background: none; border: 1px solid var(--border); border-radius: 8px;
     width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--text-muted); transition: all 0.3s; }
-  .mode-btn:hover { border-color: var(--text-muted); color: var(--text); }
+    cursor: pointer; color: var(--text-muted); transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+  .mode-btn:hover { border-color: var(--text-muted); color: var(--text); transform: translateY(-1px); }
+  .mode-btn:active { transform: scale(0.95); }
   .mode-btn.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
+  /* Hide old separate widgets if they exist */
+  .palette-switcher { display: none !important; }
 `;
 document.head.appendChild(style);
 
@@ -197,32 +202,54 @@ function observeReveals() {
 const mutObs = new MutationObserver(() => observeReveals());
 mutObs.observe(document.body || document.documentElement, { childList: true, subtree: true });
 
-// Inject background pattern widget
+// Inject unified design widget (palette + mode + backgrounds — one icon)
 function injectBgWidget() {
   const patterns = ['none','dots','grid','topo','circuit','constellation','diamonds','diagonals','hexagons','isometric','waves','dna','noise'];
+  const animated = [
+    { key:'none', label:'&times;' }, { key:'orbs', label:'orb' }, { key:'aurora', label:'aur' },
+    { key:'particles', label:'par' }, { key:'gradient', label:'grd' }, { key:'rings', label:'rng' },
+    { key:'matrix', label:'mtx' }, { key:'nebula', label:'neb' }, { key:'spotlight', label:'spt' }
+  ];
   const el = document.createElement('div');
-  el.className = 'bg-widget';
+  el.className = 'apex-widget';
   el.innerHTML = `
-    <button class="bg-widget-toggle" onclick="this.parentElement.classList.toggle('open')" aria-label="Background patterns">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
+    <button class="apex-widget-toggle" onclick="this.parentElement.classList.toggle('open')" aria-label="Design settings">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
     </button>
-    <div class="bg-widget-panel">
-      <div class="bg-widget-title">Background</div>
-      <div class="bg-widget-grid">
-        ${patterns.map(p => `<button class="bg-opt${p==='none'?' active':''}" data-pattern="${p}" onclick="setBgPattern('${p}')" title="${p}">${p === 'none' ? '&times;' : p.slice(0,3)}</button>`).join('')}
+    <div class="apex-widget-panel">
+      <div class="apex-widget-section">
+        <div class="apex-widget-label">Palette</div>
+        <div class="pal-row">
+          ${Object.entries(PALETTES).map(([k,v]) =>
+            `<button class="pal-dot" data-palette="${k}" title="${v.name}"
+              style="background:${v.dark.accent};" onclick="applyPalette('${k}', localStorage.getItem('apex-theme')||'dark')"></button>`
+          ).join('')}
+        </div>
       </div>
-      <div class="bg-widget-title" style="margin-top:8px;">Animated</div>
-      <div class="bg-widget-grid">
-        <button class="bg-opt" data-abg="none" onclick="setAnimBg('none')" title="None">&times;</button>
-        <button class="bg-opt" data-abg="orbs" onclick="setAnimBg('orbs')" title="Orbs">orb</button>
-        <button class="bg-opt" data-abg="aurora" onclick="setAnimBg('aurora')" title="Aurora">aur</button>
-        <button class="bg-opt" data-abg="particles" onclick="setAnimBg('particles')" title="Particles">par</button>
-        <button class="bg-opt" data-abg="gradient" onclick="setAnimBg('gradient')" title="Gradient">grd</button>
-        <button class="bg-opt" data-abg="rings" onclick="setAnimBg('rings')" title="Rings">rng</button>
-        <button class="bg-opt" data-abg="matrix" onclick="setAnimBg('matrix')" title="Matrix">mtx</button>
-        <button class="bg-opt" data-abg="nebula" onclick="setAnimBg('nebula')" title="Nebula">neb</button>
-        <button class="bg-opt" data-abg="spotlight" onclick="setAnimBg('spotlight')" title="Spotlight">spt</button>
+      <div class="apex-widget-section">
+        <div class="apex-widget-label">Mode</div>
+        <div class="mode-row">
+          <button class="mode-btn" data-mode="dark" onclick="applyPalette(localStorage.getItem('apex-palette')||'saas','dark')" title="Dark">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          </button>
+          <button class="mode-btn" data-mode="light" onclick="applyPalette(localStorage.getItem('apex-palette')||'saas','light')" title="Light">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="apex-widget-divider"></div>
+      <div class="apex-widget-section">
+        <div class="apex-widget-label">Pattern</div>
+        <div class="bg-widget-grid">
+          ${patterns.map(p => `<button class="bg-opt${p==='none'?' active':''}" data-pattern="${p}" onclick="setBgPattern('${p}')" title="${p}">${p === 'none' ? '&times;' : p.slice(0,3)}</button>`).join('')}
+        </div>
+      </div>
+      <div class="apex-widget-section">
+        <div class="apex-widget-label">Animated</div>
+        <div class="bg-widget-grid">
+          ${animated.map(a => `<button class="bg-opt" data-abg="${a.key}" onclick="setAnimBg('${a.key}')" title="${a.key === 'none' ? 'None' : a.key}">${a.label}</button>`).join('')}
+        </div>
       </div>
     </div>
   `;
@@ -306,24 +333,6 @@ style.textContent += `
     .apex-footer-links { gap: 32px; }
   }
 
-  .bg-widget { position: fixed; bottom: 24px; left: 24px; z-index: 200; }
-  .bg-widget-toggle { width: 36px; height: 36px; border-radius: 50%;
-    background: var(--bg-elevated); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer; color: var(--text-secondary);
-    transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
-    backdrop-filter: blur(12px); }
-  .bg-widget-toggle:hover { border-color: var(--accent); color: var(--accent);
-    transform: scale(1.1) rotate(90deg); }
-  .bg-widget-panel { position: absolute; bottom: 44px; left: 0;
-    background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px; min-width: 210px; backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    opacity: 0; transform: translateY(8px) scale(0.95); pointer-events: none;
-    transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
-  .bg-widget.open .bg-widget-panel { opacity: 1; transform: translateY(0) scale(1); pointer-events: all; }
-  .bg-widget-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
-    color: var(--text-muted); margin-bottom: 6px; }
   .bg-widget-grid { display: flex; flex-wrap: wrap; gap: 4px; }
   .bg-opt { padding: 3px 7px; font-size: 10px; border: 1px solid var(--border);
     border-radius: 6px; background: none; color: var(--text-muted); cursor: pointer;
@@ -333,9 +342,8 @@ style.textContent += `
   .bg-opt:active { transform: scale(0.95); }
   .bg-opt.active { border-color: var(--accent); color: var(--accent); background: var(--accent-glow); }
 
-  /* Palette switcher micro-animations */
-  .palette-switcher { animation: apex-widget-enter 0.6s cubic-bezier(0.22,1,0.36,1) backwards; animation-delay: 0.3s; }
-  .bg-widget { animation: apex-widget-enter 0.6s cubic-bezier(0.22,1,0.36,1) backwards; animation-delay: 0.5s; }
+  /* Widget entrance micro-animation */
+  .apex-widget { animation: apex-widget-enter 0.6s cubic-bezier(0.22,1,0.36,1) backwards; animation-delay: 0.3s; }
   @keyframes apex-widget-enter { from { opacity:0; transform:translateY(12px) scale(0.9); } }
 `;
 
