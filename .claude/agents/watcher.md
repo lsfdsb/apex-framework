@@ -93,6 +93,19 @@ grep -rql 'test(\|describe(\|it(' src/ 2>/dev/null && echo "💡 IMPROVE: Projec
 grep -rql 'className\|styled\|css' src/ 2>/dev/null && echo "💡 IMPROVE: Project has UI — ensure /design-system and /a11y are used"
 ls .env* 2>/dev/null | head -1 && echo "💡 IMPROVE: Project has env files — ensure /security audits secrets handling"
 
+# Design DNA compliance — check if new pages/components reference DNA patterns
+for f in $(git diff --name-only --diff-filter=A -- '*.tsx' '*.jsx' 2>/dev/null); do
+  if echo "$f" | grep -qiE 'page|screen|view|layout'; then
+    grep -q 'design-dna\|Design DNA\|apex-enter\|apex-heading\|apex-label' "$f" 2>/dev/null || \
+      echo "⚠️ DNA: New page $f has no Design DNA references — builder may not have read the pattern library"
+  fi
+done
+
+# Hardcoded Tailwind palette colors (design token violation)
+grep -rnE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal|lime|fuchsia)-(50|100|200|300|400|500|600|700|800|900|950)' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null | head -10 | while read -r line; do
+  echo "⚠️ TOKENS: Hardcoded Tailwind color — $line"
+done
+
 # Run APEX framework tests if in the framework repo
 [ -f "tests/test-framework.sh" ] && bash tests/test-framework.sh 2>&1 | tail -5
 ```
