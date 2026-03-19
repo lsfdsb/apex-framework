@@ -50,14 +50,15 @@
 [data-theme="light"] .ws-quick-actions { background: #ffffff; }
 [data-theme="light"] .ws-chat-input { background: #ffffff; }
 [data-theme="light"] .ws-chat-header { background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-[data-theme="light"] .pipeline-stage { background: #f0eeeb; }
-[data-theme="light"] .pipeline-stage:hover { background: #e8e5e0; }
+[data-theme="light"] .pipeline-stage { background: color-mix(in srgb, #f0eeeb 70%, transparent); }
+[data-theme="light"] .pipeline-stage:hover { background: color-mix(in srgb, #e8e5e0 85%, transparent); }
 [data-theme="light"] .app-layout,
 [data-theme="light"] .workspace { box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
-[data-theme="light"] .cmd-bar { background: #ffffff; box-shadow: 0 1px 2px rgba(0,0,0,0.04); }
-[data-theme="light"] .cmd-intel { background: #faf9f7; }
-[data-theme="light"] .cmd-channels { background: #ffffff; }
-[data-theme="light"] .cmd-reply { background: #ffffff; }
+[data-theme="light"] .cmd { background: color-mix(in srgb, #ffffff 90%, transparent); }
+[data-theme="light"] .cmd-bar { background: transparent; }
+[data-theme="light"] .cmd-intel { background: transparent; }
+[data-theme="light"] .cmd-channels { background: color-mix(in srgb, #ffffff 80%, transparent); }
+[data-theme="light"] .cmd-reply { background: color-mix(in srgb, #ffffff 80%, transparent); }
 [data-theme="light"] .cmd-ai { background: rgba(79,70,229,0.04); border-color: rgba(79,70,229,0.2); }
 [data-theme="light"] .cmd-ai-analysis { background: rgba(79,70,229,0.04); border-color: rgba(79,70,229,0.2); }
 [data-theme="light"] .cmd-phone-record { box-shadow: var(--shadow-card); }
@@ -543,9 +544,12 @@ tbody tr:last-child td { border-bottom: none; }
    SIDEBAR NAVIGATION (Ive-style)
    ═══════════════════════════════════════ */
 .app-layout { display: grid; grid-template-columns: 56px 1fr; min-height: 640px;
-  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+  backdrop-filter: blur(12px); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; }
 .app-layout.sidebar-expanded { grid-template-columns: 220px 1fr; }
-.sidebar { background: var(--bg-elevated); border-right: 1px solid var(--border); padding: 0;
+.sidebar { background: color-mix(in srgb, var(--bg-elevated) 60%, transparent);
+  border-right: 1px solid var(--border); padding: 0;
   display: flex; flex-direction: column; align-items: center; overflow: hidden;
   transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
 .sidebar-brand { padding: 16px 0; width: 100%; text-align: center; border-bottom: 1px solid var(--border); }
@@ -586,11 +590,13 @@ tbody tr:last-child td { border-bottom: none; }
    COMMAND CENTER (CRM + Helpdesk + Backoffice)
    ═══════════════════════════════════════ */
 .cmd { display: grid; grid-template-rows: 40px 1fr; grid-template-columns: 280px 1fr;
-  height: 700px; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius); }
+  height: 700px; overflow: hidden; border: 1px solid var(--border); border-radius: var(--radius);
+  background: var(--bg-elevated); backdrop-filter: blur(12px);
+  background-color: color-mix(in srgb, var(--bg-elevated) 85%, transparent); }
 
 /* Status bar — spans full width */
 .cmd-bar { grid-column: 1 / -1; display: flex; align-items: center; padding: 0 16px; gap: 16px;
-  border-bottom: 1px solid var(--border); background: var(--bg-elevated); font-size: 11px; }
+  border-bottom: 1px solid var(--border); background: transparent; font-size: 11px; }
 .cmd-bar-online { display: flex; align-items: center; gap: 5px; font-weight: 600; }
 .cmd-bar-online .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--success); }
 .cmd-bar-metrics { display: flex; gap: 16px; color: var(--text-muted); }
@@ -609,7 +615,7 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Intel panel (left) — AI + Customer + Timeline */
 .cmd-intel { overflow-y: auto; border-right: 1px solid var(--border); padding: 16px;
-  background: var(--bg); display: flex; flex-direction: column; gap: 16px; }
+  background: transparent; display: flex; flex-direction: column; gap: 16px; }
 .cmd-intel-section { }
 .cmd-intel-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
   color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
@@ -653,7 +659,7 @@ tbody tr:last-child td { border-bottom: none; }
 .cmd-tl-time { font-size: 9px; color: var(--text-muted); }
 
 /* Conversation area (right) */
-.cmd-conv { display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+.cmd-conv { display: flex; flex-direction: column; overflow: hidden; background: transparent; }
 
 /* Channel tabs — at top of conversation */
 .cmd-channels { display: flex; align-items: center; border-bottom: 1px solid var(--border);
@@ -680,7 +686,8 @@ tbody tr:last-child td { border-bottom: none; }
 /* Messages */
 .cmd-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
 .cmd-msg { max-width: 70%; padding: 12px 16px; border-radius: 18px; font-size: 13px; line-height: 1.55; }
-.cmd-msg.in { background: var(--bg-elevated); border: 1px solid var(--border);
+.cmd-msg.in { background: color-mix(in srgb, var(--bg-elevated) 80%, transparent);
+  backdrop-filter: blur(8px); border: 1px solid var(--border);
   align-self: flex-start; border-bottom-left-radius: 4px; }
 .cmd-msg.out { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
 .cmd-msg-time { font-size: 9px; opacity: 0.4; margin-top: 3px; }
@@ -748,7 +755,7 @@ tbody tr:last-child td { border-bottom: none; }
 /* ═══════════════════════════════════════
    DASHBOARD CONTENT AREA
    ═══════════════════════════════════════ */
-.dash-content { padding: 24px; overflow-y: auto; }
+.dash-content { padding: 24px; overflow-y: auto; background: transparent; }
 .dash-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
 .dash-header-left h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
 .dash-header-left p { font-size: 13px; color: var(--text-muted); }
@@ -762,9 +769,12 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Compact KPI strip */
 .kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-.kpi-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+.kpi-card { background: color-mix(in srgb, var(--bg-elevated) 70%, transparent);
+  backdrop-filter: blur(8px); border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 16px; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
-.kpi-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.kpi-card:hover { border-color: var(--border-hover); transform: translateY(-2px);
+  background: color-mix(in srgb, var(--bg-elevated) 90%, transparent);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
 .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
   color: var(--text-muted); margin-bottom: 6px; }
 .kpi-value { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
@@ -782,10 +792,12 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Dashboard grid for charts/widgets */
 .dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
-.dash-widget { background: var(--bg-elevated); border: 1px solid var(--border);
+.dash-widget { background: color-mix(in srgb, var(--bg-elevated) 70%, transparent);
+  backdrop-filter: blur(8px); border: 1px solid var(--border);
   border-radius: var(--radius-sm); padding: 20px;
   transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
-.dash-widget:hover { border-color: var(--border-hover); }
+.dash-widget:hover { border-color: var(--border-hover);
+  background: color-mix(in srgb, var(--bg-elevated) 90%, transparent); }
 .dash-widget-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
   color: var(--text-muted); font-weight: 500; margin-bottom: 16px; }
 
@@ -802,7 +814,8 @@ tbody tr:last-child td { border-bottom: none; }
 
 /* Mini pipeline strip (dashboard inline funnel) */
 .pipeline-strip { display: flex; align-items: center; gap: 2px; margin-bottom: 16px; }
-.pipeline-stage { flex: 1; text-align: center; padding: 12px 8px; background: var(--bg-surface);
+.pipeline-stage { flex: 1; text-align: center; padding: 12px 8px;
+  background: color-mix(in srgb, var(--bg-surface) 60%, transparent); backdrop-filter: blur(4px);
   border-radius: 0; position: relative; transition: all 0.3s; cursor: pointer; }
 .pipeline-stage:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
 .pipeline-stage:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
@@ -1649,7 +1662,7 @@ footer p { font-size: 12px; color: var(--text-muted); }
       <h2>Sidebar + Dashboard.<br>The real thing.</h2>
       <p>How a CRM actually looks. Dense, scannable, actionable.</p>
     </div>
-    <div style="display:grid;grid-template-columns:56px 1fr;min-height:640px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;" class="reveal reveal-delay-1">
+    <div style="display:grid;grid-template-columns:56px 1fr;min-height:640px;background:color-mix(in srgb, var(--bg-elevated) 80%, transparent);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;" class="reveal reveal-delay-1">
       <!-- Ive Sidebar — icon rail -->
       <div class="sidebar">
         <div class="sidebar-brand">
