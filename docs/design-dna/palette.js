@@ -126,6 +126,7 @@ function injectNav() {
     { href: 'presentation.html', label: 'Slides' },
     { href: 'ebook.html', label: 'E-Book' },
     { href: 'backoffice.html', label: 'Admin' },
+    { href: 'email.html', label: 'Email' },
     { href: 'patterns.html', label: 'Patterns' },
   ];
   const current = location.pathname.split('/').pop() || 'index.html';
