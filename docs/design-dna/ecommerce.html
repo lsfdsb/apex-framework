@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute("data-theme",localStorage.getItem("apex-theme")||"dark")</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX DNA — E-Commerce Patterns</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root, [data-theme="dark"] {
+  --bg: #08080a; --bg-elevated: #111114; --bg-surface: #19191d;
+  --border: #222228; --border-hover: #33333a;
+  --text: #ececf0; --text-secondary: #8a8a96; --text-muted: #55555e;
+  --accent: #636bf0; --accent-hover: #5158d4; --accent-glow: rgba(99,107,240,0.12);
+  --success: #34d399; --warning: #fbbf24; --destructive: #f87171;
+  --radius: 12px; --radius-sm: 8px;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --nav-bg: rgba(8,8,10,0.7);
+  --cta-bg: white; --cta-text: #08080a;
+  --shadow-lift: 0 4px 16px rgba(0,0,0,0.2);
+  --img-placeholder: var(--bg-surface);
+}
+[data-theme="light"] {
+  --bg: #faf9f7; --bg-elevated: #ffffff; --bg-surface: #f0eeeb;
+  --border: #e4e0db; --border-hover: #d0cac2;
+  --text: #1a1816; --text-secondary: #6b6560; --text-muted: #9c9590;
+  --accent: #4f46e5; --accent-hover: #4338ca; --accent-glow: rgba(79,70,229,0.06);
+  --success: #16a34a; --warning: #d97706; --destructive: #dc2626;
+  --nav-bg: rgba(250,249,247,0.85);
+  --cta-bg: #1a1816; --cta-text: #faf9f7;
+  --shadow-lift: 0 4px 12px rgba(0,0,0,0.04);
+  --img-placeholder: #e8e4df;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-body); background: var(--bg); color: var(--text);
+  -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body, nav, section, footer, .product-card, .cart-item, input, button, .checkout-step {
+  transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
+
+.reveal { opacity: 0; transform: translateY(32px) scale(0.98); filter: blur(4px);
+  transition: all 0.9s cubic-bezier(0.22,1,0.36,1); }
+.reveal.visible { opacity: 1; transform: none; filter: none; }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+.svg-draw path, .svg-draw circle, .svg-draw polyline, .svg-draw rect {
+  stroke-dasharray: 800; stroke-dashoffset: 800;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.22,1,0.36,1); }
+.svg-draw.visible path, .svg-draw.visible circle, .svg-draw.visible polyline,
+.svg-draw.visible rect { stroke-dashoffset: 0; }
+
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 0 32px;
+  background: var(--nav-bg); backdrop-filter: blur(20px) saturate(1.4); border-bottom: 1px solid var(--border); }
+nav > div { max-width: 1200px; margin: 0 auto; display: flex; align-items: center;
+  justify-content: space-between; height: 56px; }
+.logo { font-weight: 600; font-size: 14px; }
+.logo span { color: var(--text-muted); font-weight: 400; margin-left: 8px; }
+.nav-links { display: flex; gap: 12px; align-items: center; }
+.nav-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+.theme-toggle { background: none; border: 1px solid var(--border); border-radius: 50%;
+  width: 34px; height: 34px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-secondary); transition: all 0.3s; }
+.theme-toggle:hover { border-color: var(--text-muted); color: var(--text); }
+[data-theme="dark"] .icon-moon { display: none; }
+[data-theme="light"] .icon-sun { display: none; }
+
+section { padding: 140px 32px; }
+.inner { max-width: 1200px; margin: 0 auto; }
+.section-header { text-align: center; margin-bottom: 64px; }
+.section-header h2 { font-family: var(--font-display); font-size: clamp(40px, 5vw, 64px);
+  font-weight: 400; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 16px; }
+.section-header p { font-size: 17px; color: var(--text-secondary); font-weight: 300; }
+.label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--accent); font-weight: 500; margin-bottom: 16px; }
+
+/* ═══════════════════════════════════════
+   PRODUCT CARDS
+   ═══════════════════════════════════════ */
+.product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.product-card { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.22,1,0.36,1); cursor: pointer; }
+.product-card:hover { border-color: var(--border-hover); transform: translateY(-4px); }
+.product-img { aspect-ratio: 1; background: var(--img-placeholder); position: relative; overflow: hidden; }
+.product-img::after { content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, rgba(0,0,0,0.04) 100%); }
+/* Hover image zoom */
+.product-img .img-inner { width: 100%; height: 100%; display: flex; align-items: center;
+  justify-content: center; transition: transform 0.6s cubic-bezier(0.22,1,0.36,1); }
+.product-card:hover .img-inner { transform: scale(1.05); }
+.img-label { font-size: 12px; color: var(--text-muted); }
+.product-badge { position: absolute; top: 12px; left: 12px; padding: 4px 10px;
+  border-radius: 999px; font-size: 11px; font-weight: 600; z-index: 1; }
+.badge-new { background: var(--accent); color: white; }
+.badge-sale { background: var(--destructive); color: white; }
+.product-info { padding: 16px; }
+.product-name { font-size: 14px; font-weight: 500; margin-bottom: 4px; letter-spacing: -0.01em; }
+.product-category { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+.product-price { display: flex; align-items: baseline; gap: 8px; }
+.product-price .current { font-size: 16px; font-weight: 600; }
+.product-price .original { font-size: 13px; color: var(--text-muted); text-decoration: line-through; }
+
+/* Quick add animation */
+.product-actions { padding: 0 16px 16px; opacity: 0; transform: translateY(8px);
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.product-card:hover .product-actions { opacity: 1; transform: translateY(0); }
+.add-btn { width: 100%; padding: 10px; background: var(--cta-bg); color: var(--cta-text);
+  border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500;
+  cursor: pointer; font-family: var(--font-body); transition: opacity 0.2s; }
+.add-btn:hover { opacity: 0.85; }
+
+/* ═══════════════════════════════════════
+   PRODUCT DETAIL — Hero Split
+   ═══════════════════════════════════════ */
+.product-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.product-gallery { background: var(--bg-surface); border-radius: var(--radius); aspect-ratio: 1;
+  display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+.product-gallery::before { content: ''; position: absolute; inset: 0;
+  background: radial-gradient(circle at 30% 40%, var(--accent-glow) 0%, transparent 50%); }
+.gallery-text { font-size: 14px; color: var(--text-muted); z-index: 1; }
+.product-detail-info h1 { font-family: var(--font-display); font-size: 40px; font-weight: 400;
+  letter-spacing: -0.03em; margin-bottom: 8px; }
+.product-detail-price { font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+  margin-bottom: 8px; }
+.product-detail-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.7;
+  margin-bottom: 32px; }
+.size-options { display: flex; gap: 8px; margin-bottom: 32px; }
+.size-btn { width: 44px; height: 44px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: none; color: var(--text); font-size: 13px; cursor: pointer;
+  transition: all 0.2s; font-family: var(--font-body); }
+.size-btn:hover { border-color: var(--text-muted); }
+.size-btn.active { border-color: var(--accent); background: var(--accent-glow); color: var(--accent); }
+.detail-cta { display: flex; gap: 12px; }
+.detail-cta button { padding: 14px 32px; border-radius: var(--radius-sm); font-size: 14px;
+  font-weight: 500; cursor: pointer; font-family: var(--font-body); transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.btn-primary { background: var(--cta-bg); color: var(--cta-text); border: none; }
+.btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+.btn-ghost { background: none; color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover { border-color: var(--text-muted); }
+
+/* ═══════════════════════════════════════
+   CART / ORDER SUMMARY
+   ═══════════════════════════════════════ */
+.cart-layout { display: grid; grid-template-columns: 1fr 380px; gap: 48px; }
+.cart-items { display: flex; flex-direction: column; gap: 1px; background: var(--border);
+  border-radius: var(--radius); overflow: hidden; }
+.cart-item { background: var(--bg-elevated); padding: 20px; display: flex; gap: 16px; align-items: center;
+  transition: background 0.3s; }
+.cart-item:hover { background: var(--bg-surface); }
+.cart-thumb { width: 72px; height: 72px; background: var(--img-placeholder); border-radius: var(--radius-sm);
+  flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--text-muted); }
+.cart-item-info { flex: 1; }
+.cart-item-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.cart-item-variant { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.cart-qty { display: flex; align-items: center; gap: 12px; }
+.qty-btn { width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 6px;
+  background: none; color: var(--text); cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center; transition: border-color 0.2s; }
+.qty-btn:hover { border-color: var(--text-muted); }
+.qty-num { font-size: 14px; font-weight: 500; min-width: 20px; text-align: center; }
+.cart-item-price { font-size: 15px; font-weight: 600; white-space: nowrap; }
+.cart-remove { font-size: 11px; color: var(--text-muted); cursor: pointer; transition: color 0.2s; margin-top: 4px; }
+.cart-remove:hover { color: var(--destructive); }
+
+.order-summary { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 32px; position: sticky; top: 80px; }
+.order-summary h3 { font-size: 16px; font-weight: 600; margin-bottom: 24px; letter-spacing: -0.01em; }
+.summary-row { display: flex; justify-content: space-between; padding: 10px 0;
+  font-size: 14px; color: var(--text-secondary); }
+.summary-row.total { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px;
+  font-weight: 600; font-size: 16px; color: var(--text); }
+.summary-row .discount { color: var(--success); }
+.checkout-btn { width: 100%; padding: 14px; background: var(--accent); color: white; border: none;
+  border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer;
+  font-family: var(--font-body); margin-top: 24px; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.checkout-btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+.secure-note { display: flex; align-items: center; gap: 6px; justify-content: center;
+  margin-top: 12px; font-size: 11px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════
+   CHECKOUT STEPS
+   ═══════════════════════════════════════ */
+.checkout-steps { display: flex; justify-content: center; gap: 0; margin-bottom: 48px; }
+.checkout-step { display: flex; align-items: center; gap: 10px; padding: 12px 24px;
+  font-size: 13px; color: var(--text-muted); position: relative; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600;
+  transition: all 0.3s; }
+.checkout-step.active .step-num { background: var(--accent); border-color: var(--accent); color: white; }
+.checkout-step.done .step-num { background: var(--success); border-color: var(--success); color: white; }
+.checkout-step.active { color: var(--text); }
+.step-line { width: 40px; height: 1px; background: var(--border); }
+.step-line.done { background: var(--success); }
+
+/* ═══════════════════════════════════════
+   SVG SHOPPING BAG HERO
+   ═══════════════════════════════════════ */
+.hero-svg { display: flex; justify-content: center; margin-bottom: 48px; }
+.hero-svg svg { width: 160px; height: 160px; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.float { animation: float 4s ease-in-out infinite; }
+
+footer { padding: 64px 32px 32px; border-top: 1px solid var(--border); }
+.footer-inner { max-width: 1200px; margin: 0 auto; display: flex;
+  justify-content: space-between; gap: 64px; margin-bottom: 48px; }
+.footer-col { display: flex; flex-direction: column; gap: 8px; }
+.footer-col-title { font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
+.footer-col a { font-size: 14px; color: var(--text-secondary); text-decoration: none; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom { max-width: 1200px; margin: 0 auto; padding-top: 24px; border-top: 1px solid var(--border); }
+.footer-bottom p { font-size: 12px; color: var(--text-muted); }
+
+@media (max-width: 768px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+  .product-detail { grid-template-columns: 1fr; gap: 32px; }
+  .cart-layout { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; filter: none; }
+  .svg-draw path, .svg-draw circle { stroke-dashoffset: 0 !important; stroke-dasharray: none !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO with SVG bag -->
+<section style="text-align:center;padding-top:160px;">
+  <div class="hero-svg reveal">
+    <svg viewBox="0 0 160 160" fill="none" class="svg-draw float">
+      <!-- Shopping bag -->
+      <rect x="36" y="60" width="88" height="80" rx="8" stroke="var(--text-secondary)" stroke-width="1.5"/>
+      <!-- Handle -->
+      <path d="M60 60 V44 C60 30 72 20 80 20 C88 20 100 30 100 44 V60" stroke="var(--text-secondary)" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- Accent star -->
+      <circle cx="80" cy="96" r="12" stroke="var(--accent)" stroke-width="1.5"/>
+      <path d="M80 88 L82 93 L88 93 L83 97 L85 102 L80 99 L75 102 L77 97 L72 93 L78 93 Z" fill="var(--accent)" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="section-header reveal reveal-delay-1">
+    <div class="label">E-Commerce</div>
+    <h2>Shopping that <em style="font-family:var(--font-display);font-style:italic;color:var(--accent);">feels</em> right.</h2>
+    <p>Product cards, cart, checkout. Every detail matters.</p>
+  </div>
+</section>
+
+<!-- PRODUCT GRID -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Product Grid</div>
+      <h2>Browse with intent.</h2>
+    </div>
+    <div class="product-grid">
+      <div class="product-card reveal">
+        <div class="product-img"><span class="product-badge badge-new">New</span><div class="img-inner"><span class="img-label">Product Image</span></div></div>
+        <div class="product-info"><div class="product-name">Midnight Ceramic Vase</div><div class="product-category">Home &middot; Decor</div><div class="product-price"><span class="current">$89</span></div></div>
+        <div class="product-actions"><button class="add-btn">Add to bag</button></div>
+      </div>
+      <div class="product-card reveal reveal-delay-1">
+        <div class="product-img"><div class="img-inner"><span class="img-label">Product Image</span></div></div>
+        <div class="product-info"><div class="product-name">Walnut Desk Lamp</div><div class="product-category">Lighting</div><div class="product-price"><span class="current">$145</span></div></div>
+        <div class="product-actions"><button class="add-btn">Add to bag</button></div>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="product-img"><span class="product-badge badge-sale">-30%</span><div class="img-inner"><span class="img-label">Product Image</span></div></div>
+        <div class="product-info"><div class="product-name">Linen Throw Blanket</div><div class="product-category">Textiles</div><div class="product-price"><span class="current">$62</span><span class="original">$89</span></div></div>
+        <div class="product-actions"><button class="add-btn">Add to bag</button></div>
+      </div>
+      <div class="product-card reveal reveal-delay-3">
+        <div class="product-img"><div class="img-inner"><span class="img-label">Product Image</span></div></div>
+        <div class="product-info"><div class="product-name">Copper Pour-Over Set</div><div class="product-category">Kitchen</div><div class="product-price"><span class="current">$124</span></div></div>
+        <div class="product-actions"><button class="add-btn">Add to bag</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCT DETAIL -->
+<section>
+  <div class="inner">
+    <div class="product-detail">
+      <div class="product-gallery reveal">
+        <span class="gallery-text">Product photography</span>
+      </div>
+      <div class="reveal reveal-delay-2">
+        <div class="label">Featured</div>
+        <h1 class="product-detail-info" style="font-family:var(--font-display);font-size:40px;font-weight:400;letter-spacing:-0.03em;margin-bottom:8px;">Midnight Ceramic Vase</h1>
+        <div class="product-detail-price">$89</div>
+        <p class="product-detail-desc">Hand-thrown stoneware with a matte black glaze. Each piece is unique — subtle variations in texture and tone are part of the character.</p>
+        <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Size</div>
+        <div class="size-options">
+          <button class="size-btn">S</button>
+          <button class="size-btn active">M</button>
+          <button class="size-btn">L</button>
+        </div>
+        <div class="detail-cta">
+          <button class="btn-primary">Add to bag</button>
+          <button class="btn-ghost">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CART -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Cart</div>
+      <h2>Review your bag.</h2>
+    </div>
+    <div class="cart-layout reveal reveal-delay-1">
+      <div class="cart-items">
+        <div class="cart-item">
+          <div class="cart-thumb">IMG</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">Midnight Ceramic Vase</div>
+            <div class="cart-item-variant">Size M &middot; Matte Black</div>
+            <div class="cart-qty"><button class="qty-btn">-</button><span class="qty-num">1</span><button class="qty-btn">+</button></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="cart-item-price">$89</div>
+            <div class="cart-remove">Remove</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <div class="cart-thumb">IMG</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">Linen Throw Blanket</div>
+            <div class="cart-item-variant">Natural &middot; King</div>
+            <div class="cart-qty"><button class="qty-btn">-</button><span class="qty-num">2</span><button class="qty-btn">+</button></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="cart-item-price">$124</div>
+            <div class="cart-remove">Remove</div>
+          </div>
+        </div>
+        <div class="cart-item">
+          <div class="cart-thumb">IMG</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">Copper Pour-Over Set</div>
+            <div class="cart-item-variant">Brushed Copper</div>
+            <div class="cart-qty"><button class="qty-btn">-</button><span class="qty-num">1</span><button class="qty-btn">+</button></div>
+          </div>
+          <div style="text-align:right;">
+            <div class="cart-item-price">$124</div>
+            <div class="cart-remove">Remove</div>
+          </div>
+        </div>
+      </div>
+      <div class="order-summary">
+        <h3>Order summary</h3>
+        <div class="summary-row"><span>Subtotal</span><span>$337</span></div>
+        <div class="summary-row"><span>Discount</span><span class="discount">-$27</span></div>
+        <div class="summary-row"><span>Shipping</span><span>Free</span></div>
+        <div class="summary-row total"><span>Total</span><span>$310</span></div>
+        <button class="checkout-btn">Proceed to checkout</button>
+        <div class="secure-note">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+          Secure checkout &middot; SSL encrypted
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHECKOUT STEPS -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Checkout</div>
+      <h2>Three steps. Done.</h2>
+    </div>
+    <div class="checkout-steps reveal reveal-delay-1">
+      <div class="checkout-step done"><div class="step-num">&#10003;</div> Bag</div>
+      <div class="step-line done"></div>
+      <div class="checkout-step active"><div class="step-num">2</div> Shipping</div>
+      <div class="step-line"></div>
+      <div class="checkout-step"><div class="step-num">3</div> Payment</div>
+    </div>
+    <div style="max-width:560px;margin:0 auto;" class="reveal reveal-delay-2">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">First name</label><input type="text" placeholder="Jane" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;transition:border-color 0.2s;"></div>
+          <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">Last name</label><input type="text" placeholder="Smith" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;"></div>
+        </div>
+        <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">Address</label><input type="text" placeholder="123 Main St" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;"></div>
+        <div style="display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;">
+          <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">City</label><input type="text" placeholder="New York" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;"></div>
+          <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">State</label><input type="text" placeholder="NY" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;"></div>
+          <div><label style="display:block;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">ZIP</label><input type="text" placeholder="10001" style="width:100%;padding:11px 14px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:var(--font-body);outline:none;"></div>
+        </div>
+        <button class="checkout-btn" style="margin-top:8px;">Continue to payment</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="logo" style="margin-bottom:12px;">apex <span>design dna</span></div>
+      <p style="font-size:14px;color:var(--text-muted);line-height:1.6;max-width:240px;">Shopping patterns that convert. Every detail matters.</p>
+    </div>
+    <div style="display:flex;gap:64px;">
+      <div class="footer-col">
+        <div class="footer-col-title">Patterns</div>
+        <a href="index.html">Landing</a><a href="crm.html">CRM</a><a href="ecommerce.html">E-Commerce</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Framework</div>
+        <a href="#">GitHub</a><a href="#">Documentation</a><a href="#">Changelog</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>&copy; 2026 Lucas Bueno &amp; Claude. All rights reserved.</p></div>
+</footer>
+
+<script src="palette.js"></script>
+<script src="svg-backgrounds.js"></script>
+</body>
+</html>
