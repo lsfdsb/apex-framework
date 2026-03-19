@@ -13,8 +13,16 @@ paths:
 - Accessibility: semantic HTML, aria-labels on icon buttons, keyboard navigation, focus management.
 - Responsive: mobile-first. Test at 320px, 768px, 1280px.
 - No inline styles. Use Tailwind utilities or CSS modules.
-- **Design tokens only** — NEVER use hardcoded Tailwind palette colors (`blue-500`, `purple-600`, etc.). Use the project's semantic tokens (`primary`, `accent`, `muted`, `destructive`). Read `tailwind.config.ts` or `globals.css` first.
-- **Design DNA reference** — Before building any page or major component, read the matching pattern from `docs/design-dna/` (landing, saas, crm, ecommerce, blog, portfolio, social, lms, email, presentation, ebook, backoffice, patterns). These are the visual quality bar.
+- **Design tokens only** — NEVER use hardcoded Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`, `green-500`, `red-500`, `indigo-600`, etc.). Use the project's semantic tokens (`primary`, `accent`, `muted`, `destructive`, `success`, `warning`). Read `tailwind.config.ts` or `globals.css` first.
+- **Design DNA reference** — Before building any page or major component, read the matching pattern from `docs/design-dna/` and follow the **DNA → React Translation Guide** in `.claude/skills/design-system/reference.md`. Match the template — don't interpret it.
+- **APEX page structure** — Every page MUST have:
+  - Root wrapper: `<div className="apex-enter">`
+  - Page header: `<p className="apex-label">`, `<h1 className="font-serif italic text-3xl tracking-[-0.02em]">`, `<p className="text-muted-foreground font-light">`
+  - Content sections: `className="apex-enter stagger-1"`, `stagger-2`, `stagger-3`
+  - Cards: `hover:-translate-y-px transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]`
+  - Labels: `text-[10px] uppercase tracking-[0.06em] text-muted-foreground font-medium`
+  - Values: `text-2xl font-bold tracking-[-0.03em]`
+- **Transition curve** — ALWAYS use `cubic-bezier(0.22,1,0.36,1)` for interactive elements (hover, click, open/close). This is the APEX signature motion.
 - Memoize only when measured — premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.
 - Co-locate: component file, test file, and styles in the same directory.

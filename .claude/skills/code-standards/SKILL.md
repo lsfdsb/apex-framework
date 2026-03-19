@@ -29,6 +29,15 @@ user-invocable: false
 - Typed errors with Result pattern when useful.
 - Never empty catch blocks. Always log + handle.
 
+## Visual Standards (for .tsx/.jsx files)
+
+When writing ANY user-facing component, the `/design-system` skill auto-loads with full guidance. Key rules that apply to ALL code:
+
+- **NEVER** use hardcoded Tailwind palette colors (`blue-500`, `purple-600`). Use semantic tokens: `primary`, `accent`, `success`, `warning`, `destructive`, `muted`
+- **ALWAYS** wrap page roots in `<div className="apex-enter">` for entrance animations
+- **ALWAYS** use the APEX transition curve: `ease-[cubic-bezier(0.22,1,0.36,1)]`
+- Read the matching Design DNA page and follow the Translation Guide in `reference.md`
+
 ## React Components
 
 ```typescript

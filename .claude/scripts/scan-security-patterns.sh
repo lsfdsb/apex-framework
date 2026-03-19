@@ -101,4 +101,14 @@ if echo "$CONTENT" | grep -qE "(query|execute|sql)\s*\(\s*\`[^\`]*\\\$\{"; then
     db.select().from(users).where(eq(users.id, userId))"
 fi
 
+# ── Pattern 5: Hardcoded Tailwind palette colors (design token violation) ──
+# Only check .tsx/.jsx files — these should use semantic tokens, not raw colors
+case "$FILE_PATH" in
+  *.tsx|*.jsx)
+    if echo "$CONTENT" | grep -qE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal|lime|fuchsia)-(50|100|200|300|400|500|600|700|800|900|950)'; then
+      echo '{"systemMessage":"⚠️ APEX DESIGN: Hardcoded Tailwind color detected. Use semantic tokens: primary, accent, success, warning, destructive, muted. See Translation Guide in reference.md."}' >&2
+    fi
+    ;;
+esac
+
 exit 0
