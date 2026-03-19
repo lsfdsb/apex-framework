@@ -1872,7 +1872,7 @@ footer p { font-size: 12px; color: var(--text-muted); }
         <div class="cmd-bar-metrics">
           <span>Pipeline <strong>$284k</strong></span>
           <span>SLA <strong style="color:var(--success);">94%</strong></span>
-          <span>Reason: <strong>Account access</strong></span>
+          <span>Reason: <select class="filter-select" style="font-size:11px;padding:3px 24px 3px 8px;border-radius:6px;"><option>Account access</option><option>Billing</option><option>Renewal</option><option>Technical</option><option>Cancellation</option></select></span>
         </div>
         <div class="cmd-bar-queue">
           <div class="cmd-bubble active" style="background:#25D366;color:white;">MS</div>
@@ -1926,9 +1926,9 @@ footer p { font-size: 12px; color: var(--text-muted); }
       <div class="cmd-conv">
         <!-- Channel tabs at top -->
         <div class="cmd-channels">
-          <div class="cmd-ch-tab active"><span class="ch-indicator wpp"></span> WhatsApp <span class="cmd-ch-tab ch-count" style="padding:0;border:0;">3</span></div>
-          <div class="cmd-ch-tab"><span class="ch-indicator eml"></span> Email <span class="cmd-ch-tab ch-count" style="padding:0;border:0;">5</span></div>
-          <div class="cmd-ch-tab"><span class="ch-indicator phn"></span> Phone <span class="cmd-ch-tab ch-count" style="padding:0;border:0;">2</span></div>
+          <div class="cmd-ch-tab active" data-channel="whatsapp" onclick="switchChannel('whatsapp')"><span class="ch-indicator wpp"></span> WhatsApp <span class="ch-count">3</span></div>
+          <div class="cmd-ch-tab" data-channel="email" onclick="switchChannel('email')"><span class="ch-indicator eml"></span> Email <span class="ch-count">5</span></div>
+          <div class="cmd-ch-tab" data-channel="phone" onclick="switchChannel('phone')"><span class="ch-indicator phn"></span> Phone <span class="ch-count">2</span></div>
           <div class="cmd-ch-actions">
             <button class="cmd-ch-action" title="Transfer"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/></svg></button>
             <button class="cmd-ch-action" title="Snooze"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></button>
@@ -1936,40 +1936,54 @@ footer p { font-size: 12px; color: var(--text-muted); }
           </div>
         </div>
 
-        <!-- WhatsApp conversation (active tab) -->
-        <div class="cmd-messages">
+        <!-- ═══ WHATSAPP VIEW ═══ -->
+        <div class="cmd-messages cmd-channel-view" id="view-whatsapp">
           <div class="cmd-msg in">Oi, boa tarde! N&atilde;o consigo acessar minha conta desde ontem. Aparece "senha incorreta" mas eu n&atilde;o mudei nada.<div class="cmd-msg-time">14:23</div></div>
-          <div class="cmd-msg out">Oi Maria! Vou verificar agora. Pode me confirmar o email cadastrado?<div class="cmd-msg-time">14:24</div></div>
+          <div class="cmd-msg out"><div style="font-size:9px;color:rgba(255,255,255,0.5);margin-bottom:4px;">&#x1F916; AI Agent</div>Oi Maria! Identifiquei que sua conta foi bloqueada por seguran&ccedil;a ap&oacute;s tentativa de acesso de outro dispositivo. Pode confirmar seu email para eu desbloquear?<div class="cmd-msg-time">14:24 &middot; auto</div></div>
           <div class="cmd-msg in">maria.silva@email.com<div class="cmd-msg-time">14:24</div></div>
-          <div class="cmd-msg out">Encontrei! Houve uma tentativa de acesso de outro dispositivo e o sistema bloqueou por seguran&ccedil;a. Vou desbloquear e enviar um link agora.<div class="cmd-msg-time">14:26</div></div>
-          <div class="cmd-msg in">Ah entendi! Deve ter sido meu filho tentando pelo tablet dele 😅<div class="cmd-msg-time">14:26</div></div>
-          <div class="cmd-msg out">Haha faz sentido! 😄 Pronto, enviei o link para seu email. Expira em 24h. Mais alguma coisa?<div class="cmd-msg-time">14:27</div></div>
+          <div class="cmd-msg out"><div style="font-size:9px;color:rgba(255,255,255,0.5);margin-bottom:4px;">&#x1F916; AI Agent</div>Perfeito! Conta desbloqueada. Enviei um link de redefini&ccedil;&atilde;o para seu email. Expira em 24h. Precisa de mais alguma coisa?<div class="cmd-msg-time">14:25 &middot; auto</div></div>
+          <div class="cmd-msg in">Ah que r&aacute;pido! Deve ter sido meu filho tentando pelo tablet dele 😅 Obrigada!<div class="cmd-msg-time">14:26</div></div>
+          <div class="cmd-msg out">Haha faz sentido! 😄 Fico feliz que resolveu. Qualquer coisa, estamos aqui!<div class="cmd-msg-time">14:27 &middot; Marcus</div></div>
         </div>
 
-        <!-- Reply bar -->
-        <div class="cmd-reply">
-          <textarea placeholder="Reply via WhatsApp..." rows="1"></textarea>
-          <div class="cmd-reply-hint"><kbd>/</kbd> macros <kbd>⌘K</kbd> shortcuts</div>
-          <button class="send">Send</button>
+        <!-- ═══ EMAIL VIEW ═══ -->
+        <div class="cmd-messages cmd-channel-view" id="view-email" style="display:none;">
+          <!-- Email thread -->
+          <div class="cmd-email" style="max-width:100%;margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:11px;color:var(--text-muted);">From: <strong style="color:var(--text);">Maria Silva</strong> &lt;maria.silva@email.com&gt;</div>
+              <div style="font-size:10px;color:var(--text-muted);">Mar 15, 09:12</div>
+            </div>
+            <div class="cmd-email-subject">Re: Your Premium Plan Renewal</div>
+            <div class="cmd-email-body">Hi team, I received the renewal notice. The current pricing seems higher than what we discussed. Could you send an updated proposal with the loyalty discount Marcus mentioned on our call?<br><br>Best,<br>Maria</div>
+            <div class="cmd-email-meta"><span class="cmd-email-status"><span class="dot" style="background:var(--success);width:5px;height:5px;border-radius:50%;display:inline-block;"></span> Opened Mar 15 09:14</span></div>
+          </div>
+          <div class="cmd-email" style="max-width:100%;margin-bottom:12px;border-color:var(--accent);background:var(--accent-glow);">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:11px;color:var(--text-muted);">From: <strong style="color:var(--accent);">&#x1F916; AI Agent</strong> via support@company.com</div>
+              <div style="font-size:10px;color:var(--text-muted);">Mar 15, 09:15 &middot; auto</div>
+            </div>
+            <div class="cmd-email-subject">Re: Your Premium Plan Renewal</div>
+            <div class="cmd-email-body">Hi Maria,<br><br>Thank you for reaching out! Based on your Premium account history and excellent engagement, I've prepared an updated proposal with a 15% loyalty discount:<br><br>&bull; Current: R$ 12.000/year<br>&bull; With discount: <strong>R$ 10.200/year</strong><br>&bull; All Premium features maintained<br><br>I've attached the formal proposal for your board review. Let me know if you need any adjustments.<br><br>Best regards,<br>Support Team</div>
+            <div class="cmd-email-meta">
+              <span class="cmd-email-status"><span class="dot" style="background:var(--success);width:5px;height:5px;border-radius:50%;display:inline-block;"></span> Opened</span>
+              <span class="cmd-email-status"><span class="dot" style="background:var(--success);width:5px;height:5px;border-radius:50%;display:inline-block;"></span> Link clicked</span>
+              <span>&#x1F4CE; proposal-renewal-2026.pdf</span>
+            </div>
+          </div>
+          <div class="cmd-email" style="max-width:100%;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+              <div style="font-size:11px;color:var(--text-muted);">From: <strong style="color:var(--text);">Maria Silva</strong></div>
+              <div style="font-size:10px;color:var(--text-muted);">Mar 16, 14:30</div>
+            </div>
+            <div class="cmd-email-subject">Re: Your Premium Plan Renewal</div>
+            <div class="cmd-email-body">Perfect, thank you! I'll present this to the board on Thursday. The discount makes a big difference. Quick question — can we split the payment into quarterly installments?</div>
+            <div class="cmd-email-meta"><span class="cmd-email-status"><span class="dot" style="background:var(--success);width:5px;height:5px;border-radius:50%;display:inline-block;"></span> Opened Mar 16 14:32</span></div>
+          </div>
         </div>
-      </div>
-    </div>
 
-    <!-- Phone tab demo (separate instance showing the phone experience) -->
-    <div style="margin-top:48px;" class="reveal">
-      <div style="text-align:center;margin-bottom:24px;">
-        <div class="label">Phone Tab</div>
-        <h3 style="font-family:var(--font-display);font-size:clamp(28px,3vw,40px);font-weight:400;letter-spacing:-0.03em;">Recording. Transcript.<br><em style="font-style:italic;color:var(--accent);">AI analysis.</em></h3>
-      </div>
-      <div style="max-width:800px;margin:0 auto;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;">
-        <!-- Channel tabs with Phone active -->
-        <div class="cmd-channels">
-          <div class="cmd-ch-tab"><span class="ch-indicator wpp"></span> WhatsApp</div>
-          <div class="cmd-ch-tab"><span class="ch-indicator eml"></span> Email</div>
-          <div class="cmd-ch-tab active"><span class="ch-indicator phn"></span> Phone</div>
-        </div>
-        <div style="padding:20px;overflow-y:auto;max-height:500px;">
-          <!-- Recording player -->
+        <!-- ═══ PHONE VIEW ═══ -->
+        <div class="cmd-messages cmd-channel-view" id="view-phone" style="display:none;padding:20px;">
           <div class="cmd-phone-record">
             <div class="cmd-phone-header">
               <button class="cmd-phone-play"><svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
@@ -1984,31 +1998,33 @@ footer p { font-size: 12px; color: var(--text-muted); }
               <div class="cmd-wave-bar" style="height:26px"></div><div class="cmd-wave-bar" style="height:16px"></div><div class="cmd-wave-bar" style="height:22px"></div><div class="cmd-wave-bar" style="height:10px"></div><div class="cmd-wave-bar" style="height:18px"></div><div class="cmd-wave-bar" style="height:24px"></div><div class="cmd-wave-bar" style="height:14px"></div><div class="cmd-wave-bar" style="height:8px"></div>
             </div>
           </div>
-
-          <!-- AI Transcript -->
           <div class="cmd-transcript">
             <div class="cmd-transcript-title">AI Transcript</div>
             <div class="cmd-transcript-line"><span class="ts">0:00</span> <strong>Agent:</strong> Bom dia Maria, tudo bem? Aqui &eacute; o Marcus da equipe de renova&ccedil;&otilde;es.</div>
             <div class="cmd-transcript-line"><span class="ts">0:08</span> <strong>Maria:</strong> Oi Marcus! Tudo sim. Recebi o email sobre a renova&ccedil;&atilde;o do plano.</div>
             <div class="cmd-transcript-line"><span class="ts">0:15</span> <strong>Agent:</strong> Isso! Queria conversar sobre as condi&ccedil;&otilde;es. Voc&ecirc; est&aacute; satisfeita com o plano Premium?</div>
-            <div class="cmd-transcript-line"><span class="ts">0:28</span> <strong>Maria:</strong> Sim, muito. O suporte &eacute; excelente. S&oacute; que o pre&ccedil;o subiu bastante esse ano...</div>
-            <div class="cmd-transcript-line"><span class="ts">0:42</span> <strong>Agent:</strong> Entendo. Para clientes Premium com seu hist&oacute;rico, consigo oferecer um desconto especial.</div>
+            <div class="cmd-transcript-line"><span class="ts">0:28</span> <strong>Maria:</strong> Sim, muito. S&oacute; que o pre&ccedil;o subiu bastante esse ano...</div>
+            <div class="cmd-transcript-line"><span class="ts">0:42</span> <strong>Agent:</strong> Para clientes Premium com seu hist&oacute;rico, consigo oferecer 15% de desconto.</div>
             <div class="cmd-transcript-line"><span class="ts">1:05</span> <strong>Maria:</strong> Que &oacute;timo! Quanto ficaria?</div>
-            <div class="cmd-transcript-line"><span class="ts">1:12</span> <strong>Agent:</strong> Consigo 15% de desconto, ficaria R$ 10.200 no ano. Mantendo todos os benef&iacute;cios.</div>
-            <div class="cmd-transcript-line"><span class="ts">1:30</span> <strong>Maria:</strong> Preciso ver com a diretoria. Pode me mandar a proposta por email?</div>
-            <div class="cmd-transcript-line"><span class="ts">1:45</span> <strong>Agent:</strong> Claro! Envio ainda hoje. E se precisar de algo mais, &eacute; s&oacute; chamar.</div>
+            <div class="cmd-transcript-line"><span class="ts">1:12</span> <strong>Agent:</strong> R$ 10.200 no ano. Mantendo todos os benef&iacute;cios.</div>
+            <div class="cmd-transcript-line"><span class="ts">1:30</span> <strong>Maria:</strong> Preciso ver com a diretoria. Manda a proposta por email?</div>
           </div>
-
-          <!-- AI Analysis -->
           <div class="cmd-ai-analysis">
-            <div class="cmd-ai-analysis-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2z"/><path d="M12 8v4l3 3"/></svg> AI Analysis</div>
+            <div class="cmd-ai-analysis-title">&#x1F916; AI Analysis</div>
             <div class="cmd-ai-row"><span class="cmd-ai-row-label">Sentiment</span><span class="cmd-ai-row-value" style="color:var(--success);">Positive</span></div>
             <div class="cmd-ai-row"><span class="cmd-ai-row-label">Topics</span><span class="cmd-ai-row-value">Renewal, Pricing, Discount</span></div>
-            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Customer intent</span><span class="cmd-ai-row-value">Willing to renew with discount</span></div>
+            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Intent</span><span class="cmd-ai-row-value">Willing to renew with discount</span></div>
             <div class="cmd-ai-row"><span class="cmd-ai-row-label">Blocker</span><span class="cmd-ai-row-value" style="color:var(--warning);">Board approval needed</span></div>
-            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Risk level</span><span class="cmd-ai-row-value" style="color:var(--warning);">Medium</span></div>
-            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Action items</span><span class="cmd-ai-row-value">Send proposal by email today. Follow up Friday.</span></div>
+            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Risk</span><span class="cmd-ai-row-value" style="color:var(--warning);">Medium</span></div>
+            <div class="cmd-ai-row"><span class="cmd-ai-row-label">Actions</span><span class="cmd-ai-row-value">Send proposal today. Follow up Friday.</span></div>
           </div>
+        </div>
+
+        <!-- Reply bar (adapts per channel) -->
+        <div class="cmd-reply" id="cmd-reply-bar">
+          <textarea id="cmd-reply-input" placeholder="Reply via WhatsApp..." rows="1"></textarea>
+          <div class="cmd-reply-hint"><kbd>/</kbd> macros <kbd>⌘K</kbd> shortcuts</div>
+          <button class="send">Send</button>
         </div>
       </div>
     </div>
@@ -2044,5 +2060,29 @@ footer p { font-size: 12px; color: var(--text-muted); }
 
 <script src="palette.js"></script>
 <script src="svg-backgrounds.js"></script>
+<script>
+// Command Center interactivity
+function switchChannel(ch) {
+  // Toggle tab active state
+  document.querySelectorAll('.cmd-ch-tab').forEach(t => t.classList.toggle('active', t.dataset.channel === ch));
+  // Toggle channel views
+  document.querySelectorAll('.cmd-channel-view').forEach(v => v.style.display = 'none');
+  const view = document.getElementById('view-' + ch);
+  if (view) view.style.display = '';
+  // Update reply placeholder
+  const input = document.getElementById('cmd-reply-input');
+  if (input) {
+    const placeholders = { whatsapp: 'Reply via WhatsApp...', email: 'Compose email reply...', phone: 'Add call note...' };
+    input.placeholder = placeholders[ch] || 'Reply...';
+  }
+}
+// Bubble click — switch active client
+document.querySelectorAll('.cmd-bubble').forEach(b => {
+  b.addEventListener('click', function() {
+    document.querySelectorAll('.cmd-bubble').forEach(x => x.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
 </body>
 </html>
