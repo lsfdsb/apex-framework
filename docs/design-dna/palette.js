@@ -136,10 +136,12 @@ style.textContent = `
   .apex-nav-logo { font-family: 'Inter',-apple-system,sans-serif; font-weight: 600; font-size: 14px;
     text-decoration: none; color: var(--text); letter-spacing: -0.02em; }
   .apex-nav-logo span { color: var(--text-muted); font-weight: 300; margin-left: 4px; font-size: 13px; }
-  .apex-nav-links { display: flex; gap: 6px; }
+  .apex-nav-links { display: flex; gap: 4px; overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; white-space: nowrap; }
+  .apex-nav-links::-webkit-scrollbar { display: none; }
   .apex-nav-links a { font-family: 'Inter',-apple-system,sans-serif; font-size: 13px;
-    color: var(--text-muted); text-decoration: none; padding: 5px 12px;
-    border-radius: 999px; transition: all 0.25s; }
+    color: var(--text-muted); text-decoration: none; padding: 5px 10px;
+    border-radius: 999px; transition: all 0.25s; flex-shrink: 0; white-space: nowrap; }
   .apex-nav-links a:hover { color: var(--text); background: var(--accent-glow); transform: translateY(-1px); }
   .apex-nav-links a:active { transform: scale(0.95); }
   .apex-nav-links a.active { color: var(--accent); background: var(--accent-glow); font-weight: 500; }
