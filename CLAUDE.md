@@ -129,6 +129,8 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 3. **Design Reviewer must review UI** — If .tsx/.jsx files are created, Design Reviewer checks design token compliance, persona alignment, and branding. This is part of the `build` preset now.
 4. **Worktree output must be verified** — After any builder in a worktree reports "done", the lead MUST verify files exist in the main project. Do NOT trust "success" messages from worktree agents without checking.
 5. **Research before integration code** — If the PRD lists external APIs, `/research` runs BEFORE the builder writes integration code. Never design against an API you haven't read the docs for.
+6. **Lead never does builder work** — If a builder fails (worktree file loss, stuck, etc.), do NOT rewrite files as the lead. Re-spawn a builder with `isolation: none` instead. Lead writes code only for single-file quick fixes. This prevents burning Opus context on Sonnet-level work.
+7. **Builders MUST commit in worktree** — Before reporting "done", builders run `git add -A && git commit`. Without a commit, worktree cleanup deletes all files. The lead merges from the branch. This rule exists because file loss has occurred in 4+ sessions.
 
 ### The Roster
 | Role | Agent | Model | Purpose |

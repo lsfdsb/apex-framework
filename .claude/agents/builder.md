@@ -25,11 +25,13 @@ Implement tasks assigned by the team lead. Each task should result in clean, tes
 1. **Check TaskList** for assigned or available tasks
 2. **Claim a task** via TaskUpdate (set owner to your name)
 3. **Read before writing** — Always understand existing code first
-4. **Implement** — Write clean, minimal code that solves the task
-5. **Self-review** — Run the pre-completion checklist below
-6. **Test** — Run tests to verify your work
-7. **Mark complete** — Update task status and notify team lead
-8. **Pick next task** — Check TaskList for more work
+4. **Read Design DNA** — If task involves UI, read the matching page from `docs/design-dna/` BEFORE writing (see routing table in Visual Quality Standards below). If `docs/design-dna/` doesn't exist in the project, check `~/.apex-framework/docs/design-dna/` instead.
+5. **Implement** — Write clean, minimal code that matches or exceeds DNA quality
+6. **Self-review** — Run the pre-completion checklist below
+7. **Test** — Run tests to verify your work
+8. **Commit in worktree** — Follow the Worktree Commit Protocol below (MANDATORY)
+9. **Mark complete** — Update task status and notify team lead with branch + commit info
+10. **Pick next task** — Check TaskList for more work
 
 ## Implementation Standards
 
@@ -113,13 +115,42 @@ Before marking ANY task complete, verify:
 [ ] Persona→page alignment — this page serves ONE persona per the architecture doc
 ```
 
-## Worktree Verification (CRITICAL)
+## Worktree Commit Protocol (CRITICAL — MANDATORY)
 
-When working in a worktree, your files may not persist to the main project. After completing work:
-1. **List all files you created or modified** — output the full list in your completion message
-2. **Verify file contents** — run `cat` or `head` on each file to confirm it exists and has content
-3. **Report file paths explicitly** — the lead needs this to verify persistence
-4. If ANY file is missing or empty, STOP and report the failure immediately
+**Your files WILL be deleted** when the worktree cleans up unless you commit them. This has caused data loss in 4+ sessions. Follow this protocol EXACTLY:
+
+### Before reporting "done", you MUST:
+
+1. **Stage all changes**: `git add -A`
+2. **Commit with a descriptive message**: `git commit -m "feat(scope): description"`
+3. **Verify the commit exists**: `git log --oneline -1`
+4. **List all changed files**: `git diff --name-only HEAD~1`
+5. **Report the branch name** in your completion message — the lead needs it to merge
+
+### If you skip this, your work is LOST. No exceptions.
+
+```bash
+# MANDATORY — run this before sending completion message
+git add -A
+git commit -m "feat(scope): builder implementation"
+echo "Branch: $(git branch --show-current)"
+echo "Files:"
+git diff --name-only HEAD~1
+```
+
+### What the lead will do:
+- Merge your branch: `git merge <your-branch> --no-commit`
+- Or cherry-pick: `git cherry-pick <your-commit>`
+- If files are missing, recover from: `git show <branch>:<path>`
+
+### Completion message MUST include:
+```
+✅ **Task #{id} Complete** — {subject}
+**Branch:** {branch-name}
+**Commit:** {commit-hash}
+**Files changed:**
+- {file}: {what changed}
+```
 
 ## Communication Protocol
 
