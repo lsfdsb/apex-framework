@@ -13,6 +13,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Technical Writer added to all team presets (build, fix, review), not just full
 - **Sentinel Phase 8: Observatory Health Check** — Runtime validation of built APEX apps
 - **Self-Test Dual Mode** — Quick mode (`/self-test`, `/batman`): 7-phase structural audit; Full mode (`/self-test full`, `/batman full`): 10-phase integration proof with full agent team
+- Batman builds apps — dual-mode self-test (7f5177e)
+- **APEX Observatory dashboard** — Real-time framework health monitoring (dashboard/server.js + dashboard/index.html)
+- **Observatory PRD and architecture docs** — Complete documentation (docs/prd/apex-observatory.md, docs/architecture/apex-observatory.md)
 
 ### Changed
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
@@ -20,6 +23,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - CLAUDE.md: "Always-On Agents" section added above team spawn rules
 - Sentinel agent: maxTurns increased from 50 to 60, report format updated for Phase 8
 - Self-Test skill: complete rewrite with quick mode (structural) and full mode (integration proof)
+
+### Fixed
+- ANSI escape code stripping in test runner API output — Observatory Phase 2 validation
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 

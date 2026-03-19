@@ -142,6 +142,7 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 | Technical Writer | technical-writer | haiku | CHANGELOG, README, docs |
 | Researcher | researcher | haiku | API/docs investigation |
 | Sentinel | sentinel | sonnet | The Dark Knight — /self-test, /batman |
+| Framework Evolver | framework-evolver | sonnet | Self-improvement — /evolve |
 
 ### Presets
 - `build` — Watcher + Builder + Design Reviewer + QA + Technical Writer (features, refactoring — Design Reviewer auto-included when task creates UI)
