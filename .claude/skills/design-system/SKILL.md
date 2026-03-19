@@ -1,6 +1,12 @@
 ---
 name: design-system
 description: Our design system standards and UI/UX guidelines. Auto-loads when building any user-facing interface, component, page, or layout. Triggers on design, style, UI, UX, component, layout, responsive, accessibility, dark mode, theme, beautiful, aesthetic, or visual work. Build like Jony Ive — radical simplicity where every element earns its place.
+paths:
+  - "**/*.tsx"
+  - "**/*.jsx"
+  - "**/*.css"
+  - "**/globals.css"
+  - "**/tailwind.config.*"
 user-invocable: false
 ---
 
