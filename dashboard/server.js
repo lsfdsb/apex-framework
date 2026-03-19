@@ -259,7 +259,7 @@ function collectCrossRef() {
   return collectAgents().map(agent => {
     const inClaudeMd = new RegExp(agent.name, "i").test(claudeMd);
     const inTeamsSkill = new RegExp(agent.name, "i").test(teamSkill);
-    const hasTests = (run(`grep -rql "${agent.name}" tests/ 2>/dev/null`) || "").trim().length > 0;
+    const hasTests = (run(`grep -rl "${agent.name}" tests/ 2>/dev/null`) || "").trim().length > 0;
     return {
       agent: agent.name,
       claudeMd: inClaudeMd,
