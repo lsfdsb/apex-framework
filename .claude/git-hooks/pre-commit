@@ -17,16 +17,14 @@ else
   STEEL='' BESKAR='' SHADOW='' FROST='' EMBER='' WARN=''
 fi
 
-# ── Animated Header ──
+# ── Header ──
 echo ""
 if [ "$APEX_COLORS" = true ]; then
-  printf "  ${GOLD_BOLD}╔══════════════════════════════════════╗${RST}\n"
-  printf "  ${GOLD_BOLD}║${RST}   ${EMBER}⚔️  APEX Pre-Commit Forge${RST}         ${GOLD_BOLD}║${RST}\n"
-  printf "  ${GOLD_BOLD}╚══════════════════════════════════════╝${RST}\n"
+  printf "  ${BESKAR}APEX Pre-Commit${RST}\n"
+  printf "  ${SHADOW}──────────────────────────────────────${RST}\n"
 else
-  echo "  ╔══════════════════════════════════════╗"
-  echo "  ║   ⚔️  APEX Pre-Commit Forge          ║"
-  echo "  ╚══════════════════════════════════════╝"
+  echo "  APEX Pre-Commit"
+  echo "  ──────────────────────────────────────"
 fi
 echo ""
 
@@ -284,48 +282,18 @@ fi
 echo ""
 if [ $ERRORS -gt 0 ]; then
   if [ "$APEX_COLORS" = true ]; then
-    printf "  ${ERR_BOLD}╔══════════════════════════════════════╗${RST}\n"
-    printf "  ${ERR_BOLD}║${RST}  ${FIRE} ${ERR_BOLD}%d issue(s) found. Commit blocked.${RST} ${ERR_BOLD}║${RST}\n" "$ERRORS"
-    printf "  ${ERR_BOLD}║${RST}  ${STEEL}Fix the issues above and try again.${RST} ${ERR_BOLD}║${RST}\n"
-    printf "  ${ERR_BOLD}╚══════════════════════════════════════╝${RST}\n"
+    printf "  ${ERR}%d issue(s). Commit blocked.${RST}\n" "$ERRORS"
   else
-    echo "  🛑 APEX: $ERRORS issue(s) found. Commit blocked."
-    echo "  Fix the issues above and try again."
+    echo "  $ERRORS issue(s). Commit blocked."
   fi
   echo ""
   exit 1
 fi
 
-# Grogu celebrates on success (20% chance)
-GROGU_CELEBRATE=$((RANDOM % 5))
-
 if [ "$APEX_COLORS" = true ]; then
-  printf "  ${OK_BOLD}╔══════════════════════════════════════╗${RST}\n"
-  printf "  ${OK_BOLD}║${RST}  ${OK_BOLD}✓ All %d checks passed${RST}               ${OK_BOLD}║${RST}\n" "$PASSED_CHECKS"
-  printf "  ${OK_BOLD}║${RST}  ${STEEL}This is the way. ⚔️${RST}                ${OK_BOLD}║${RST}\n"
-  printf "  ${OK_BOLD}╚══════════════════════════════════════╝${RST}\n"
-  if [ "$GROGU_CELEBRATE" -eq 0 ]; then
-    echo ""
-    # Animated reveal — each line appears with a brief delay
-    printf "  ${CREED}        ╭───╮${RST}\n";          sleep 0.06
-    printf "  ${CREED}   ╭───( • • )───╮${RST}\n";     sleep 0.06
-    printf "  ${CREED}        ╰─┬─╯${RST}\n";          sleep 0.06
-    printf "  ${CREED}         ╭┴╮${RST}\n";            sleep 0.06
-    printf "  ${CREED}         ╰─╯${RST}\n";            sleep 0.12
-    # Pose change — eyes light up
-    printf "\033[5A"
-    printf "  ${CREED}        ╭───╮${RST}     ${OK}✨${RST}\n"
-    printf "  ${CREED}   ╭───( ${OK}◠ ◠${RST} ${CREED})───╮${RST}  ${OK}\"Patu!\"${RST}\n"
-    printf "  ${CREED}        ╰─┬─╯${RST}      ${STEEL}Grogu approves this commit${RST}\n"
-    printf "  ${CREED}         ╭┴╮${RST}\n"
-    printf "  ${CREED}         ╰─╯${RST}\n"
-  fi
+  printf "  ${OK}All checks passed.${RST}\n"
 else
-  echo "  ✅ APEX: All checks passed. This is the way."
-  if [ "$GROGU_CELEBRATE" -eq 0 ]; then
-    echo ""
-    echo "  👶 \"Patu!\" — Grogu approves this commit"
-  fi
+  echo "  All checks passed."
 fi
 echo ""
 exit 0

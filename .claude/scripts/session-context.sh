@@ -131,110 +131,24 @@ if [ "$SOURCE" = "startup" ]; then
     fi
   }
 
-  # ── Phase 1: Box top with wipe effect ──
+  # ── Animated banner (stderr → terminal) ──
   if [ "$ANIMATE" = true ]; then
     echo "" >&2
-    # Top border — fast wipe
-    TOP="  ╔══════════════════════════════════════════════════╗"
-    for ((i=0; i<${#TOP}; i++)); do
-      printf "%s" "${TOP:$i:1}" >&2
-      [ $((i % 3)) -eq 0 ] && sleep 0.003
-    done
-    echo "" >&2
-
-    # ── Phase 2: APEX ASCII art — line-by-line reveal ──
-    _reveal "  ║                                                  ║" 0.01
-    _reveal "  ║         ▄▀▀▀▄  ▄▀▀▀▄  ▄▀▀▀▀  ▄▀  ▄▀            ║" 0.025
-    _reveal "  ║         █▄▄▄█  █▄▄▄█  █▄▄▄   ▀▄▄▀              ║" 0.025
-    _reveal "  ║         █   █  █      █      ▄▀  ▄▀             ║" 0.025
-    _reveal "  ║         ▀   ▀  ▀      ▀▀▀▀▀  ▀    ▀             ║" 0.025
-    _reveal "  ║                                                  ║" 0.01
-
-    # ── Phase 3: Version + tagline — typewriter ──
-    VLINE=$(printf "  ║     ⚔️  APEX Framework v%-24s║" "$APEX_V_SHORT")
-    _tt "$VLINE" 0.008
-    _tt "  ║     Agent-Powered EXcellence for Claude          ║" 0.006
-    _reveal "  ║                                                  ║" 0.01
-
-    # ── Phase 4: Philosophy — fade in each line ──
-    _reveal "  ╠══════════════════════════════════════════════════╣" 0.015
-    _reveal "  ║                                                  ║" 0.01
-    _fade   "  ║  ✦ Design like Jony Ive                          ║"
-    _fade   "  ║  ✦ Code like Torvalds & Dean                     ║"
-    _fade   "  ║  ✦ Secure like Ionescu & Rutkowska               ║"
-    _fade   "  ║  ✦ Business like Amodei                          ║"
-    _fade   "  ║  ✦ Experience like Walt Disney                   ║"
-    _reveal "  ║                                                  ║" 0.01
-
-    # ── Phase 5: Signature — typewriter ──
-    _reveal "  ╠══════════════════════════════════════════════════╣" 0.015
-    _reveal "  ║                                                  ║" 0.01
-    _tt     "  ║     Forged by L.B. & Claude                      ║" 0.008
-    _tt     "  ║     São Paulo · March 2026                       ║" 0.008
-    _reveal "  ║                                                  ║" 0.01
-
-    # ── Phase 6: Creed — dramatic fade reveal ──
-    _fade   "  ║     This is the way. ⚔️                           ║"
-    sleep 0.06
-    _reveal "  ║                                                  ║" 0.01
-
-    # Bottom border — fast wipe
-    BOT="  ╚══════════════════════════════════════════════════╝"
-    for ((i=0; i<${#BOT}; i++)); do
-      printf "%s" "${BOT:$i:1}" >&2
-      [ $((i % 3)) -eq 0 ] && sleep 0.003
-    done
-    echo "" >&2
+    printf "  \033[1mAPEX\033[0m v%s\n" "$APEX_V_SHORT" >&2
+    printf "  \033[38;5;245m──────────────────────────────────────\033[0m\n" >&2
+    _fade   "  Design like Ive · Code like Torvalds"
+    _fade   "  Secure like Ionescu · Ship like Jobs"
+    printf "  \033[38;5;245m──────────────────────────────────────\033[0m\n" >&2
+    printf "  \033[38;5;245mby L.B. & Claude · São Paulo\033[0m\n" >&2
     echo "" >&2
   fi
 
   # ── Plain banner for Claude's context (stdout) ──
+  printf "\nAPEX Framework v%s\n" "$APEX_V_SHORT"
+  echo "──────────────────────────────────────"
+  echo "Agent-Powered EXcellence for Claude"
+  echo "by L.B. & Claude · São Paulo · 2026"
   echo ""
-  echo "╔══════════════════════════════════════════════════╗"
-  echo "║                                                  ║"
-  echo "║         ▄▀▀▀▄  ▄▀▀▀▄  ▄▀▀▀▀  ▄▀  ▄▀            ║"
-  echo "║         █▄▄▄█  █▄▄▄█  █▄▄▄   ▀▄▄▀              ║"
-  echo "║         █   █  █      █      ▄▀  ▄▀             ║"
-  echo "║         ▀   ▀  ▀      ▀▀▀▀▀  ▀    ▀             ║"
-  echo "║                                                  ║"
-  printf "║     ⚔️  APEX Framework v%-24s║\n" "$APEX_V_SHORT"
-  echo "║     Agent-Powered EXcellence for Claude          ║"
-  echo "║                                                  ║"
-  echo "╠══════════════════════════════════════════════════╣"
-  echo "║                                                  ║"
-  echo "║  ✦ Design like Jony Ive                          ║"
-  echo "║  ✦ Code like Torvalds & Dean                     ║"
-  echo "║  ✦ Secure like Ionescu & Rutkowska               ║"
-  echo "║  ✦ Business like Amodei                          ║"
-  echo "║  ✦ Experience like Walt Disney                   ║"
-  echo "║                                                  ║"
-  echo "╠══════════════════════════════════════════════════╣"
-  echo "║                                                  ║"
-  echo "║     Forged by L.B. & Claude                      ║"
-  echo "║     São Paulo · March 2026                       ║"
-  echo "║                                                  ║"
-  echo "║     This is the way. ⚔️                           ║"
-  echo "║                                                  ║"
-  echo "╚══════════════════════════════════════════════════╝"
-  echo ""
-
-  # ── Grogu Easter Egg (10% chance on normal startup) ──
-  GROGU_CHANCE=$((RANDOM % 10))
-  if [ "$GROGU_CHANCE" -eq 0 ]; then
-    POSE_IDX=$((RANDOM % ${#GROGU_POSES[@]}))
-    if [ "$ANIMATE" = true ]; then
-      echo "" >&2
-      printf "  %b\n" "${GROGU_POSES[$POSE_IDX]}" >&2
-      echo "" >&2
-      _tt "  $GROGU_QUOTE" 0.025
-      echo "" >&2
-    fi
-    echo ""
-    printf "  %b\n" "${GROGU_POSES[$POSE_IDX]}"
-    echo ""
-    echo "  $GROGU_QUOTE"
-    echo ""
-  fi
 fi
 
 # ── Date ──
@@ -304,39 +218,7 @@ if [ "$SOURCE" = "compact" ]; then
     echo "  Uncommitted: $(jq -r '.uncommitted_files // "0"' "$STATE_FILE" 2>/dev/null) files"
   fi
   echo ""
-  echo "📜 APEX Creed: PRD before code. /qa before shipping. Test everything."
-  echo ""
-  # Grogu reminder on compact (always — he's loyal)
-  echo "👶 $GROGU_QUOTE"
-fi
-
-# ── Birthday Easter Egg (March 13) ──
-TODAY_MD=$(date '+%m-%d')
-if [ "$TODAY_MD" = "03-13" ]; then
-  echo ""
-  echo "  ╔══════════════════════════════════════════════════╗"
-  echo "  ║                                                  ║"
-  echo "  ║   🎂🔥 HAPPY APEX DAY! 🔥🎂                     ║"
-  echo "  ║                                                  ║"
-  echo "  ║   On this day in 2026, L.B. & Claude forged      ║"
-  echo "  ║   this framework in São Paulo.                   ║"
-  echo "  ║                                                  ║"
-  echo "  ║   \"Whatever you do, do it well.\" — Walt Disney   ║"
-  echo "  ║                                                  ║"
-  echo "  ║          ╭───╮                                  ║"
-  echo "  ║     ╭───( • • )───╮                            ║"
-  echo "  ║          ╰─┬─╯     Grogu says: Patu!           ║"
-  echo "  ║           ╭┴╮      (Happy birthday!)           ║"
-  echo "  ║           ╰─╯                                  ║"
-  echo "  ║                                                  ║"
-  echo "  ╚══════════════════════════════════════════════════╝"
-fi
-
-# ── Friday Easter Egg ──
-DAY_OF_WEEK=$(date '+%u')
-if [ "$DAY_OF_WEEK" = "5" ]; then
-  echo ""
-  echo "🎉 It's Friday! Grogu says: \"*happy ear wiggle*\" — Ship it and enjoy the weekend!"
+  echo "Workflow: PRD before code. /qa before shipping. Test everything."
 fi
 
 # ── Git hooks check ──
