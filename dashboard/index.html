@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX Observatory — Framework Health Dashboard</title>
+<style>
+  /* ── Reset & Foundation ────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-dark: #0a0a0f;
+    --bg-card: #12121a;
+    --bg-card-hover: #1a1a26;
+    --bg-surface: #16161f;
+    --border: #1e1e2e;
+    --border-accent: #2a2a3e;
+    --text-primary: #e0e0e8;
+    --text-secondary: #8888a0;
+    --text-muted: #55556a;
+    --accent-gold: #c8a84e;
+    --accent-gold-dim: #8a7535;
+    --green: #34d399;
+    --green-dim: rgba(52, 211, 153, 0.12);
+    --red: #f87171;
+    --red-dim: rgba(248, 113, 113, 0.12);
+    --yellow: #fbbf24;
+    --yellow-dim: rgba(251, 191, 36, 0.12);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96, 165, 250, 0.12);
+    --purple: #a78bfa;
+    --accent-gold-glow: rgba(200, 168, 78, 0.3);
+    --accent-gold-subtle: rgba(200, 168, 78, 0.05);
+    --red-border: rgba(248, 113, 113, 0.3);
+    --red-subtle: rgba(248, 113, 113, 0.05);
+    --font-mono: "SF Mono", "Fira Code", "JetBrains Mono", Consolas, monospace;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Accessibility ─────────────────────────────── */
+  .skip-nav {
+    position: absolute;
+    top: -48px;
+    left: 12px;
+    padding: 10px 20px;
+    background: var(--accent-gold);
+    color: var(--bg-dark);
+    font-weight: 700;
+    font-size: 13px;
+    z-index: 9999;
+    border-radius: 0 0 var(--radius) var(--radius);
+    text-decoration: none;
+    transition: top 0.15s ease;
+  }
+
+  .skip-nav:focus {
+    top: 0;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ── Layout ────────────────────────────────────── */
+  .app {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 32px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .logo-icon {
+    font-size: 36px;
+    filter: drop-shadow(0 0 12px var(--accent-gold-glow));
+  }
+
+  .logo h1 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    color: var(--accent-gold);
+  }
+
+  .logo .subtitle {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .version-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg-surface);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* ── Health Bar ────────────────────────────────── */
+  .health-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .health-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    transition: all 0.2s ease;
+  }
+
+  .health-card:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-accent);
+  }
+
+  .health-card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  .health-card .value {
+    font-size: 28px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+  }
+
+  .health-card .detail {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+
+  .health-card.ok .value { color: var(--green); }
+  .health-card.warn .value { color: var(--yellow); }
+  .health-card.error .value { color: var(--red); }
+
+  /* ── Buttons ───────────────────────────────────── */
+  .btn {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    padding: 8px 16px;
+    border: 1px solid var(--border-accent);
+    border-radius: var(--radius);
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .btn:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--accent-gold-dim);
+    color: var(--accent-gold);
+  }
+
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-gold-dim), transparent);
+    border-color: var(--accent-gold-dim);
+    color: var(--accent-gold);
+  }
+
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent-gold), transparent);
+    color: var(--bg-dark);
+  }
+
+  .btn-sm {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  /* ── Sections ──────────────────────────────────── */
+  .section {
+    margin-bottom: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title .icon {
+    font-size: 16px;
+  }
+
+  /* ── Tables ────────────────────────────────────── */
+  .table-wrap {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+
+  caption {
+    text-align: left;
+    padding: 10px 16px 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  th[scope="col"] {
+    text-align: left;
+    padding: 10px 16px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    background: var(--bg-surface);
+    border-bottom: 1px solid var(--border);
+    font-weight: 500;
+  }
+
+  td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  tr:hover td { background: var(--bg-card-hover); }
+
+  .status-ok { color: var(--green); }
+  .status-fail { color: var(--red); }
+  .status-warn { color: var(--yellow); }
+  .status-info { color: var(--blue); }
+
+  .badge {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .badge-green { background: var(--green-dim); color: var(--green); }
+  .badge-red { background: var(--red-dim); color: var(--red); }
+  .badge-yellow { background: var(--yellow-dim); color: var(--yellow); }
+  .badge-blue { background: var(--blue-dim); color: var(--blue); }
+  .badge-muted { background: var(--border); color: var(--text-muted); }
+
+  .mono { font-family: var(--font-mono); font-size: 12px; }
+
+  /* ── Test Runner ───────────────────────────────── */
+  .test-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .test-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .test-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--border-accent);
+    transition: background 0.3s ease;
+  }
+
+  .test-card.passed::before { background: var(--green); }
+  .test-card.failed::before { background: var(--red); }
+  .test-card.running::before {
+    background: linear-gradient(90deg, var(--accent-gold), transparent, var(--accent-gold));
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .test-card .suite-name {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .test-card .count {
+    font-size: 36px;
+    font-weight: 700;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    line-height: 1;
+  }
+
+  .test-card.passed .count { color: var(--green); }
+  .test-card.failed .count { color: var(--red); }
+  .test-card.running .count { color: var(--accent-gold); }
+
+  .test-card .status-text {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  /* ── Cross-Reference Matrix ────────────────────── */
+  .matrix-cell {
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+
+  /* ── Workflow Chain ────────────────────────────── */
+  .workflow-chain {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow-x: auto;
+    justify-content: center;
+    flex-wrap: wrap;
+    row-gap: 12px;
+  }
+
+  .workflow-step {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+
+  .workflow-node {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 8px 14px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-accent);
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    white-space: nowrap;
+    transition: all 0.2s ease;
+  }
+
+  .workflow-node.present {
+    border-color: var(--green);
+    color: var(--green);
+    background: var(--green-dim);
+  }
+
+  .workflow-node.missing {
+    border-color: var(--red);
+    color: var(--red);
+    background: var(--red-dim);
+  }
+
+  .workflow-arrow {
+    color: var(--text-muted);
+    font-size: 16px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* ── Issues List ───────────────────────────────── */
+  .issues-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .issue-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+
+  .issue-item.critical { border-left-color: var(--red); }
+  .issue-item.low { border-left-color: var(--blue); }
+
+  .issue-source {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  /* ── Loading ───────────────────────────────────── */
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-accent);
+    border-top-color: var(--accent-gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 12px;
+    flex-shrink: 0;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* ── Verdict Banner ────────────────────────────── */
+  .verdict {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    text-align: center;
+    margin-top: 32px;
+  }
+
+  .verdict.safe {
+    border-color: var(--accent-gold-dim);
+    background: linear-gradient(135deg, var(--accent-gold-subtle), transparent);
+  }
+
+  .verdict.danger {
+    border-color: var(--red-border);
+    background: linear-gradient(135deg, var(--red-subtle), transparent);
+  }
+
+  .verdict-icon { font-size: 32px; margin-bottom: 8px; }
+  .verdict-text {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.8;
+  }
+  .verdict-quote {
+    font-style: italic;
+    color: var(--text-muted);
+    font-size: 12px;
+    margin-top: 12px;
+  }
+
+  /* ── Responsive ────────────────────────────────── */
+  @media (max-width: 768px) {
+    .test-grid { grid-template-columns: 1fr; }
+    .health-bar { grid-template-columns: repeat(2, 1fr); }
+    header { flex-direction: column; gap: 16px; }
+    .header-actions { flex-wrap: wrap; justify-content: center; }
+  }
+
+  /* ── Scrollbar ─────────────────────────────────── */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg-dark); }
+  ::-webkit-scrollbar-thumb { background: var(--border-accent); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-nav">Skip to main content</a>
+
+<div class="app">
+  <header role="banner">
+    <div class="logo">
+      <span class="logo-icon" aria-hidden="true">🦇</span>
+      <div>
+        <h1>APEX Observatory</h1>
+        <div class="subtitle">Framework Health Dashboard</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <span class="version-badge" id="version" aria-label="Framework version">v--</span>
+      <button class="btn" onclick="loadOverview()" aria-label="Refresh all dashboard data">Refresh</button>
+      <button class="btn btn-primary" onclick="runAllTests()" aria-label="Run all test suites">Run All Tests</button>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Health Overview Bar -->
+    <section aria-labelledby="health-heading">
+      <h2 id="health-heading" class="sr-only">Framework Health Overview</h2>
+      <div class="health-bar" id="health-bar" role="list" aria-label="Framework health metrics">
+        <div class="health-card" role="listitem">
+          <div class="label">Loading…</div>
+          <div class="value">--</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent Roster -->
+    <section class="section" aria-labelledby="agents-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="agents-heading">
+          <span class="icon" aria-hidden="true">🤖</span> Agent Roster
+        </h2>
+        <span class="mono" id="agent-count" style="color: var(--text-muted)" aria-live="polite">--</span>
+      </div>
+      <div class="table-wrap">
+        <table aria-labelledby="agents-heading">
+          <caption>All APEX agents with their configuration, tools, and validation status.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Agent</th>
+              <th scope="col">Model</th>
+              <th scope="col">Tools</th>
+              <th scope="col">Skills</th>
+              <th scope="col">Mode</th>
+              <th scope="col">R/O</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="agents-body">
+            <tr><td colspan="7"><div class="loading"><span class="spinner" aria-hidden="true"></span> Loading agents…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Skill Directory -->
+    <section class="section" aria-labelledby="skills-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="skills-heading">
+          <span class="icon" aria-hidden="true">⚔️</span> Skill Directory
+        </h2>
+        <span class="mono" id="skill-count" style="color: var(--text-muted)" aria-live="polite">--</span>
+      </div>
+      <div class="table-wrap">
+        <table aria-labelledby="skills-heading">
+          <caption>All APEX skills with allowed tools and team integration status.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Skill</th>
+              <th scope="col">Description</th>
+              <th scope="col">Allowed Tools</th>
+              <th scope="col">Team-Aware</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="skills-body">
+            <tr><td colspan="5"><div class="loading"><span class="spinner" aria-hidden="true"></span> Loading skills…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Hook Scripts -->
+    <section class="section" aria-labelledby="hooks-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="hooks-heading">
+          <span class="icon" aria-hidden="true">📜</span> Hook Scripts
+        </h2>
+        <span class="mono" id="hook-count" style="color: var(--text-muted)" aria-live="polite">--</span>
+      </div>
+      <div class="table-wrap">
+        <table aria-labelledby="hooks-heading">
+          <caption>Hook scripts with executable permission, syntax validation, and settings.json wiring status.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Script</th>
+              <th scope="col">Executable</th>
+              <th scope="col">Syntax</th>
+              <th scope="col">Wired in Settings</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="hooks-body">
+            <tr><td colspan="5"><div class="loading"><span class="spinner" aria-hidden="true"></span> Loading hooks…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Workflow Chain -->
+    <section class="section" aria-labelledby="workflow-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="workflow-heading">
+          <span class="icon" aria-hidden="true">🔄</span> Workflow Chain
+        </h2>
+      </div>
+      <div class="workflow-chain" id="workflow-chain" role="list" aria-label="APEX workflow chain">
+        <div class="loading"><span class="spinner" aria-hidden="true"></span> Loading workflow…</div>
+      </div>
+    </section>
+
+    <!-- Test Runner -->
+    <section class="section" aria-labelledby="tests-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="tests-heading">
+          <span class="icon" aria-hidden="true">⚡</span> Test Suites
+        </h2>
+        <span class="mono" style="color: var(--text-muted)" id="test-timestamp" aria-live="polite">Not run yet</span>
+      </div>
+      <div class="test-grid" id="test-grid" role="list">
+        <div class="test-card" id="tc-framework" role="listitem">
+          <div class="suite-name">Structural</div>
+          <div class="count" id="tc-count-framework">--</div>
+          <div class="status-text" id="tc-status-framework">test-framework.sh</div>
+          <button class="btn btn-sm" onclick="runSuite('framework')" aria-label="Run structural framework test suite">Run</button>
+        </div>
+        <div class="test-card" id="tc-hooks" role="listitem">
+          <div class="suite-name">Hooks</div>
+          <div class="count" id="tc-count-hooks">--</div>
+          <div class="status-text" id="tc-status-hooks">test-hooks.sh</div>
+          <button class="btn btn-sm" onclick="runSuite('hooks')" aria-label="Run hook scripts test suite">Run</button>
+        </div>
+        <div class="test-card" id="tc-integration" role="listitem">
+          <div class="suite-name">Integration</div>
+          <div class="count" id="tc-count-integration">--</div>
+          <div class="status-text" id="tc-status-integration">test-integration.sh</div>
+          <button class="btn btn-sm" onclick="runSuite('integration')" aria-label="Run integration test suite">Run</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Cross-Reference Matrix -->
+    <section class="section" aria-labelledby="crossref-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="crossref-heading">
+          <span class="icon" aria-hidden="true">🔗</span> Cross-Reference Matrix
+        </h2>
+      </div>
+      <div class="table-wrap">
+        <table aria-labelledby="crossref-heading">
+          <caption>Agent coverage across CLAUDE.md, teams skill, and test suite references.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Agent</th>
+              <th scope="col">CLAUDE.md</th>
+              <th scope="col">Teams Skill</th>
+              <th scope="col">Tests</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody id="crossref-body">
+            <tr><td colspan="5"><div class="loading"><span class="spinner" aria-hidden="true"></span> Loading matrix…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Issues -->
+    <section class="section" id="issues-section" style="display: none;" aria-labelledby="issues-heading">
+      <div class="section-header">
+        <h2 class="section-title" id="issues-heading">
+          <span class="icon" aria-hidden="true">⚠️</span> Issues Found
+        </h2>
+        <span class="mono" id="issue-count" style="color: var(--red)" aria-live="polite">--</span>
+      </div>
+      <div class="issues-list" id="issues-list" role="list"></div>
+    </section>
+
+    <!-- Verdict -->
+    <div id="verdict" role="status" aria-live="polite"></div>
+
+  </main>
+</div>
+
+<script>
+  // ── State ─────────────────────────────────────────────────
+  let data = null;
+  let testResults = {};
+
+  // ── Fetch ─────────────────────────────────────────────────
+  async function fetchJson(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res.json();
+  }
+
+  // ── Load Overview ─────────────────────────────────────────
+  async function loadOverview() {
+    try {
+      const response = await fetchJson("/api/overview");
+      data = response.data;
+      renderHealth();
+      renderAgents();
+      renderSkills();
+      renderHooks();
+      renderCrossRef();
+      loadWorkflow();
+      renderIssues();
+      renderVerdict();
+      document.getElementById("version").textContent = "v" + data.version;
+    } catch (e) {
+      const bar = document.getElementById("health-bar");
+      bar.innerHTML = `<div class="health-card error"><div class="label">Error</div><div class="value" style="font-size:14px">${e.message}</div></div>`;
+    }
+  }
+
+  // ── Health Bar ────────────────────────────────────────────
+  function renderHealth() {
+    const h = data.health;
+    const el = document.getElementById("health-bar");
+    const cards = [
+      { label: "Agents", value: `${h.agents.healthy}/${h.agents.total}`, status: h.agents.healthy === h.agents.total ? "ok" : "warn" },
+      { label: "Skills", value: `${h.skills.healthy}/${h.skills.total}`, status: h.skills.healthy === h.skills.total ? "ok" : "warn" },
+      { label: "Hook Scripts", value: `${h.hooks.healthy}/${h.hooks.total}`, status: h.hooks.healthy === h.hooks.total ? "ok" : "warn" },
+      { label: "Hook Events", value: h.hookEvents, status: h.hookEvents >= 15 ? "ok" : "warn", detail: "Wired in settings.json" },
+      { label: "Settings", value: h.settings ? "Valid" : "Invalid", status: h.settings ? "ok" : "error" },
+      { label: "Agent Teams", value: h.agentTeams ? "ON" : "OFF", status: h.agentTeams ? "ok" : "error", detail: "CLAUDE_CODE_EXPERIMENTAL" },
+    ];
+
+    el.innerHTML = cards.map(c => `
+      <div class="health-card ${c.status}" role="listitem">
+        <div class="label">${c.label}</div>
+        <div class="value">${c.value}</div>
+        ${c.detail ? `<div class="detail">${c.detail}</div>` : ""}
+      </div>
+    `).join("");
+  }
+
+  // ── Agents ────────────────────────────────────────────────
+  function renderAgents() {
+    const el = document.getElementById("agents-body");
+    const count = document.getElementById("agent-count");
+    const valid = data.agents.filter(a => a.valid).length;
+    count.textContent = `${valid}/${data.agents.length} valid`;
+
+    el.innerHTML = data.agents.map(a => `
+      <tr>
+        <td>
+          <strong style="color: var(--text-primary)">${esc(a.name)}</strong>
+          ${a.background ? ' <span class="badge badge-blue" title="Background agent">BG</span>' : ""}
+        </td>
+        <td><span class="badge badge-${a.model === "opus" ? "yellow" : a.model === "sonnet" ? "blue" : "green"}">${esc(a.model || "?")}</span></td>
+        <td class="mono" style="font-size:11px; max-width:180px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${esc(a.tools.join(', '))}">${esc(a.tools.join(", "))}</td>
+        <td class="mono" style="font-size:11px">${esc(a.skills.join(", ") || "—")}</td>
+        <td class="mono" style="font-size:11px">${esc(a.permissionMode || "default")}</td>
+        <td>${a.readOnly ? '<span class="badge badge-muted" title="Read-only agent">R/O</span>' : '<span class="badge badge-blue" title="Write-capable agent">R/W</span>'}</td>
+        <td>${a.valid
+          ? '<span class="badge badge-green">VALID</span>'
+          : `<span class="badge badge-red">ISSUES</span> <span style="font-size:11px; color:var(--red)">${esc(a.issues.join("; "))}</span>`
+        }</td>
+      </tr>
+    `).join("");
+  }
+
+  // ── Skills ────────────────────────────────────────────────
+  function renderSkills() {
+    const el = document.getElementById("skills-body");
+    const count = document.getElementById("skill-count");
+    const valid = data.skills.filter(s => s.valid).length;
+    count.textContent = `${valid}/${data.skills.length} valid`;
+
+    el.innerHTML = data.skills.map(s => {
+      const desc = s.description || "—";
+      const truncated = desc.length > 80 ? desc.slice(0, 80) + "…" : desc;
+      const tools = s.allowedTools.join(", ") || "—";
+      const toolsTrunc = tools.length > 50 ? tools.slice(0, 50) + "…" : tools;
+      return `
+        <tr>
+          <td><strong style="color: var(--text-primary)">/${esc(s.name)}</strong></td>
+          <td style="max-width:280px; font-size:12px" title="${esc(desc)}">${esc(truncated)}</td>
+          <td class="mono" style="font-size:10px; max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${esc(tools)}">${esc(toolsTrunc)}</td>
+          <td>${s.teamAware ? '<span class="badge badge-green">YES</span>' : '<span style="color: var(--text-muted)">—</span>'}</td>
+          <td>${s.valid
+            ? '<span class="badge badge-green">VALID</span>'
+            : `<span class="badge badge-red">ISSUES</span> <span style="font-size:11px; color:var(--red)">${esc(s.issues.join("; "))}</span>`
+          }</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // ── Hooks ─────────────────────────────────────────────────
+  function renderHooks() {
+    const el = document.getElementById("hooks-body");
+    const count = document.getElementById("hook-count");
+    const valid = data.hooks.filter(h => h.valid).length;
+    count.textContent = `${valid}/${data.hooks.length} valid`;
+
+    el.innerHTML = data.hooks.map(h => `
+      <tr>
+        <td class="mono">${esc(h.file)}</td>
+        <td>${h.executable
+          ? '<span class="status-ok" aria-label="Executable">✓</span>'
+          : '<span class="status-fail" aria-label="Not executable">✗</span>'
+        }</td>
+        <td>${h.syntaxOk
+          ? '<span class="status-ok" aria-label="Syntax OK">✓</span>'
+          : `<span class="status-fail" aria-label="Syntax error">✗</span> <span style="font-size:11px; color:var(--red)">${esc(h.syntaxError || "")}</span>`
+        }</td>
+        <td>${h.wiredInSettings
+          ? '<span class="badge badge-green">WIRED</span>'
+          : '<span class="badge badge-muted">UNWIRED</span>'
+        }</td>
+        <td>${h.valid ? '<span class="badge badge-green">OK</span>' : '<span class="badge badge-red">FAIL</span>'}</td>
+      </tr>
+    `).join("");
+  }
+
+  // ── Workflow ──────────────────────────────────────────────
+  async function loadWorkflow() {
+    try {
+      const response = await fetchJson("/api/workflow");
+      const wf = response.data;
+      const el = document.getElementById("workflow-chain");
+      el.innerHTML = wf.chain.map((s, i) => `
+        <div class="workflow-step" role="listitem">
+          <div class="workflow-node ${s.exists ? "present" : "missing"}"
+               aria-label="${esc(s.command)} — ${s.exists ? "present" : "missing"}"
+               title="${s.exists ? "Skill exists" : "Skill missing"}">
+            ${esc(s.command)}
+          </div>
+          ${i < wf.chain.length - 1 ? '<span class="workflow-arrow" aria-hidden="true">→</span>' : ""}
+        </div>
+      `).join("");
+    } catch (e) {
+      document.getElementById("workflow-chain").innerHTML =
+        `<span style="color:var(--red)">Failed to load workflow: ${esc(e.message)}</span>`;
+    }
+  }
+
+  // ── Cross-Reference ───────────────────────────────────────
+  function renderCrossRef() {
+    const el = document.getElementById("crossref-body");
+    el.innerHTML = data.crossRef.map(c => `
+      <tr>
+        <td class="mono" style="color: var(--text-primary)">${esc(c.agent)}</td>
+        <td><div class="matrix-cell">${c.claudeMd
+          ? '<span class="status-ok" aria-label="Present in CLAUDE.md">✓</span>'
+          : '<span class="status-fail" aria-label="Missing from CLAUDE.md">✗</span>'
+        }</div></td>
+        <td><div class="matrix-cell">${c.teamsSkill
+          ? '<span class="status-ok" aria-label="In teams skill">✓</span>'
+          : '<span class="status-fail" aria-label="Not in teams skill">✗</span>'
+        }</div></td>
+        <td><div class="matrix-cell">${c.testCoverage
+          ? '<span class="status-ok" aria-label="Has test coverage">✓</span>'
+          : '<span class="status-warn" aria-label="No test coverage">—</span>'
+        }</div></td>
+        <td>${c.allGreen
+          ? '<span class="badge badge-green">WIRED</span>'
+          : '<span class="badge badge-yellow">GAP</span>'
+        }</td>
+      </tr>
+    `).join("");
+  }
+
+  // ── Issues ────────────────────────────────────────────────
+  function renderIssues() {
+    const issues = [];
+
+    for (const a of data.agents) {
+      for (const issue of a.issues) {
+        issues.push({ source: `agent/${a.name}`, text: issue, severity: "medium" });
+      }
+    }
+    for (const s of data.skills) {
+      for (const issue of s.issues) {
+        issues.push({ source: `skill/${s.name}`, text: issue, severity: "medium" });
+      }
+    }
+    for (const h of data.hooks) {
+      if (!h.executable) issues.push({ source: `hook/${h.file}`, text: "Not executable", severity: "critical" });
+      if (!h.syntaxOk) issues.push({ source: `hook/${h.file}`, text: `Syntax error: ${h.syntaxError}`, severity: "critical" });
+    }
+    for (const c of data.crossRef) {
+      if (!c.claudeMd) issues.push({ source: `xref/${c.agent}`, text: "Not in CLAUDE.md", severity: "low" });
+      if (!c.teamsSkill) issues.push({ source: `xref/${c.agent}`, text: "Not in teams skill", severity: "low" });
+    }
+
+    const section = document.getElementById("issues-section");
+    const list = document.getElementById("issues-list");
+    const countEl = document.getElementById("issue-count");
+
+    if (issues.length === 0) {
+      section.style.display = "none";
+      return;
+    }
+
+    section.style.display = "block";
+    countEl.textContent = `${issues.length} issue${issues.length !== 1 ? "s" : ""}`;
+    list.innerHTML = issues.map(i => `
+      <div class="issue-item ${i.severity}" role="listitem">
+        ${esc(i.text)}
+        <div class="issue-source">${esc(i.source)}</div>
+      </div>
+    `).join("");
+  }
+
+  // ── Test Runner — Individual Suite ────────────────────────
+  async function runSuite(suite) {
+    const card = document.getElementById(`tc-${suite}`);
+    const countEl = document.getElementById(`tc-count-${suite}`);
+    const statusEl = document.getElementById(`tc-status-${suite}`);
+    const btn = card.querySelector("button");
+
+    card.className = "test-card running";
+    countEl.textContent = "…";
+    statusEl.textContent = "Running…";
+    if (btn) btn.disabled = true;
+
+    try {
+      const response = await fetchJson(`/api/test?suite=${suite}`);
+      const r = response.data;
+      card.className = `test-card ${r.allPassed ? "passed" : "failed"}`;
+      countEl.textContent = r.passed;
+      statusEl.textContent = r.failed > 0 ? `${r.failed} failed` : "all passed";
+      testResults[suite] = r;
+      updateTestTimestamp();
+      renderVerdict();
+    } catch (e) {
+      card.className = "test-card failed";
+      countEl.textContent = "!";
+      statusEl.textContent = esc(e.message);
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  // ── Test Runner — Run All ─────────────────────────────────
+  async function runAllTests() {
+    const btn = document.querySelector('button[aria-label="Run all test suites"]');
+    if (btn) btn.disabled = true;
+
+    for (const suite of ["framework", "hooks", "integration"]) {
+      const card = document.getElementById(`tc-${suite}`);
+      const countEl = document.getElementById(`tc-count-${suite}`);
+      const statusEl = document.getElementById(`tc-status-${suite}`);
+      const suiteBtn = card.querySelector("button");
+      card.className = "test-card running";
+      countEl.textContent = "…";
+      statusEl.textContent = "Running…";
+      if (suiteBtn) suiteBtn.disabled = true;
+    }
+
+    document.getElementById("test-timestamp").textContent = "Running all suites…";
+
+    try {
+      const response = await fetchJson("/api/test/all");
+      const results = response.data;
+
+      for (const suite of ["framework", "hooks", "integration"]) {
+        const r = results[suite];
+        const card = document.getElementById(`tc-${suite}`);
+        const countEl = document.getElementById(`tc-count-${suite}`);
+        const statusEl = document.getElementById(`tc-status-${suite}`);
+        const suiteBtn = card.querySelector("button");
+        card.className = `test-card ${r.allPassed ? "passed" : "failed"}`;
+        countEl.textContent = r.passed;
+        statusEl.textContent = r.failed > 0 ? `${r.failed} failed` : "all passed";
+        if (suiteBtn) suiteBtn.disabled = false;
+        testResults[suite] = r;
+      }
+
+      const s = results.summary;
+      document.getElementById("test-timestamp").textContent =
+        `${s.totalPassed} passed · ${s.totalFailed} failed · ${new Date().toLocaleTimeString()}`;
+      renderVerdict();
+    } catch (e) {
+      document.getElementById("test-timestamp").textContent = `Error: ${esc(e.message)}`;
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  function updateTestTimestamp() {
+    const suites = ["framework", "hooks", "integration"];
+    const ran = suites.filter(s => testResults[s]);
+    if (ran.length === 0) return;
+    const totalPassed = ran.reduce((n, s) => n + (testResults[s]?.passed || 0), 0);
+    const totalFailed = ran.reduce((n, s) => n + (testResults[s]?.failed || 0), 0);
+    document.getElementById("test-timestamp").textContent =
+      `${totalPassed} passed · ${totalFailed} failed · ${new Date().toLocaleTimeString()}`;
+  }
+
+  // ── Verdict ───────────────────────────────────────────────
+  function renderVerdict() {
+    const el = document.getElementById("verdict");
+    if (!data) return;
+
+    const agentIssues = data.agents.reduce((n, a) => n + a.issues.length, 0);
+    const skillIssues = data.skills.reduce((n, s) => n + s.issues.length, 0);
+    const hookIssues = data.hooks.filter(h => !h.valid).length;
+    const xrefGaps = data.crossRef.filter(c => !c.allGreen).length;
+    const totalIssues = agentIssues + skillIssues + hookIssues + xrefGaps;
+
+    const suites = ["framework", "hooks", "integration"];
+    const ran = suites.filter(s => testResults[s]);
+    const testsFailed = ran.length > 0 && ran.some(s => !testResults[s].allPassed);
+    const allClear = totalIssues === 0 && !testsFailed;
+
+    const totalPassed = ran.reduce((n, s) => n + (testResults[s]?.passed || 0), 0);
+    const totalFailed = ran.reduce((n, s) => n + (testResults[s]?.failed || 0), 0);
+
+    if (allClear) {
+      el.innerHTML = `
+        <div class="verdict safe">
+          <div class="verdict-icon" aria-hidden="true">🦇</div>
+          <div class="verdict-text">
+            The Dark Knight confirms: <strong style="color: var(--accent-gold)">Gotham is safe.</strong><br>
+            All systems operational.
+            ${ran.length > 0 ? `<br><span style="color: var(--green)">${totalPassed} tests passed.</span>` : ""}
+          </div>
+          <div class="verdict-quote">"It's not who I am underneath, but what I do that defines me."</div>
+        </div>
+      `;
+    } else {
+      el.innerHTML = `
+        <div class="verdict danger">
+          <div class="verdict-icon" aria-hidden="true">🦇</div>
+          <div class="verdict-text">
+            The Dark Knight found <strong style="color: var(--red)">${totalIssues} structural threat${totalIssues !== 1 ? "s" : ""}</strong>.
+            ${testsFailed ? `<br><span style="color: var(--red)">${totalFailed} test${totalFailed !== 1 ? "s" : ""} failed.</span>` : ""}
+            <br>Review issues above and deploy the Debugger.
+          </div>
+          <div class="verdict-quote">"Why do we fall? So we can learn to pick ourselves up."</div>
+        </div>
+      `;
+    }
+  }
+
+  // ── XSS escape ────────────────────────────────────────────
+  function esc(str) {
+    return String(str ?? "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  // ── Init ──────────────────────────────────────────────────
+  loadOverview();
+</script>
+
+</body>
+</html>
