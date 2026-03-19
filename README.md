@@ -359,7 +359,7 @@ Premium UI pattern library with 14 pages, 5 palettes, dark/light mode, and 22 ba
 node -e "require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)"
 ```
 
-Open `http://localhost:3001` — pattern pages for Landing, CRM, E-Commerce, SaaS, Blog, Portfolio, Social, LMS, Presentation, E-Book, Backoffice, plus a Design System reference and SVG patterns library. Global palette switcher and background widget on every page.
+Open `http://localhost:3001` — 14 pattern pages for Landing, CRM (15 patterns), E-Commerce, SaaS, Blog, Portfolio, Social, LMS, Presentation, E-Book, Email Templates, Backoffice, plus Design System tokens and SVG Patterns library (14 static + 8 animated). Unified design widget on every page — palette, dark/light mode, backgrounds from one icon.
 
 ### Step 6: Trust the Safety Net
 
