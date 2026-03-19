@@ -23,27 +23,19 @@ fi
 if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+'; then
   echo ""
   if [ "$APEX_COLORS" = true ]; then
-    printf "  ${ERR_BOLD}╔══════════════════════════════════════════╗${RST}\n"
-    printf "  ${ERR_BOLD}║${RST}  ${ERR}⚔️  Invalid commit message format${RST}     ${ERR_BOLD}║${RST}\n"
-    printf "  ${ERR_BOLD}╚══════════════════════════════════════════╝${RST}\n"
-    echo ""
-    printf "  ${BESKAR}Required:${RST} ${FROST}type(scope): description${RST}\n"
-    echo ""
-    printf "  ${STEEL}Types:${RST}    ${GOLD}feat${RST} ${STEEL}|${RST} ${GOLD}fix${RST} ${STEEL}|${RST} ${GOLD}docs${RST} ${STEEL}|${RST} ${GOLD}refactor${RST} ${STEEL}|${RST} ${GOLD}test${RST} ${STEEL}|${RST} ${GOLD}perf${RST} ${STEEL}|${RST} ${GOLD}security${RST} ${STEEL}|${RST} ${GOLD}chore${RST}\n"
-    printf "  ${STEEL}Example:${RST}  ${OK}feat(auth): add OAuth login with Google${RST}\n"
-    printf "  ${STEEL}Example:${RST}  ${OK}fix(cart): prevent negative quantities${RST}\n"
-    echo ""
-    printf "  ${STEEL}Your msg:${RST} ${ERR}%s${RST}\n" "$COMMIT_MSG"
+    printf "  ${ERR}Invalid commit message format${RST}\n\n"
+    printf "  ${STEEL}Required${RST}  type(scope): description\n"
+    printf "  ${STEEL}Types${RST}     feat fix docs refactor test perf security chore\n"
+    printf "  ${STEEL}Example${RST}   ${OK}feat(auth): add OAuth login with Google${RST}\n\n"
+    printf "  ${STEEL}Got${RST}       ${ERR}%s${RST}\n" "$COMMIT_MSG"
   else
-    echo "  ⚔️ APEX: Invalid commit message format."
+    echo "  Invalid commit message format"
     echo ""
-    echo "  Required: type(scope): description"
+    echo "  Required  type(scope): description"
+    echo "  Types     feat fix docs refactor test perf security chore"
+    echo "  Example   feat(auth): add OAuth login with Google"
     echo ""
-    echo "  Types:    feat, fix, docs, refactor, test, perf, security, chore"
-    echo "  Example:  feat(auth): add OAuth login with Google"
-    echo "  Example:  fix(cart): prevent negative quantities"
-    echo ""
-    echo "  Your message: $COMMIT_MSG"
+    echo "  Got       $COMMIT_MSG"
   fi
   echo ""
   exit 1
@@ -53,32 +45,18 @@ fi
 if [ ${#COMMIT_MSG} -gt 72 ]; then
   echo ""
   if [ "$APEX_COLORS" = true ]; then
-    printf "  ${WARN_BOLD}⚔️  Commit message too long${RST} ${STEEL}(${#COMMIT_MSG} chars, max 72)${RST}\n"
-    printf "  ${STEEL}Keep the subject line concise. Add details in the body.${RST}\n"
+    printf "  ${WARN}Subject too long${RST} ${STEEL}(${#COMMIT_MSG} chars, max 72)${RST}\n"
+    printf "  ${STEEL}Use the body for details.${RST}\n"
   else
-    echo "  ⚔️ APEX: Commit message too long (${#COMMIT_MSG} chars, max 72)."
-    echo "  Keep the subject line concise. Add details in the body."
+    echo "  Subject too long (${#COMMIT_MSG} chars, max 72)"
+    echo "  Use the body for details."
   fi
   echo ""
   exit 1
 fi
 
-# Extract type for visual feedback
-TYPE=$(echo "$COMMIT_MSG" | sed -E 's/^([a-z]+).*/\1/')
-case "$TYPE" in
-  feat)     ICON="✨" ;;
-  fix)      ICON="🔧" ;;
-  docs)     ICON="📝" ;;
-  refactor) ICON="♻️" ;;
-  test)     ICON="🧪" ;;
-  perf)     ICON="⚡" ;;
-  security) ICON="🛡️" ;;
-  chore)    ICON="🔩" ;;
-  *)        ICON="📦" ;;
-esac
-
 if [ "$APEX_COLORS" = true ]; then
-  printf "  ${OK}✓${RST} ${STEEL}Commit message:${RST} ${BESKAR}%s %s${RST}\n" "$ICON" "$COMMIT_MSG"
+  printf "  ${OK}✓${RST} ${STEEL}%s${RST}\n" "$COMMIT_MSG"
 fi
 
 exit 0

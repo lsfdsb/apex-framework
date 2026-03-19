@@ -124,42 +124,6 @@ assert_exit "allows rm without -rf" 0 "$LAST_EXIT"
 echo ""
 
 # ────────────────────────────────────────────
-# TEST: enforce-commit-msg.sh
-# ────────────────────────────────────────────
-echo "🧪 enforce-commit-msg.sh"
-
-# Should allow conventional commits
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git commit -m \"feat: add login page\""}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "allows feat: commit" 0 "$LAST_EXIT"
-
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git commit -m \"fix(auth): resolve token expiry bug\""}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "allows fix(scope): commit" 0 "$LAST_EXIT"
-
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git commit -m \"docs: update README\""}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "allows docs: commit" 0 "$LAST_EXIT"
-
-# Should block non-conventional commits
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git commit -m \"updated stuff\""}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "blocks non-conventional commit" 2 "$LAST_EXIT"
-assert_output_contains "shows conventional format help" "conventional format" "$OUTPUT"
-
-# Should allow non-commit git commands
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git status"}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "allows git status" 0 "$LAST_EXIT"
-
-# Should allow editor-based commits (no -m flag)
-LAST_EXIT=0
-OUTPUT=$(echo '{"tool_input":{"command":"git commit"}}' | bash "$SCRIPTS/enforce-commit-msg.sh" 2>&1) || LAST_EXIT=$?
-assert_exit "allows editor-based commit" 0 "$LAST_EXIT"
-
-echo ""
-
-# ────────────────────────────────────────────
 # TEST: protect-files.sh
 # ────────────────────────────────────────────
 echo "🧪 protect-files.sh"
@@ -434,14 +398,15 @@ echo ""
 # ────────────────────────────────────────────
 # SUMMARY
 # ────────────────────────────────────────────
-echo "======================================"
-echo -e "Total: $TOTAL | ${GREEN}Pass: $PASS${NC} | ${RED}Fail: $FAIL${NC}"
+echo "  ──────────────────────────────────────"
+echo ""
+echo -e "  ${GREEN}$PASS passed${NC}  ${RED}$FAIL failed${NC}"
 echo ""
 
 if [ "$FAIL" -gt 0 ]; then
-  echo -e "${RED}⚔️ Some tests failed. Fix issues above.${NC}"
+  echo -e "  ${RED}Some tests failed.${NC}"
   exit 1
 else
-  echo -e "${GREEN}⚔️ All tests passed. This is the way.${NC}"
+  echo -e "  ${GREEN}All tests passed.${NC}"
   exit 0
 fi

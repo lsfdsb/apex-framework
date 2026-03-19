@@ -104,15 +104,13 @@ section() {
 # ══════════════════════════════════════════════════
 echo ""
 if [ "$APEX_COLORS" = true ]; then
-  printf "  ${GOLD_BOLD}╔══════════════════════════════════════════════╗${RST}\n"
-  printf "  ${GOLD_BOLD}║${RST}   ${EMBER}⚔️  APEX Framework Self-Test Suite${RST}       ${GOLD_BOLD}║${RST}\n"
-  printf "  ${GOLD_BOLD}║${RST}   ${STEEL}Testing all components...${RST}                ${GOLD_BOLD}║${RST}\n"
-  printf "  ${GOLD_BOLD}╚══════════════════════════════════════════════╝${RST}\n"
+  printf "\n  ${BESKAR}APEX Self-Test${RST}\n"
+  printf "  ${SHADOW}──────────────────────────────────────${RST}\n\n"
 else
-  echo "  ╔══════════════════════════════════════════════╗"
-  echo "  ║   ⚔️  APEX Framework Self-Test Suite         ║"
-  echo "  ║   Testing all components...                  ║"
-  echo "  ╚══════════════════════════════════════════════╝"
+  echo ""
+  echo "  APEX Self-Test"
+  echo "  ──────────────────────────────────────"
+  echo ""
 fi
 
 # ══════════════════════════════════════════════════
@@ -177,22 +175,16 @@ EXPECTED_SCRIPTS=(
   "apex-launch.sh"
   "apex-statusline.sh"
   "apex-sync.sh"
-  "auto-approve-safe.sh"
   "auto-changelog.sh"
   "auto-format.sh"
   "auto-update.sh"
   "block-dangerous-commands.sh"
   "dev-monitor.sh"
   "dev-server.sh"
-  "enforce-commit-msg.sh"
   "enforce-workflow.sh"
   "extract-session.sh"
   "guard-workflow-skip.sh"
   "handle-failure.sh"
-  "log-subagent.sh"
-  "notify.sh"
-  "post-compact.sh"
-  "pre-compact.sh"
   "protect-files.sh"
   "session-cleanup.sh"
   "session-context.sh"
@@ -245,10 +237,8 @@ SCRIPTS_NEEDING_JQ=(
   "handle-failure.sh"
   "dev-server.sh"
   "block-dangerous-commands.sh"
-  "enforce-commit-msg.sh"
   "enforce-workflow.sh"
   "protect-files.sh"
-  "notify.sh"
 )
 
 for script in "${SCRIPTS_NEEDING_JQ[@]}"; do
@@ -455,16 +445,13 @@ fi
 # ══════════════════════════════════════════════════
 # 13. GROGU EASTER EGGS
 # ══════════════════════════════════════════════════
-section "13. Grogu Easter Eggs"
+section "13. Visual Identity"
 
-assert_file_contains "$SCRIPTS/session-context.sh" "Grogu" "Grogu in session banner"
-assert_file_contains "$SCRIPTS/session-context.sh" "GROGU_QUOTES" "Grogu quotes array"
-assert_file_contains "$SCRIPTS/session-context.sh" "03-13" "Birthday easter egg"
-assert_file_contains "$SCRIPTS/session-context.sh" "Friday" "Friday easter egg"
+assert_file_contains "$SCRIPTS/session-context.sh" "APEX Framework" "Session banner present"
 assert_file_contains "$SCRIPTS/handle-failure.sh" "Grogu" "Grogu in failure handler"
 assert_file_contains "$SCRIPTS/stop-gate.sh" "Grogu" "Grogu in stop gate"
 assert_file_contains "$SCRIPTS/session-cleanup.sh" "Grogu" "Grogu in session cleanup"
-assert_file_contains "$GIT_HOOKS/pre-commit" "Grogu" "Grogu in pre-commit"
+assert_file_contains "$GIT_HOOKS/pre-commit" "All checks passed" "Pre-commit success message"
 assert_file_contains "$SKILLS/about/SKILL.md" "Grogu" "Grogu in about page"
 
 # ══════════════════════════════════════════════════
@@ -478,7 +465,7 @@ assert_file_contains "$SCRIPTS/apex-colors.sh" "apex_fade_in" "Fade-in effect"
 assert_file_contains "$SCRIPTS/apex-colors.sh" "apex_progress" "Progress bar"
 assert_file_contains "$GIT_HOOKS/pre-commit" "apex_spinner" "Pre-commit uses spinners"
 assert_file_contains "$GIT_HOOKS/pre-commit" "apex_progress" "Pre-commit uses progress bar"
-assert_file_contains "$GIT_HOOKS/commit-msg" "ICON" "Commit-msg has type icons"
+assert_file_contains "$GIT_HOOKS/commit-msg" "Invalid commit message" "Commit-msg validates format"
 assert_file_contains "$SCRIPTS/apex-statusline.sh" "CTX_STR" "Status line has context tracking"
 
 # ══════════════════════════════════════════════════
@@ -488,7 +475,7 @@ section "15. Watermark & Branding"
 
 assert_file_contains "$SCRIPTS/session-context.sh" "L.B. & Claude" "Session has watermark"
 assert_file_contains "$SCRIPTS/apex-statusline.sh" "L.B. & Claude" "Status line has watermark"
-assert_file_contains "$SCRIPTS/session-context.sh" "This is the way" "Session has creed"
+assert_file_contains "$SCRIPTS/session-context.sh" "APEX Framework" "Session has APEX banner"
 assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "APEX" "CLAUDE.md has APEX identity"
 
 # ══════════════════════════════════════════════════
@@ -600,43 +587,33 @@ fi
 # SUMMARY
 # ══════════════════════════════════════════════════
 echo ""
+echo ""
 if [ "$APEX_COLORS" = true ]; then
-  printf "  ${SHADOW}══════════════════════════════════════════════${RST}\n"
+  printf "  ${SHADOW}──────────────────────────────────────${RST}\n"
 else
-  echo "  ══════════════════════════════════════════════"
+  echo "  ──────────────────────────────────────"
 fi
 echo ""
 
 if [ "$FAIL" -gt 0 ]; then
   if [ "$APEX_COLORS" = true ]; then
-    printf "  ${ERR_BOLD}╔══════════════════════════════════════════════╗${RST}\n"
-    printf "  ${ERR_BOLD}║${RST}  Results: ${OK}%d passed${RST} · ${ERR}%d failed${RST} · ${STEEL}%d skipped${RST} ${ERR_BOLD}║${RST}\n" "$PASS" "$FAIL" "$SKIP"
-    printf "  ${ERR_BOLD}║${RST}  Total: %d tests                            ${ERR_BOLD}║${RST}\n" "$TOTAL"
-    printf "  ${ERR_BOLD}║${RST}                                              ${ERR_BOLD}║${RST}\n"
-    printf "  ${ERR_BOLD}║${RST}  ${STEEL}Some tests failed. Fix issues above.${RST}       ${ERR_BOLD}║${RST}\n"
-    printf "  ${ERR_BOLD}╚══════════════════════════════════════════════╝${RST}\n"
+    printf "  ${OK}%d passed${RST}  ${ERR}%d failed${RST}  ${STEEL}%d skipped${RST}\n" "$PASS" "$FAIL" "$SKIP"
+    printf "\n  ${ERR}Some tests failed.${RST}\n"
   else
-    echo "  Results: $PASS passed · $FAIL failed · $SKIP skipped"
-    echo "  Total: $TOTAL tests"
-    echo "  Some tests failed. Fix issues above."
+    echo "  $PASS passed  $FAIL failed  $SKIP skipped"
+    echo ""
+    echo "  Some tests failed."
   fi
   echo ""
   exit 1
 else
   if [ "$APEX_COLORS" = true ]; then
-    printf "  ${OK_BOLD}╔══════════════════════════════════════════════╗${RST}\n"
-    printf "  ${OK_BOLD}║${RST}  Results: ${OK_BOLD}%d passed${RST} · ${STEEL}%d skipped${RST}            ${OK_BOLD}║${RST}\n" "$PASS" "$SKIP"
-    printf "  ${OK_BOLD}║${RST}  Total: %d tests                            ${OK_BOLD}║${RST}\n" "$TOTAL"
-    printf "  ${OK_BOLD}║${RST}                                              ${OK_BOLD}║${RST}\n"
-    printf "  ${OK_BOLD}║${RST}  ${OK_BOLD}⚔️  All tests passed. This is the way.${RST}    ${OK_BOLD}║${RST}\n"
-    # Grogu celebrates
-    printf "  ${OK_BOLD}║${RST}  ${CREED}👶 \"Patu!\" — Grogu is proud of you${RST}       ${OK_BOLD}║${RST}\n"
-    printf "  ${OK_BOLD}╚══════════════════════════════════════════════╝${RST}\n"
+    printf "  ${OK}%d passed${RST}  ${STEEL}%d skipped${RST}\n" "$PASS" "$SKIP"
+    printf "\n  ${OK}All tests passed.${RST}\n"
   else
-    echo "  Results: $PASS passed · $SKIP skipped"
-    echo "  Total: $TOTAL tests"
-    echo "  ⚔️  All tests passed. This is the way."
-    echo "  👶 \"Patu!\" — Grogu is proud of you"
+    echo "  $PASS passed  $SKIP skipped"
+    echo ""
+    echo "  All tests passed."
   fi
   echo ""
   exit 0
