@@ -1,5 +1,7 @@
 # APEX Observatory — Product Requirements Document
 
+**Status:** ✅ Complete (v5.11.0)
+
 ## Vision
 A visual dashboard that proves the APEX Framework works by displaying its own health — agents, skills, hooks, workflow chain, test results — all from a single localhost page. The app itself is the integration proof: if every APEX phase can build this successfully, the framework works.
 

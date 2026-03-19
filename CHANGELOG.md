@@ -5,6 +5,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.11.1] — 2026-03-19 — Design DNA Enforcement + Agent Hardening
+
+### Added
+- **Watcher DNA Compliance** — Watcher scans new page/screen components for Design DNA references and flags hardcoded Tailwind palette colors as design token violations (#85)
+
+### Fixed
+- **Technical Writer Rewrite** — Gap detection first: audits git log + merged PRs against CHANGELOG before writing. Self-verifies all PRs are documented. Lead spawn instructions now require specific change descriptions (#84)
+
+## [5.11.0] — 2026-03-18 — Design DNA Integration
+
 ### Added
 - **CRM Patterns Expansion** — CRM page scaled from 5 to 15 components: deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring with SVG progress rings, data table with search/filters/pagination, filter bar with active tags, task/follow-up list with due dates, 2 empty state variants, email composer, notes panel
 - **Design DNA Wired into Build Pipeline** — CLAUDE.md rule #16 enforces DNA page lookup; design-system SKILL.md routing table for all 14 pages + 2 JS modules; builder.md agent with mandatory DNA checks; design-reviewer.md agent with DNA compliance gate (BLOCK on violations); components.md and reference.md updated
