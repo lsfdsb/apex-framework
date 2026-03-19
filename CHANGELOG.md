@@ -35,7 +35,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - `tests/test-all.sh` — Aggregator runs all 5 test suites
 - `tests/lib/helpers.sh` — Shared test utilities with categorized assertions
 - `tests/fixtures/` — 18 Claude Code hook JSON payloads matching official schema
-- expand CRM — 10 new patterns, wire DNA into pipeline (bdb1a85)
+- **Unified Design Widget** — Merged palette switcher + background selector into single icon; palette dots, dark/light mode, 14 static patterns, 9 animated backgrounds all in one panel (#81)
+
+### Fixed
+- **Rings background fills screen** — Rings animated background now uses `vmax × 1.5` + `transform: scale()` for full-viewport coverage; 5 rings staggered over 8s eliminates visible reset flash (#80)
+- **Worktree commit protocol** — Builders MUST `git commit` before reporting done to prevent file loss (4+ incidents). Lead never rewrites files — re-spawns builder with `isolation: none`. Added recovery protocol and stale worktree cleanup (#82)
 
 ### Changed
 - `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
