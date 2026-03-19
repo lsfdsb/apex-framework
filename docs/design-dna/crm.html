@@ -1654,218 +1654,113 @@ footer p { font-size: 12px; color: var(--text-muted); }
   </div>
 </section>
 
-<!-- SIDEBAR + CRM DASHBOARD -->
+<!-- CRM DASHBOARD — Floating Bento -->
 <section>
   <div class="inner">
     <div class="section-header reveal">
-      <div class="label">App Layout</div>
-      <h2>Sidebar + Dashboard.<br>The real thing.</h2>
-      <p>How a CRM actually looks. Dense, scannable, actionable.</p>
+      <div class="label">Dashboard</div>
+      <h2>Every number,<br>at a glance.</h2>
+      <p>KPIs, pipeline, revenue, deals — floating cards that breathe with the background.</p>
     </div>
-    <div style="display:grid;grid-template-columns:56px 1fr;min-height:640px;background:color-mix(in srgb, var(--bg-elevated) 80%, transparent);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;" class="reveal reveal-delay-1">
-      <!-- Ive Sidebar — icon rail -->
-      <div class="sidebar">
-        <div class="sidebar-brand">
-          <div class="sidebar-brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        </div>
-        <div class="sidebar-nav">
-          <div class="sidebar-item active" title="Dashboard">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-          </div>
-          <div class="sidebar-item" title="Contacts">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
-          </div>
-          <div class="sidebar-item" title="Pipeline">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
-            <span class="badge">12</span>
-          </div>
-          <div class="sidebar-item" title="Analytics">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <div class="sidebar-divider"></div>
-          <div class="sidebar-item" title="Inbox">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
-            <span class="badge">8</span>
-          </div>
-          <div class="sidebar-item" title="Settings">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.2.65.77 1.09 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-          </div>
-        </div>
-        <div class="sidebar-footer">
-          <div class="sidebar-avatar online" title="Ana Souza">AS</div>
+    <!-- Floating sidebar + dashboard content side by side -->
+    <div style="display:grid;grid-template-columns:56px 1fr;gap:16px;align-items:start;" class="reveal reveal-delay-1">
+      <!-- Floating sidebar card -->
+      <div style="background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:12px 0;display:flex;flex-direction:column;align-items:center;gap:4px;">
+        <div style="width:28px;height:28px;border-radius:8px;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:8px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <div class="sidebar-item active" title="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+        <div class="sidebar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+        <div class="sidebar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg><span class="badge">12</span></div>
+        <div class="sidebar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+        <div style="width:24px;height:1px;background:var(--border);margin:4px 0;"></div>
+        <div class="sidebar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="badge">8</span></div>
+        <div class="sidebar-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.2.65.77 1.09 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+        <div style="margin-top:auto;padding-top:8px;border-top:1px solid var(--border);width:100%;display:flex;justify-content:center;"><div class="sidebar-avatar online" style="width:28px;height:28px;font-size:10px;">AS</div></div>
+      </div>
+      <!-- Dashboard floating cards -->
+      <div style="display:flex;flex-direction:column;gap:16px;">
+    <div class="kpi-strip">
+      <div class="kpi-card">
+        <div class="kpi-label">Pipeline Value</div>
+        <div class="kpi-value">$284k</div>
+        <div class="kpi-sub"><span class="up">&uarr; 18%</span> vs last month</div>
+        <div class="kpi-spark"><div class="kpi-spark-bar" style="height:40%"></div><div class="kpi-spark-bar" style="height:55%"></div><div class="kpi-spark-bar" style="height:45%"></div><div class="kpi-spark-bar" style="height:70%"></div><div class="kpi-spark-bar" style="height:60%"></div><div class="kpi-spark-bar" style="height:85%"></div><div class="kpi-spark-bar" style="height:100%"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Win Rate</div>
+        <div class="kpi-value" style="color:var(--success);">68%</div>
+        <div class="kpi-sub"><span class="up">&uarr; 5%</span> vs Q4</div>
+        <div class="kpi-spark"><div class="kpi-spark-bar" style="height:60%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:55%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:70%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:65%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:75%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:80%;background:var(--success)"></div><div class="kpi-spark-bar" style="height:90%;background:var(--success)"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Open Deals</div>
+        <div class="kpi-value">42</div>
+        <div class="kpi-sub">12 closing this week</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg. Close Time</div>
+        <div class="kpi-value">18d</div>
+        <div class="kpi-sub"><span class="up">&darr; 3d</span> faster</div>
+      </div>
+    </div>
+
+    <!-- Pipeline strip — floating -->
+    <div class="pipeline-strip reveal reveal-delay-2">
+      <div class="pipeline-stage"><div class="pipeline-stage-value">48</div><div class="pipeline-stage-label">New Lead</div><div class="pipeline-stage-bar" style="background:var(--pipeline-lead);"></div></div>
+      <div class="pipeline-stage"><div class="pipeline-stage-value">32</div><div class="pipeline-stage-label">Qualified</div><div class="pipeline-stage-bar" style="background:var(--pipeline-qualified);"></div></div>
+      <div class="pipeline-stage"><div class="pipeline-stage-value">18</div><div class="pipeline-stage-label">Proposal</div><div class="pipeline-stage-bar" style="background:var(--pipeline-proposal);"></div></div>
+      <div class="pipeline-stage"><div class="pipeline-stage-value">12</div><div class="pipeline-stage-label">Negotiation</div><div class="pipeline-stage-bar" style="background:var(--accent);"></div></div>
+      <div class="pipeline-stage"><div class="pipeline-stage-value" style="color:var(--success);">8</div><div class="pipeline-stage-label">Won</div><div class="pipeline-stage-bar" style="background:var(--pipeline-won);"></div></div>
+    </div>
+
+    <!-- Charts row — two floating cards -->
+    <div class="dash-grid reveal reveal-delay-3">
+      <div class="dash-widget">
+        <div class="dash-widget-title">Monthly Revenue</div>
+        <div class="bar-chart">
+          <div class="bar-col"><div class="bar-fill" data-value="$24k" style="height:45%"></div><span class="bar-label">Oct</span></div>
+          <div class="bar-col"><div class="bar-fill" data-value="$33k" style="height:62%"></div><span class="bar-label">Nov</span></div>
+          <div class="bar-col"><div class="bar-fill" data-value="$29k" style="height:55%"></div><span class="bar-label">Dec</span></div>
+          <div class="bar-col"><div class="bar-fill" data-value="$41k" style="height:78%"></div><span class="bar-label">Jan</span></div>
+          <div class="bar-col"><div class="bar-fill" data-value="$36k" style="height:68%"></div><span class="bar-label">Feb</span></div>
+          <div class="bar-col"><div class="bar-fill" data-value="$48k" style="height:92%"></div><span class="bar-label">Mar</span></div>
         </div>
       </div>
-
-      <!-- Dashboard content -->
-      <div class="dash-content">
-        <div class="dash-header">
-          <div class="dash-header-left">
-            <h1>Dashboard</h1>
-            <p>Recovery pipeline &middot; Mar 2026</p>
-          </div>
-          <div class="dash-header-right">
-            <button class="dash-btn ghost">Export</button>
-            <button class="dash-btn primary">+ New deal</button>
-          </div>
+      <div class="dash-widget">
+        <div class="dash-widget-title">Deal Sources</div>
+        <div class="donut" style="background:conic-gradient(var(--accent) 0% 42%, var(--success) 42% 68%, var(--warning) 68% 85%, var(--text-muted) 85% 100%);">
+          <div class="donut-center"><div class="donut-value">248</div><div class="donut-label">Total</div></div>
         </div>
-
-        <!-- KPI strip -->
-        <div class="kpi-strip">
-          <div class="kpi-card">
-            <div class="kpi-label">Pipeline Value</div>
-            <div class="kpi-value">$284k</div>
-            <div class="kpi-sub"><span class="up">&uarr; 18%</span> vs last month</div>
-            <div class="kpi-spark">
-              <div class="kpi-spark-bar" style="height:40%"></div>
-              <div class="kpi-spark-bar" style="height:55%"></div>
-              <div class="kpi-spark-bar" style="height:45%"></div>
-              <div class="kpi-spark-bar" style="height:70%"></div>
-              <div class="kpi-spark-bar" style="height:60%"></div>
-              <div class="kpi-spark-bar" style="height:85%"></div>
-              <div class="kpi-spark-bar" style="height:100%"></div>
-            </div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Win Rate</div>
-            <div class="kpi-value" style="color:var(--success);">68%</div>
-            <div class="kpi-sub"><span class="up">&uarr; 5%</span> vs Q4</div>
-            <div class="kpi-spark">
-              <div class="kpi-spark-bar" style="height:60%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:55%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:70%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:65%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:75%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:80%;background:var(--success)"></div>
-              <div class="kpi-spark-bar" style="height:90%;background:var(--success)"></div>
-            </div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Open Deals</div>
-            <div class="kpi-value">42</div>
-            <div class="kpi-sub">12 closing this week</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Avg. Close Time</div>
-            <div class="kpi-value">18d</div>
-            <div class="kpi-sub"><span class="up">&darr; 3d</span> faster</div>
-          </div>
-        </div>
-
-        <!-- Mini pipeline strip -->
-        <div class="pipeline-strip">
-          <div class="pipeline-stage">
-            <div class="pipeline-stage-value">48</div>
-            <div class="pipeline-stage-label">New Lead</div>
-            <div class="pipeline-stage-bar" style="background:var(--pipeline-lead);"></div>
-          </div>
-          <div class="pipeline-stage">
-            <div class="pipeline-stage-value">32</div>
-            <div class="pipeline-stage-label">Qualified</div>
-            <div class="pipeline-stage-bar" style="background:var(--pipeline-qualified);"></div>
-          </div>
-          <div class="pipeline-stage">
-            <div class="pipeline-stage-value">18</div>
-            <div class="pipeline-stage-label">Proposal</div>
-            <div class="pipeline-stage-bar" style="background:var(--pipeline-proposal);"></div>
-          </div>
-          <div class="pipeline-stage">
-            <div class="pipeline-stage-value">12</div>
-            <div class="pipeline-stage-label">Negotiation</div>
-            <div class="pipeline-stage-bar" style="background:var(--accent);"></div>
-          </div>
-          <div class="pipeline-stage">
-            <div class="pipeline-stage-value" style="color:var(--success);">8</div>
-            <div class="pipeline-stage-label">Won</div>
-            <div class="pipeline-stage-bar" style="background:var(--pipeline-won);"></div>
-          </div>
-        </div>
-
-        <!-- Charts row -->
-        <div class="dash-grid">
-          <div class="dash-widget">
-            <div class="dash-widget-title">Monthly Revenue</div>
-            <div class="bar-chart">
-              <div class="bar-col"><div class="bar-fill" data-value="$24k" style="height:45%"></div><span class="bar-label">Oct</span></div>
-              <div class="bar-col"><div class="bar-fill" data-value="$33k" style="height:62%"></div><span class="bar-label">Nov</span></div>
-              <div class="bar-col"><div class="bar-fill" data-value="$29k" style="height:55%"></div><span class="bar-label">Dec</span></div>
-              <div class="bar-col"><div class="bar-fill" data-value="$41k" style="height:78%"></div><span class="bar-label">Jan</span></div>
-              <div class="bar-col"><div class="bar-fill" data-value="$36k" style="height:68%"></div><span class="bar-label">Feb</span></div>
-              <div class="bar-col"><div class="bar-fill" data-value="$48k" style="height:92%"></div><span class="bar-label">Mar</span></div>
-            </div>
-          </div>
-          <div class="dash-widget">
-            <div class="dash-widget-title">Deal Sources</div>
-            <div class="donut" style="background:conic-gradient(var(--accent) 0% 42%, var(--success) 42% 68%, var(--warning) 68% 85%, var(--text-muted) 85% 100%);">
-              <div class="donut-center">
-                <div class="donut-value">248</div>
-                <div class="donut-label">Total</div>
-              </div>
-            </div>
-            <div class="donut-legend">
-              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--accent);"></div> Inbound (42%)</div>
-              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--success);"></div> Referral (26%)</div>
-              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--warning);"></div> Outbound (17%)</div>
-              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--text-muted);"></div> Other (15%)</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Recent deals mini-table -->
-        <div class="dash-grid" style="grid-template-columns:1fr 1fr;">
-          <div class="dash-widget">
-            <div class="dash-widget-title">Hot Deals</div>
-            <div class="mini-table">
-              <div class="mini-table-row">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">SH</span>
-                <span class="mini-table-name">E-commerce Platform</span>
-                <span class="mini-table-company">StyleHouse</span>
-                <span class="mini-table-amount">$65k</span>
-                <span class="ticket-status open" style="font-size:10px;">Proposal</span>
-              </div>
-              <div class="mini-table-row">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">DF</span>
-                <span class="mini-table-name">API Integration</span>
-                <span class="mini-table-company">DataFlow</span>
-                <span class="mini-table-amount">$45k</span>
-                <span class="ticket-status pending" style="font-size:10px;">Qualified</span>
-              </div>
-              <div class="mini-table-row">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">CB</span>
-                <span class="mini-table-name">SaaS Migration</span>
-                <span class="mini-table-company">CloudBase</span>
-                <span class="mini-table-amount">$32k</span>
-                <span class="ticket-status open" style="font-size:10px;">Proposal</span>
-              </div>
-            </div>
-          </div>
-          <div class="dash-widget">
-            <div class="dash-widget-title">Recent Activity</div>
-            <div style="display:flex;flex-direction:column;gap:12px;">
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(52,211,153,0.15);color:var(--success);">&#10003;</span>
-                <span style="flex:1;">Ana closed <strong>Analytics Suite</strong> &mdash; $52k</span>
-                <span style="color:var(--text-muted);font-size:11px;">2m</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(251,191,36,0.15);color:var(--warning);">&rarr;</span>
-                <span style="flex:1;">Marcus moved <strong>API Integration</strong> to Proposal</span>
-                <span style="color:var(--text-muted);font-size:11px;">1h</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">JP</span>
-                <span style="flex:1;">Julia added note on <strong>StyleHouse</strong></span>
-                <span style="color:var(--text-muted);font-size:11px;">3h</span>
-              </div>
-              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
-                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(96,165,250,0.15);color:var(--info);">+</span>
-                <span style="flex:1;">New lead: <strong>Elena Rodriguez</strong> — Series B</span>
-                <span style="color:var(--text-muted);font-size:11px;">5h</span>
-              </div>
-            </div>
-          </div>
+        <div class="donut-legend">
+          <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--accent);"></div> Inbound (42%)</div>
+          <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--success);"></div> Referral (26%)</div>
+          <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--warning);"></div> Outbound (17%)</div>
+          <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--text-muted);"></div> Other (15%)</div>
         </div>
       </div>
     </div>
+
+    <!-- Deals + Activity — two floating cards -->
+    <div class="dash-grid reveal" style="grid-template-columns:1fr 1fr;">
+      <div class="dash-widget">
+        <div class="dash-widget-title">Hot Deals</div>
+        <div class="mini-table">
+          <div class="mini-table-row"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">SH</span><span class="mini-table-name">E-commerce Platform</span><span class="mini-table-company">StyleHouse</span><span class="mini-table-amount">$65k</span><span class="ticket-status open" style="font-size:10px;">Proposal</span></div>
+          <div class="mini-table-row"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">DF</span><span class="mini-table-name">API Integration</span><span class="mini-table-company">DataFlow</span><span class="mini-table-amount">$45k</span><span class="ticket-status pending" style="font-size:10px;">Qualified</span></div>
+          <div class="mini-table-row"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">CB</span><span class="mini-table-name">SaaS Migration</span><span class="mini-table-company">CloudBase</span><span class="mini-table-amount">$32k</span><span class="ticket-status open" style="font-size:10px;">Proposal</span></div>
+        </div>
+      </div>
+      <div class="dash-widget">
+        <div class="dash-widget-title">Recent Activity</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(52,211,153,0.15);color:var(--success);">&#10003;</span><span style="flex:1;">Ana closed <strong>Analytics Suite</strong> &mdash; $52k</span><span style="color:var(--text-muted);font-size:11px;">2m</span></div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(251,191,36,0.15);color:var(--warning);">&rarr;</span><span style="flex:1;">Marcus moved <strong>API Integration</strong> to Proposal</span><span style="color:var(--text-muted);font-size:11px;">1h</span></div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">JP</span><span style="flex:1;">Julia added note on <strong>StyleHouse</strong></span><span style="color:var(--text-muted);font-size:11px;">3h</span></div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:13px;"><span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(96,165,250,0.15);color:var(--info);">+</span><span style="flex:1;">New lead: <strong>Elena Rodriguez</strong> — Series B</span><span style="color:var(--text-muted);font-size:11px;">5h</span></div>
+        </div>
+      </div>
+    </div>
+      </div><!-- close flex col -->
+    </div><!-- close grid -->
   </div>
 </section>
 
