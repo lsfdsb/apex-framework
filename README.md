@@ -339,6 +339,16 @@ APEX has 10 specialized agents — a championship roster. Use `/teams` for paral
 
 Use `/teams` and Claude auto-selects the right roster. Use `/batman` when you need proof everything works.
 
+### The Observatory
+
+Visual framework health dashboard at localhost:3000:
+
+```bash
+node dashboard/server.js
+```
+
+Shows agents, skills, hooks, workflow chain, live test runner, cross-reference matrix, and agent activity — all in a Gotham-themed dark UI. Zero dependencies.
+
 ### Step 6: Trust the Safety Net
 
 APEX has 3 layers of protection running automatically:

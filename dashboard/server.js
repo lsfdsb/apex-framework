@@ -270,6 +270,61 @@ function collectCrossRef() {
   });
 }
 
+// ── Activity Collector ───────────────────────────────────────
+
+function collectActivity() {
+  const home = process.env.HOME || process.env.USERPROFILE || "";
+  const teamsDir = path.join(home, ".claude", "teams");
+  const tasksDir = path.join(home, ".claude", "tasks");
+  const teams = [];
+
+  if (!fs.existsSync(teamsDir)) return { teams: [], tasks: [] };
+
+  for (const entry of fs.readdirSync(teamsDir)) {
+    const configPath = path.join(teamsDir, entry, "config.json");
+    if (!fs.existsSync(configPath)) continue;
+    try {
+      const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+      teams.push({
+        name: config.name || entry,
+        description: config.description || "",
+        createdAt: config.createdAt ? new Date(config.createdAt).toISOString() : null,
+        members: (config.members || []).map(m => ({
+          name: m.name,
+          type: m.agentType,
+          model: (m.model || "").replace(/^claude-/, "").split("[")[0],
+          active: !!m.isActive,
+          prompt: m.prompt ? m.prompt.slice(0, 200) + (m.prompt.length > 200 ? "…" : "") : null,
+        })),
+      });
+    } catch { /* skip corrupt configs */ }
+  }
+
+  const tasks = [];
+  if (fs.existsSync(tasksDir)) {
+    for (const session of fs.readdirSync(tasksDir)) {
+      const sessionDir = path.join(tasksDir, session);
+      if (!fs.statSync(sessionDir).isDirectory()) continue;
+      for (const f of fs.readdirSync(sessionDir).filter(f => f.endsWith(".json") && f !== ".lock")) {
+        try {
+          const task = JSON.parse(fs.readFileSync(path.join(sessionDir, f), "utf-8"));
+          if (!task.subject) continue;
+          tasks.push({
+            id: task.id,
+            session: session.slice(0, 8),
+            subject: task.subject,
+            status: task.status || "pending",
+            owner: task.owner || null,
+            activeForm: task.activeForm || null,
+          });
+        } catch { /* skip corrupt tasks */ }
+      }
+    }
+  }
+
+  return { teams, tasks };
+}
+
 // ── Test Runner ──────────────────────────────────────────────
 
 const TEST_SCRIPTS = {
@@ -390,6 +445,10 @@ function handleApi(req, res) {
       break;
     }
 
+    case "/api/activity":
+      respond(res, collectActivity());
+      break;
+
     default:
       respond(res, { error: "Not found" }, 404);
   }
@@ -428,6 +487,7 @@ server.listen(PORT, () => {
     "    /api/hooks         Hook scripts with settings wiring",
     "    /api/workflow      Workflow chain skill existence",
     "    /api/crossref      Agent cross-reference matrix",
+    "    /api/activity      Agent teams and task activity",
     "    /api/test?suite=   Run a test suite (framework|hooks|integration)",
     "    /api/test/all      Run all test suites",
     "",
