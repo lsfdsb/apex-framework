@@ -46,17 +46,24 @@ Follow these APEX conventions strictly:
 - **Responsive by default** — Mobile-first, works at 320px
 - **Error states always** — Every async operation needs loading, error, and empty states
 
-## Design Token Enforcement
+## Visual Quality Standards
 
-**CRITICAL**: Never use hardcoded Tailwind palette colors (blue-500, purple-500, amber-500, etc.) in UI components. ALWAYS use the project's design tokens:
+**Before writing ANY user-facing component**, read `.claude/skills/design-system/reference.md` for premium patterns and anti-patterns.
 
-1. **Before writing any UI component**, read the project's design system or tailwind.config.ts to find the defined color tokens (e.g., `primary`, `accent`, `muted`, CSS variables like `--color-primary`)
-2. Use ONLY semantic color tokens: `bg-primary`, `text-accent`, `border-muted`, `var(--color-primary)`, etc.
-3. If no design system exists yet, flag this to the lead — do NOT invent colors
-4. The Design System skill (`/design-system`) defines the project's visual language. Read it before building any UI.
+### Token Enforcement
+- **NEVER** hardcode Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`)
+- **ALWAYS** use semantic tokens: `bg-primary`, `text-accent`, `border-border`, `var(--color-primary)`
+- If no design system exists, pick a curated token set from `reference.md` and install it
+- Read the project's `tailwind.config.ts` or `globals.css` first
 
-**NEVER**: `bg-blue-500`, `text-purple-600`, `border-amber-400` — these are hardcoded and will break when the theme changes.
-**ALWAYS**: `bg-primary`, `text-accent`, `border-border` — these follow the design system.
+### Visual Distinctiveness (Ive Standard)
+- **NEVER** produce the generic AI layout: centered gradient hero, 3-column icon grid, blue/purple palette, uniform cards
+- **ALWAYS** create layouts with personality: asymmetric hero, typography-driven hierarchy, one accent color, intentional whitespace
+- **ALWAYS** add scroll-reveal animations to content sections (CSS IntersectionObserver pattern from reference.md)
+- **ALWAYS** use stagger animations on lists and grids
+- Hero headlines should be large (48-72px), with weight contrast
+- One primary CTA per section, not two
+- Let whitespace do the design work — don't fill every pixel
 
 ## Branding Check
 
