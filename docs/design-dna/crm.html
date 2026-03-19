@@ -574,90 +574,120 @@ tbody tr:last-child td { border-bottom: none; }
 .ws-stat { font-size: 11px; color: var(--text-muted); }
 .ws-stat strong { color: var(--text); font-weight: 600; }
 
-/* Inbox panel */
-.ws-inbox { border-right: 1px solid var(--border); overflow-y: auto; }
-.ws-inbox-header { padding: 14px 16px; font-size: 13px; font-weight: 600;
-  display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-.ws-inbox-tabs { display: flex; border-bottom: 1px solid var(--border); }
-.ws-inbox-tab { flex: 1; padding: 8px; text-align: center; font-size: 11px; font-weight: 500;
-  color: var(--text-muted); cursor: pointer; transition: all 0.2s; border-bottom: 2px solid transparent; }
-.ws-inbox-tab:hover { color: var(--text-secondary); }
-.ws-inbox-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
-.ws-conversation { display: flex; gap: 10px; padding: 12px 16px; cursor: pointer;
-  border-bottom: 1px solid var(--border); transition: all 0.2s; align-items: flex-start; }
-.ws-conversation:hover { background: var(--bg-surface); }
-.ws-conversation.active { background: var(--accent-glow); border-left: 3px solid var(--accent); padding-left: 13px; }
-.ws-conversation.unread { background: var(--bg-surface); }
-.ws-conv-avatar { width: 32px; height: 32px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; }
+/* Inbox panel (Shuffle-inspired cards) */
+.ws-inbox { border-right: 1px solid var(--border); overflow-y: auto; background: var(--bg); }
+.ws-inbox-header { padding: 16px 16px 12px; font-size: 14px; font-weight: 600;
+  display: flex; align-items: center; justify-content: space-between; }
+.ws-inbox-tabs { display: flex; gap: 4px; padding: 0 12px 12px; }
+.ws-inbox-tab { padding: 6px 14px; border-radius: 999px; font-size: 11px; font-weight: 500;
+  color: var(--text-muted); cursor: pointer; transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+  background: none; border: none; font-family: var(--font-body); }
+.ws-inbox-tab:hover { color: var(--text); background: var(--bg-surface); }
+.ws-inbox-tab.active { color: var(--accent); background: var(--accent-glow); }
+.ws-inbox-list { padding: 0 8px; }
+.ws-conversation { display: flex; gap: 12px; padding: 14px 12px; cursor: pointer;
+  border-radius: var(--radius-sm); margin-bottom: 4px; align-items: flex-start;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); border: 1px solid transparent; }
+.ws-conversation:hover { background: var(--bg-elevated); transform: translateX(2px); }
+.ws-conversation:active { transform: scale(0.98); }
+.ws-conversation.active { background: var(--bg-elevated); border-color: var(--accent);
+  box-shadow: 0 2px 12px var(--accent-glow); }
+.ws-conversation.unread { background: var(--bg-elevated); }
+.ws-conversation.unread .ws-conv-name { font-weight: 600; color: var(--text); }
+.ws-conv-avatar { width: 36px; height: 36px; border-radius: 12px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; }
 .ws-conv-body { flex: 1; min-width: 0; }
 .ws-conv-name { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
 .ws-conv-preview { font-size: 12px; color: var(--text-muted); white-space: nowrap;
-  overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
+  overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
 .ws-conv-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
 .ws-conv-time { font-size: 10px; color: var(--text-muted); }
 .ws-conv-unread { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-.channel-icon { width: 14px; height: 14px; border-radius: 3px; display: inline-flex;
+.channel-icon { width: 16px; height: 16px; border-radius: 4px; display: inline-flex;
   align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; }
 .channel-icon.whatsapp { background: #25D366; color: white; }
 .channel-icon.email { background: var(--accent); color: white; }
 .channel-icon.phone { background: var(--warning); color: white; }
 
-/* Chat panel */
-.ws-chat { display: flex; flex-direction: column; overflow: hidden; }
-.ws-chat-header { padding: 12px 16px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 10px; }
-.ws-chat-header-name { font-size: 14px; font-weight: 600; }
+/* Chat panel (Shuffle-inspired) */
+.ws-chat { display: flex; flex-direction: column; overflow: hidden; background: var(--bg); }
+.ws-chat-header { padding: 14px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; background: var(--bg-elevated); }
+.ws-chat-header-name { font-size: 15px; font-weight: 600; letter-spacing: -0.01em; }
 .ws-chat-header-channel { font-size: 11px; color: var(--text-muted); display: flex; align-items: center; gap: 4px; }
 .ws-chat-actions { margin-left: auto; display: flex; gap: 6px; }
-.ws-chat-action { width: 28px; height: 28px; border-radius: var(--radius-sm); border: 1px solid var(--border);
-  background: none; color: var(--text-muted); cursor: pointer; transition: all 0.2s;
+.ws-chat-action { width: 30px; height: 30px; border-radius: 10px; border: 1px solid var(--border);
+  background: none; color: var(--text-muted); cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
   display: flex; align-items: center; justify-content: center; }
-.ws-chat-action:hover { border-color: var(--border-hover); color: var(--text); }
+.ws-chat-action:hover { border-color: var(--border-hover); color: var(--text); transform: translateY(-1px); }
+.ws-chat-action:active { transform: scale(0.92); }
 .ws-chat-action.resolve { border-color: var(--success); color: var(--success); }
-.ws-chat-action.resolve:hover { background: var(--success); color: white; }
-.ws-chat-body { flex: 1; padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-.ws-msg { max-width: 75%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.5; }
-.ws-msg.customer { background: var(--bg-surface); align-self: flex-start; border-bottom-left-radius: 4px; }
+.ws-chat-action.resolve:hover { background: var(--success); color: white; transform: translateY(-1px); }
+.ws-chat-body { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+.ws-msg { max-width: 72%; padding: 12px 16px; border-radius: 18px; font-size: 14px; line-height: 1.55;
+  transition: transform 0.15s; }
+.ws-msg:hover { transform: scale(1.01); }
+.ws-msg.customer { background: var(--bg-elevated); align-self: flex-start; border-bottom-left-radius: 4px;
+  border: 1px solid var(--border); }
 .ws-msg.agent { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-.ws-msg-time { font-size: 9px; opacity: 0.5; margin-top: 4px; }
-.ws-msg-channel-tag { font-size: 9px; padding: 1px 6px; border-radius: 999px; margin-bottom: 6px;
-  display: inline-block; }
-.ws-msg-channel-tag.whatsapp { background: rgba(37,211,102,0.15); color: #25D366; }
+.ws-msg-time { font-size: 10px; opacity: 0.45; margin-top: 4px; }
+.ws-msg-channel-tag { font-size: 10px; padding: 3px 10px; border-radius: 999px; margin-bottom: 8px;
+  display: inline-flex; align-items: center; gap: 4px; font-weight: 500; }
+.ws-msg-channel-tag.whatsapp { background: rgba(37,211,102,0.12); color: #25D366; }
 .ws-msg-channel-tag.email { background: var(--accent-glow); color: var(--accent); }
-.ws-chat-input { padding: 12px 16px; border-top: 1px solid var(--border);
-  display: flex; gap: 8px; align-items: flex-end; }
-.ws-chat-input textarea { flex: 1; border: 1px solid var(--border); border-radius: var(--radius-sm);
-  background: var(--bg); color: var(--text); padding: 8px 12px; font-size: 13px;
-  font-family: var(--font-body); resize: none; outline: none; min-height: 36px; max-height: 100px;
+/* Quick actions bar (Shuffle-inspired tactile buttons) */
+.ws-quick-actions { display: flex; gap: 6px; padding: 10px 20px; border-top: 1px solid var(--border);
+  background: var(--bg-elevated); }
+.ws-quick-btn { display: flex; align-items: center; gap: 5px; padding: 7px 14px;
+  border-radius: 10px; border: 1px solid var(--border); background: none;
+  color: var(--text-secondary); font-size: 11px; font-weight: 500; cursor: pointer;
+  font-family: var(--font-body); transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.ws-quick-btn:hover { border-color: var(--border-hover); color: var(--text);
+  transform: translateY(-1px); background: var(--bg-surface); }
+.ws-quick-btn:active { transform: scale(0.95); }
+.ws-quick-btn.primary { background: var(--success); border-color: var(--success); color: white; }
+.ws-quick-btn.primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.ws-quick-btn svg { width: 12px; height: 12px; stroke: currentColor; }
+.ws-chat-input { padding: 12px 20px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-end; background: var(--bg-elevated); }
+.ws-chat-input textarea { flex: 1; border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg); color: var(--text); padding: 10px 16px; font-size: 13px;
+  font-family: var(--font-body); resize: none; outline: none; min-height: 40px; max-height: 100px;
   transition: border-color 0.2s; }
-.ws-chat-input textarea:focus { border-color: var(--accent); }
-.ws-chat-input .send-btn { padding: 8px 14px; border-radius: var(--radius-sm); background: var(--accent);
-  color: white; border: none; font-size: 12px; font-weight: 500; cursor: pointer;
-  transition: background 0.2s; font-family: var(--font-body); }
-.ws-chat-input .send-btn:hover { background: var(--accent-hover); }
+.ws-chat-input textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+.ws-chat-input .send-btn { padding: 10px 18px; border-radius: 12px; background: var(--accent);
+  color: white; border: none; font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); font-family: var(--font-body); }
+.ws-chat-input .send-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+.ws-chat-input .send-btn:active { transform: scale(0.95); }
 
-/* Context panel */
-.ws-context { border-left: 1px solid var(--border); overflow-y: auto; padding: 16px; }
-.ws-context-profile { text-align: center; padding-bottom: 16px; border-bottom: 1px solid var(--border);
-  margin-bottom: 16px; }
-.ws-context-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--accent-glow);
-  margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
-  font-size: 16px; font-weight: 700; color: var(--accent); }
-.ws-context-name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+/* Context panel (Shuffle-inspired customer card) */
+.ws-context { border-left: 1px solid var(--border); overflow-y: auto; padding: 16px;
+  background: var(--bg); }
+.ws-context-profile { text-align: center; padding: 20px 12px; margin: -16px -16px 16px;
+  background: var(--bg-elevated); border-bottom: 1px solid var(--border); }
+.ws-context-avatar { width: 56px; height: 56px; border-radius: 16px; background: var(--accent-glow);
+  margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 700; color: var(--accent); }
+.ws-context-name { font-size: 16px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
 .ws-context-company { font-size: 12px; color: var(--text-muted); }
-.ws-context-section { margin-bottom: 16px; }
+.ws-context-section { margin-bottom: 20px; }
 .ws-context-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
-  color: var(--text-muted); font-weight: 500; margin-bottom: 8px; }
-.ws-context-field { margin-bottom: 8px; }
-.ws-context-field-label { font-size: 10px; color: var(--text-muted); margin-bottom: 1px; }
-.ws-context-field-value { font-size: 12px; }
-.ws-context-tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 999px;
-  background: var(--bg-surface); color: var(--text-muted); margin: 2px; }
-.ws-context-deal { padding: 8px 10px; background: var(--bg-surface); border-radius: var(--radius-sm);
-  margin-bottom: 6px; }
-.ws-context-deal-name { font-size: 12px; font-weight: 500; }
-.ws-context-deal-value { font-size: 11px; color: var(--accent); font-weight: 600; }
+  color: var(--text-muted); font-weight: 500; margin-bottom: 10px; }
+.ws-context-field { margin-bottom: 10px; }
+.ws-context-field-label { font-size: 10px; color: var(--text-muted); margin-bottom: 2px; }
+.ws-context-field-value { font-size: 13px; }
+.ws-context-tag { display: inline-block; font-size: 10px; padding: 4px 10px; border-radius: 999px;
+  background: var(--bg-elevated); color: var(--text-secondary); margin: 2px;
+  border: 1px solid var(--border); transition: all 0.2s; }
+.ws-context-tag:hover { border-color: var(--accent); color: var(--accent); }
+.ws-context-deal { padding: 12px; background: var(--bg-elevated); border-radius: var(--radius-sm);
+  margin-bottom: 6px; border: 1px solid var(--border);
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.ws-context-deal:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.ws-context-deal-name { font-size: 13px; font-weight: 500; }
+.ws-context-deal-value { font-size: 12px; color: var(--accent); font-weight: 600; }
 .ws-context-deal-stage { font-size: 10px; color: var(--text-muted); }
 
 /* ═══════════════════════════════════════
@@ -1838,6 +1868,7 @@ footer p { font-size: 12px; color: var(--text-muted); }
               <div class="ws-inbox-tab">Mine (4)</div>
             </div>
             <!-- Conversations -->
+            <div class="ws-inbox-list">
             <div class="ws-conversation active">
               <div class="ws-conv-avatar" style="background:#25D366;color:white;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
@@ -1906,6 +1937,7 @@ footer p { font-size: 12px; color: var(--text-muted); }
                 <span class="ws-conv-time">2h</span>
               </div>
             </div>
+            </div>
           </div>
 
           <!-- Active conversation -->
@@ -1950,6 +1982,13 @@ footer p { font-size: 12px; color: var(--text-muted); }
                 Haha faz sentido! 😄 Pronto, enviei o link para seu email. Vai expirar em 24h. Mais alguma coisa?
                 <div class="ws-msg-time">14:27</div>
               </div>
+            </div>
+            <div class="ws-quick-actions">
+              <button class="ws-quick-btn primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Resolve</button>
+              <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Snooze</button>
+              <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 1l4 4-4 4"/><path d="M3 11V9a4 4 0 014-4h14"/></svg> Transfer</button>
+              <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg> Tag</button>
+              <button class="ws-quick-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg> Template</button>
             </div>
             <div class="ws-chat-input">
               <textarea placeholder="Type a message..." rows="1"></textarea>
