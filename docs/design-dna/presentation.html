@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>document.documentElement.setAttribute("data-theme",localStorage.getItem("apex-theme")||"dark")</script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>APEX DNA — Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#08080a;--bg-elevated:#111114;--bg-surface:#19191d;--border:#222228;--border-hover:#33333a;--text:#ececf0;--text-secondary:#8a8a96;--text-muted:#55555e;--accent:#636bf0;--accent-hover:#5158d4;--accent-glow:rgba(99,107,240,0.12);--success:#34d399;--warning:#fbbf24;--destructive:#f87171;--radius:16px;--radius-sm:8px;--font-body:'Inter',-apple-system,sans-serif;--font-display:'Instrument Serif',Georgia,serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased}
+body,section,.slide,footer{transition:background-color 0.4s,color 0.4s,border-color 0.4s}
+.reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all 0.9s cubic-bezier(0.22,1,0.36,1)}.reveal.visible{opacity:1;transform:none;filter:none}
+.reveal-delay-1{transition-delay:0.1s}.reveal-delay-2{transition-delay:0.2s}.reveal-delay-3{transition-delay:0.3s}.reveal-delay-4{transition-delay:0.4s}
+section{padding:100px 32px}.inner{max-width:1200px;margin:0 auto}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:var(--accent);font-weight:500;margin-bottom:16px}
+.section-header{text-align:center;margin-bottom:64px}
+.section-header h2{font-family:var(--font-display);font-size:clamp(40px,5vw,64px);font-weight:400;letter-spacing:-0.03em;line-height:1.1;margin-bottom:16px}
+.section-header p{font-size:17px;color:var(--text-secondary);font-weight:300}
+
+/* Slide frame */
+.slide{aspect-ratio:16/9;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius);padding:48px 64px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;margin-bottom:24px;transition:all 0.4s cubic-bezier(0.22,1,0.36,1)}
+.slide:hover{border-color:var(--border-hover)}
+.slide-label{position:absolute;top:16px;right:20px;font-size:10px;color:var(--text-muted);letter-spacing:0.06em;text-transform:uppercase}
+.slide-num{position:absolute;bottom:16px;right:20px;font-size:11px;color:var(--text-muted)}
+
+/* Slide types */
+.slide-title h1{font-family:var(--font-display);font-size:clamp(40px,5vw,72px);font-weight:400;letter-spacing:-0.04em;line-height:1}
+.slide-title h1 em{font-style:italic;color:var(--accent)}
+.slide-title p{font-size:18px;color:var(--text-secondary);font-weight:300;margin-top:16px;max-width:480px}
+.slide-title .slide-meta{font-size:13px;color:var(--text-muted);margin-top:32px}
+
+/* Section divider slide */
+.slide-section{justify-content:center;align-items:center;text-align:center}
+.slide-section h2{font-family:var(--font-display);font-size:clamp(48px,6vw,80px);font-weight:400;letter-spacing:-0.04em}
+.slide-section h2 em{font-style:italic;color:var(--accent)}
+.slide-section p{font-size:16px;color:var(--text-muted);margin-top:12px}
+
+/* Content slide */
+.slide-content h2{font-size:28px;font-weight:600;letter-spacing:-0.02em;margin-bottom:24px}
+.slide-content .content-grid{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.content-item h3{font-size:16px;font-weight:600;margin-bottom:6px}
+.content-item p{font-size:14px;color:var(--text-secondary);line-height:1.6}
+.content-item .content-num{font-family:var(--font-display);font-size:36px;color:var(--border-hover);margin-bottom:8px;letter-spacing:-0.03em}
+
+/* Stats slide */
+.slide-stats{align-items:center;text-align:center}
+.stats-row{display:flex;justify-content:center;gap:64px;margin-top:32px}
+.stat-big{text-align:center}
+.stat-big-value{font-size:64px;font-weight:700;letter-spacing:-0.04em;line-height:1}
+.stat-big-label{font-size:14px;color:var(--text-muted);margin-top:8px}
+
+/* Quote slide */
+.slide-quote{justify-content:center;align-items:center;text-align:center;padding:48px 80px}
+.slide-quote blockquote{font-family:var(--font-display);font-size:clamp(28px,3.5vw,44px);font-weight:400;letter-spacing:-0.02em;line-height:1.3;font-style:italic;color:var(--text)}
+.slide-quote cite{display:block;font-family:var(--font-body);font-style:normal;font-size:14px;color:var(--text-muted);margin-top:24px}
+
+/* Image + text slide */
+.slide-split{flex-direction:row;gap:48px;padding:0}
+.slide-split-img{flex:1;background:var(--bg-surface);display:flex;align-items:center;justify-content:center;min-height:100%;position:relative}
+.slide-split-img::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 40%,var(--accent-glow),transparent 60%)}
+.slide-split-img span{font-size:12px;color:var(--text-muted);z-index:1}
+.slide-split-text{flex:1;padding:48px 48px 48px 0;display:flex;flex-direction:column;justify-content:center}
+.slide-split-text h2{font-size:32px;font-weight:600;letter-spacing:-0.02em;margin-bottom:12px}
+.slide-split-text p{font-size:15px;color:var(--text-secondary);line-height:1.7;margin-bottom:16px}
+.slide-split-text ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.slide-split-text li{font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:10px}
+.slide-split-text li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0}
+
+/* Timeline slide */
+.slide-timeline{display:flex;gap:0;margin-top:24px}
+.timeline-step{flex:1;text-align:center;position:relative;padding:0 16px}
+.timeline-step::before{content:'';position:absolute;top:16px;left:0;right:0;height:1px;background:var(--border)}
+.timeline-step:first-child::before{left:50%}
+.timeline-step:last-child::before{right:50%}
+.timeline-dot-big{width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);background:var(--bg-elevated);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--accent);margin:0 auto 12px;position:relative;z-index:1}
+.timeline-step h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.timeline-step p{font-size:12px;color:var(--text-muted);line-height:1.4}
+
+/* CTA slide */
+.slide-cta{justify-content:center;align-items:center;text-align:center;position:relative}
+.slide-cta::before{content:'';position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,var(--accent-glow),transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
+.slide-cta h2{font-family:var(--font-display);font-size:clamp(36px,4vw,56px);font-weight:400;letter-spacing:-0.03em;position:relative}
+.slide-cta h2 em{font-style:italic;color:var(--accent)}
+.slide-cta p{font-size:16px;color:var(--text-secondary);margin-top:12px;position:relative}
+.slide-cta .cta-btn{display:inline-block;margin-top:24px;padding:12px 32px;background:var(--accent);color:white;border-radius:999px;font-size:14px;font-weight:500;text-decoration:none;transition:all 0.3s cubic-bezier(0.22,1,0.36,1);position:relative}
+.slide-cta .cta-btn:hover{transform:translateY(-2px);opacity:0.9}
+
+/* Grid of mini slides */
+.slide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.slide-mini{aspect-ratio:16/9;background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius-sm);padding:24px;display:flex;flex-direction:column;justify-content:center;transition:all 0.3s cubic-bezier(0.22,1,0.36,1)}
+.slide-mini:hover{border-color:var(--border-hover);transform:translateY(-2px)}
+.slide-mini h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.slide-mini p{font-size:11px;color:var(--text-muted);line-height:1.4}
+
+@media(max-width:768px){.slide{padding:32px;aspect-ratio:auto;min-height:300px}.slide-split{flex-direction:column}.slide-split-text{padding:32px}.stats-row{flex-direction:column;gap:24px}.slide-timeline{flex-direction:column;gap:16px}.slide-grid{grid-template-columns:1fr}.content-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}.reveal{opacity:1;transform:none;filter:none}}
+</style>
+</head>
+<body>
+
+<section style="padding-top:140px;text-align:center">
+  <div class="inner">
+    <div class="label reveal">Presentation</div>
+    <h1 class="reveal reveal-delay-1" style="font-family:var(--font-display);font-size:clamp(48px,7vw,80px);font-weight:400;letter-spacing:-0.04em;line-height:1;">Slides that<br><em style="font-style:italic;color:var(--accent)">persuade.</em></h1>
+    <p class="reveal reveal-delay-2" style="font-size:18px;color:var(--text-secondary);font-weight:300;max-width:440px;margin:20px auto 0;">Pitch decks, keynotes, investor presentations. 10 slide types, each designed to make one point perfectly.</p>
+  </div>
+</section>
+
+<!-- SLIDE 1: Title -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>10 slide types.</h2><p>One idea per slide. Maximum impact.</p></div>
+
+    <div class="slide slide-title reveal">
+      <span class="slide-label">Title Slide</span>
+      <h1>The future of<br>work is <em>async.</em></h1>
+      <p>How distributed teams are outperforming co-located ones — and what it means for your company.</p>
+      <div class="slide-meta">Acme Corp · Series B Pitch · March 2026</div>
+      <span class="slide-num">01 / 10</span>
+    </div>
+
+    <!-- SLIDE 2: Section Divider -->
+    <div class="slide slide-section reveal">
+      <span class="slide-label">Section Divider</span>
+      <h2>The <em>problem.</em></h2>
+      <p>Why traditional offices are failing knowledge workers.</p>
+      <span class="slide-num">02 / 10</span>
+    </div>
+
+    <!-- SLIDE 3: Stats -->
+    <div class="slide slide-stats reveal">
+      <span class="slide-label">Key Metrics</span>
+      <h2 style="font-size:24px;font-weight:600;letter-spacing:-0.02em;">The numbers speak for themselves.</h2>
+      <div class="stats-row">
+        <div class="stat-big"><div class="stat-big-value" style="color:var(--accent)">73%</div><div class="stat-big-label">Prefer remote work</div></div>
+        <div class="stat-big"><div class="stat-big-value">2.4×</div><div class="stat-big-label">Productivity increase</div></div>
+        <div class="stat-big"><div class="stat-big-value" style="color:var(--success)">$21K</div><div class="stat-big-label">Saved per employee/year</div></div>
+      </div>
+      <span class="slide-num">03 / 10</span>
+    </div>
+
+    <!-- SLIDE 4: Content Grid -->
+    <div class="slide slide-content reveal">
+      <span class="slide-label">Key Points</span>
+      <h2>Why async wins.</h2>
+      <div class="content-grid">
+        <div class="content-item"><div class="content-num">01</div><h3>Deep Work</h3><p>Uninterrupted blocks of focus time. No context switching. No meetings about meetings.</p></div>
+        <div class="content-item"><div class="content-num">02</div><h3>Global Talent</h3><p>Hire the best person for the job, regardless of timezone. Your talent pool becomes the entire planet.</p></div>
+        <div class="content-item"><div class="content-num">03</div><h3>Written Culture</h3><p>Decisions documented by default. No "you had to be there." Institutional memory that scales.</p></div>
+        <div class="content-item"><div class="content-num">04</div><h3>Work-Life Balance</h3><p>People work when they're at their best. Not when the office says so. Retention follows.</p></div>
+      </div>
+      <span class="slide-num">04 / 10</span>
+    </div>
+
+    <!-- SLIDE 5: Quote -->
+    <div class="slide slide-quote reveal">
+      <span class="slide-label">Quote</span>
+      <blockquote>"The future of work is not about where you work. It's about how clearly you think."</blockquote>
+      <cite>— Jason Fried, Basecamp</cite>
+      <span class="slide-num">05 / 10</span>
+    </div>
+
+    <!-- SLIDE 6: Image + Text Split -->
+    <div class="slide slide-split reveal">
+      <span class="slide-label">Feature Highlight</span>
+      <div class="slide-split-img"><span>Product screenshot</span></div>
+      <div class="slide-split-text">
+        <h2>Built for async teams.</h2>
+        <p>Our platform replaces meetings with structured communication. Every conversation has context, every decision has a paper trail.</p>
+        <ul>
+          <li>Threaded discussions with @mentions</li>
+          <li>Async video messages (no scheduling)</li>
+          <li>Decision logs with voting</li>
+          <li>Timezone-aware availability</li>
+        </ul>
+      </div>
+      <span class="slide-num">06 / 10</span>
+    </div>
+
+    <!-- SLIDE 7: Timeline / Roadmap -->
+    <div class="slide slide-content reveal">
+      <span class="slide-label">Roadmap</span>
+      <h2>Where we're going.</h2>
+      <div class="slide-timeline">
+        <div class="timeline-step"><div class="timeline-dot-big" style="background:var(--success);border-color:var(--success);color:white">✓</div><h4>Q1 2026</h4><p>MVP launch<br>1K users</p></div>
+        <div class="timeline-step"><div class="timeline-dot-big" style="background:var(--success);border-color:var(--success);color:white">✓</div><h4>Q2 2026</h4><p>Teams feature<br>10K users</p></div>
+        <div class="timeline-step"><div class="timeline-dot-big">3</div><h4>Q3 2026</h4><p>Enterprise<br>50K target</p></div>
+        <div class="timeline-step"><div class="timeline-dot-big">4</div><h4>Q4 2026</h4><p>AI features<br>100K target</p></div>
+      </div>
+      <span class="slide-num">07 / 10</span>
+    </div>
+
+    <!-- SLIDE 8: Team -->
+    <div class="slide slide-content reveal">
+      <span class="slide-label">Team</span>
+      <h2>The people behind it.</h2>
+      <div style="display:flex;justify-content:center;gap:48px;margin-top:8px">
+        <div style="text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--accent-glow);border:1px solid var(--border);margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div><div style="font-size:14px;font-weight:600">Ana Souza</div><div style="font-size:12px;color:var(--text-muted)">CEO & Design</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px">Ex-Stripe, RISD</div></div>
+        <div style="text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--accent-glow);border:1px solid var(--border);margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div><div style="font-size:14px;font-weight:600">Marcus Chen</div><div style="font-size:12px;color:var(--text-muted)">CTO</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px">Ex-Google, MIT</div></div>
+        <div style="text-align:center"><div style="width:64px;height:64px;border-radius:50%;background:var(--accent-glow);border:1px solid var(--border);margin:0 auto 10px;display:flex;align-items:center;justify-content:center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M20 21a8 8 0 0 0-16 0"/></svg></div><div style="font-size:14px;font-weight:600">Julia Park</div><div style="font-size:12px;color:var(--text-muted)">Head of Product</div><div style="font-size:11px;color:var(--text-muted);margin-top:4px">Ex-Linear, Stanford</div></div>
+      </div>
+      <span class="slide-num">08 / 10</span>
+    </div>
+
+    <!-- SLIDE 9: Pricing / Tiers -->
+    <div class="slide slide-content reveal">
+      <span class="slide-label">Pricing</span>
+      <h2>Simple pricing. No surprises.</h2>
+      <div style="display:flex;justify-content:center;gap:16px;margin-top:16px">
+        <div style="flex:1;max-width:220px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:24px;text-align:center">
+          <div style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Starter</div>
+          <div style="font-size:36px;font-weight:700;letter-spacing:-0.03em">$0</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">per user/month</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Up to 5 users<br>10GB storage<br>Basic integrations</div>
+        </div>
+        <div style="flex:1;max-width:220px;background:var(--bg);border:2px solid var(--accent);border-radius:var(--radius-sm);padding:24px;text-align:center">
+          <div style="font-size:14px;color:var(--accent);margin-bottom:8px;font-weight:500">Pro</div>
+          <div style="font-size:36px;font-weight:700;letter-spacing:-0.03em">$12</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">per user/month</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">Unlimited users<br>100GB storage<br>All integrations</div>
+        </div>
+        <div style="flex:1;max-width:220px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:24px;text-align:center">
+          <div style="font-size:14px;color:var(--text-muted);margin-bottom:8px">Enterprise</div>
+          <div style="font-size:36px;font-weight:700;letter-spacing:-0.03em">Custom</div>
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:16px">&nbsp;</div>
+          <div style="font-size:13px;color:var(--text-secondary);line-height:1.6">SSO & SAML<br>Dedicated support<br>SLA guarantee</div>
+        </div>
+      </div>
+      <span class="slide-num">09 / 10</span>
+    </div>
+
+    <!-- SLIDE 10: CTA / Closing -->
+    <div class="slide slide-cta reveal">
+      <span class="slide-label">Closing</span>
+      <h2>Ready to go <em>async?</em></h2>
+      <p>Let's build the future of work together.</p>
+      <a href="#" class="cta-btn">Schedule a demo</a>
+      <span class="slide-num">10 / 10</span>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE TYPE OVERVIEW -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal"><h2>All 10 types.</h2><p>Mix and match for any presentation.</p></div>
+    <div class="slide-grid reveal reveal-delay-1">
+      <div class="slide-mini"><h4>Title</h4><p>Big headline + subtitle. First impression.</p></div>
+      <div class="slide-mini"><h4>Section Divider</h4><p>Centered text. Marks a new chapter.</p></div>
+      <div class="slide-mini"><h4>Key Metrics</h4><p>3 big numbers. Data that hits.</p></div>
+      <div class="slide-mini"><h4>Content Grid</h4><p>4 key points. Numbered, structured.</p></div>
+      <div class="slide-mini"><h4>Quote</h4><p>One voice. Centered, italic, powerful.</p></div>
+      <div class="slide-mini"><h4>Image + Text</h4><p>Split layout. Show and tell.</p></div>
+      <div class="slide-mini"><h4>Roadmap</h4><p>Timeline with milestones. Past + future.</p></div>
+      <div class="slide-mini"><h4>Team</h4><p>Faces + roles. Trust through people.</p></div>
+      <div class="slide-mini"><h4>Pricing</h4><p>Tiers side by side. Clear value.</p></div>
+      <div class="slide-mini"><h4>Closing CTA</h4><p>One ask. Accent glow. End strong.</p></div>
+    </div>
+  </div>
+</section>
+
+<script src="palette.js"></script>
+<script src="svg-backgrounds.js"></script>
+</body>
+</html>

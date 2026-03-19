@@ -123,6 +123,9 @@ function injectNav() {
     { href: 'portfolio.html', label: 'Portfolio' },
     { href: 'social.html', label: 'Social' },
     { href: 'lms.html', label: 'LMS' },
+    { href: 'presentation.html', label: 'Slides' },
+    { href: 'ebook.html', label: 'E-Book' },
+    { href: 'backoffice.html', label: 'Admin' },
     { href: 'patterns.html', label: 'Patterns' },
   ];
   const current = location.pathname.split('/').pop() || 'index.html';
