@@ -34,7 +34,15 @@ When reviewing, check:
    - An agent workspace should NOT have executive KPI widgets
    - Mixed personas on one page = BLOCK unless PRD explicitly allows it
 
+9. **Visual Distinctiveness** (Ive Standard):
+   - Does this look like every other AI-generated site? If yes, BLOCK
+   - Check for banned anti-patterns (from reference.md): centered gradient hero, 3-column icon grid, blue/purple default palette, uniform card grid, two CTAs in hero, "Welcome to [App]" headline
+   - Check for premium patterns: asymmetric layout, typography-driven hierarchy, one accent color, intentional whitespace, scroll-reveal animations, stagger effects
+   - Verify hero headline is large (48-72px) with weight contrast
+   - Verify only ONE primary action per section
+   - Score 1 = generic AI look, 3 = acceptable, 5 = Apple-tier
+
 Rate each dimension 1-5. Ship threshold: average ≥4, no dimension below 3.
-**Design token violations, template branding, or persona misalignment = automatic BLOCK regardless of other scores.**
+**Design token violations, template branding, persona misalignment, or generic AI look = automatic BLOCK.**
 
 For each issue, explain what's wrong, why it matters to the user, and how to fix it.
