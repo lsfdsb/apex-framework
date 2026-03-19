@@ -208,7 +208,9 @@ Preview server: `http://localhost:3001` (run from project root if not already ru
 |---|---|---|
 | Landing page, marketing site | `docs/design-dna/landing.html` | Hero, features grid, pricing, testimonials, CTA banner, auth card |
 | SaaS dashboard, admin panel | `docs/design-dna/saas.html` | Dashboard layout, data tables, settings page, empty states |
-| CRM, contacts, pipelines | `docs/design-dna/crm.html` | Kanban pipeline, contact cards, activity timeline, chat widget, ticket list, deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring with progress rings, data table with filters/pagination, filter bar with active tags, task/follow-up list, empty states, email composer, notes panel |
+| CRM, contacts, pipelines | `docs/design-dna/crm.html` | **19 patterns**: Kanban pipeline, contact cards, activity timeline, chat widget, ticket list, deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring, data table, filter bar, task list, empty states, email composer, notes panel, **sidebar navigation**, **CRM dashboard** (KPI strip + sparklines + bar chart + donut + activity feed), **helpdesk dashboard** (SLA metrics + queue by channel + agent performance cards) |
+| Sidebar navigation | `docs/design-dna/crm.html` | Collapsible sidebar with logo, sections, icons, active states, badges, user avatar — use for any app with 5+ navigation items |
+| Dashboard layout | `docs/design-dna/crm.html` | Sidebar + compact content area with KPI strip (sparklines), bar charts, donut charts, activity feed — the REAL dashboard pattern (not marketing-page style) |
 | E-commerce, shop, products | `docs/design-dna/ecommerce.html` | Product grid, product detail, cart, 3-step checkout |
 | Blog, editorial, articles | `docs/design-dna/blog.html` | Hero, featured article, article grid, reading experience, newsletter |
 | Portfolio, agency, showcase | `docs/design-dna/portfolio.html` | Selected work grid, services list, contact form |

@@ -511,6 +511,164 @@ tbody tr:last-child td { border-bottom: none; }
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .note-submit:hover { background: var(--accent-hover); }
 
+/* ═══════════════════════════════════════
+   SIDEBAR NAVIGATION
+   ═══════════════════════════════════════ */
+.app-layout { display: grid; grid-template-columns: 240px 1fr; min-height: 600px;
+  background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+.sidebar { background: var(--bg-elevated); border-right: 1px solid var(--border); padding: 20px 0;
+  display: flex; flex-direction: column; }
+.sidebar-logo { padding: 0 20px 20px; font-size: 15px; font-weight: 600; letter-spacing: -0.02em;
+  border-bottom: 1px solid var(--border); margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+.sidebar-logo-icon { width: 28px; height: 28px; border-radius: var(--radius-sm); background: var(--accent);
+  display: flex; align-items: center; justify-content: center; }
+.sidebar-logo-icon svg { width: 14px; height: 14px; stroke: white; }
+.sidebar-section { padding: 12px 12px 4px; }
+.sidebar-section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); font-weight: 500; padding: 0 8px; margin-bottom: 4px; }
+.sidebar-item { display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin: 1px 0;
+  border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.2s; }
+.sidebar-item:hover { background: var(--bg-surface); color: var(--text); }
+.sidebar-item.active { background: var(--accent-glow); color: var(--accent); font-weight: 500; }
+.sidebar-item svg { width: 16px; height: 16px; stroke: currentColor; flex-shrink: 0; }
+.sidebar-item .badge { margin-left: auto; font-size: 10px; padding: 1px 7px; border-radius: 999px;
+  background: var(--accent); color: white; font-weight: 600; }
+.sidebar-footer { margin-top: auto; padding: 16px 12px; border-top: 1px solid var(--border); }
+.sidebar-user { display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+  border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
+.sidebar-user:hover { background: var(--bg-surface); }
+.sidebar-user-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-glow);
+  display: flex; align-items: center; justify-content: center; font-size: 10px;
+  font-weight: 600; color: var(--accent); flex-shrink: 0; }
+.sidebar-user-info { flex: 1; }
+.sidebar-user-name { font-size: 13px; font-weight: 500; }
+.sidebar-user-role { font-size: 11px; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════
+   DASHBOARD CONTENT AREA
+   ═══════════════════════════════════════ */
+.dash-content { padding: 24px; overflow-y: auto; }
+.dash-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.dash-header-left h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
+.dash-header-left p { font-size: 13px; color: var(--text-muted); }
+.dash-header-right { display: flex; gap: 8px; }
+.dash-btn { padding: 7px 14px; border-radius: var(--radius-sm); font-size: 12px;
+  font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.dash-btn.primary { background: var(--accent); color: white; border: none; }
+.dash-btn.primary:hover { background: var(--accent-hover); }
+.dash-btn.ghost { background: none; border: 1px solid var(--border); color: var(--text-secondary); }
+.dash-btn.ghost:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* Compact KPI strip */
+.kpi-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+.kpi-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.kpi-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--text-muted); margin-bottom: 6px; }
+.kpi-value { font-size: 24px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.kpi-sub { font-size: 11px; color: var(--text-muted); margin-top: 6px; display: flex; align-items: center; gap: 4px; }
+.kpi-sub .up { color: var(--success); }
+.kpi-sub .down { color: var(--destructive); }
+/* Mini sparkline (CSS-only approximation) */
+.kpi-spark { display: flex; align-items: flex-end; gap: 3px; height: 32px; margin-top: 10px; }
+.kpi-spark-bar { width: 6px; border-radius: 3px; background: var(--accent); opacity: 0.25;
+  transition: all 0.4s ease-out; }
+.kpi-spark-bar:nth-last-child(1) { opacity: 0.8; }
+.kpi-spark-bar:nth-last-child(2) { opacity: 0.6; }
+.kpi-spark-bar:nth-last-child(3) { opacity: 0.4; }
+.kpi-card:hover .kpi-spark-bar { opacity: 0.9; }
+
+/* Dashboard grid for charts/widgets */
+.dash-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+.dash-widget { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 20px;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.dash-widget:hover { border-color: var(--border-hover); }
+.dash-widget-title { font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--text-muted); font-weight: 500; margin-bottom: 16px; }
+
+/* CSS-only bar chart */
+.bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 160px; padding-top: 8px; }
+.bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.bar-fill { width: 100%; border-radius: 4px 4px 0 0; background: var(--accent);
+  transition: all 0.6s cubic-bezier(0.22,1,0.36,1); position: relative; min-height: 8px; }
+.bar-fill:hover { filter: brightness(1.3); transform: scaleY(1.05); transform-origin: bottom; }
+.bar-fill::after { content: attr(data-value); position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: var(--text-muted); opacity: 0; transition: opacity 0.2s; white-space: nowrap; }
+.bar-fill:hover::after { opacity: 1; }
+.bar-label { font-size: 10px; color: var(--text-muted); }
+
+/* Mini pipeline strip (dashboard inline funnel) */
+.pipeline-strip { display: flex; align-items: center; gap: 2px; margin-bottom: 16px; }
+.pipeline-stage { flex: 1; text-align: center; padding: 12px 8px; background: var(--bg-surface);
+  border-radius: 0; position: relative; transition: all 0.3s; cursor: pointer; }
+.pipeline-stage:first-child { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.pipeline-stage:last-child { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.pipeline-stage:hover { background: var(--accent-glow); }
+.pipeline-stage-value { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; }
+.pipeline-stage-label { font-size: 9px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted); margin-top: 2px; }
+.pipeline-stage-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; }
+
+/* Compact mini-table */
+.mini-table { width: 100%; }
+.mini-table-row { display: flex; align-items: center; gap: 12px; padding: 8px 0;
+  border-bottom: 1px solid var(--border); font-size: 13px; transition: background 0.15s; }
+.mini-table-row:last-child { border-bottom: none; }
+.mini-table-row:hover { background: var(--bg-surface); margin: 0 -8px; padding: 8px 8px; border-radius: 4px; }
+.mini-table-name { flex: 1; font-weight: 500; }
+.mini-table-company { color: var(--text-muted); width: 100px; }
+.mini-table-amount { font-weight: 600; width: 80px; text-align: right; }
+.mini-table-stage { width: 80px; }
+
+/* Donut chart (CSS-only) */
+.donut { width: 120px; height: 120px; border-radius: 50%; position: relative; margin: 0 auto; }
+.donut-center { position: absolute; inset: 20px; border-radius: 50%; background: var(--bg-elevated);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.donut-value { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; }
+.donut-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.donut-legend { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.donut-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-secondary); }
+.donut-legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+/* ═══════════════════════════════════════
+   HELPDESK DASHBOARD
+   ═══════════════════════════════════════ */
+.sla-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.sla-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; text-align: center; }
+.sla-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 2px; }
+.sla-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.sla-bar { height: 4px; background: var(--bg-surface); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+.sla-bar-fill { height: 100%; border-radius: 2px; transition: width 1s ease-out; }
+
+/* Agent grid */
+.agent-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.agent-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 16px; text-align: center; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.agent-card:hover { border-color: var(--border-hover); transform: translateY(-1px); }
+.agent-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-glow);
+  margin: 0 auto 10px; display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--accent); }
+.agent-name { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+.agent-status { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; }
+.agent-stat { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+.agent-stat-label { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.agent-online { display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--success); margin-right: 4px; }
+
+/* Queue status */
+.queue-row { display: flex; align-items: center; gap: 12px; padding: 10px 0;
+  border-bottom: 1px solid var(--border); }
+.queue-row:last-child { border-bottom: none; }
+.queue-channel { font-size: 13px; font-weight: 500; width: 80px; }
+.queue-bar-bg { flex: 1; height: 8px; background: var(--bg-surface); border-radius: 4px; overflow: hidden; }
+.queue-bar-fill { height: 100%; border-radius: 4px; transition: width 1s ease-out; }
+.queue-count { font-size: 13px; font-weight: 600; width: 40px; text-align: right; }
+.queue-wait { font-size: 11px; color: var(--text-muted); width: 60px; text-align: right; }
+
 footer { padding: 48px 32px; text-align: center; border-top: 1px solid var(--border); }
 footer p { font-size: 12px; color: var(--text-muted); }
 
@@ -524,6 +682,12 @@ footer p { font-size: 12px; color: var(--text-muted); }
   .profile-top { flex-direction: column; align-items: center; text-align: center; }
   .profile-meta { justify-content: center; flex-wrap: wrap; }
   .filter-bar { flex-direction: column; align-items: stretch; }
+  .app-layout { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .kpi-strip { grid-template-columns: 1fr 1fr; }
+  .dash-grid { grid-template-columns: 1fr; }
+  .sla-grid { grid-template-columns: 1fr; }
+  .agent-grid { grid-template-columns: 1fr 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important;
@@ -1269,6 +1433,396 @@ footer p { font-size: 12px; color: var(--text-muted); }
         </div>
         <div class="note-content">Competitor analysis: they're also talking to <strong>BuildCo</strong> — but their timeline is 6+ months. Our 8-week delivery is our strongest differentiator. Lead with speed.</div>
         <div class="note-tags"><span class="note-tag">competitive</span><span class="note-tag">strategy</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SIDEBAR + CRM DASHBOARD -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">App Layout</div>
+      <h2>Sidebar + Dashboard.<br>The real thing.</h2>
+      <p>How a CRM actually looks. Dense, scannable, actionable.</p>
+    </div>
+    <div class="app-layout reveal reveal-delay-1">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+          Phoenix
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Main</div>
+          <div class="sidebar-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            Contacts
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+            Pipeline <span class="badge">12</span>
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Analytics
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Support</div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            Tickets <span class="badge">8</span>
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Queue
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Settings</div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.2.65.77 1.09 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+            Settings
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-user-avatar">AS</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Ana Souza</div>
+              <div class="sidebar-user-role">Sales Manager</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dashboard content -->
+      <div class="dash-content">
+        <div class="dash-header">
+          <div class="dash-header-left">
+            <h1>Dashboard</h1>
+            <p>Recovery pipeline &middot; Mar 2026</p>
+          </div>
+          <div class="dash-header-right">
+            <button class="dash-btn ghost">Export</button>
+            <button class="dash-btn primary">+ New deal</button>
+          </div>
+        </div>
+
+        <!-- KPI strip -->
+        <div class="kpi-strip">
+          <div class="kpi-card">
+            <div class="kpi-label">Pipeline Value</div>
+            <div class="kpi-value">$284k</div>
+            <div class="kpi-sub"><span class="up">&uarr; 18%</span> vs last month</div>
+            <div class="kpi-spark">
+              <div class="kpi-spark-bar" style="height:40%"></div>
+              <div class="kpi-spark-bar" style="height:55%"></div>
+              <div class="kpi-spark-bar" style="height:45%"></div>
+              <div class="kpi-spark-bar" style="height:70%"></div>
+              <div class="kpi-spark-bar" style="height:60%"></div>
+              <div class="kpi-spark-bar" style="height:85%"></div>
+              <div class="kpi-spark-bar" style="height:100%"></div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Win Rate</div>
+            <div class="kpi-value" style="color:var(--success);">68%</div>
+            <div class="kpi-sub"><span class="up">&uarr; 5%</span> vs Q4</div>
+            <div class="kpi-spark">
+              <div class="kpi-spark-bar" style="height:60%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:55%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:70%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:65%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:75%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:80%;background:var(--success)"></div>
+              <div class="kpi-spark-bar" style="height:90%;background:var(--success)"></div>
+            </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Open Deals</div>
+            <div class="kpi-value">42</div>
+            <div class="kpi-sub">12 closing this week</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Avg. Close Time</div>
+            <div class="kpi-value">18d</div>
+            <div class="kpi-sub"><span class="up">&darr; 3d</span> faster</div>
+          </div>
+        </div>
+
+        <!-- Mini pipeline strip -->
+        <div class="pipeline-strip">
+          <div class="pipeline-stage">
+            <div class="pipeline-stage-value">48</div>
+            <div class="pipeline-stage-label">New Lead</div>
+            <div class="pipeline-stage-bar" style="background:var(--pipeline-lead);"></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-stage-value">32</div>
+            <div class="pipeline-stage-label">Qualified</div>
+            <div class="pipeline-stage-bar" style="background:var(--pipeline-qualified);"></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-stage-value">18</div>
+            <div class="pipeline-stage-label">Proposal</div>
+            <div class="pipeline-stage-bar" style="background:var(--pipeline-proposal);"></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-stage-value">12</div>
+            <div class="pipeline-stage-label">Negotiation</div>
+            <div class="pipeline-stage-bar" style="background:var(--accent);"></div>
+          </div>
+          <div class="pipeline-stage">
+            <div class="pipeline-stage-value" style="color:var(--success);">8</div>
+            <div class="pipeline-stage-label">Won</div>
+            <div class="pipeline-stage-bar" style="background:var(--pipeline-won);"></div>
+          </div>
+        </div>
+
+        <!-- Charts row -->
+        <div class="dash-grid">
+          <div class="dash-widget">
+            <div class="dash-widget-title">Monthly Revenue</div>
+            <div class="bar-chart">
+              <div class="bar-col"><div class="bar-fill" data-value="$24k" style="height:45%"></div><span class="bar-label">Oct</span></div>
+              <div class="bar-col"><div class="bar-fill" data-value="$33k" style="height:62%"></div><span class="bar-label">Nov</span></div>
+              <div class="bar-col"><div class="bar-fill" data-value="$29k" style="height:55%"></div><span class="bar-label">Dec</span></div>
+              <div class="bar-col"><div class="bar-fill" data-value="$41k" style="height:78%"></div><span class="bar-label">Jan</span></div>
+              <div class="bar-col"><div class="bar-fill" data-value="$36k" style="height:68%"></div><span class="bar-label">Feb</span></div>
+              <div class="bar-col"><div class="bar-fill" data-value="$48k" style="height:92%"></div><span class="bar-label">Mar</span></div>
+            </div>
+          </div>
+          <div class="dash-widget">
+            <div class="dash-widget-title">Deal Sources</div>
+            <div class="donut" style="background:conic-gradient(var(--accent) 0% 42%, var(--success) 42% 68%, var(--warning) 68% 85%, var(--text-muted) 85% 100%);">
+              <div class="donut-center">
+                <div class="donut-value">248</div>
+                <div class="donut-label">Total</div>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--accent);"></div> Inbound (42%)</div>
+              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--success);"></div> Referral (26%)</div>
+              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--warning);"></div> Outbound (17%)</div>
+              <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--text-muted);"></div> Other (15%)</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent deals mini-table -->
+        <div class="dash-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="dash-widget">
+            <div class="dash-widget-title">Hot Deals</div>
+            <div class="mini-table">
+              <div class="mini-table-row">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">SH</span>
+                <span class="mini-table-name">E-commerce Platform</span>
+                <span class="mini-table-company">StyleHouse</span>
+                <span class="mini-table-amount">$65k</span>
+                <span class="ticket-status open" style="font-size:10px;">Proposal</span>
+              </div>
+              <div class="mini-table-row">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">DF</span>
+                <span class="mini-table-name">API Integration</span>
+                <span class="mini-table-company">DataFlow</span>
+                <span class="mini-table-amount">$45k</span>
+                <span class="ticket-status pending" style="font-size:10px;">Qualified</span>
+              </div>
+              <div class="mini-table-row">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">CB</span>
+                <span class="mini-table-name">SaaS Migration</span>
+                <span class="mini-table-company">CloudBase</span>
+                <span class="mini-table-amount">$32k</span>
+                <span class="ticket-status open" style="font-size:10px;">Proposal</span>
+              </div>
+            </div>
+          </div>
+          <div class="dash-widget">
+            <div class="dash-widget-title">Recent Activity</div>
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(52,211,153,0.15);color:var(--success);">&#10003;</span>
+                <span style="flex:1;">Ana closed <strong>Analytics Suite</strong> &mdash; $52k</span>
+                <span style="color:var(--text-muted);font-size:11px;">2m</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(251,191,36,0.15);color:var(--warning);">&rarr;</span>
+                <span style="flex:1;">Marcus moved <strong>API Integration</strong> to Proposal</span>
+                <span style="color:var(--text-muted);font-size:11px;">1h</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;">JP</span>
+                <span style="flex:1;">Julia added note on <strong>StyleHouse</strong></span>
+                <span style="color:var(--text-muted);font-size:11px;">3h</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;font-size:13px;">
+                <span class="deal-avatar" style="width:24px;height:24px;font-size:9px;background:rgba(96,165,250,0.15);color:var(--info);">+</span>
+                <span style="flex:1;">New lead: <strong>Elena Rodriguez</strong> — Series B</span>
+                <span style="color:var(--text-muted);font-size:11px;">5h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HELPDESK DASHBOARD -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Helpdesk Dashboard</div>
+      <h2>Support metrics,<br>at a glance.</h2>
+      <p>SLA tracking, agent performance, queue status.</p>
+    </div>
+    <div class="app-layout reveal reveal-delay-1">
+      <!-- Reuse sidebar with Tickets active -->
+      <div class="sidebar">
+        <div class="sidebar-logo">
+          <div class="sidebar-logo-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+          Support
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Overview</div>
+          <div class="sidebar-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+            Dashboard
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+            All Tickets <span class="badge">24</span>
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            My Queue <span class="badge">6</span>
+          </div>
+        </div>
+        <div class="sidebar-section">
+          <div class="sidebar-section-title">Channels</div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            Email
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            Live Chat
+          </div>
+          <div class="sidebar-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+            Phone
+          </div>
+        </div>
+        <div class="sidebar-footer">
+          <div class="sidebar-user">
+            <div class="sidebar-user-avatar">MC</div>
+            <div class="sidebar-user-info">
+              <div class="sidebar-user-name">Marcus Chen</div>
+              <div class="sidebar-user-role">Support Lead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Helpdesk content -->
+      <div class="dash-content">
+        <div class="dash-header">
+          <div class="dash-header-left">
+            <h1>Support Dashboard</h1>
+            <p>Real-time &middot; Today</p>
+          </div>
+          <div class="dash-header-right">
+            <button class="dash-btn ghost">Last 7 days</button>
+            <button class="dash-btn primary">+ New ticket</button>
+          </div>
+        </div>
+
+        <!-- SLA metrics -->
+        <div class="sla-grid">
+          <div class="sla-card">
+            <div class="sla-value" style="color:var(--success);">94%</div>
+            <div class="sla-label">SLA Met</div>
+            <div class="sla-bar"><div class="sla-bar-fill" style="width:94%;background:var(--success);"></div></div>
+          </div>
+          <div class="sla-card">
+            <div class="sla-value">2.4m</div>
+            <div class="sla-label">Avg First Reply</div>
+            <div class="sla-bar"><div class="sla-bar-fill" style="width:76%;background:var(--accent);"></div></div>
+          </div>
+          <div class="sla-card">
+            <div class="sla-value">4.2h</div>
+            <div class="sla-label">Avg Resolution</div>
+            <div class="sla-bar"><div class="sla-bar-fill" style="width:58%;background:var(--warning);"></div></div>
+          </div>
+        </div>
+
+        <!-- Queue by channel -->
+        <div class="dash-widget" style="margin-bottom:16px;">
+          <div class="dash-widget-title">Queue by Channel</div>
+          <div class="queue-row">
+            <span class="queue-channel">Email</span>
+            <div class="queue-bar-bg"><div class="queue-bar-fill" style="width:65%;background:var(--accent);"></div></div>
+            <span class="queue-count">13</span>
+            <span class="queue-wait">~8m avg</span>
+          </div>
+          <div class="queue-row">
+            <span class="queue-channel">Live Chat</span>
+            <div class="queue-bar-bg"><div class="queue-bar-fill" style="width:35%;background:var(--success);"></div></div>
+            <span class="queue-count">7</span>
+            <span class="queue-wait">~2m avg</span>
+          </div>
+          <div class="queue-row">
+            <span class="queue-channel">Phone</span>
+            <div class="queue-bar-bg"><div class="queue-bar-fill" style="width:20%;background:var(--warning);"></div></div>
+            <span class="queue-count">4</span>
+            <span class="queue-wait">~1m avg</span>
+          </div>
+        </div>
+
+        <!-- Agent performance -->
+        <div class="dash-widget">
+          <div class="dash-widget-title">Agent Performance</div>
+          <div class="agent-grid">
+            <div class="agent-card">
+              <div class="agent-avatar">MC</div>
+              <div class="agent-name"><span class="agent-online"></span>Marcus</div>
+              <div class="agent-status">12 resolved today</div>
+              <div class="agent-stat" style="color:var(--success);">98%</div>
+              <div class="agent-stat-label">CSAT</div>
+            </div>
+            <div class="agent-card">
+              <div class="agent-avatar" style="color:var(--success);background:rgba(52,211,153,0.1);">JP</div>
+              <div class="agent-name"><span class="agent-online"></span>Julia</div>
+              <div class="agent-status">8 resolved today</div>
+              <div class="agent-stat" style="color:var(--success);">96%</div>
+              <div class="agent-stat-label">CSAT</div>
+            </div>
+            <div class="agent-card">
+              <div class="agent-avatar" style="color:var(--warning);background:rgba(251,191,36,0.1);">TH</div>
+              <div class="agent-name">Tom</div>
+              <div class="agent-status">5 resolved today</div>
+              <div class="agent-stat">91%</div>
+              <div class="agent-stat-label">CSAT</div>
+            </div>
+            <div class="agent-card">
+              <div class="agent-avatar" style="color:var(--info);background:rgba(96,165,250,0.1);">ER</div>
+              <div class="agent-name"><span class="agent-online"></span>Elena</div>
+              <div class="agent-status">10 resolved today</div>
+              <div class="agent-stat" style="color:var(--success);">97%</div>
+              <div class="agent-stat-label">CSAT</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

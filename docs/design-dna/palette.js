@@ -356,13 +356,13 @@ function init() {
   injectSwitcher();
   injectBgWidget();
   injectFooter();
-  const palette = localStorage.getItem('apex-palette') || 'saas';
+  const palette = localStorage.getItem('apex-palette') || 'creative';
   const mode = localStorage.getItem('apex-theme') || 'dark';
   applyPalette(palette, mode);
-  const savedBg = localStorage.getItem('apex-bg');
-  if (savedBg) setBgPattern(savedBg);
-  const savedAbg = localStorage.getItem('apex-abg');
-  if (savedAbg) setAnimBg(savedAbg);
+  const savedBg = localStorage.getItem('apex-bg') ?? 'dots';
+  if (savedBg && savedBg !== 'none') setBgPattern(savedBg);
+  const savedAbg = localStorage.getItem('apex-abg') ?? 'nebula';
+  if (savedAbg && savedAbg !== 'none') setAnimBg(savedAbg);
   observeReveals();
   setTimeout(observeReveals, 100);
   setTimeout(observeReveals, 500);
