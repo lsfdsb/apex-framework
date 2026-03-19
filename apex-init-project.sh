@@ -162,6 +162,18 @@ else
   echo "   ✅ .gitignore created"
 fi
 
+# ── Design DNA (pattern library) ──
+echo ""
+echo "🎨 Installing Design DNA pattern library..."
+if [ -d "$APEX_DIR/docs/design-dna" ]; then
+  mkdir -p docs/design-dna
+  cp "$APEX_DIR"/docs/design-dna/*.html docs/design-dna/ 2>/dev/null || true
+  cp "$APEX_DIR"/docs/design-dna/*.js docs/design-dna/ 2>/dev/null || true
+  DNA_COUNT=$(ls docs/design-dna/*.html 2>/dev/null | wc -l | tr -d ' ')
+  echo "   ✅ $DNA_COUNT pattern pages + 2 JS modules"
+  echo "   Preview: node -e \"require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)\""
+fi
+
 # ── Docs directories ──
 mkdir -p docs/prd docs/architecture docs/research docs/reviews
 

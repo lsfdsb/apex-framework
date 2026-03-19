@@ -584,6 +584,57 @@ else
 fi
 
 # ══════════════════════════════════════════════════
+# DESIGN DNA — Pattern Library Integrity
+# ══════════════════════════════════════════════════
+DNA_DIR="$SCRIPT_DIR/docs/design-dna"
+section "Design DNA — Pattern Library"
+
+assert_dir_exists "$DNA_DIR" "docs/design-dna/"
+
+# All 14 pattern pages must exist
+DNA_PAGES="index design-system landing crm ecommerce saas blog portfolio social lms presentation ebook backoffice email patterns"
+for page in $DNA_PAGES; do
+  assert_file_exists "$DNA_DIR/${page}.html" "DNA page: ${page}.html"
+done
+
+# JS modules must exist
+assert_file_exists "$DNA_DIR/palette.js" "palette.js (global switcher)"
+assert_file_exists "$DNA_DIR/svg-backgrounds.js" "svg-backgrounds.js (pattern engine)"
+
+# palette.js must have all 5 palettes
+assert_file_contains "$DNA_DIR/palette.js" "saas:" "palette.js has SaaS palette"
+assert_file_contains "$DNA_DIR/palette.js" "editorial:" "palette.js has Editorial palette"
+assert_file_contains "$DNA_DIR/palette.js" "fintech:" "palette.js has Fintech palette"
+assert_file_contains "$DNA_DIR/palette.js" "startup:" "palette.js has Startup palette"
+assert_file_contains "$DNA_DIR/palette.js" "creative:" "palette.js has Creative palette"
+
+# palette.js must have unified widget (not separate switcher + bg-widget)
+assert_file_contains "$DNA_DIR/palette.js" "apex-widget" "palette.js has unified widget"
+
+# svg-backgrounds.js must have all pattern types
+assert_file_contains "$DNA_DIR/svg-backgrounds.js" "dots:" "svg-backgrounds.js has dots pattern"
+assert_file_contains "$DNA_DIR/svg-backgrounds.js" "grid:" "svg-backgrounds.js has grid pattern"
+assert_file_contains "$DNA_DIR/svg-backgrounds.js" "constellation:" "svg-backgrounds.js has constellation pattern"
+assert_file_contains "$DNA_DIR/svg-backgrounds.js" "rings:" "svg-backgrounds.js has rings animation"
+
+# svg-backgrounds.js rings must use vmax (fullscreen fix)
+assert_file_contains "$DNA_DIR/svg-backgrounds.js" "vmax" "rings use vmax for fullscreen"
+
+# CRM must have 15+ sections (expanded patterns)
+CRM_SECTIONS=$(grep -c 'section-header' "$DNA_DIR/crm.html" 2>/dev/null || echo "0")
+assert_true "CRM has 10+ pattern sections (found $CRM_SECTIONS)" "[ $CRM_SECTIONS -ge 10 ]"
+
+# All pages must reference palette.js
+for page in $DNA_PAGES; do
+  assert_file_contains "$DNA_DIR/${page}.html" "palette.js" "${page}.html loads palette.js"
+done
+
+# Design DNA must be wired into build pipeline
+assert_file_contains "$SCRIPT_DIR/CLAUDE.md" "Design DNA before UI" "CLAUDE.md has DNA rule"
+assert_file_contains "$AGENTS/builder.md" "design-dna" "builder.md references Design DNA"
+assert_file_contains "$AGENTS/design-reviewer.md" "design-dna" "design-reviewer.md references Design DNA"
+
+# ══════════════════════════════════════════════════
 # SUMMARY
 # ══════════════════════════════════════════════════
 echo ""
