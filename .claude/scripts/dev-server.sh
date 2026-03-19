@@ -16,8 +16,46 @@ LOG_DIR="$PROJECT_DIR/.claude"
 LOG_FILE="$LOG_DIR/dev-server.log"
 PID_FILE="$LOG_DIR/.dev-server.pid"
 
-# Skip if no package.json
+# Skip if no package.json — BUT check for Design DNA (APEX framework repo)
 if [ ! -f "$PACKAGE_JSON" ]; then
+  # Check if this is the APEX framework repo with Design DNA
+  DNA_DIR="$PROJECT_DIR/docs/design-dna"
+  if [ -d "$DNA_DIR" ] && [ -f "$DNA_DIR/index.html" ]; then
+    # Start the Design DNA dev server
+    DNA_PID_FILE="$LOG_DIR/.dna-server.pid"
+    DNA_LOG_FILE="$LOG_DIR/dna-server.log"
+    # Check if already running
+    if [ -f "$DNA_PID_FILE" ]; then
+      OLD_PID=$(cat "$DNA_PID_FILE" 2>/dev/null)
+      if [ -n "$OLD_PID" ] && kill -0 "$OLD_PID" 2>/dev/null; then
+        echo "🟢 Design DNA server running (PID $OLD_PID · http://localhost:3001)"
+        exit 0
+      fi
+      rm -f "$DNA_PID_FILE" 2>/dev/null
+    fi
+    # Start DNA server
+    nohup node -e "
+const http=require('http'),fs=require('fs'),path=require('path');
+const dir='$DNA_DIR';
+const types={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8'};
+http.createServer((q,s)=>{
+  let file=q.url.split('?')[0];if(file==='/') file='/index.html';
+  if(!path.extname(file)) file+='.html';
+  const p=path.join(dir,file);
+  if(!fs.existsSync(p)){s.writeHead(404);s.end('Not found');return;}
+  s.writeHead(200,{'Content-Type':types[path.extname(p)]||'text/plain'});
+  fs.createReadStream(p).pipe(s);
+}).listen(3001,()=>console.log('Design DNA running at http://localhost:3001'));
+" > "$DNA_LOG_FILE" 2>&1 &
+    echo "$!" > "$DNA_PID_FILE"
+    sleep 1
+    if kill -0 "$(cat "$DNA_PID_FILE")" 2>/dev/null; then
+      echo "🟢 Design DNA server started · http://localhost:3001"
+    else
+      echo "⚠️ Design DNA server failed to start. Check $DNA_LOG_FILE"
+    fi
+    exit 0
+  fi
   echo "⚙️ Dev server: no package.json found. Not a Node.js project."
   exit 0
 fi

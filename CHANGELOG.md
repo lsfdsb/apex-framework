@@ -5,6 +5,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.11.2] — 2026-03-19 — Design DNA Distribution + Framework Tooling
+
+### Added
+- **VERSION file** — Single source of truth for framework version, read dynamically by session-context.sh (was hardcoded 5.7.0 fallback)
+- **Design DNA installation** — install.sh now copies all 14 Design DNA pages (hub, design-system, landing, crm, ecommerce, saas, blog, portfolio, social, lms, presentation, ebook, email, backoffice) + 2 JS modules (palette.js, svg-backgrounds.js) to new projects at `docs/design-dna/`
+- **64 Design DNA tests** — Comprehensive validation suite covering page existence, palette integrity, CRM expansion (10+ patterns), rings fullscreen coverage, pipeline wiring, navigation persistence (352 total tests, all passing)
+- **Design DNA dev server** — dev-server.sh auto-detects and starts DNA server (port 3001) when running in APEX framework repo
+- **/ship skill** — Fast-track PR workflow: branch → commit → push → create PR → merge in single command; supports draft mode, auto-merge on approval, and configurable commit scopes
+
+### Changed
+- README.md updated with v5.11 nomenclature
+
+### Details
+- Tests validate all 14 DNA pages load palette.js and svg-backgrounds.js
+- CRM expansion verified: 18 component sections (10+ required)
+- Rings animated background tested for full-viewport vmax × 1.5 scale coverage
+- Pipeline wiring confirms builder.md references DNA, design-reviewer.md has compliance gate, CLAUDE.md has DNA rule
+- dev-server.sh gracefully handles stale PID files, prevents port conflicts
+- /ship enables single-author fast-track PRs with pre-configured merge strategy
+
 ## [5.11.1] — 2026-03-19 — Design DNA Enforcement + Agent Hardening
 
 ### Added

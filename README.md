@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.11
+# ⚔️ APEX Framework v5.11.2
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║          ⚔️  APEX Framework v5.11            ║
+  ║         ⚔️  APEX Framework v5.11.2           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Design like Jony Ive                        ║
@@ -48,7 +48,7 @@ cd ~/my-project
 ~/.apex-framework/install.sh
 ```
 
-**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It also installs git hooks that enforce code quality, creates doc directories for your PRDs, and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It also installs git hooks that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
 
 ### For additional projects
 
@@ -130,15 +130,16 @@ Everything installs into your project's `.claude/` directory:
 
 | Category | Count | What it does |
 |----------|-------|-------------|
-| **Skills** | 25 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, etc.) — each is a specialized knowledge module |
-| **Scripts** | 23 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, etc.) |
+| **Skills** | 29 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, `/ship`, etc.) — each is a specialized knowledge module |
+| **Scripts** | 29 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, dev server, etc.) |
 | **Agents** | 10 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, sentinel (Batman), framework-evolver |
 | **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
 | **Output Style** | 1 | Educational — explains What/Why/How for every action |
 | **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
 | **StatusLine** | 1 | Real-time dashboard: model, context %, tokens, agents, lines changed |
+| **Design DNA** | 14 pages | Premium UI pattern library (hub, design-system, landing, CRM, e-commerce, SaaS, blog, portfolio, social, LMS, presentation, e-book, email, backoffice) + 2 JS modules |
 | **Sandbox** | 1 | OS-level protection: blocks writes to /etc, ~/.ssh, ~/.aws |
-| **Tests** | 3 suites | framework (288 tests), hooks (115 tests), agents (137 tests) |
+| **Tests** | 3 suites | framework (352 tests), hooks (115 tests), agents (137 tests) |
 
 ---
 

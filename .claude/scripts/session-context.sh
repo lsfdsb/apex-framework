@@ -47,9 +47,13 @@ fi
 if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/.installed-version" ]; then
   APEX_VERSION=$(cat "$HOME/.apex-framework/.installed-version" 2>/dev/null | tr -d '[:space:]')
 fi
+# Priority 4: VERSION file in framework source
+if [ -z "$APEX_VERSION" ] && [ -f "$HOME/.apex-framework/VERSION" ]; then
+  APEX_VERSION=$(cat "$HOME/.apex-framework/VERSION" 2>/dev/null | tr -d '[:space:]')
+fi
 # Fallback
 if [ -z "$APEX_VERSION" ]; then
-  APEX_VERSION="5.7.0"
+  APEX_VERSION="5.11.1"
 fi
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
