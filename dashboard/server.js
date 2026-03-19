@@ -335,7 +335,7 @@ function collectActivity() {
     }
   }
 
-  return { teams, tasks };
+  return { teams, tasks, hasActive };
 }
 
 // ── Test Runner ──────────────────────────────────────────────
