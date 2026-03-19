@@ -5,6 +5,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **CRM Patterns Expansion** — CRM page scaled from 15 to 19 patterns: sidebar navigation (collapsible with logo, sections, icons, active states, badges, user avatar), CRM dashboard (KPI strip with sparklines, bar charts, donut charts, activity feed), helpdesk dashboard (SLA metrics, queue by channel, agent performance cards)
+- **Design DNA Routing Table** — design-system SKILL.md updated with dedicated entries for sidebar navigation and dashboard layouts, helping builders find the right pattern faster
+
+### Changed
+- **Default Palette** — Changed from SaaS to Creative Warm (emerald + coral + warm grays) for more distinctive brand expression
+- **Default Backgrounds** — Dots static pattern + Nebula animated background as visual system defaults (persisted via localStorage)
+
 ## [5.11.2] — 2026-03-19 — Design DNA Distribution + Framework Tooling
 
 ### Added
