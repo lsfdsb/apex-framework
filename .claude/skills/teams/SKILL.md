@@ -106,14 +106,36 @@ The framework *breathes* when the team operates as a continuous cycle without hu
 
 ### Post-Builder Verification (CRITICAL)
 
-After ANY builder agent completes (whether in worktree or not):
+After ANY builder agent completes:
 
-1. **Check file existence** — Verify every file the builder claims to have created/modified actually exists in the main project
-2. **Check file content** — Read the first few lines of each file to confirm it's not empty or corrupted
-3. **If files are missing** — Do NOT proceed. The worktree may have been cleaned up prematurely. Re-create the files or re-run the builder.
-4. **Report to lead** — Include a file verification status in the completion message
+1. **Check the builder's completion message** — it MUST include a branch name and commit hash
+2. **Merge the branch**: `git merge <builder-branch> --no-commit` or `git cherry-pick <commit>`
+3. **Verify files exist**: `ls -la` on every file the builder listed
+4. **If files are missing but branch exists**: `git show <branch>:<path>` to recover
+5. **If no commit was made**: Files are LOST. Re-spawn builder with `isolation: none`
 
-This step exists because worktree isolation can cause file loss. NEVER skip it.
+### When Builders Fail — Recovery Protocol
+
+**Do NOT rewrite files yourself.** The lead is Opus — too expensive for Sonnet work. Instead:
+
+1. Re-spawn a new builder with **no worktree isolation**:
+   ```
+   Agent({
+     subagent_type: "builder",
+     isolation: none,  // ← NO WORKTREE — writes directly to main project
+     prompt: "... same task ..."
+   })
+   ```
+2. Only use `isolation: worktree` when multiple builders work in parallel on conflicting files
+3. For single-builder tasks, `isolation: none` is safer and faster
+
+### Stale Worktree Cleanup
+
+Run periodically (or at session end):
+```bash
+git worktree prune
+rm -rf .claude/worktrees/agent-*
+```
 
 ### Key principle: No human intervention needed in the loop
 
