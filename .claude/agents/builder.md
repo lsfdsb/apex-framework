@@ -48,7 +48,28 @@ Follow these APEX conventions strictly:
 
 ## Visual Quality Standards
 
-**Before writing ANY user-facing component**, read `.claude/skills/design-system/reference.md` for premium patterns and anti-patterns.
+**Before writing ANY user-facing component:**
+1. Read `.claude/skills/design-system/reference.md` for premium patterns and anti-patterns
+2. Read the **matching Design DNA page** from `docs/design-dna/` — this is MANDATORY:
+
+| Building... | Read first |
+|---|---|
+| Landing/marketing | `docs/design-dna/landing.html` |
+| Dashboard/SaaS | `docs/design-dna/saas.html` |
+| CRM/contacts/pipeline | `docs/design-dna/crm.html` |
+| E-commerce/shop | `docs/design-dna/ecommerce.html` |
+| Blog/editorial | `docs/design-dna/blog.html` |
+| Portfolio/agency | `docs/design-dna/portfolio.html` |
+| Social/feed | `docs/design-dna/social.html` |
+| LMS/courses | `docs/design-dna/lms.html` |
+| Email templates | `docs/design-dna/email.html` |
+| Slides/presentations | `docs/design-dna/presentation.html` |
+| E-book/long-form | `docs/design-dna/ebook.html` |
+| Backoffice/internal | `docs/design-dna/backoffice.html` |
+| SVG backgrounds | `docs/design-dna/patterns.html` + `docs/design-dna/svg-backgrounds.js` |
+| Color/typography | `docs/design-dna/design-system.html` |
+
+The Design DNA pages are our **visual quality bar**. Match or exceed them. Adapt patterns to the project's stack — don't copy HTML, extract the design language.
 
 ### Token Enforcement
 - **NEVER** hardcode Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`)

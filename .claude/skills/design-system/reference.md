@@ -1,5 +1,7 @@
 # Design System — Detailed Reference
 
+> **IMPORTANT**: This file contains token sets and CSS patterns. For **live visual references** of complete page layouts, read the matching page from `docs/design-dna/` — see the routing table in `SKILL.md`. The Design DNA is the authoritative visual quality bar for all APEX projects.
+
 ## Font Pairing Recommendations
 
 Choose ONE pairing per project. Never repeat across projects.

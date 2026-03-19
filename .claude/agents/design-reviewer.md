@@ -34,7 +34,18 @@ When reviewing, check:
    - An agent workspace should NOT have executive KPI widgets
    - Mixed personas on one page = BLOCK unless PRD explicitly allows it
 
-9. **Visual Distinctiveness** (Ive Standard):
+9. **Design DNA Compliance** (NEW — CRITICAL):
+   - Read the matching Design DNA reference page from `docs/design-dna/` before scoring:
+     - Landing → `landing.html` | Dashboard/SaaS → `saas.html` | CRM → `crm.html` | E-commerce → `ecommerce.html`
+     - Blog → `blog.html` | Portfolio → `portfolio.html` | Social → `social.html` | LMS → `lms.html`
+     - Email → `email.html` | Slides → `presentation.html` | E-book → `ebook.html` | Backoffice → `backoffice.html`
+   - Compare the built page against the DNA reference: layout structure, visual hierarchy, spacing, component anatomy
+   - The DNA page is the **minimum quality bar** — built pages must match or exceed it
+   - Check if SVG backgrounds from `docs/design-dna/patterns.html` were used where appropriate
+   - Check if animations match the motion patterns in the DNA reference
+   - DNA non-compliance = BLOCK (explain what doesn't match and which DNA pattern to follow)
+
+10. **Visual Distinctiveness** (Ive Standard):
    - Does this look like every other AI-generated site? If yes, BLOCK
    - Check for banned anti-patterns (from reference.md): centered gradient hero, 3-column icon grid, blue/purple default palette, uniform card grid, two CTAs in hero, "Welcome to [App]" headline
    - Check for premium patterns: asymmetric layout, typography-driven hierarchy, one accent color, intentional whitespace, scroll-reveal animations, stagger effects

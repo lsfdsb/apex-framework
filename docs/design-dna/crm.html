@@ -223,6 +223,294 @@ section { padding: 140px 32px; }
 /* Grid layout for side-by-side */
 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
 
+/* ═══════════════════════════════════════
+   DEAL DETAIL DRAWER
+   ═══════════════════════════════════════ */
+.drawer-preview { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; max-width: 480px; margin: 0 auto; }
+.drawer-header { padding: 24px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-start; }
+.drawer-title { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 4px; }
+.drawer-subtitle { font-size: 13px; color: var(--text-muted); }
+.drawer-close { background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--text-muted); transition: all 0.2s; }
+.drawer-close:hover { border-color: var(--text-muted); color: var(--text); }
+.drawer-body { padding: 24px; }
+.drawer-field { margin-bottom: 20px; }
+.drawer-field-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em;
+  color: var(--text-muted); font-weight: 500; margin-bottom: 6px; }
+.drawer-field-value { font-size: 14px; color: var(--text); }
+.drawer-progress { margin: 24px 0; }
+.drawer-progress-bar { height: 6px; background: var(--bg-surface); border-radius: 3px; overflow: hidden; }
+.drawer-progress-fill { height: 100%; border-radius: 3px;
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1); }
+.drawer-progress-meta { display: flex; justify-content: space-between; margin-top: 8px; }
+.drawer-progress-meta span { font-size: 11px; color: var(--text-muted); }
+.drawer-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.drawer-tag { font-size: 11px; padding: 3px 10px; border-radius: 999px;
+  background: var(--bg-surface); color: var(--text-secondary); border: 1px solid var(--border); }
+.drawer-actions { padding: 16px 24px; border-top: 1px solid var(--border);
+  display: flex; gap: 8px; }
+.drawer-btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px;
+  font-weight: 500; cursor: pointer; transition: all 0.2s; font-family: var(--font-body); }
+.drawer-btn.primary { background: var(--accent); color: white; border: none; }
+.drawer-btn.primary:hover { background: var(--accent-hover); }
+.drawer-btn.secondary { background: none; border: 1px solid var(--border); color: var(--text-secondary); }
+.drawer-btn.secondary:hover { border-color: var(--border-hover); color: var(--text); }
+
+/* ═══════════════════════════════════════
+   CONTACT PROFILE
+   ═══════════════════════════════════════ */
+.profile { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; max-width: 880px; margin: 0 auto; }
+.profile-top { padding: 32px; display: flex; gap: 24px; align-items: flex-start;
+  border-bottom: 1px solid var(--border); }
+.profile-avatar { width: 72px; height: 72px; border-radius: 50%; background: var(--accent-glow);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+  font-weight: 700; color: var(--accent); flex-shrink: 0; border: 2px solid var(--border); }
+.profile-info { flex: 1; }
+.profile-name { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; margin-bottom: 2px; }
+.profile-role { font-size: 14px; color: var(--text-secondary); margin-bottom: 12px; }
+.profile-meta { display: flex; gap: 24px; }
+.profile-meta-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
+.profile-meta-item svg { width: 14px; height: 14px; stroke: var(--text-muted); }
+.profile-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.profile-tab { padding: 12px 20px; font-size: 13px; font-weight: 500; color: var(--text-muted);
+  border-bottom: 2px solid transparent; cursor: pointer; transition: all 0.2s; }
+.profile-tab:hover { color: var(--text-secondary); }
+.profile-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.profile-content { padding: 24px 32px; }
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.profile-stat-card { background: var(--bg-surface); border-radius: var(--radius-sm); padding: 20px; }
+.profile-stat-card .stat-label { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+.profile-stat-card .stat-value { font-size: 28px; font-weight: 700; letter-spacing: -0.03em; }
+.profile-stat-card .stat-change { font-size: 12px; margin-top: 4px; }
+.profile-stat-card .stat-change.up { color: var(--success); }
+.profile-stat-card .stat-change.down { color: var(--destructive); }
+
+/* ═══════════════════════════════════════
+   PIPELINE ANALYTICS
+   ═══════════════════════════════════════ */
+.analytics-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 48px; }
+.metric-card { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; }
+.metric-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase;
+  letter-spacing: 0.06em; margin-bottom: 8px; }
+.metric-value { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; }
+.metric-change { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+.metric-change.up { color: var(--success); }
+.metric-change.down { color: var(--destructive); }
+.funnel { max-width: 640px; margin: 0 auto; }
+.funnel-stage { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+.funnel-bar-container { flex: 1; position: relative; }
+.funnel-bar { height: 40px; border-radius: var(--radius-sm); position: relative; overflow: hidden;
+  transition: width 1.5s cubic-bezier(0.22,1,0.36,1); display: flex; align-items: center;
+  padding-left: 16px; }
+.funnel-bar span { font-size: 13px; font-weight: 600; color: white; position: relative; z-index: 1; }
+.funnel-label { font-size: 13px; color: var(--text-secondary); width: 80px; text-align: right; }
+.funnel-count { font-size: 13px; color: var(--text-muted); width: 40px; }
+.conversion-arrow { text-align: center; padding: 4px 0; }
+.conversion-arrow span { font-size: 11px; color: var(--text-muted); background: var(--bg-surface);
+  padding: 2px 10px; border-radius: 999px; }
+
+/* ═══════════════════════════════════════
+   LEAD SCORE
+   ═══════════════════════════════════════ */
+.lead-scores { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.lead-score-card { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; text-align: center;
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1); }
+.lead-score-card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+.score-ring { width: 80px; height: 80px; margin: 0 auto 16px; position: relative; }
+.score-ring svg { transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: var(--bg-surface); stroke-width: 6; }
+.score-ring-fill { fill: none; stroke-width: 6; stroke-linecap: round;
+  transition: stroke-dashoffset 1.5s cubic-bezier(0.22,1,0.36,1); }
+.score-value { position: absolute; inset: 0; display: flex; align-items: center;
+  justify-content: center; font-size: 20px; font-weight: 700; }
+.score-name { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.score-company { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+.score-factors { display: flex; justify-content: center; gap: 12px; }
+.score-factor { font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted); padding: 3px 8px; background: var(--bg-surface); border-radius: 999px; }
+
+/* ═══════════════════════════════════════
+   DATA TABLE
+   ═══════════════════════════════════════ */
+.table-container { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; }
+.table-toolbar { padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.table-search { display: flex; align-items: center; gap: 8px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 6px 12px;
+  min-width: 260px; transition: border-color 0.2s; }
+.table-search:focus-within { border-color: var(--accent); }
+.table-search svg { width: 14px; height: 14px; stroke: var(--text-muted); flex-shrink: 0; }
+.table-search input { border: none; background: none; color: var(--text); font-size: 13px;
+  font-family: var(--font-body); outline: none; width: 100%; }
+.table-filters { display: flex; gap: 8px; }
+.filter-btn { font-size: 12px; padding: 6px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: none; color: var(--text-secondary);
+  cursor: pointer; transition: all 0.2s; font-family: var(--font-body);
+  display: flex; align-items: center; gap: 4px; }
+.filter-btn:hover { border-color: var(--border-hover); color: var(--text); }
+.filter-btn.active { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+table { width: 100%; border-collapse: collapse; }
+thead th { padding: 10px 20px; text-align: left; font-size: 11px; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-muted); font-weight: 500;
+  border-bottom: 1px solid var(--border); background: var(--bg-surface); }
+tbody td { padding: 14px 20px; font-size: 13px; border-bottom: 1px solid var(--border); }
+tbody tr { transition: background 0.15s; }
+tbody tr:hover { background: var(--bg-surface); }
+tbody tr:last-child td { border-bottom: none; }
+.table-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-glow);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 10px;
+  font-weight: 600; color: var(--accent); margin-right: 10px; vertical-align: middle; }
+.table-check { width: 16px; height: 16px; border-radius: 4px; border: 1px solid var(--border);
+  appearance: none; cursor: pointer; transition: all 0.15s; vertical-align: middle; }
+.table-check:checked { background: var(--accent); border-color: var(--accent); }
+.table-badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 500; }
+.table-badge.hot { background: rgba(248,113,113,0.1); color: var(--destructive); }
+.table-badge.warm { background: rgba(251,191,36,0.1); color: var(--warning); }
+.table-badge.cold { background: rgba(96,165,250,0.1); color: var(--info); }
+.table-pagination { padding: 12px 20px; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; }
+.table-pagination span { font-size: 12px; color: var(--text-muted); }
+.table-pagination-btns { display: flex; gap: 4px; }
+.table-pagination-btns button { width: 32px; height: 32px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: none; color: var(--text-secondary);
+  cursor: pointer; font-size: 12px; transition: all 0.15s; font-family: var(--font-body); }
+.table-pagination-btns button:hover { border-color: var(--border-hover); }
+.table-pagination-btns button.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+/* ═══════════════════════════════════════
+   FILTER BAR
+   ═══════════════════════════════════════ */
+.filter-bar { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px 20px; display: flex; flex-wrap: wrap;
+  gap: 12px; align-items: center; max-width: 880px; margin: 0 auto; }
+.filter-group { display: flex; align-items: center; gap: 8px; }
+.filter-group-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--text-muted); font-weight: 500; }
+.filter-select { appearance: none; background: var(--bg); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 6px 28px 6px 10px; font-size: 12px;
+  color: var(--text); font-family: var(--font-body); cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%238a8a96' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 10px center;
+  transition: border-color 0.2s; }
+.filter-select:focus { outline: none; border-color: var(--accent); }
+.filter-divider { width: 1px; height: 24px; background: var(--border); }
+.active-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.active-filter { font-size: 11px; padding: 4px 10px; border-radius: 999px;
+  background: var(--accent-glow); color: var(--accent); display: flex; align-items: center; gap: 6px; }
+.active-filter button { background: none; border: none; color: var(--accent); cursor: pointer;
+  font-size: 14px; line-height: 1; padding: 0; }
+
+/* ═══════════════════════════════════════
+   TASK / FOLLOW-UP LIST
+   ═══════════════════════════════════════ */
+.tasks-list { display: flex; flex-direction: column; gap: 6px; max-width: 640px; margin: 0 auto; }
+.task-item { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 18px; display: flex; align-items: center;
+  gap: 14px; transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.task-item:hover { border-color: var(--border-hover); }
+.task-check { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border);
+  flex-shrink: 0; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; }
+.task-check:hover { border-color: var(--accent); }
+.task-check.done { background: var(--success); border-color: var(--success); }
+.task-check.done::after { content: '✓'; color: white; font-size: 10px; font-weight: 700; }
+.task-info { flex: 1; }
+.task-title { font-size: 14px; font-weight: 500; margin-bottom: 2px; }
+.task-item.completed .task-title { text-decoration: line-through; color: var(--text-muted); }
+.task-context { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+.task-due { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 500; white-space: nowrap; }
+.task-due.overdue { background: rgba(248,113,113,0.1); color: var(--destructive); }
+.task-due.today { background: rgba(251,191,36,0.1); color: var(--warning); }
+.task-due.upcoming { background: rgba(96,165,250,0.1); color: var(--info); }
+.task-avatar-sm { width: 20px; height: 20px; border-radius: 50%; background: var(--bg-surface);
+  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 8px; font-weight: 600; color: var(--text-muted); }
+
+/* ═══════════════════════════════════════
+   EMPTY STATES
+   ═══════════════════════════════════════ */
+.empty-state { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 64px 32px; text-align: center; max-width: 480px; margin: 0 auto; }
+.empty-icon { width: 64px; height: 64px; margin: 0 auto 24px; border-radius: 50%;
+  background: var(--bg-surface); display: flex; align-items: center; justify-content: center; }
+.empty-icon svg { width: 28px; height: 28px; stroke: var(--text-muted); }
+.empty-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+.empty-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; max-width: 320px; margin-left: auto; margin-right: auto; }
+.empty-cta { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px;
+  border-radius: var(--radius-sm); background: var(--accent); color: white; font-size: 13px;
+  font-weight: 500; border: none; cursor: pointer; transition: background 0.2s;
+  font-family: var(--font-body); }
+.empty-cta:hover { background: var(--accent-hover); }
+
+/* ═══════════════════════════════════════
+   EMAIL COMPOSER
+   ═══════════════════════════════════════ */
+.email-composer { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; max-width: 640px; margin: 0 auto; }
+.email-composer-header { padding: 16px 20px; border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; }
+.email-composer-header h4 { font-size: 14px; font-weight: 600; }
+.email-field { padding: 10px 20px; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 12px; }
+.email-field-label { font-size: 12px; color: var(--text-muted); min-width: 48px; }
+.email-field-value { font-size: 13px; color: var(--text); flex: 1; }
+.email-field-value input { border: none; background: none; color: var(--text); font-size: 13px;
+  font-family: var(--font-body); outline: none; width: 100%; }
+.email-recipient-tag { display: inline-flex; align-items: center; gap: 4px; font-size: 12px;
+  padding: 2px 10px; border-radius: 999px; background: var(--accent-glow); color: var(--accent); }
+.email-body { padding: 20px; min-height: 200px; }
+.email-body-content { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+.email-body-content p { margin-bottom: 12px; }
+.email-toolbar { padding: 12px 20px; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center; }
+.email-toolbar-left { display: flex; gap: 4px; }
+.email-tool-btn { width: 32px; height: 32px; border-radius: var(--radius-sm);
+  border: 1px solid transparent; background: none; color: var(--text-muted);
+  cursor: pointer; transition: all 0.15s; display: flex; align-items: center; justify-content: center; }
+.email-tool-btn:hover { border-color: var(--border); color: var(--text-secondary); }
+.email-send-btn { padding: 8px 20px; border-radius: var(--radius-sm); background: var(--accent);
+  color: white; border: none; font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: background 0.2s; font-family: var(--font-body);
+  display: flex; align-items: center; gap: 6px; }
+.email-send-btn:hover { background: var(--accent-hover); }
+
+/* ═══════════════════════════════════════
+   NOTES PANEL
+   ═══════════════════════════════════════ */
+.notes-panel { max-width: 480px; margin: 0 auto; }
+.note { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 20px; margin-bottom: 12px;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1); }
+.note:hover { border-color: var(--border-hover); }
+.note-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.note-author { display: flex; align-items: center; gap: 8px; }
+.note-author-avatar { width: 24px; height: 24px; border-radius: 50%; background: var(--accent-glow);
+  display: flex; align-items: center; justify-content: center; font-size: 9px;
+  font-weight: 600; color: var(--accent); }
+.note-author-name { font-size: 13px; font-weight: 500; }
+.note-time { font-size: 11px; color: var(--text-muted); }
+.note-content { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+.note-content strong { color: var(--text); font-weight: 500; }
+.note-tags { display: flex; gap: 6px; margin-top: 12px; }
+.note-tag { font-size: 10px; padding: 2px 8px; border-radius: 999px;
+  background: var(--bg-surface); color: var(--text-muted); }
+.note-input { background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 16px; display: flex; gap: 12px; align-items: flex-start; }
+.note-input textarea { flex: 1; border: none; background: none; color: var(--text);
+  font-size: 13px; font-family: var(--font-body); outline: none; resize: none;
+  min-height: 48px; line-height: 1.5; }
+.note-submit { background: var(--accent); color: white; border: none; width: 32px; height: 32px;
+  border-radius: var(--radius-sm); cursor: pointer; transition: background 0.2s;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.note-submit:hover { background: var(--accent-hover); }
+
 footer { padding: 48px 32px; text-align: center; border-top: 1px solid var(--border); }
 footer p { font-size: 12px; color: var(--text-muted); }
 
@@ -230,6 +518,12 @@ footer p { font-size: 12px; color: var(--text-muted); }
   .pipeline { grid-template-columns: 1fr 1fr; }
   .contacts-grid { grid-template-columns: 1fr; }
   .split { grid-template-columns: 1fr; }
+  .analytics-grid { grid-template-columns: 1fr 1fr; }
+  .lead-scores { grid-template-columns: 1fr 1fr; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .profile-top { flex-direction: column; align-items: center; text-align: center; }
+  .profile-meta { justify-content: center; flex-wrap: wrap; }
+  .filter-bar { flex-direction: column; align-items: stretch; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important;
@@ -428,6 +722,554 @@ footer p { font-size: 12px; color: var(--text-muted); }
       <div class="ticket"><div class="ticket-priority medium"></div><div class="ticket-info"><div class="ticket-title">Dashboard loading slowly on mobile</div><div class="ticket-desc">LCP > 4s on iPhone 13, investigated CDN config</div></div><span class="ticket-status pending">Pending</span><span class="ticket-time">2h ago</span></div>
       <div class="ticket"><div class="ticket-priority low"></div><div class="ticket-info"><div class="ticket-title">Feature request: dark mode for email templates</div><div class="ticket-desc">Multiple customers requested prefers-color-scheme support</div></div><span class="ticket-status open">Open</span><span class="ticket-time">1d ago</span></div>
       <div class="ticket"><div class="ticket-priority low"></div><div class="ticket-info"><div class="ticket-title">Typo in onboarding welcome email</div><div class="ticket-desc">"Weclome" → "Welcome" on step 3</div></div><span class="ticket-status resolved">Resolved</span><span class="ticket-time">2d ago</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- DEAL DETAIL DRAWER -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Deal Detail</div>
+      <h2>The full picture,<br>one click away.</h2>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="drawer-preview">
+        <div class="drawer-header">
+          <div>
+            <div class="drawer-title">E-commerce Platform</div>
+            <div class="drawer-subtitle">StyleHouse &middot; Proposal Stage</div>
+          </div>
+          <button class="drawer-close">&times;</button>
+        </div>
+        <div class="drawer-body">
+          <div class="drawer-progress">
+            <div class="drawer-progress-bar"><div class="drawer-progress-fill" style="width:60%;background:var(--pipeline-proposal);"></div></div>
+            <div class="drawer-progress-meta"><span>Proposal</span><span>60% probability</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+            <div class="drawer-field"><div class="drawer-field-label">Value</div><div class="drawer-field-value" style="font-size:24px;font-weight:700;letter-spacing:-0.02em;">$65,000</div></div>
+            <div class="drawer-field"><div class="drawer-field-label">Expected Close</div><div class="drawer-field-value">Mar 28, 2026</div></div>
+            <div class="drawer-field"><div class="drawer-field-label">Owner</div><div class="drawer-field-value" style="display:flex;align-items:center;gap:8px;"><span class="deal-avatar" style="width:20px;height:20px;font-size:8px;">AS</span> Ana Souza</div></div>
+            <div class="drawer-field"><div class="drawer-field-label">Source</div><div class="drawer-field-value">Inbound &middot; Website</div></div>
+          </div>
+          <div class="drawer-field">
+            <div class="drawer-field-label">Tags</div>
+            <div class="drawer-tags">
+              <span class="drawer-tag">enterprise</span>
+              <span class="drawer-tag">e-commerce</span>
+              <span class="drawer-tag">high-value</span>
+              <span class="drawer-tag">Q1 target</span>
+            </div>
+          </div>
+          <div class="drawer-field" style="margin-top:20px;">
+            <div class="drawer-field-label">Last Activity</div>
+            <div class="drawer-field-value" style="color:var(--text-secondary);">Proposal sent via email — awaiting board review. Follow-up scheduled for Friday.</div>
+          </div>
+        </div>
+        <div class="drawer-actions">
+          <button class="drawer-btn primary">Send follow-up</button>
+          <button class="drawer-btn secondary">Add note</button>
+          <button class="drawer-btn secondary">Schedule call</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT PROFILE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Contact Profile</div>
+      <h2>Know your people<br>inside out.</h2>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="profile">
+        <div class="profile-top">
+          <div class="profile-avatar">AS</div>
+          <div class="profile-info">
+            <div class="profile-name">Ana Souza</div>
+            <div class="profile-role">Product Lead at Fintech Co</div>
+            <div class="profile-meta">
+              <div class="profile-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                ana@fintechco.com
+              </div>
+              <div class="profile-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/></svg>
+                +55 11 9876-5432
+              </div>
+              <div class="profile-meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                S&atilde;o Paulo, BR
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="profile-tabs">
+          <div class="profile-tab active">Overview</div>
+          <div class="profile-tab">Deals (12)</div>
+          <div class="profile-tab">Activity</div>
+          <div class="profile-tab">Emails</div>
+          <div class="profile-tab">Notes</div>
+        </div>
+        <div class="profile-content">
+          <div class="profile-grid">
+            <div class="profile-stat-card">
+              <div class="stat-label">Total Revenue</div>
+              <div class="stat-value">$184k</div>
+              <div class="stat-change up">&uarr; 23% vs last quarter</div>
+            </div>
+            <div class="profile-stat-card">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value">94%</div>
+              <div class="stat-change up">&uarr; 8% improvement</div>
+            </div>
+            <div class="profile-stat-card">
+              <div class="stat-label">Avg. Deal Size</div>
+              <div class="stat-value">$15.3k</div>
+              <div class="stat-change up">&uarr; 12% growth</div>
+            </div>
+            <div class="profile-stat-card">
+              <div class="stat-label">Avg. Close Time</div>
+              <div class="stat-value">18 days</div>
+              <div class="stat-change down">&darr; 3 days faster</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE ANALYTICS -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Analytics</div>
+      <h2>Numbers that<br>drive decisions.</h2>
+    </div>
+    <div class="analytics-grid reveal reveal-delay-1">
+      <div class="metric-card">
+        <div class="metric-label">Pipeline Value</div>
+        <div class="metric-value">$284k</div>
+        <div class="metric-change up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +18% this month</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Win Rate</div>
+        <div class="metric-value">68%</div>
+        <div class="metric-change up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> +5% vs Q4</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Avg. Deal Size</div>
+        <div class="metric-value">$32k</div>
+        <div class="metric-change down"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/></svg> -3% vs Q4</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">Time to Close</div>
+        <div class="metric-value">24d</div>
+        <div class="metric-change up"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/></svg> 6 days faster</div>
+      </div>
+    </div>
+
+    <!-- Pipeline Funnel -->
+    <div class="funnel reveal reveal-delay-2">
+      <div class="funnel-stage">
+        <span class="funnel-label">New Leads</span>
+        <div class="funnel-bar-container"><div class="funnel-bar" style="width:100%;background:var(--pipeline-lead);"><span>248</span></div></div>
+      </div>
+      <div class="conversion-arrow"><span>&darr; 52%</span></div>
+      <div class="funnel-stage">
+        <span class="funnel-label">Qualified</span>
+        <div class="funnel-bar-container"><div class="funnel-bar" style="width:52%;background:var(--pipeline-qualified);"><span>129</span></div></div>
+      </div>
+      <div class="conversion-arrow"><span>&darr; 64%</span></div>
+      <div class="funnel-stage">
+        <span class="funnel-label">Proposal</span>
+        <div class="funnel-bar-container"><div class="funnel-bar" style="width:33%;background:var(--pipeline-proposal);"><span>83</span></div></div>
+      </div>
+      <div class="conversion-arrow"><span>&darr; 78%</span></div>
+      <div class="funnel-stage">
+        <span class="funnel-label">Won</span>
+        <div class="funnel-bar-container"><div class="funnel-bar" style="width:26%;background:var(--pipeline-won);"><span>65</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEAD SCORE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Lead Scoring</div>
+      <h2>Focus on who<br>matters most.</h2>
+    </div>
+    <div class="lead-scores reveal reveal-delay-1">
+      <div class="lead-score-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" class="score-ring-bg"/>
+            <circle cx="40" cy="40" r="34" class="score-ring-fill" style="stroke:var(--success);stroke-dasharray:197;stroke-dashoffset:18;" />
+          </svg>
+          <div class="score-value" style="color:var(--success);">92</div>
+        </div>
+        <div class="score-name">Elena Rodriguez</div>
+        <div class="score-company">Series B Startup</div>
+        <div class="score-factors"><span class="score-factor">website visit</span><span class="score-factor">demo booked</span><span class="score-factor">budget confirmed</span></div>
+      </div>
+      <div class="lead-score-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" class="score-ring-bg"/>
+            <circle cx="40" cy="40" r="34" class="score-ring-fill" style="stroke:var(--accent);stroke-dasharray:197;stroke-dashoffset:55;" />
+          </svg>
+          <div class="score-value" style="color:var(--accent);">72</div>
+        </div>
+        <div class="score-name">James Okafor</div>
+        <div class="score-company">Enterprise Corp</div>
+        <div class="score-factors"><span class="score-factor">pricing page</span><span class="score-factor">email opened</span></div>
+      </div>
+      <div class="lead-score-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" class="score-ring-bg"/>
+            <circle cx="40" cy="40" r="34" class="score-ring-fill" style="stroke:var(--warning);stroke-dasharray:197;stroke-dashoffset:108;" />
+          </svg>
+          <div class="score-value" style="color:var(--warning);">45</div>
+        </div>
+        <div class="score-name">Priya Patel</div>
+        <div class="score-company">Early Stage</div>
+        <div class="score-factors"><span class="score-factor">blog reader</span><span class="score-factor">free trial</span></div>
+      </div>
+      <div class="lead-score-card">
+        <div class="score-ring">
+          <svg viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="34" class="score-ring-bg"/>
+            <circle cx="40" cy="40" r="34" class="score-ring-fill" style="stroke:var(--text-muted);stroke-dasharray:197;stroke-dashoffset:168;" />
+          </svg>
+          <div class="score-value">15</div>
+        </div>
+        <div class="score-name">Tom Hansen</div>
+        <div class="score-company">Unknown</div>
+        <div class="score-factors"><span class="score-factor">single visit</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA TABLE -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Data Table</div>
+      <h2>Every contact,<br>organized.</h2>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="table-container">
+        <div class="table-toolbar">
+          <div class="table-search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search contacts...">
+          </div>
+          <div class="table-filters">
+            <button class="filter-btn active">All <span style="color:var(--text-muted);margin-left:2px;">248</span></button>
+            <button class="filter-btn">Hot <span style="color:var(--text-muted);margin-left:2px;">24</span></button>
+            <button class="filter-btn">Warm <span style="color:var(--text-muted);margin-left:2px;">89</span></button>
+            <button class="filter-btn">Cold <span style="color:var(--text-muted);margin-left:2px;">135</span></button>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:40px;"><input type="checkbox" class="table-check"></th>
+              <th>Contact</th>
+              <th>Company</th>
+              <th>Status</th>
+              <th>Score</th>
+              <th>Last Activity</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><input type="checkbox" class="table-check"></td>
+              <td><span class="table-avatar">ER</span>Elena Rodriguez</td>
+              <td style="color:var(--text-secondary);">Series B Startup</td>
+              <td><span class="table-badge hot">Hot</span></td>
+              <td style="font-weight:600;color:var(--success);">92</td>
+              <td style="color:var(--text-muted);">2 hours ago</td>
+              <td style="font-weight:600;">$45,000</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="table-check"></td>
+              <td><span class="table-avatar">JO</span>James Okafor</td>
+              <td style="color:var(--text-secondary);">Enterprise Corp</td>
+              <td><span class="table-badge warm">Warm</span></td>
+              <td style="font-weight:600;color:var(--accent);">72</td>
+              <td style="color:var(--text-muted);">Yesterday</td>
+              <td style="font-weight:600;">$120,000</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="table-check"></td>
+              <td><span class="table-avatar">PP</span>Priya Patel</td>
+              <td style="color:var(--text-secondary);">Early Stage</td>
+              <td><span class="table-badge warm">Warm</span></td>
+              <td style="font-weight:600;color:var(--warning);">45</td>
+              <td style="color:var(--text-muted);">3 days ago</td>
+              <td style="font-weight:600;">$8,500</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="table-check"></td>
+              <td><span class="table-avatar">AS</span>Ana Souza</td>
+              <td style="color:var(--text-secondary);">Fintech Co</td>
+              <td><span class="table-badge hot">Hot</span></td>
+              <td style="font-weight:600;color:var(--success);">88</td>
+              <td style="color:var(--text-muted);">5 min ago</td>
+              <td style="font-weight:600;">$65,000</td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" class="table-check"></td>
+              <td><span class="table-avatar">TH</span>Tom Hansen</td>
+              <td style="color:var(--text-secondary);">Unknown</td>
+              <td><span class="table-badge cold">Cold</span></td>
+              <td style="font-weight:600;color:var(--text-muted);">15</td>
+              <td style="color:var(--text-muted);">2 weeks ago</td>
+              <td style="font-weight:600;">$0</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-pagination">
+          <span>Showing 1&ndash;5 of 248 contacts</span>
+          <div class="table-pagination-btns">
+            <button>&laquo;</button>
+            <button class="active">1</button>
+            <button>2</button>
+            <button>3</button>
+            <button>&hellip;</button>
+            <button>50</button>
+            <button>&raquo;</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Filters</div>
+      <h2>Find exactly<br>who you need.</h2>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="filter-bar">
+        <div class="filter-group">
+          <span class="filter-group-label">Status</span>
+          <select class="filter-select"><option>All statuses</option><option>Active</option><option>Inactive</option><option>Churned</option></select>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+          <span class="filter-group-label">Owner</span>
+          <select class="filter-select"><option>All owners</option><option>Ana Souza</option><option>Marcus Chen</option><option>Julia Park</option></select>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+          <span class="filter-group-label">Score</span>
+          <select class="filter-select"><option>Any score</option><option>Hot (80+)</option><option>Warm (40-79)</option><option>Cold (&lt;40)</option></select>
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-group">
+          <span class="filter-group-label">Source</span>
+          <select class="filter-select"><option>All sources</option><option>Inbound</option><option>Outbound</option><option>Referral</option></select>
+        </div>
+      </div>
+      <div style="max-width:880px;margin:12px auto 0;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11px;color:var(--text-muted);">Active filters:</span>
+        <div class="active-filters">
+          <span class="active-filter">Hot leads <button>&times;</button></span>
+          <span class="active-filter">Ana Souza <button>&times;</button></span>
+          <span class="active-filter">Inbound <button>&times;</button></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TASK / FOLLOW-UP LIST -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Tasks</div>
+      <h2>Never miss<br>a follow-up.</h2>
+    </div>
+    <div class="tasks-list reveal reveal-delay-1">
+      <div class="task-item">
+        <div class="task-check"></div>
+        <div class="task-info">
+          <div class="task-title">Send revised proposal to StyleHouse</div>
+          <div class="task-context"><span class="deal-avatar" style="width:16px;height:16px;font-size:7px;">SH</span> E-commerce Platform &middot; $65,000</div>
+        </div>
+        <span class="task-due overdue">Overdue</span>
+        <div class="task-avatar-sm">AS</div>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <div class="task-info">
+          <div class="task-title">Call DataFlow — discuss API requirements</div>
+          <div class="task-context"><span class="deal-avatar" style="width:16px;height:16px;font-size:7px;">DF</span> API Integration &middot; $45,000</div>
+        </div>
+        <span class="task-due today">Today</span>
+        <div class="task-avatar-sm">MC</div>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <div class="task-info">
+          <div class="task-title">Prepare demo environment for Metric Labs</div>
+          <div class="task-context"><span class="deal-avatar" style="width:16px;height:16px;font-size:7px;">ML</span> Dashboard MVP &middot; $18,000</div>
+        </div>
+        <span class="task-due upcoming">Friday</span>
+        <div class="task-avatar-sm">JP</div>
+      </div>
+      <div class="task-item">
+        <div class="task-check"></div>
+        <div class="task-info">
+          <div class="task-title">Send case study to Elena Rodriguez</div>
+          <div class="task-context"><span class="deal-avatar" style="width:16px;height:16px;font-size:7px;">ER</span> Platform Build &middot; $45,000</div>
+        </div>
+        <span class="task-due upcoming">Next week</span>
+        <div class="task-avatar-sm">AS</div>
+      </div>
+      <div class="task-item completed">
+        <div class="task-check done"></div>
+        <div class="task-info">
+          <div class="task-title">Update pricing for InsightCo renewal</div>
+          <div class="task-context"><span class="deal-avatar" style="width:16px;height:16px;font-size:7px;">IC</span> Analytics Suite &middot; $52,000</div>
+        </div>
+        <span class="task-due" style="background:rgba(52,211,153,0.1);color:var(--success);">Done</span>
+        <div class="task-avatar-sm">MC</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMPTY STATES -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Empty States</div>
+      <h2>Guide, don't abandon.</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+      <div class="reveal">
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="empty-title">No contacts yet</div>
+          <div class="empty-desc">Contacts help you track relationships and deal history. Import your first batch or add one manually.</div>
+          <button class="empty-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Add first contact</button>
+        </div>
+      </div>
+      <div class="reveal reveal-delay-1">
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div class="empty-title">Pipeline is empty</div>
+          <div class="empty-desc">Your pipeline tracks deals from lead to close. Create your first deal to start visualizing your sales flow.</div>
+          <button class="empty-cta"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Create first deal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EMAIL COMPOSER -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Email</div>
+      <h2>Write once,<br>close faster.</h2>
+    </div>
+    <div class="reveal reveal-delay-1">
+      <div class="email-composer">
+        <div class="email-composer-header">
+          <h4>New Email</h4>
+          <div style="display:flex;gap:8px;">
+            <button class="drawer-btn secondary" style="font-size:11px;padding:4px 10px;">Save draft</button>
+            <button class="drawer-btn secondary" style="font-size:11px;padding:4px 10px;">Templates</button>
+          </div>
+        </div>
+        <div class="email-field">
+          <span class="email-field-label">To</span>
+          <div class="email-field-value"><span class="email-recipient-tag">elena@seriesb.com</span></div>
+        </div>
+        <div class="email-field">
+          <span class="email-field-label">Subject</span>
+          <div class="email-field-value"><input type="text" value="Follow-up: Platform build proposal"></div>
+        </div>
+        <div class="email-body">
+          <div class="email-body-content">
+            <p>Hi Elena,</p>
+            <p>Following up on our conversation last week about the platform build. I've attached the revised proposal with the scope adjustments we discussed.</p>
+            <p>Key changes:</p>
+            <p>&bull; Phase 1 delivery moved to April 15<br>&bull; Added real-time analytics module<br>&bull; Reduced initial scope to focus on core workflows</p>
+            <p>Happy to jump on a quick call this week if you'd like to walk through it together.</p>
+            <p>Best,<br>Ana</p>
+          </div>
+        </div>
+        <div class="email-toolbar">
+          <div class="email-toolbar-left">
+            <button class="email-tool-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg></button>
+            <button class="email-tool-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></button>
+            <button class="email-tool-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg></button>
+          </div>
+          <button class="email-send-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg> Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NOTES PANEL -->
+<section>
+  <div class="inner">
+    <div class="section-header reveal">
+      <div class="label">Notes</div>
+      <h2>Context that<br>compounds.</h2>
+    </div>
+    <div class="notes-panel reveal reveal-delay-1">
+      <div class="note-input" style="margin-bottom:16px;">
+        <div class="note-author-avatar">AS</div>
+        <textarea placeholder="Add a note about this contact or deal..."></textarea>
+        <button class="note-submit"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+      </div>
+      <div class="note">
+        <div class="note-header">
+          <div class="note-author"><div class="note-author-avatar">AS</div><span class="note-author-name">Ana Souza</span></div>
+          <span class="note-time">2 hours ago</span>
+        </div>
+        <div class="note-content">Called Elena to discuss the revised proposal. She's excited about the <strong>real-time analytics module</strong> — said it was the missing piece. Board review is scheduled for Thursday. She'll push for a decision by EOW.</div>
+        <div class="note-tags"><span class="note-tag">call</span><span class="note-tag">proposal</span><span class="note-tag">decision pending</span></div>
+      </div>
+      <div class="note">
+        <div class="note-header">
+          <div class="note-author"><div class="note-author-avatar" style="color:var(--success);background:rgba(52,211,153,0.1);">MC</div><span class="note-author-name">Marcus Chen</span></div>
+          <span class="note-time">Yesterday</span>
+        </div>
+        <div class="note-content">Technical review done. Their team uses <strong>PostgreSQL + Redis</strong> stack. Integration will need a custom webhook bridge for their legacy inventory system. Estimate 2 additional sprints.</div>
+        <div class="note-tags"><span class="note-tag">technical</span><span class="note-tag">integration</span></div>
+      </div>
+      <div class="note">
+        <div class="note-header">
+          <div class="note-author"><div class="note-author-avatar" style="color:var(--warning);background:rgba(251,191,36,0.1);">JP</div><span class="note-author-name">Julia Park</span></div>
+          <span class="note-time">3 days ago</span>
+        </div>
+        <div class="note-content">Competitor analysis: they're also talking to <strong>BuildCo</strong> — but their timeline is 6+ months. Our 8-week delivery is our strongest differentiator. Lead with speed.</div>
+        <div class="note-tags"><span class="note-tag">competitive</span><span class="note-tag">strategy</span></div>
+      </div>
     </div>
   </div>
 </section>
