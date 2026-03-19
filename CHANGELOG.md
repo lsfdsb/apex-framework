@@ -30,6 +30,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - ANSI escape code stripping in test runner API output
 - Hooks test parser — `Pass: N` format now correctly matched (was showing 0)
 - console.log replaced with process.stdout.write in server startup
+- add activity section + update docs (0e3cf99)
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 

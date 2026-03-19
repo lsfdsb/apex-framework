@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash, TaskCreate, TaskUpdate, TaskList, SendMessage
 disallowedTools: Write, Edit, MultiEdit
 model: sonnet
 permissionMode: plan
-isolation: worktree
+isolation: none
 maxTurns: 25
 skills: code-standards, security, performance
 memory: project

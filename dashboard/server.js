@@ -277,41 +277,54 @@ function collectActivity() {
   const teamsDir = path.join(home, ".claude", "teams");
   const tasksDir = path.join(home, ".claude", "tasks");
   const teams = [];
+  let hasActive = false;
 
-  if (!fs.existsSync(teamsDir)) return { teams: [], tasks: [] };
+  if (!fs.existsSync(teamsDir)) return { teams: [], tasks: [], hasActive: false };
 
   for (const entry of fs.readdirSync(teamsDir)) {
     const configPath = path.join(teamsDir, entry, "config.json");
     if (!fs.existsSync(configPath)) continue;
     try {
       const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
+      const members = (config.members || []).map(m => ({
+        name: m.name,
+        type: m.agentType,
+        model: (m.model || "").replace(/^claude-/, "").split("[")[0],
+        active: !!m.isActive,
+        color: m.color || null,
+        prompt: m.prompt ? m.prompt.slice(0, 200) + (m.prompt.length > 200 ? "…" : "") : null,
+      }));
+      const activeCount = members.filter(m => m.active).length;
+      if (activeCount > 0) hasActive = true;
       teams.push({
         name: config.name || entry,
         description: config.description || "",
         createdAt: config.createdAt ? new Date(config.createdAt).toISOString() : null,
-        members: (config.members || []).map(m => ({
-          name: m.name,
-          type: m.agentType,
-          model: (m.model || "").replace(/^claude-/, "").split("[")[0],
-          active: !!m.isActive,
-          prompt: m.prompt ? m.prompt.slice(0, 200) + (m.prompt.length > 200 ? "…" : "") : null,
-        })),
+        members,
+        activeCount,
+        totalCount: members.length,
       });
     } catch { /* skip corrupt configs */ }
   }
 
+  // Only show tasks from team-named sessions (not random UUIDs from other projects)
+  const teamNames = teams.map(t => t.name);
   const tasks = [];
   if (fs.existsSync(tasksDir)) {
     for (const session of fs.readdirSync(tasksDir)) {
       const sessionDir = path.join(tasksDir, session);
       if (!fs.statSync(sessionDir).isDirectory()) continue;
+      // Only include tasks from known team sessions or current project sessions
+      const isTeamSession = teamNames.includes(session);
+      const hasProjectTasks = isTeamSession; // prioritize team tasks
+      if (!isTeamSession) continue;
       for (const f of fs.readdirSync(sessionDir).filter(f => f.endsWith(".json") && f !== ".lock")) {
         try {
           const task = JSON.parse(fs.readFileSync(path.join(sessionDir, f), "utf-8"));
           if (!task.subject) continue;
           tasks.push({
             id: task.id,
-            session: session.slice(0, 8),
+            team: session,
             subject: task.subject,
             status: task.status || "pending",
             owner: task.owner || null,
