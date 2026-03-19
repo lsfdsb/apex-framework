@@ -27,6 +27,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - CLAUDE.md: "Always-On Agents" section added above team spawn rules
 - Sentinel agent: maxTurns increased from 50 to 60, report format updated for Phase 8
 - Self-Test skill: complete rewrite with quick mode (structural) and full mode (integration proof)
+- **StatusLine v2 rewrite** — Simplified from 15 segments to 7; removed custom agent tracking (Claude Code handles natively); graceful cold start; fixed dead code and MAX heuristic
 
 ### Fixed
 - ANSI escape code stripping in test runner API output
@@ -35,6 +36,14 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - add activity section + update docs (0e3cf99)
 - Observatory `collectActivity()` — `hasActive` flag now included in API response
 - Observatory activity endpoint — tasks filtered by known teams, no stray UUIDs
+- StatusLine cold start — shows "🟢 ready" instead of "0/0"
+- StatusLine dead code — removed redundant health check, duplicate model ID check
+- StatusLine MAX plan heuristic — now requires tokens > 0
+- StatusLine PR timeout race condition — validates PR URLs must start with https://github.com/
+
+### Removed
+- Custom agent tracking in statusline (abbrev_agent, /tmp/apex-agents*.json reading)
+- StatusLine "This is the way." branding suffix
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 

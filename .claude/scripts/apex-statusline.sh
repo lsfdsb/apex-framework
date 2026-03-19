@@ -1,27 +1,26 @@
 #!/bin/bash
-# apex-statusline.sh — APEX Framework Status Line (Beskar Edition)
+# apex-statusline.sh — APEX Framework Status Line v2
 # by L.B. & Claude · São Paulo, 2026
 #
-# Official JSON schema (code.claude.com/docs/en/statusline):
+# Philosophy: Glance, don't read. Hide zeros. Earn every character.
+#
+# JSON schema (code.claude.com/docs/en/statusline):
 #   .model.id / .model.display_name
 #   .context_window.used_percentage / .context_window.total_input_tokens
 #   .context_window.total_output_tokens / .context_window.context_window_size
 #   .cost.total_cost_usd / .cost.total_duration_ms
 #   .cost.total_lines_added / .cost.total_lines_removed
-#
-# Note: context_window is null before first API call. Handle with // 0.
 
-# Force C locale for numeric formatting (avoid 0,5 instead of 0.5 in pt-BR etc.)
 export LC_NUMERIC=C
 
 if ! command -v jq &> /dev/null; then
-  echo "⚔️ APEX | This is the way."
+  echo "⚔️ APEX ┃ install jq for full status"
   exit 0
 fi
 
 INPUT=$(cat)
 
-# ── Extract all values in a SINGLE jq call (perf: ~5ms vs ~50ms for 10 calls) ──
+# ── Parse all values in a single jq call ──
 PARSED=$(echo "$INPUT" | jq -r '
   [
     (.model.display_name // "—"),
@@ -38,7 +37,6 @@ PARSED=$(echo "$INPUT" | jq -r '
   ] | join("\t")
 ' 2>/dev/null)
 
-# Split parsed values (tab-separated)
 IFS=$'\t' read -r MODEL_DISPLAY MODEL_ID CTX_PCT CTX_SIZE TOK_IN TOK_OUT TOK_USED COST_RAW LA LR DUR_MS <<< "$PARSED"
 
 # ── Model ──
@@ -50,34 +48,26 @@ case "$MODEL_DISPLAY" in
 esac
 echo "$MODEL_ID" | grep -qi "opusplan" 2>/dev/null && M="opus→sonnet"
 
-# ── Context window ──
-CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
-
-# ── Context size correction based on known model limits ──
-# Claude Code may report stale/wrong context_window_size after model switch.
-# Override with known values and recompute percentage proportionally.
+# ── Context size correction for known model limits ──
 EXPECTED_CTX=0
 case "$MODEL_ID" in
-  *opus*1m*|*opus*1M*)   EXPECTED_CTX=1000000 ;;
-  *opus-4*)              EXPECTED_CTX=200000 ;;
-  *sonnet-4*)            EXPECTED_CTX=200000 ;;
-  *haiku*)               EXPECTED_CTX=200000 ;;
+  *opus*[1][mM]*) EXPECTED_CTX=1000000 ;;
+  *opus-4*)       EXPECTED_CTX=200000 ;;
+  *sonnet-4*)     EXPECTED_CTX=200000 ;;
+  *haiku*)        EXPECTED_CTX=200000 ;;
 esac
-# Also check display name for 1M hint
-echo "$MODEL_ID" | grep -qi "1m" 2>/dev/null && EXPECTED_CTX=1000000
 
 if [ "$EXPECTED_CTX" -gt 0 ] 2>/dev/null && [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
   if [ "$CTX_SIZE" -ne "$EXPECTED_CTX" ]; then
-    # Recompute: if API says 14% of 200K, but actual window is 1M,
-    # real percentage = 14% * 200K / 1M = 2.8%
     if command -v bc &>/dev/null; then
       CTX_PCT=$(echo "scale=1; $CTX_PCT * $CTX_SIZE / $EXPECTED_CTX" | bc 2>/dev/null || echo "$CTX_PCT")
-      CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
     fi
     CTX_SIZE=$EXPECTED_CTX
   fi
 fi
+CTX_INT=$(printf '%.0f' "$CTX_PCT" 2>/dev/null || echo "0")
 
+# ── Format tokens ──
 fmt_tok() {
   local n=$1
   if [ "$n" -ge 1000000 ] 2>/dev/null; then
@@ -89,175 +79,121 @@ fmt_tok() {
   fi
 }
 
-# ── Cost (already extracted above) ──
-COST=$(printf '%.2f' "$COST_RAW" 2>/dev/null || echo "0.00")
+# ── Context bar (clean fill) ──
+BW=10
+F=$((CTX_INT * BW / 100))
+[ "$F" -gt "$BW" ] && F=$BW
+E=$((BW - F))
+BAR=""
+for ((i=0;i<F;i++)); do BAR="${BAR}█"; done
+for ((i=0;i<E;i++)); do BAR="${BAR}░"; done
 
-# ── Lines (already extracted above) ──
-NET=$((LA - LR))
-[ "$NET" -ge 0 ] 2>/dev/null && NET_FMT="+${NET}" || NET_FMT="${NET}"
+# ── Health indicator ──
+if [ "$CTX_INT" -gt 80 ] 2>/dev/null; then
+  HEALTH="🔴"
+elif [ "$CTX_INT" -gt 60 ] 2>/dev/null; then
+  HEALTH="🟡"
+else
+  HEALTH="🟢"
+fi
 
-# ── Duration (already extracted above) ──
+# ── Plan badge (only show MAX after first API call) ──
+PLAN=""
+TOK_TOTAL=$((TOK_IN + TOK_OUT))
+if [ "$COST_RAW" = "0" ] || [ "$COST_RAW" = "0.00" ]; then
+  [ "$TOK_TOTAL" -gt 0 ] 2>/dev/null && PLAN="MAX "
+fi
+
+# ── Duration ──
 DUR_SEC=$((DUR_MS / 1000))
 if [ "$DUR_SEC" -ge 3600 ] 2>/dev/null; then
-  DUR_H=$((DUR_SEC / 3600))
-  DUR_M=$(((DUR_SEC % 3600) / 60))
-  DUR_FMT="${DUR_H}h${DUR_M}m"
+  DUR_FMT="$((DUR_SEC / 3600))h$(((DUR_SEC % 3600) / 60))m"
 elif [ "$DUR_SEC" -ge 60 ] 2>/dev/null; then
   DUR_FMT="$((DUR_SEC / 60))m"
 else
   DUR_FMT="${DUR_SEC}s"
 fi
 
-# ── Plan badge ──
-PLAN=""
-if [ "$COST" = "0.00" ]; then PLAN="MAX "; fi
-
-# ── Context bar (gradient: █ ▓ ▒ ░) ──
-BW=10
-F=$((CTX_INT * BW / 100))
-[ "$F" -gt "$BW" ] && F=$BW
-E=$((BW - F))
-BAR=""
-for ((i=0;i<F;i++)); do
-  # Last filled block uses ▓ for gradient edge
-  if [ "$i" -eq $((F - 1)) ] && [ "$F" -lt "$BW" ]; then
-    BAR="${BAR}▓"
-  else
-    BAR="${BAR}█"
-  fi
-done
-for ((i=0;i<E;i++)); do
-  # First empty block uses ▒ for gradient edge
-  if [ "$i" -eq 0 ] && [ "$F" -gt 0 ]; then
-    BAR="${BAR}▒"
-  else
-    BAR="${BAR}░"
-  fi
-done
-
-# ── Health status ──
-if [ "$CTX_INT" -gt 80 ] 2>/dev/null; then
-  HEALTH="🔴"
-elif [ "$CTX_INT" -gt 60 ] 2>/dev/null; then
-  HEALTH="🟡"
-elif [ "$CTX_INT" -gt 30 ] 2>/dev/null; then
-  HEALTH="🟢"
-else
-  HEALTH="🟢"
-fi
-
-# ── Agent name abbreviation ──
-abbrev_agent() {
-  case "$1" in
-    watcher)           echo "W" ;;
-    builder)           echo "B" ;;
-    debugger)          echo "D" ;;
-    qa)                echo "QA" ;;
-    code-reviewer)     echo "CR" ;;
-    design-reviewer)   echo "DR" ;;
-    researcher)        echo "R" ;;
-    framework-evolver) echo "FE" ;;
-    technical-writer)  echo "TW" ;;
-    sentinel)          echo "🦇" ;;
-    Explore)           echo "Ex" ;;
-    Plan)              echo "Pl" ;;
-    general-purpose)   echo "GP" ;;
-    *)                 echo "$1" | cut -c1-3 ;;
-  esac
-}
-
-# ── Running agents (live) ──
-RUNNING_FILE="/tmp/apex-agents-running.json"
-RUNNING_STR=""
-if [ -f "$RUNNING_FILE" ]; then
-  RUNNING_TYPES=$(jq -r '[.running[].type] | unique | join(",")' "$RUNNING_FILE" 2>/dev/null)
-  RUNNING_COUNT=$(jq -r '.running | length' "$RUNNING_FILE" 2>/dev/null)
-  if [ "${RUNNING_COUNT:-0}" -gt 0 ] 2>/dev/null; then
-    RUNNING_ABBREV=""
-    IFS=',' read -ra RTYPES <<< "$RUNNING_TYPES"
-    for t in "${RTYPES[@]}"; do
-      [ -n "$RUNNING_ABBREV" ] && RUNNING_ABBREV="${RUNNING_ABBREV},"
-      RUNNING_ABBREV="${RUNNING_ABBREV}$(abbrev_agent "$t")"
-    done
-    RUNNING_STR=" ┃ ⚡ ${RUNNING_COUNT} (${RUNNING_ABBREV})"
-  fi
-fi
-
-# ── Completed agents (cumulative) ──
-AGENT_FILE="/tmp/apex-agents.json"
-AGENT_STR=""
-if [ -f "$AGENT_FILE" ]; then
-  AGENT_DATA=$(jq -r '[(.count // 0 | tostring), (.total_tokens // 0 | tostring), ((.types // []) | join(","))] | join("\t")' "$AGENT_FILE" 2>/dev/null)
-  IFS=$'\t' read -r AGENT_COUNT AGENT_TOKENS AGENT_TYPES_RAW <<< "$AGENT_DATA"
-  if [ "${AGENT_COUNT:-0}" -gt 0 ] 2>/dev/null; then
-    TYPES_DISPLAY=""
-    if [ -n "$AGENT_TYPES_RAW" ]; then
-      IFS=',' read -ra TYPES_ARR <<< "$AGENT_TYPES_RAW"
-      ABBREV_JOINED=""
-      for t in "${TYPES_ARR[@]}"; do
-        [ -n "$ABBREV_JOINED" ] && ABBREV_JOINED="${ABBREV_JOINED},"
-        ABBREV_JOINED="${ABBREV_JOINED}$(abbrev_agent "$t")"
-      done
-      TYPES_DISPLAY=" (${ABBREV_JOINED})"
-    fi
-    AGENT_STR=" ┃ 🤖 ${AGENT_COUNT}${TYPES_DISPLAY} $(fmt_tok "$AGENT_TOKENS")"
-  fi
+# ── Lines changed (hide if zero) ──
+LINES_STR=""
+NET=$((LA - LR))
+if [ "$LA" -gt 0 ] 2>/dev/null || [ "$LR" -gt 0 ] 2>/dev/null; then
+  [ "$NET" -ge 0 ] 2>/dev/null && NET_FMT="+${NET}" || NET_FMT="${NET}"
+  LINES_STR=" ┃ +${LA}/-${LR} (${NET_FMT})"
 fi
 
 # ── Alerts ──
-A=""
-[ "$CTX_INT" -gt 80 ] 2>/dev/null && A=" ⚠️ CTX"
+ALERTS=""
+[ "$CTX_INT" -gt 80 ] 2>/dev/null && ALERTS=" ⚠️ CTX"
 PREF="$HOME/.claude/apex-preferences.json"
-TH="5.00"; [ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
-command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && A="${A} ⚠️ COST"
+COST=$(printf '%.2f' "$COST_RAW" 2>/dev/null || echo "0.00")
+TH="5.00"
+[ -f "$PREF" ] && TH=$(jq -r '.cost_alert_threshold_usd // 5.00' "$PREF" 2>/dev/null || echo "5.00")
+command -v bc &>/dev/null && [ "$(echo "$COST > $TH" | bc 2>/dev/null)" = "1" ] && ALERTS="${ALERTS} ⚠️ COST"
 
-# ── PR detection (clickable link + merge status, cached 60s) ──
+# ── PR link (cached 60s, validated) ──
 PR_STR=""
 if command -v gh &>/dev/null; then
   BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-  # Sanitize branch name for cache filename (feat/foo → feat-foo)
-  BRANCH_SAFE=$(echo "$BRANCH" | tr '/' '-')
-  PR_CACHE="/tmp/apex-pr-cache-${BRANCH_SAFE}.json"
-  PR_DATA=""
-  # Use cache if fresh (< 60s old)
-  if [ -f "$PR_CACHE" ]; then
-    CACHE_AGE=$(( $(date +%s) - $(stat -f %m "$PR_CACHE" 2>/dev/null || echo "0") ))
-    [ "$CACHE_AGE" -lt 60 ] && PR_DATA=$(cat "$PR_CACHE" 2>/dev/null)
-  fi
-  # Fetch if no cache or stale
-  if [ -z "$PR_DATA" ] && [ -n "$BRANCH" ]; then
-    # macOS has no coreutils `timeout` — use background + kill pattern instead
-    PR_DATA=$(
-      gh pr view --json number,state,url 2>/dev/null &
-      GH_PID=$!
-      ( sleep 2 && kill "$GH_PID" 2>/dev/null ) &
-      KILL_PID=$!
-      wait "$GH_PID" 2>/dev/null
-      kill "$KILL_PID" 2>/dev/null
-    )
-    if [ -n "$PR_DATA" ]; then
-      echo "$PR_DATA" > "$PR_CACHE"
-    else
-      # Cache "no PR" to avoid re-fetching every render
-      echo '{"none":true}' > "$PR_CACHE"
+  if [ -n "$BRANCH" ]; then
+    BRANCH_SAFE=$(echo "$BRANCH" | tr '/' '-')
+    PR_CACHE="/tmp/apex-pr-cache-${BRANCH_SAFE}.json"
+    PR_DATA=""
+
+    if [ -f "$PR_CACHE" ]; then
+      CACHE_AGE=$(( $(date +%s) - $(stat -f %m "$PR_CACHE" 2>/dev/null || echo "0") ))
+      [ "$CACHE_AGE" -lt 60 ] && PR_DATA=$(cat "$PR_CACHE" 2>/dev/null)
     fi
-  fi
-  if [ -n "$PR_DATA" ] && [ "$PR_DATA" != '{"none":true}' ]; then
-    PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
-    PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')
-    PR_URL=$(echo "$PR_DATA" | jq -r '.url // empty')
-    if [ -n "$PR_NUM" ]; then
-      case "$PR_STATE" in
-        MERGED) PR_ICON="🟣" ;;
-        OPEN)   PR_ICON="🟢" ;;
-        CLOSED) PR_ICON="⚪" ;;
-        *)      PR_ICON="PR" ;;
-      esac
-      # Always use OSC 8 for clickable link — Claude Code TUI supports it
-      PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
+
+    if [ -z "$PR_DATA" ]; then
+      # Try with timeout (coreutils), fall back to bg+kill on macOS
+      if command -v timeout &>/dev/null; then
+        PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
+      else
+        gh pr view --json number,state,url > "/tmp/apex-pr-fetch-$$.json" 2>/dev/null &
+        GH_PID=$!
+        sleep 2
+        if kill -0 "$GH_PID" 2>/dev/null; then
+          kill "$GH_PID" 2>/dev/null
+          wait "$GH_PID" 2>/dev/null
+        else
+          wait "$GH_PID" 2>/dev/null
+          PR_DATA=$(cat "/tmp/apex-pr-fetch-$$.json" 2>/dev/null)
+        fi
+        rm -f "/tmp/apex-pr-fetch-$$.json"
+      fi
+      if [ -n "$PR_DATA" ]; then
+        echo "$PR_DATA" > "$PR_CACHE"
+      else
+        echo '{"none":true}' > "$PR_CACHE"
+      fi
+    fi
+
+    if [ -n "$PR_DATA" ] && [ "$PR_DATA" != '{"none":true}' ]; then
+      PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
+      PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')
+      PR_URL=$(echo "$PR_DATA" | jq -r '.url // empty')
+      # Validate URL: must start with https://github.com/
+      if [ -n "$PR_NUM" ] && echo "$PR_URL" | grep -q '^https://github\.com/' 2>/dev/null; then
+        case "$PR_STATE" in
+          MERGED) PR_ICON="🟣" ;;
+          OPEN)   PR_ICON="🟢" ;;
+          CLOSED) PR_ICON="⚪" ;;
+          *)      PR_ICON="PR" ;;
+        esac
+        PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
+      fi
     fi
   fi
 fi
 
-# ── Output (printf %b for reliable OSC 8 escape interpretation) ──
-printf '%b' "⚔️  APEX ┃ ${M} ${PLAN}┃ ${HEALTH} ${BAR} ${CTX_INT}%% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE") ┃ ↑$(fmt_tok "$TOK_IN") ↓$(fmt_tok "$TOK_OUT")${RUNNING_STR}${AGENT_STR} ┃ +${LA}/-${LR} (${NET_FMT} net) ┃ ${DUR_FMT}${A}${PR_STR} ┃ This is the way.\n"
+# ── Build context segment ──
+if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
+  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE")"
+else
+  CTX_STR="${HEALTH} ready"
+fi
+
+# ── Output ──
+# Segments: APEX | model | context | lines | duration | alerts | PR
+printf '%b' "⚔️ APEX ┃ ${M} ${PLAN}┃ ${CTX_STR}${LINES_STR} ┃ ${DUR_FMT}${ALERTS}${PR_STR}\n"

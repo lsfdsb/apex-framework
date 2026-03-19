@@ -399,7 +399,7 @@ for script in "$SCRIPTS"/*.sh; do
   BASENAME=$(basename "$script")
   # Skip scripts that don't use jq or intentionally degrade silently (exit 0)
   case "$BASENAME" in
-    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|session-learner.sh|health-check.sh|scan-security-patterns.sh) continue ;;
+    apex-statusline.sh|apex-colors.sh|apex-launch.sh|apex-sync.sh|auto-update.sh|dev-monitor.sh|extract-session.sh|auto-approve-safe.sh|auto-changelog.sh|dev-server.sh|log-subagent.sh|track-agent-start.sh|session-learner.sh|health-check.sh|scan-security-patterns.sh) continue ;;
   esac
   TOTAL=$((TOTAL + 1))
   if grep -q "jq not installed" "$script"; then

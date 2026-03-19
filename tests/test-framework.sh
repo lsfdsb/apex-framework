@@ -479,7 +479,7 @@ assert_file_contains "$SCRIPTS/apex-colors.sh" "apex_progress" "Progress bar"
 assert_file_contains "$GIT_HOOKS/pre-commit" "apex_spinner" "Pre-commit uses spinners"
 assert_file_contains "$GIT_HOOKS/pre-commit" "apex_progress" "Pre-commit uses progress bar"
 assert_file_contains "$GIT_HOOKS/commit-msg" "ICON" "Commit-msg has type icons"
-assert_file_contains "$SCRIPTS/apex-statusline.sh" "AGENT_STR" "Status line has agent tracking"
+assert_file_contains "$SCRIPTS/apex-statusline.sh" "CTX_STR" "Status line has context tracking"
 
 # ══════════════════════════════════════════════════
 # 15. WATERMARK & BRANDING
