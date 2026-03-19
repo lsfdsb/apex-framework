@@ -14,6 +14,7 @@ paths:
 - Responsive: mobile-first. Test at 320px, 768px, 1280px.
 - No inline styles. Use Tailwind utilities or CSS modules.
 - **Design tokens only** — NEVER use hardcoded Tailwind palette colors (`blue-500`, `purple-600`, etc.). Use the project's semantic tokens (`primary`, `accent`, `muted`, `destructive`). Read `tailwind.config.ts` or `globals.css` first.
+- **Design DNA reference** — Before building any page or major component, read the matching pattern from `docs/design-dna/` (landing, saas, crm, ecommerce, blog, portfolio, social, lms, email, presentation, ebook, backoffice, patterns). These are the visual quality bar.
 - Memoize only when measured — premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.
 - Co-locate: component file, test file, and styles in the same directory.

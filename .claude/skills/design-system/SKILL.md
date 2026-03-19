@@ -195,3 +195,44 @@ When building a new page, start from these patterns:
 ## Detailed Reference
 
 For font pairings, color palettes, responsive breakpoints, and component state matrix, read `$SKILL_DIR/reference.md`.
+
+## Design DNA — Live Pattern Library (MANDATORY)
+
+The APEX Design DNA at `docs/design-dna/` is our **authoritative visual reference**. Every pattern page contains production-quality HTML/CSS that defines how screens should look and feel. **Before building ANY user-facing page, you MUST read the matching Design DNA page.**
+
+Preview server: `http://localhost:3001` (run from project root if not already running).
+
+### Page-Type Routing Table
+
+| Building this... | Read this first | Key patterns inside |
+|---|---|---|
+| Landing page, marketing site | `docs/design-dna/landing.html` | Hero, features grid, pricing, testimonials, CTA banner, auth card |
+| SaaS dashboard, admin panel | `docs/design-dna/saas.html` | Dashboard layout, data tables, settings page, empty states |
+| CRM, contacts, pipelines | `docs/design-dna/crm.html` | Kanban pipeline, contact cards, activity timeline, chat widget, ticket list, deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring with progress rings, data table with filters/pagination, filter bar with active tags, task/follow-up list, empty states, email composer, notes panel |
+| E-commerce, shop, products | `docs/design-dna/ecommerce.html` | Product grid, product detail, cart, 3-step checkout |
+| Blog, editorial, articles | `docs/design-dna/blog.html` | Hero, featured article, article grid, reading experience, newsletter |
+| Portfolio, agency, showcase | `docs/design-dna/portfolio.html` | Selected work grid, services list, contact form |
+| Social feed, community | `docs/design-dna/social.html` | 3-column feed layout, sidebar, trending, suggested |
+| LMS, courses, learning | `docs/design-dna/lms.html` | Course catalog, lesson player, progress overview, certificate |
+| Email templates | `docs/design-dna/email.html` | 8 transactional patterns: welcome, verification, order, shipping, password reset, team invite, payment failed, weekly digest |
+| Presentations, slides | `docs/design-dna/presentation.html` | 10 slide types: title, divider, stats, content grid, quote, split, timeline, team, pricing, CTA |
+| E-book, long-form content | `docs/design-dna/ebook.html` | Cover, table of contents, reading page, drop caps, sidenotes, chapter nav |
+| Backoffice, internal tools | `docs/design-dna/backoffice.html` | User management CRUD, activity log, invoices, permission matrix |
+| SVG backgrounds, patterns | `docs/design-dna/patterns.html` | 14 static SVG patterns + 8 animated backgrounds (orbs, aurora, particles, gradient mesh, rings, matrix, nebula, spotlight) |
+| Color system, typography, tokens | `docs/design-dna/design-system.html` | 5 color palettes, typography scale, spacing, motion, component states, radii + shadows |
+| **Any page** (always read) | `docs/design-dna/index.html` | Hub page with navigation to all patterns |
+
+### Reusable JS Modules
+
+These modules are **production-ready code** that can be directly adapted into any project:
+
+- **`docs/design-dna/svg-backgrounds.js`** — 14 static SVG patterns (dots, grid, topo, circuit, hexagons, crosses, diamonds, diagonals, constellation, isometric, waves, dna, noise, triangles) + 8 animated canvas/CSS backgrounds. Import and use directly.
+- **`docs/design-dna/palette.js`** — Global palette switcher widget with 5 curated palettes + dark/light mode toggle. Reference implementation for theme switching.
+
+### How to Use Design DNA
+
+1. **Read the matching page** before writing any component
+2. **Match the quality level** — the DNA pages represent our minimum visual bar
+3. **Adapt, don't copy** — extract the patterns, layout structure, and visual language; adapt to the project's stack (React, Vue, etc.)
+4. **Use the SVG backgrounds** — for any page that needs visual texture, reference `patterns.html` and `svg-backgrounds.js`
+5. **Check all 5 palettes** — your implementation should work with any palette from `design-system.html`
