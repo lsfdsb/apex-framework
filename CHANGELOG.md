@@ -21,6 +21,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ### Changed
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
+- Technical Writer agent: explicit instruction to MUST edit files (fix Haiku hallucination)
+- Code Reviewer and QA agents: `isolation: worktree` → `isolation: none` (need real project state)
 - Output style enforces always-on agent rule — blocks commits/PRs without Technical Writer
 - CLAUDE.md: "Always-On Agents" section added above team spawn rules
 - Sentinel agent: maxTurns increased from 50 to 60, report format updated for Phase 8
@@ -31,6 +33,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - Hooks test parser — `Pass: N` format now correctly matched (was showing 0)
 - console.log replaced with process.stdout.write in server startup
 - add activity section + update docs (0e3cf99)
+- Observatory `collectActivity()` — `hasActive` flag now included in API response
+- Observatory activity endpoint — tasks filtered by known teams, no stray UUIDs
 
 ## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
