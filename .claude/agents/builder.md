@@ -100,15 +100,48 @@ Follow these APEX conventions strictly:
 | SVG backgrounds | `docs/design-dna/patterns.html` + `docs/design-dna/svg-backgrounds.js` |
 | Color/typography | `docs/design-dna/design-system.html` |
 
-The Design DNA pages are our **visual quality bar**. Follow the **DNA → React Translation Guide** in `reference.md` to convert patterns correctly:
+The Design DNA pages are our **visual quality bar**. Do NOT "interpret" or "be inspired by" the DNA. **Match it.** The DNA is the spec.
 
-1. **Extract the anatomy** — layout, spacing (px → Tailwind), typography, colors, radius, transitions
-2. **Map CSS variables** — `var(--accent)` → `text-primary`, `var(--bg-elevated)` → `bg-elevated` (see token mapping table)
+### DNA Extraction Protocol (MANDATORY before writing ANY component)
+
+After reading the DNA page, you MUST run this extraction and **write the values down in your response** before coding:
+
+```
+📋 DNA EXTRACTION — [page type]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎨 Palette:
+   Background: [exact hex from :root or CSS]
+   Elevated:   [exact hex]
+   Surface:    [exact hex]
+   Text:       [exact hex]
+   Accent:     [exact hex]
+   Border:     [exact hex]
+
+🔤 Typography:
+   Display font: [font-family from .section-header h2 or hero]
+   Body font:    [font-family from body]
+   Section heading: [font-size, weight, letter-spacing, line-height]
+
+🧱 Key patterns:
+   Card style:    [border, radius, shadow, hover effect]
+   Section header: [label + heading + subtitle pattern]
+   Animations:    [transition values, reveal pattern]
+
+📐 Layout:
+   Max width: [max-width from main container]
+   Grid:      [columns, gap]
+   Spacing:   [section padding, card padding]
+```
+
+**If you skip this extraction, your code WILL NOT match the DNA.** This has caused full rebuilds in real sessions. Write these values down, then reference them as you code. Every color in your CSS must trace back to this extraction.
+
+### DNA → Code Translation
+
+1. **First file: globals.css** — Set up CSS variables matching the extracted palette BEFORE writing components
+2. **Map CSS variables** — `var(--accent)` → `text-accent`, `var(--bg-elevated)` → `bg-elevated`
 3. **Preserve proportions** — font sizes ±1px, padding ±2px, same radius, same transition timing
-4. **Add page animations** — every page root gets `apex-enter`, sections get `stagger-1/2/3`
-5. **Verify side-by-side** — open the DNA page and your component, check the 9-point checklist before marking done
-
-Do NOT "interpret" or "be inspired by" the DNA. **Match it.** The DNA is the spec.
+4. **Add page animations** — every page root gets reveal animations matching the DNA
+5. **Verify** — does your component use the EXACT colors from the extraction? If not, fix it
 
 ### Token Enforcement
 - **NEVER** hardcode Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`)

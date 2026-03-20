@@ -255,7 +255,10 @@ Agent({
   team_name: "feat-landing-page",
   name: "builder",
   subagent_type: "builder",
-  prompt: "Implement the landing page with hero, features grid, and CTA."
+  prompt: "Implement the landing page with hero, features grid, and CTA.
+    DESIGN DNA: Read docs/design-dna/landing.html FIRST.
+    Extract the palette, fonts, and patterns before writing ANY code.
+    globals.css must match the DNA palette exactly."
 })
 
 Agent({
