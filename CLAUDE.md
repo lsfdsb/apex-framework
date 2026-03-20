@@ -187,7 +187,7 @@ apex ~/Projects/myapp             # specific project
 
 The `apex` command (installed to `~/.local/bin/` by `install.sh`) auto-detects iTerm2 + tmux and launches `tmux -CC` + `claude --teammate-mode tmux`. Falls back to regular `claude` if tmux/iTerm2 aren't available.
 
-**Tmux + Ctrl+B conflict**: Ctrl+B is tmux's prefix key AND Claude Code's "background agent" shortcut. In tmux sessions, press **Ctrl+B twice** (first = tmux prefix, second = background). Or remap tmux prefix: `set -g prefix C-a` in `~/.tmux.conf`.
+**Note**: If using tmux, Ctrl+B conflicts (tmux prefix = Ctrl+B = Claude Code background shortcut). Fix: remap tmux prefix with `set -g prefix C-a` in `~/.tmux.conf`.
 
 ### Principles
 1. **Always use TeamCreate** — Never spawn regular subagents for team work. Use TeamCreate + Agent with team_name
