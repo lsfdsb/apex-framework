@@ -132,7 +132,6 @@
         ]
       }
     ],
-    "UserPromptSubmit": [],
     "PreToolUse": [
       {
         "matcher": "Bash",
