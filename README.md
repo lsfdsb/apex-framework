@@ -369,7 +369,7 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 9 specialized agents — a championship roster. Use `/teams` for parallel work, `/batman` to verify everything:
+APEX has 7 specialized agents — a championship roster. Use `/teams` for parallel work:
 
 | Agent | Model | Role |
 |-------|-------|------|
