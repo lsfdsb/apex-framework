@@ -5,6 +5,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+
+### Added
+- add 11 primitive starter components + barrel export (0ec955c)
+- v5.13 Design DNA Starters — 42 files, zero translation (868cd7a)
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
 
 The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.
