@@ -39,3 +39,5 @@ coverage/
 # Debug
 *.log
 npm-debug.log*
+docs/design-dna/showcase/node_modules/
+docs/design-dna/showcase/dist/
