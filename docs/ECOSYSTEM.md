@@ -6,7 +6,7 @@ These community skills and MCP servers complement APEX. All verified as official
 
 ### vercel-react-best-practices (176K+ installs)
 Official Vercel React optimization patterns. 40+ rules across 8 categories.
-Complements: our `code-standards` skill
+Complements: our `.claude/rules/` path-based rules
 ```bash
 /plugin marketplace add vercel-labs/react-best-practices
 ```
@@ -22,14 +22,14 @@ Complements: our `design-system` skill
 
 ### Context7
 Live, version-specific documentation for libraries. Prevents hallucinated APIs.
-Complements: our `/research` skill
+Complements: native WebSearch + WebFetch
 ```bash
 claude mcp add context7 -- npx -y @context7/mcp
 ```
 
 ### Supabase MCP
 Direct database access from Claude Code. Query, migrate, manage RLS.
-Complements: our `sql-practices` skill
+Complements: our `.claude/rules/sql.md`
 ```bash
 claude mcp add supabase -- npx -y @supabase/mcp-server
 ```

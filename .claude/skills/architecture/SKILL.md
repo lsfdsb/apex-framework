@@ -40,7 +40,7 @@ You are designing: $ARGUMENTS
 **API Design** — REST by default. Versioned (/api/v1/). Consistent error format. Pagination on lists. Rate limiting on all endpoints. Request validation.
 
 **Integration Architecture** — For each external integration identified in the PRD:
-1. Confirm `/research` has been run on the actual API docs
+1. Confirm API docs have been verified via WebSearch
 2. Document: auth method, rate limits, webhook patterns, error handling
 3. Design service abstraction layer (never call external APIs directly from components)
 4. Plan for mock/test mode that doesn't hit real APIs
@@ -79,7 +79,7 @@ You are designing: $ARGUMENTS
 
 **ADRs** — For every significant choice: Context, Decision, Consequences, Alternatives.
 
-4. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need `/research`.
+4. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need API verification via WebSearch.
 
 ## Production Observability
 

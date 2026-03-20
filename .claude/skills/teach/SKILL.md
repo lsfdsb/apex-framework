@@ -123,7 +123,6 @@ Edit files → git add → git commit → git push
 | `/security` | Security audit (OWASP) |
 | `/commit` | Clean conventional commit |
 | `/teach` | Ask Claude to explain anything |
-| `/debug` | Structured debugging workflow |
 | `Shift+Tab` | Toggle plan mode (shows Claude's thinking) |
 | `Esc` | Interrupt Claude mid-response |
 | `/compact` | Free up context window when it's full |
