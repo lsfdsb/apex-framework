@@ -1,0 +1,90 @@
+/* APEX Design DNA — Animations
+   Reveal, stagger, page enter, magnetic hover
+   by L.B. & Claude · São Paulo, 2026 */
+
+/* Page enter */
+@keyframes apex-enter {
+  from { opacity: 0; transform: translateY(32px) scale(0.98); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+.apex-enter { animation: apex-enter 900ms var(--ease-out) both; }
+
+/* Scroll reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px) scale(0.98);
+  filter: blur(4px);
+  transition: all 0.9s var(--ease-out);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* Stagger children */
+.stagger-1 { animation-delay: 100ms; }
+.stagger-2 { animation-delay: 200ms; }
+.stagger-3 { animation-delay: 300ms; }
+
+/* DNA utility classes */
+.apex-label {
+  font-size: var(--section-label-size, 11px);
+  text-transform: uppercase;
+  letter-spacing: var(--section-label-tracking, 0.12em);
+  font-weight: 500;
+  color: var(--accent);
+}
+
+.apex-heading {
+  font-family: var(--font-display);
+  font-size: var(--section-heading-size);
+  font-weight: var(--section-heading-weight, 400);
+  letter-spacing: var(--section-heading-tracking, -0.03em);
+  line-height: var(--section-heading-leading, 1.1);
+  color: var(--text);
+}
+
+/* Magnetic hover */
+.magnetic { transition: transform 0.3s var(--ease-out); }
+.magnetic:hover { transform: translateY(var(--card-hover-y, -2px)); }
+.magnetic:active { transform: translateY(0); }
+
+/* Shimmer loading skeleton */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-elevated) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Card thumbnail gradient overlay */
+.card-thumb::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 60%, var(--bg-elevated));
+  pointer-events: none;
+}
+
+/* Certificate glow effect */
+.cert-glow::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, var(--accent-glow), transparent 60%);
+  pointer-events: none;
+}
+
+/* Smooth transitions on theme change */
+body, section, footer {
+  transition: background-color 0.4s, color 0.4s, border-color 0.4s;
+}
