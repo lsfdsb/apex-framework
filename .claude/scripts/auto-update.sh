@@ -230,6 +230,41 @@ for style in "$APEX_CACHE"/.claude/output-styles/*.md; do
   [ -f "$style" ] && cp "$style" "$PROJECT_DIR/.claude/output-styles/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
 done
 
+# Update Design DNA (pattern pages + starters + tokens + recipes)
+if [ -d "$APEX_CACHE/docs/design-dna" ]; then
+  mkdir -p "$PROJECT_DIR/docs/design-dna"
+  # HTML pages + JS modules
+  for f in "$APEX_CACHE"/docs/design-dna/*.html "$APEX_CACHE"/docs/design-dna/*.js; do
+    [ -f "$f" ] && cp "$f" "$PROJECT_DIR/docs/design-dna/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
+  done
+  # Tokens
+  if [ -d "$APEX_CACHE/docs/design-dna/tokens" ]; then
+    mkdir -p "$PROJECT_DIR/docs/design-dna/tokens/palettes"
+    for f in "$APEX_CACHE"/docs/design-dna/tokens/*.css; do
+      [ -f "$f" ] && cp "$f" "$PROJECT_DIR/docs/design-dna/tokens/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
+    done
+    for f in "$APEX_CACHE"/docs/design-dna/tokens/palettes/*.css; do
+      [ -f "$f" ] && cp "$f" "$PROJECT_DIR/docs/design-dna/tokens/palettes/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
+    done
+  fi
+  # Starters (layout, primitives, patterns)
+  for subdir in layout primitives patterns; do
+    if [ -d "$APEX_CACHE/docs/design-dna/starters/$subdir" ]; then
+      mkdir -p "$PROJECT_DIR/docs/design-dna/starters/$subdir"
+      for f in "$APEX_CACHE/docs/design-dna/starters/$subdir"/*; do
+        [ -f "$f" ] && cp "$f" "$PROJECT_DIR/docs/design-dna/starters/$subdir/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
+      done
+    fi
+  done
+  # Recipes
+  if [ -d "$APEX_CACHE/docs/design-dna/recipes" ]; then
+    mkdir -p "$PROJECT_DIR/docs/design-dna/recipes"
+    for f in "$APEX_CACHE"/docs/design-dna/recipes/*.md; do
+      [ -f "$f" ] && cp "$f" "$PROJECT_DIR/docs/design-dna/recipes/" && UPDATE_COUNT=$((UPDATE_COUNT + 1))
+    done
+  fi
+fi
+
 # Update settings.json — but only if the user hasn't customized it.
 # We detect customization by checking if the file differs from the previous
 # framework version. If it matches the old framework version, safe to overwrite.
