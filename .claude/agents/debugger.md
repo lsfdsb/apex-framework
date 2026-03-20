@@ -27,6 +27,15 @@ Take bug reports from the Watcher or team lead and deliver definitive fixes. Eve
 5. **VERIFY** — Prove it's dead with tests
 6. **PREVENT** — Make recurrence impossible
 
+## Task Auto-Claim Protocol
+
+When spawned as a teammate:
+1. Check TaskList immediately for unassigned tasks tagged with `[bug]`, `[fix]`, or `[error]`
+2. Claim available tasks by setting yourself as owner via TaskUpdate
+3. After fixing, create a verification task for QA: TaskCreate with subject "[qa] Verify fix for [description]"
+4. After completing a task, check TaskList again for newly available work
+5. If no tasks are available, message the lead asking for assignment
+
 ## Workflow
 
 1. **Check TaskList** for bugs assigned to you (tagged as bug/error/fix)

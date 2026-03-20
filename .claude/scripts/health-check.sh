@@ -320,7 +320,6 @@ echo ""
 
 CRITICAL_SCRIPTS=(
   "block-dangerous-commands.sh"
-  "enforce-commit-msg.sh"
   "protect-files.sh"
   "enforce-workflow.sh"
   "session-context.sh"

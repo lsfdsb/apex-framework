@@ -41,9 +41,9 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ╠═══════════════════════════════════════════════════════════╣
      ║                                                           ║
      ║   Built with:                                             ║
-     ║     26 Skills · 7 Rules · 4 Agents · 26 Scripts          ║
-     ║     1 Output Style · 1 Sandbox · 2 Test Suites           ║
-     ║     387 tests · 9 versions · ∞ ambition                  ║
+     ║     29 Skills · 7 Rules · 9 Agents · 23 Scripts          ║
+     ║     1 Output Style · 1 Sandbox · 4 Test Suites           ║
+     ║     660 tests · 12 versions · ∞ ambition                 ║
      ║                                                           ║
      ║   A Head of CX who dreamed of building world-class        ║
      ║   apps, and an AI who believed in teaching while doing.   ║
@@ -94,7 +94,11 @@ Skills: !`ls .claude/skills/ 2>/dev/null | wc -l | tr -d ' '` · Scripts: !`ls .
 - **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
 - **v5.6**: Auto-update & self-evolution. Auto-update from GitHub on SessionStart, /evolve skill with framework-evolver agent, session transcript analysis.
 - **v5.7**: Bug fixes & full hook coverage. Fixed macOS stat compat, pnpm false-positive in verify-install, extract-session path. Wired all 7 orphaned scripts. Added React SPA stack guide, pnpm permissions, broadened PRD detection, auto-lint after format.
-- **v5.8**: Gold standard audit. Fixed self-learning loop (session-learner + extract-session path bugs), removed false-positive file protections, added health-check.sh, expanded /teach to 8-level learning progression, rewrote install guide, optimized statusline performance, 387 tests across 2 test suites.
+- **v5.8**: Gold standard audit. Fixed self-learning loop, removed false-positive file protections, added health-check.sh, expanded /teach to 8-level learning progression, rewrote install guide, optimized statusline performance.
+- **v5.9**: Agent teams. Championship roster (9 agents), team presets (build/fix/review/full), Breathing Loop, iTerm2 split panes, auto-spawn logic.
+- **v5.10**: Design DNA. 14 premium UI pattern pages, SVG backgrounds library, palette switcher (5 palettes × 2 modes), Design Reviewer agent.
+- **v5.11**: Ive audit. Stripped 6 redundant scripts, removed fake testing (sentinel/self-test/observatory), component audit, mobile-first enforcement, dual theme architecture.
+- **v5.12**: Brutal self-assessment. Fixed 20+ issues: GitHub repo reference, missing script warnings, agent auto-claim protocols, Watcher delta monitoring, Design Reviewer Bash access, scan responsibility matrix, research→build dependencies, real behavioral tests (660 tests), benchmark-backed model assignments (Code Reviewer→Opus), security regex hardening.
 
 ## The Mascot
 

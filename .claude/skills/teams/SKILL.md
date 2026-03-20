@@ -9,6 +9,22 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 
 > "Talent wins games, but teamwork and intelligence win championships." — Michael Jordan
 
+## Quick Start (TL;DR)
+
+```
+/teams build   → Watcher + Builder + Design Reviewer + QA + Tech Writer
+/teams fix     → Watcher + Debugger + QA + Tech Writer
+/teams review  → Code Reviewer + Design Reviewer + QA + Tech Writer
+/teams full    → All 9 agents (championship roster)
+```
+
+**How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
+`Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop`
+
+**3 rules**: (1) Watcher always first, (2) Builders commit in worktree, (3) Verify files after builder completes.
+
+---
+
 ## Current Context
 
 Branch: !`git branch --show-current 2>/dev/null`
@@ -30,7 +46,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
 | **Debugger** | debugger | sonnet | worktree | Hunts bugs to root cause, fixes permanently |
 | **QA** | qa | sonnet | worktree | Runs full quality gate, blocks bad code |
-| **Code Reviewer** | code-reviewer | sonnet | worktree | Deep code review for quality and security |
+| **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security — security gate gets best model |
 | **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
 | **Researcher** | researcher | haiku | background | API/docs investigation |
@@ -143,6 +159,39 @@ rm -rf .claude/worktrees/agent-*
 - QA auto-verifies when Debugger reports "fix ready" — no manual /qa
 - If QA rejects, a new task is created and Debugger picks it up automatically
 - The loop keeps breathing until everything is green
+
+## Scan Responsibility Matrix (No Duplication)
+
+Each check has ONE owner. No two agents scan the same thing.
+
+| Check | Owner | Others |
+|-------|-------|--------|
+| Build/compile errors | **Watcher** (continuous) | QA (final gate) |
+| Test failures | **Watcher** (continuous) | QA (final gate) |
+| console.log in production | **Watcher** | — |
+| Type `any` usage | **Watcher** | — |
+| File size > 300 lines | **Watcher** | — |
+| Function size > 30 lines | **Watcher** | — |
+| Hardcoded secrets | **Watcher** | Security hook (PreToolUse) |
+| Hardcoded Tailwind colors | **Design Reviewer** | — |
+| Design DNA compliance | **Design Reviewer** | — |
+| Branding sweep | **Design Reviewer** | — |
+| Responsive/mobile-first | **Design Reviewer** | — |
+| Accessibility (WCAG) | **Design Reviewer** | — |
+| Performance (N+1, bundle) | **QA** (phase 5) | — |
+| Security (OWASP) | **QA** (phase 6) | — |
+| Logic correctness | **QA** (phase 2) | — |
+| Code quality/patterns | **Code Reviewer** | — |
+
+**Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate. Design Reviewer owns all visual/UI checks. No overlap.
+
+## Task Dependencies (Enforced)
+
+When creating tasks for a team with both Researcher and Builder:
+- Create Researcher tasks FIRST
+- Create Builder integration tasks with `addBlockedBy: [researcher-task-id]`
+- Builder cannot start integration code until Researcher reports findings
+- This prevents building against APIs we haven't verified
 
 ## Auto-Spawn Logic
 

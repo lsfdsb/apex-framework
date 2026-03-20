@@ -29,8 +29,8 @@ run_suite() {
 
   # Extract pass/fail counts from output
   local passed failed
-  passed=$(echo "$output" | grep -oE '[0-9]+ passed' | head -1 | grep -oE '[0-9]+')
-  failed=$(echo "$output" | grep -oE '[0-9]+ failed' | head -1 | grep -oE '[0-9]+')
+  passed=$(echo "$output" | grep -oE '[0-9]+ passed|Pass: [0-9]+' | head -1 | grep -oE '[0-9]+')
+  failed=$(echo "$output" | grep -oE '[0-9]+ failed|Fail: [0-9]+' | head -1 | grep -oE '[0-9]+')
   [ -z "$passed" ] && passed=0
   [ -z "$failed" ] && failed=0
 
@@ -50,7 +50,7 @@ run_suite() {
 run_suite "Framework"    "$SCRIPT_DIR/test-framework.sh"
 run_suite "Hooks"        "$SCRIPT_DIR/test-hooks.sh"
 run_suite "Agents"       "$SCRIPT_DIR/test-agents.sh"
-run_suite "Behavioral"   "$SCRIPT_DIR/test-behavioral.sh"
+run_suite "Behavioral"   "$SCRIPT_DIR/test-behavioral-v2.sh"
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))

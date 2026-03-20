@@ -26,7 +26,7 @@ if [ ! -d "$APEX_DIR/.claude" ]; then
   exit 1
 fi
 
-APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.7.0")
+APEX_VERSION=$(cat "$APEX_DIR/VERSION" 2>/dev/null | tr -d '[:space:]' || echo "5.12.0")
 APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 
 echo ""

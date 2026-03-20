@@ -29,13 +29,13 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 10. **Adapt to existing stacks** — Don't force the APEX default stack on existing projects.
 11. **Only verified libraries** — Official publisher, maintained, no critical CVEs, proper license.
 12. **Design tokens only** — UI components MUST use project design tokens (CSS variables, semantic classes). Never hardcode Tailwind palette colors (blue-500, purple-600, etc.). Read the design system first.
-16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`.
-17. **Reuse before create** — Before creating ANY new component, search for existing ones. If a pattern appears on 2+ pages, it MUST be a shared component in `src/components/`. Three similar files doing the same thing = architectural failure.
-18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
-19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. The Design Reviewer will BLOCK pages that don't match DNA quality.
 13. **Branding sweep** — After any project init or template scaffolding, grep for template branding (ACME, Doppel, "My App", boilerplate names) and replace ALL instances with the actual project name. No template branding ships to production.
 14. **Persona→page alignment** — Every page serves ONE primary persona. Never mix management views (dashboards, KPIs) with operational views (queues, kanban, forms) on the same page unless the PRD explicitly calls for it.
 15. **Verify worktree output** — After any builder agent completes in a worktree, verify files exist in the main project before proceeding. Worktree cleanup can delete files silently.
+16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. The Design Reviewer will BLOCK pages that don't match DNA quality.
+17. **Reuse before create** — Before creating ANY new component, search for existing ones. If a pattern appears on 2+ pages, it MUST be a shared component in `src/components/`. Three similar files doing the same thing = architectural failure.
+18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
+19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable.
 
 ## Code Standards
 
@@ -57,8 +57,11 @@ For projects using APEX:
 - `npm run dev` / `npm run build` / `npm run test` / `npm run lint` / `npm run format`
 
 For the APEX Framework itself:
-- `bash tests/test-framework.sh` — 288 structural and functional tests
-- `bash tests/test-hooks.sh` — 115 hook behavior tests
+- `bash tests/test-all.sh` — Full suite (659 tests across 4 suites)
+- `bash tests/test-framework.sh` — 348 structural and functional tests
+- `bash tests/test-hooks.sh` — 94 hook behavior tests
+- `bash tests/test-agents.sh` — 122 agent validation tests
+- `bash tests/test-behavioral-v2.sh` — 95 real behavioral tests (JSON payloads, exit codes, output validation)
 - `bash -n .claude/scripts/*.sh` — syntax validation for all scripts
 
 ## Commit Message Rules
@@ -153,7 +156,7 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 | Builder | builder | sonnet | Feature implementation |
 | Debugger | debugger | sonnet | Root cause bug fixes |
 | QA | qa | sonnet | Quality gate enforcement |
-| Code Reviewer | code-reviewer | sonnet | Code quality and security |
+| Code Reviewer | code-reviewer | opus | Code quality and security |
 | Design Reviewer | design-reviewer | sonnet | UI/UX and accessibility |
 | Technical Writer | technical-writer | haiku | CHANGELOG, README, docs |
 | Researcher | researcher | haiku | API/docs investigation |
@@ -169,7 +172,28 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 ```
 Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop
 ```
-The team operates autonomously. No human intervention needed in the loop.
+
+The loop is **semi-autonomous via task auto-claim**:
+1. Builder/Debugger/QA auto-claim tasks from TaskList tagged with `[build]`/`[bug]`/`[qa]`
+2. Debugger auto-creates `[qa]` verification tasks when done
+3. QA auto-creates `[bug]` tasks if verification fails
+4. Lead intervenes only for: merge decisions, ship/no-ship, and scope changes
+
+### Scan Responsibility Matrix (No Duplication)
+
+Each check has ONE owner. No two agents scan the same thing.
+
+| Check | Owner | Timing |
+|-------|-------|--------|
+| Build/test failures | **Watcher** | Continuous delta |
+| console.log, type `any`, file/function size | **Watcher** | Continuous delta |
+| Hardcoded secrets | **Watcher** + PreToolUse hook | Continuous + per-edit |
+| Hardcoded Tailwind colors | **Design Reviewer** | Post-build review |
+| Design DNA compliance, branding, responsive | **Design Reviewer** | Post-build review |
+| Performance (N+1, bundle, CWV) | **QA** phase 5 | Final gate |
+| Security (OWASP) | **QA** phase 6 | Final gate |
+| Logic correctness | **QA** phase 2 | Final gate |
+| Code quality/patterns | **Code Reviewer** | PR review |
 
 ### Split Panes (iTerm2)
 Prerequisites (one-time setup):

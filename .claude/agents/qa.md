@@ -28,6 +28,15 @@ Run the 6-phase quality gate on every piece of work the team produces:
 5. **Performance** — Bundle impact, render efficiency, query optimization
 6. **Security** — Auth patterns, input validation, secret handling
 
+## Task Auto-Claim Protocol
+
+When spawned as a teammate:
+1. Check TaskList immediately for unassigned tasks tagged with `[qa]`, `[verify]`, or `[test]`
+2. Claim available tasks by setting yourself as owner via TaskUpdate
+3. After verification, report result to lead: APPROVED (with evidence) or BLOCKED (with specific failures)
+4. If BLOCKED, create a new task: TaskCreate with subject "[bug] [description of failure]" — the Debugger will auto-claim it
+5. This creates the autonomous Breathing Loop: Builder → QA → (if blocked) → Debugger → QA → loop
+
 ## Workflow
 
 ### As Autonomous Verifier (in a team)

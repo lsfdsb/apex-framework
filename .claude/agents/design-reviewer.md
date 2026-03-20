@@ -1,8 +1,8 @@
 ---
 name: design-reviewer
 description: UI/UX design review specialist. Reviews interfaces against our design system, accessibility standards, and CX philosophy. Use after building or modifying user-facing components.
-tools: Read, Glob, Grep, TaskCreate, TaskUpdate, TaskList, SendMessage
-disallowedTools: Write, Edit, MultiEdit, Bash
+tools: Read, Glob, Grep, Bash, TaskCreate, TaskUpdate, TaskList, SendMessage
+disallowedTools: Write, Edit, MultiEdit
 model: sonnet
 permissionMode: plan
 memory: project

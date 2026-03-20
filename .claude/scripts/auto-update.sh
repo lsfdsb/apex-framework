@@ -171,6 +171,24 @@ if [ ! -f "$APEX_CACHE/VERSION" ] || [ ! -d "$APEX_CACHE/.claude/scripts" ] || [
   exit 0
 fi
 
+# ── Rollback function (used if update fails) ──
+rollback_update() {
+  local backup_dir="$1"
+  if [ -d "$backup_dir" ]; then
+    echo "⚠️ APEX: Update failed — rolling back from backup..." >&2
+    for component in scripts skills agents rules output-styles; do
+      if [ -d "$backup_dir/$component" ]; then
+        rm -r "$PROJECT_DIR/.claude/$component" 2>/dev/null
+        cp -r "$backup_dir/$component" "$PROJECT_DIR/.claude/$component"
+      fi
+    done
+    if [ -f "$backup_dir/settings.json" ]; then
+      cp "$backup_dir/settings.json" "$PROJECT_DIR/.claude/settings.json"
+    fi
+    echo "✅ APEX: Rollback complete — previous version restored" >&2
+  fi
+}
+
 # ── Apply updates to current project ──
 UPDATE_COUNT=0
 
@@ -260,6 +278,13 @@ fi
 #   - .apex-state.json (session state)
 #   - git hooks in .git/hooks/ (may have custom hooks)
 
+# Verify update succeeded (critical files still exist)
+if [ ! -d "$PROJECT_DIR/.claude/scripts" ] || [ ! -d "$PROJECT_DIR/.claude/skills" ]; then
+  rollback_update "$BACKUP_DIR"
+  echo "❌ APEX Auto-Update: FAILED — rolled back to previous version" >&2
+  exit 0
+fi
+
 log "Update complete: v$LOCAL_VERSION → v$REMOTE_VERSION ($UPDATE_COUNT files in $PROJECT_DIR)"
 
 echo ""
@@ -267,5 +292,10 @@ echo "🔄 APEX Auto-Update: v$LOCAL_VERSION → v$REMOTE_VERSION"
 echo "   $UPDATE_COUNT files updated in project"
 echo "   Backup saved. Changelog: https://github.com/${APEX_REPO}/releases"
 echo ""
+
+# Cleanup old backups (keep last 7 days)
+find "$APEX_CACHE" -maxdepth 1 -name ".backup-*" -mtime +7 -type d 2>/dev/null | while read -r old_backup; do
+  rm -r "$old_backup" 2>/dev/null
+done
 
 exit 0
