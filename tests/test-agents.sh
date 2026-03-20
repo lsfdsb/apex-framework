@@ -165,7 +165,6 @@ for agent_file in $AGENT_FILES; do
   fi
 
   # 11. Read-only agents don't have Write tools
-  if echo "$AGENT_NAME" | grep -qE 'watcher|code-reviewer|design-reviewer|sentinel'; then
     if echo "$DISALLOWED" | grep -q 'Write' || ! echo "$TOOLS_LINE" | grep -q 'Write'; then
       pass "$AGENT_NAME (read-only role) correctly cannot write"
     else
@@ -215,7 +214,6 @@ else
 fi
 
 # 15. Check no orphan agents in CLAUDE.md
-ROSTER_AGENTS=$(grep -oE '\*\*(watcher|builder|debugger|qa|code-reviewer|design-reviewer|technical-writer|researcher|sentinel|framework-evolver)\*\*' "$CLAUDE_MD" 2>/dev/null | tr -d '*' | sort -u)
 for roster_agent in $ROSTER_AGENTS; do
   if [ -f "$AGENTS_DIR/${roster_agent}.md" ]; then
     : # exists

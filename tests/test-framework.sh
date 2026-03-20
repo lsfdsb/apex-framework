@@ -317,7 +317,7 @@ section "8. Skills"
 EXPECTED_SKILLS=(
   "about" "a11y" "apex-stack" "architecture" "changelog"
   "cicd" "code-standards" "commit" "cost-management" "cx-review" "debug"
-  "design-system" "dev" "e2e" "evolve" "init" "performance" "self-test" "teams"
+  "design-system" "dev" "e2e" "evolve" "init" "performance" "ship" "teams"
   "prd" "qa" "research" "security"
   "sql-practices" "supabase" "teach" "verify-lib"
 )
@@ -356,7 +356,7 @@ done
 # ══════════════════════════════════════════════════
 section "9. Agents"
 
-EXPECTED_AGENTS=("code-reviewer.md" "design-reviewer.md" "researcher.md" "framework-evolver.md" "watcher.md" "builder.md" "debugger.md" "qa.md" "technical-writer.md" "sentinel.md")
+EXPECTED_AGENTS=("code-reviewer.md" "design-reviewer.md" "researcher.md" "framework-evolver.md" "watcher.md" "builder.md" "debugger.md" "qa.md" "technical-writer.md")
 for agent in "${EXPECTED_AGENTS[@]}"; do
   assert_file_exists "$AGENTS/$agent"
   assert_file_contains "$AGENTS/$agent" "^---" "$agent has frontmatter"
