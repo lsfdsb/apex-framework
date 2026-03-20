@@ -3,19 +3,42 @@
 All notable changes to the APEX Framework will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [5.14.0] — 2026-03-20 — Feature Cleanup + Branch Hygiene
+## [5.14.0] — 2026-03-20 — Native Alignment Audit
+
+Comprehensive audit against Claude Code's native capabilities. Every feature must earn its place — if Claude Code does it natively, APEX doesn't duplicate it.
 
 ### Removed
-- **`/evolve` skill** — Removed the self-evolution feature entirely. Skill, agent (`framework-evolver`), and supporting scripts (`extract-session.sh`, `apex-sync.sh`) all deleted. References cleaned from CLAUDE.md, README.md, session-context.sh, stop-gate.sh, handle-failure.sh, health-check.sh, init skill, teach skill, teams skill, about skill, and apex-init-project.sh
-- **Test infrastructure** — Removed entire `tests/` directory (test-all.sh, test-framework.sh, test-hooks.sh, test-agents.sh, test-behavioral-v2.sh, test-integration.sh, test-simulation.sh, test-behavioral.sh, fixtures/, lib/). Test infrastructure will be redesigned from scratch. References cleaned from CLAUDE.md and README.md. Note: `/qa` skill and project-level testing rules are preserved — only framework self-tests removed
-- **31 stale local branches** — Cleaned up accumulated feature/fix branches from past sessions
-- **Session logs** — Cleared `.claude/session-logs/` directory
-- **Error counter** — Removed proactive `/evolve` suggestion from stop-gate.sh and handle-failure.sh error counters
+- **`/evolve` skill** — Removed self-evolution feature. Skill, agent (`framework-evolver`), scripts (`extract-session.sh`, `apex-sync.sh`) deleted
+- **`/debug` skill** — Claude Code has native `/debug` bundled skill
+- **`/research` skill** — Claude Code has native WebSearch + WebFetch tools
+- **`/code-standards` skill** — Redundant with `.claude/rules/` path-based rules
+- **`/sql-practices` skill** — Redundant with `.claude/rules/sql.md`
+- **`/cost-management` skill** — Claude Code handles auto-compaction natively
+- **`/init` skill** — Claude Code has native `/init` command
+- **`/apex-stack` skill** — Stack recommendations go stale; WebSearch provides current data
+- **`researcher` agent** — Claude Code's native WebSearch + WebFetch + Explore subagent replace this
+- **`guard-workflow-skip.sh`** — Advisory nudge, redundant with `enforce-workflow.sh`
+- **`auto-format.sh`** — Redundant with Prettier pre-commit hook
+- **`verify-install.sh`** — Redundant with session-context.sh bootstrap detection
+- **`track-agent-start.sh`** — Claude Code natively tracks subagents
+- **Test infrastructure** — Entire `tests/` directory removed for redesign
+- **31 stale local branches** — Accumulated feature/fix branches cleaned
 
 ### Changed
-- **Agent roster** — 10 → 9 agents (Framework Evolver removed). Updated roster tables in CLAUDE.md, README.md, teams skill, and about skill
-- **README version** — Updated to v5.14.0
-- **Session learner** — Updated comments to reflect standalone role (no longer feeds evolve agent)
+- **Agent roster** — 10 → 7 agents (Framework Evolver, Researcher removed; code-reviewer replaced by official plugin)
+- **Agent skills** — Removed `code-standards`, `sql-practices`, `debug` from all agent frontmatter. Agents now reference only skills that still exist
+- **settings.json** — Removed 4 hook entries pointing to deleted scripts (UserPromptSubmit, PreToolUse verify-install, PostToolUse auto-format, SubagentStart track-agent-start)
+- **session-context.sh** — Hook verification loop updated to match actual scripts
+- **health-check.sh** — Removed auto-format.sh from critical scripts check
+- **CLAUDE.md** — `/research` references → WebSearch; Researcher agent removed from roster
+- **README.md** — Updated agent counts, replaced `/debug` and `/research` with native equivalents
+- **Installed `code-review` plugin** — Official Anthropic plugin replaces custom code-reviewer agent
+
+### Stats
+- Skills: 28 → 21 (-7)
+- Agents: 9 → 7 (-2)
+- Scripts: 22 → 18 (-4)
+- Lines deleted: ~5,900
 
 ## [Unreleased]
 

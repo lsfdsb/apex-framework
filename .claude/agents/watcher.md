@@ -8,7 +8,7 @@ permissionMode: dontAsk
 background: true
 maxTurns: 50
 memory: project
-skills: debug, security, code-standards, performance
+skills: security, performance
 ---
 
 # Watcher — The Continuous Guardian

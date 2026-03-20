@@ -7,7 +7,7 @@ model: opus
 permissionMode: plan
 isolation: none
 maxTurns: 25
-skills: code-standards, security, performance
+skills: security, performance
 memory: project
 ---
 

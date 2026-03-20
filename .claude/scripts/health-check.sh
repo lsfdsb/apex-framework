@@ -325,7 +325,6 @@ CRITICAL_SCRIPTS=(
   "session-context.sh"
   "stop-gate.sh"
   "handle-failure.sh"
-  "auto-format.sh"
 )
 
 for script in "${CRITICAL_SCRIPTS[@]}"; do

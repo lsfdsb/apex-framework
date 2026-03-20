@@ -7,7 +7,7 @@ permissionMode: default
 isolation: worktree
 maxTurns: 40
 memory: project
-skills: code-standards, sql-practices, design-system, performance, security
+skills: design-system, performance, security
 ---
 
 # Builder — The Implementation Engine
