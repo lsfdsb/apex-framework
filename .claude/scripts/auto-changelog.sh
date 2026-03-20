@@ -197,4 +197,9 @@ ${ENTRY}\\
   fi
 fi
 
+# ── Technical Writer reminder ──
+# After adding a CHANGELOG entry, remind Claude to update README if needed.
+# This is the deterministic trigger the Technical Writer needs.
+echo '{"systemMessage":"📝 APEX: CHANGELOG updated automatically. If this commit changes features, counts, or versions — spawn the Technical Writer to update README: Agent({ subagent_type: \"technical-writer\", run_in_background: true, prompt: \"Update README and CHANGELOG for latest commit.\" })"}'
+
 exit 0

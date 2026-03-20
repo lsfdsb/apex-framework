@@ -3,7 +3,7 @@ name: commit
 description: Creates a clean, conventional commit with pre-commit checks. This skill should be used when the user says "commit", "save my work", "checkpoint", or wants to commit changes. Runs lint, type check, and tests before committing. Claude should never auto-commit — the user decides when to save.
 argument-hint: "[commit message or leave blank for auto-generate]"
 disable-model-invocation: true
-allowed-tools: Read, Bash, Grep, Glob
+allowed-tools: Read, Bash, Grep, Glob, Agent
 ---
 
 # Commit — Ship Clean Code
@@ -103,8 +103,27 @@ git commit -m "feat(ui): add login page component"
 
 📚 _Teaching_: Each commit should be one logical change. If you can't describe it in one line, it's probably doing too much.
 
-## After Commit
+## After Commit — Docs Gate (MANDATORY)
 
-- Update CHANGELOG.md (invoke changelog skill)
+**Nothing ships undocumented.** After committing, you MUST update docs. This is deterministic, not optional.
+
+### Option A: Spawn Technical Writer (recommended for multi-file changes)
+```
+Agent({
+  subagent_type: "technical-writer",
+  run_in_background: true,
+  prompt: "Update CHANGELOG.md and README.md for this session.
+    Recent commit: [PASTE git log --oneline -1 OUTPUT HERE]
+    Changes: [DESCRIBE WHAT CHANGED IN 1-2 SENTENCES]
+    Run gap detection first — verify CHANGELOG covers this commit."
+})
+```
+
+### Option B: Update CHANGELOG inline (for small changes)
+Run the changelog skill: add an entry under `## [Unreleased]` in the correct category (Added/Changed/Fixed).
+
+### Always do:
 - Show the user: `git log --oneline -3` (last 3 commits for context)
 - Remind about pushing: "Your changes are saved locally. Run `git push` when ready to share."
+
+📚 _Teaching_: The Technical Writer exists so you never ship without docs. If you commit code and forget to update CHANGELOG, the next person who reads the repo won't know what changed. Documentation is a love letter to your future self.
