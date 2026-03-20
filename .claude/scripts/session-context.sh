@@ -283,7 +283,7 @@ if [ "$SOURCE" = "startup" ]; then
       echo ""
       echo "📖 Lessons from recent sessions:"
       printf "%b" "$LESSONS"
-      echo "  (Use /evolve to address recurring patterns)"
+      echo "  (Review patterns above to avoid repeating mistakes)"
     fi
   fi
 fi

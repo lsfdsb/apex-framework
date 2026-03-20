@@ -16,7 +16,7 @@ ls .claude/skills/ 2>/dev/null | head -5
 ```
 
 **If `.claude/skills/` exists and has files:**
-Tell the user: "APEX is already installed in this project! You have [count] skills ready. Use `/evolve` to improve the framework, or just start building — your safety net is active."
+Tell the user: "APEX is already installed in this project! You have [count] skills ready. Just start building — your safety net is active."
 Then STOP — do not reinstall.
 
 ## Step 1: Find the APEX Framework Source
@@ -42,7 +42,7 @@ done
      They block dangerous commands, enforce PRDs, validate commits,
      and auto-format your code. You can't accidentally break things.
 
-  🤖 Agents — 9 autonomous agents (watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, framework-evolver)
+  🤖 Agents — 9 autonomous agents (watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher)
      Claude spawns these automatically as championship teams when needed.
 
   📏 Rules — auto-load when you edit certain file types (React, SQL, etc.)

@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.12.0
+# ⚔️ APEX Framework v5.14.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.12.0           ║
+  ║         ⚔️  APEX Framework v5.14.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -173,7 +173,7 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (9 agents)
+### The Championship Roster (8 agents)
 
 | Agent | Model | Role |
 |-------|-------|------|
@@ -183,7 +183,6 @@ One install. Everything in your project's `.claude/` directory.
 | **Debugger** | Sonnet | Root cause analysis, definitive fixes |
 | **QA** | Sonnet | 6-phase quality gate |
 | **Design Reviewer** | Sonnet | UI/UX, design token compliance |
-| **Framework Evolver** | Sonnet | Self-improvement from real sessions |
 | **Watcher** | Haiku | Continuous monitoring |
 | **Technical Writer** | Haiku | Documentation, CHANGELOG |
 | **Researcher** | Haiku | API docs, library evaluation |
@@ -239,7 +238,7 @@ Layer 3: Hook scripts (runtime enforcement)
 | Tier | Model | Agents | Why |
 |------|-------|--------|-----|
 | **Decision + Security** | Opus | Lead, Code Reviewer | Best reasoning. Security gate needs the best eye. Catches vulnerabilities Sonnet misses. |
-| **Build + Analyze** | Sonnet | Builder, Debugger, QA, Design Reviewer, Evolver | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
+| **Build + Analyze** | Sonnet | Builder, Debugger, QA, Design Reviewer | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
 | **Monitor + Research** | Haiku | Watcher, Technical Writer, Researcher | Fast, cheap, excellent for reading/monitoring tasks. |
 
 ---
@@ -261,20 +260,6 @@ The bar at the bottom of your terminal shows real-time session data:
 | `15m` | Session duration |
 
 When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space. At cold start (before first API call), context shows `🟢 ready` instead of zeros.
-
----
-
-## Testing
-
-APEX tests itself with 659 tests across 4 suites:
-
-```bash
-bash tests/test-all.sh           # Run everything (659 tests, ~5 seconds)
-bash tests/test-framework.sh     # 348 structural tests
-bash tests/test-hooks.sh         # 94 hook behavior tests
-bash tests/test-agents.sh        # 122 agent validation tests
-bash tests/test-behavioral-v2.sh # 95 real behavioral tests (JSON payloads, security scanning)
-```
 
 ---
 
@@ -310,8 +295,6 @@ APEX is designed to teach you engineering while you build. Here's how to get the
 
 - Write features with less hand-holding
 - Set up CI/CD pipelines (`/cicd`)
-- Run `/evolve` to improve the framework itself
-
 ---
 
 ## Step-by-Step Guide
@@ -387,7 +370,7 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 10 specialized agents — a championship roster. Use `/teams` for parallel work, `/batman` to verify everything:
+APEX has 9 specialized agents — a championship roster. Use `/teams` for parallel work, `/batman` to verify everything:
 
 | Agent | Model | Role |
 |-------|-------|------|
@@ -400,7 +383,6 @@ APEX has 10 specialized agents — a championship roster. Use `/teams` for paral
 | **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
 | **researcher** | Haiku | Verifies APIs, libraries, best practices |
 | **sentinel** | Sonnet | The Dark Knight — `/batman` for full self-test |
-| **framework-evolver** | Sonnet | Analyzes sessions for improvements (`/evolve`) |
 
 Use `/teams` and Claude auto-selects the right roster. Use `/batman` when you need proof everything works.
 
@@ -443,19 +425,7 @@ APEX has 3 layers of protection running automatically:
 - Context preserved across compaction
 - Agent token usage tracked in the statusline
 
-### Step 7: Evolve the Framework
-
-At the end of productive sessions, say `/evolve`. The framework-evolver agent will:
-
-1. Read the full session transcript
-2. Read accumulated session logs (errors, blocks, corrections)
-3. Cross-reference against all hooks, skills, and rules
-4. Propose specific, evidence-based improvements
-5. Wait for your approval before any changes
-
-The `session-learner.sh` hook runs automatically at session end, logging errors, hook blocks, and user corrections. Over time, this data shows patterns — the framework literally learns from your usage.
-
-### Step 8: Use the StatusLine
+### Step 7: Use the StatusLine
 
 The statusline at the bottom shows real-time session data:
 
@@ -479,7 +449,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 2. **Say "teach me" often** — the teach skill turns every interaction into a learning moment.
 3. **Review PRDs before approving** — the PRD drives everything downstream. Get it right.
 4. **Run `/qa` before every PR** — it catches what you miss.
-5. **Say `/evolve` at session end** — the framework gets better every time.
+5. **Review session learnings** — check the startup banner for patterns from past sessions.
 
 ---
 
@@ -496,7 +466,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ### v5.11.0 (2026-03-18) — Agent Teams: The Championship Roster
 
-- **10 championship-grade agents** — Watcher, Builder, Debugger, QA, Code Reviewer, Design Reviewer, Technical Writer, Researcher, Sentinel (Batman), Framework Evolver
+- **9 championship-grade agents** — Watcher, Builder, Debugger, QA, Code Reviewer, Design Reviewer, Technical Writer, Researcher, Sentinel (Batman)
 - **`/teams` skill** — orchestrated parallelism with 4 presets: build, fix, review, full
 - **`/batman` (`/self-test`)** — summons the Sentinel for complete framework verification
 - **Breathing Loop** — autonomous Watcher→Debugger→QA→Builder cycle

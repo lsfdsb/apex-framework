@@ -1,1 +1,0 @@
-{"session_id": "test", "transcript_path": "/tmp/t", "cwd": "/tmp", "permission_mode": "default", "hook_event_name": "PostToolUse", "tool_name": "Bash", "tool_input": {"command": "git commit -m \"feat: add login\""}, "tool_response": {"stdout": "[main abc1234] feat: add login", "exit_code": 0}, "tool_use_id": "toolu_9"}
