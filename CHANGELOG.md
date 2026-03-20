@@ -19,6 +19,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
 
 ### Fixed
+- **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results, blinding the self-improvement loop (#117)
+- **False Positive Hook Blocks** — BLOCKED grep now only matches real hook verdicts (`BLOCKED:`), not the word "BLOCKED" in agent documentation. Fixed 5+ sessions of inflated block counts (#117)
+- **Tailwind Warning Channel** — Design token warning now outputs to stdout (was stderr), so Claude actually receives the hint (#117)
+- **Detached HEAD Guard** — Commit blocker now catches detached HEAD state, preventing orphaned commits from worktree agents (#117)
+- **Stale Agent Branch Pruning** — SessionStart now auto-prunes `agent-*` branches with no associated worktree (#117)
+- **Settings Allow List** — Added `gh pr/api/repo/run` and `git fetch/merge/rebase/push/worktree/tag` to prevent unnecessary permission prompts (#117)
 - **Debugger Git Bug** — Fixed critical `git add -A` to `git add --all -- ':!node_modules' ':!.next' ':!.cache'` that was silently staging build artifacts and breaking commits (#115)
 - **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
 - **Framework Evolver Memory** — Fixed memory type annotation for consistency with system expectations (#115)
