@@ -3,7 +3,7 @@ name: builder
 description: Full-capability implementation agent for parallel coding work. Handles feature implementation, bug fixes, refactoring, and code generation within a team. Works in isolated worktrees to avoid conflicts.
 tools: Read, Glob, Grep, Bash, Edit, Write, MultiEdit, TaskCreate, TaskUpdate, TaskList, SendMessage
 model: sonnet
-permissionMode: default
+permissionMode: dontAsk
 isolation: worktree
 maxTurns: 40
 memory: project
