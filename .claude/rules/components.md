@@ -23,9 +23,13 @@ paths:
   - Labels: `text-[10px] uppercase tracking-[0.06em] text-muted-foreground font-medium`
   - Values: `text-2xl font-bold tracking-[-0.03em]`
 - **Transition curve** — ALWAYS use `cubic-bezier(0.22,1,0.36,1)` for interactive elements (hover, click, open/close). This is the APEX signature motion.
+- **Shared vs page-specific** — If a component is used on 2+ pages, it MUST live in `src/components/`. Page-specific components go in `src/pages/[page]/components/` or colocated. Before creating a new component, run `grep -r "similar-pattern" src/components/` to check for existing ones.
+- **No duplication** — Three similar components = refactor into one with variants via props. Example: `StatCard` with `variant="compact" | "detailed"` instead of `CompactStatCard` + `DetailedStatCard`.
 - Memoize only when measured — premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.
 - Co-locate: component file, test file, and styles in the same directory.
+- **Mobile-first** — Default styles target 320px. Add `sm:`, `md:`, `lg:` for larger screens. Never the reverse.
+- **Dual theme** — Both dark and light modes must work from the first commit. Use semantic tokens. Test with `[data-theme="light"]`.
 
 ## Error Boundaries
 
