@@ -41,3 +41,4 @@ coverage/
 npm-debug.log*
 docs/design-dna/showcase/node_modules/
 docs/design-dna/showcase/dist/
+docs/design-dna/showcase/.vite/
