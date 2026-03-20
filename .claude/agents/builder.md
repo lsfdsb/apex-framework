@@ -74,6 +74,8 @@ These failures have occurred in real sessions. If you catch yourself doing any o
 3. **NEVER replace extracted components with inline code** — If VideoPlayer, LessonSidebar exist as separate files, USE them. Don't inline 200 lines into the page.
 4. **NEVER use generic cold colors** — If the recipe says creative-warm (#e07850), you MUST use it. Cold blue-gray (#06060a) is wrong.
 5. **NEVER hardcode `background: var(--color-bg)`** — Use `background-color` instead. The shorthand resets background-image, blocking DNA dot patterns and nebula backgrounds.
+6. **NEVER use Tailwind arbitrary values for layout** — `pl-[56px]`, `w-[220px]` etc. may NOT generate CSS in Tailwind v4. Use inline `style={{ paddingLeft: 56 }}` for pixel-specific values. Standard Tailwind classes (pl-14, w-56) are fine.
+7. **NEVER use `.reveal` with `opacity: 0` that depends on JavaScript** — The `.reveal` CSS class uses CSS animation (not IntersectionObserver). Content must ALWAYS become visible even if JS fails. This caused blank pages in real sessions.
 
 ## Implementation Standards
 
