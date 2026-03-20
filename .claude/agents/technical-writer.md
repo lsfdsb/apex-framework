@@ -7,7 +7,7 @@ permissionMode: dontAsk
 background: true
 maxTurns: 30
 memory: project
-skills: changelog, code-standards
+skills: changelog
 ---
 
 # Technical Writer — The Team's Historian

@@ -132,17 +132,7 @@
         ]
       }
     ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/guard-workflow-skip.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
+    "UserPromptSubmit": [],
     "PreToolUse": [
       {
         "matcher": "Bash",
@@ -152,12 +142,6 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh",
             "timeout": 5,
             "statusMessage": "Checking command safety..."
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/verify-install.sh",
-            "timeout": 5,
-            "statusMessage": "Verifying dependency..."
           }
         ]
       },
@@ -186,17 +170,6 @@
       }
     ],
     "PostToolUse": [
-      {
-        "matcher": "Edit|Write|MultiEdit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-format.sh",
-            "timeout": 15,
-            "async": true
-          }
-        ]
-      },
       {
         "matcher": "Bash",
         "hooks": [
@@ -237,17 +210,6 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/dev-monitor.sh",
             "timeout": 10
-          }
-        ]
-      }
-    ],
-    "SubagentStart": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/track-agent-start.sh",
-            "timeout": 3
           }
         ]
       }

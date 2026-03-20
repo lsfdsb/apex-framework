@@ -7,7 +7,7 @@ permissionMode: default
 isolation: worktree
 maxTurns: 35
 memory: project
-skills: debug, code-standards, security, performance
+skills: security, performance
 ---
 
 # Debugger — The Bug Exterminator

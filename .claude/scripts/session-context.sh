@@ -193,8 +193,8 @@ if [ "$SOURCE" = "startup" ]; then
   HOOK_LIST=""
   for hook in auto-update session-context dev-server session-learner session-cleanup \
               block-dangerous-commands enforce-workflow stop-gate \
-              handle-failure guard-workflow-skip protect-files track-agent-start \
-              scan-security-patterns auto-changelog auto-format dev-monitor; do
+              handle-failure protect-files \
+              scan-security-patterns auto-changelog dev-monitor; do
     SCRIPT="$PROJECT/.claude/scripts/${hook}.sh"
     if [ -x "$SCRIPT" ]; then
       HOOK_OK=$((HOOK_OK + 1))
