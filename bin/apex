@@ -1,16 +1,32 @@
 #!/bin/bash
-# apex — Open Claude Code. Split panes auto-enabled in iTerm2 + tmux.
+# apex — Open Claude Code in a project directory.
 # Usage: apex [project-dir]
+#        apex --tmux [project-dir]   # force tmux split panes
 set -euo pipefail
 
 DIR="${1:-$(pwd)}"
-DIR="$(cd "$DIR" 2>/dev/null && pwd)" || { echo "Not found: $1" >&2; exit 1; }
+TMUX_MODE=false
 
-# iTerm2 + tmux available → split panes
-if [[ "${TERM_PROGRAM:-}" == "iTerm.app" ]] && command -v tmux &>/dev/null; then
+# Parse flags
+for arg in "$@"; do
+  case "$arg" in
+    --tmux) TMUX_MODE=true ;;
+    *) DIR="$arg" ;;
+  esac
+done
+
+DIR="$(cd "$DIR" 2>/dev/null && pwd)" || { echo "Not found: $DIR" >&2; exit 1; }
+
+# Only use tmux if explicitly requested with --tmux
+if [ "$TMUX_MODE" = true ]; then
+  if ! command -v tmux &>/dev/null; then
+    echo "tmux not installed. Install: brew install tmux" >&2
+    echo "Launching without tmux..." >&2
+    cd "$DIR" && exec claude
+  fi
   tmux kill-session -t apex 2>/dev/null || true
   exec tmux -CC new-session -s apex -c "$DIR" "claude --teammate-mode tmux"
 fi
 
-# Fallback: regular claude
+# Default: launch claude directly — no tmux, no conflicts
 cd "$DIR" && exec claude
