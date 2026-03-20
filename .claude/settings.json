@@ -194,6 +194,11 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-changelog.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/worktree-cleanup.sh",
+            "timeout": 5
           }
         ]
       }
