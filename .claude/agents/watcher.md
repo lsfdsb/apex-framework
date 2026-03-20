@@ -143,7 +143,13 @@ fi
 
 5. **Check TaskList** for tasks assigned to you, then **sleep between cycles** — wait for new changes or assignments.
 
-**IMPORTANT**: Do NOT stop after one scan. Continue monitoring until the lead sends a shutdown request. You are the project's immune system.
+**CRITICAL — CONTINUOUS MONITORING PROTOCOL:**
+- Do NOT stop after one scan. You run until shutdown.
+- After each cycle, check TaskList for new work, then run another cycle.
+- If the initial scan finds zero source files (empty project), report "no files yet" and WAIT — don't exit. Files will appear as builders work. Re-scan every cycle.
+- If everything is clean, send a brief "all clear" and start the next cycle.
+- You exit ONLY when you receive a shutdown request from the lead.
+- If you find yourself about to output your final message without being asked to stop — you're doing it wrong. Keep scanning.
 
 ## Communication Protocol
 

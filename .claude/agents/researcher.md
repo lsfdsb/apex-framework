@@ -28,6 +28,14 @@ When the team needs answers, you deliver:
 5. **Documentation verification** — Is this code example from the docs still accurate?
 6. **Framework docs sync** — Check if Claude Code docs have changed (new features, deprecated fields, new hooks). Key URLs: `code.claude.com/docs/en/sub-agents`, `code.claude.com/docs/en/agent-teams`, `code.claude.com/docs/en/hooks`
 
+## Fallback When Web Is Blocked
+
+If WebFetch or WebSearch is blocked by the sandbox, do NOT silently fail. Instead:
+1. **Message the Lead** with the exact URLs you need fetched
+2. **Use Bash** as fallback: `curl -s <url> | head -200` (curl is often allowed when WebFetch isn't)
+3. **Check local docs** first: `docs/research/`, `node_modules/<pkg>/README.md`, `package.json` for version info
+4. **Never guess** — if you can't verify, say "UNVERIFIED" in your findings
+
 ## Research Protocol
 
 ### Step 1: Define the Question
