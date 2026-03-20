@@ -167,10 +167,37 @@ echo ""
 echo "🎨 Installing Design DNA pattern library..."
 if [ -d "$APEX_DIR/docs/design-dna" ]; then
   mkdir -p docs/design-dna
+  # HTML pattern pages + JS modules
   cp "$APEX_DIR"/docs/design-dna/*.html docs/design-dna/ 2>/dev/null || true
   cp "$APEX_DIR"/docs/design-dna/*.js docs/design-dna/ 2>/dev/null || true
   DNA_COUNT=$(ls docs/design-dna/*.html 2>/dev/null | wc -l | tr -d ' ')
+
+  # Design DNA Starters (v5.13+) — tokens, components, recipes
+  STARTER_COUNT=0
+  if [ -d "$APEX_DIR/docs/design-dna/tokens" ]; then
+    mkdir -p docs/design-dna/tokens/palettes
+    cp "$APEX_DIR"/docs/design-dna/tokens/*.css docs/design-dna/tokens/ 2>/dev/null || true
+    cp "$APEX_DIR"/docs/design-dna/tokens/palettes/*.css docs/design-dna/tokens/palettes/ 2>/dev/null || true
+    STARTER_COUNT=$((STARTER_COUNT + $(ls docs/design-dna/tokens/*.css docs/design-dna/tokens/palettes/*.css 2>/dev/null | wc -l | tr -d ' ')))
+  fi
+  if [ -d "$APEX_DIR/docs/design-dna/starters" ]; then
+    for subdir in layout primitives patterns; do
+      if [ -d "$APEX_DIR/docs/design-dna/starters/$subdir" ]; then
+        mkdir -p "docs/design-dna/starters/$subdir"
+        cp "$APEX_DIR/docs/design-dna/starters/$subdir"/*.tsx "docs/design-dna/starters/$subdir/" 2>/dev/null || true
+        cp "$APEX_DIR/docs/design-dna/starters/$subdir"/*.ts "docs/design-dna/starters/$subdir/" 2>/dev/null || true
+        STARTER_COUNT=$((STARTER_COUNT + $(ls "docs/design-dna/starters/$subdir"/* 2>/dev/null | wc -l | tr -d ' ')))
+      fi
+    done
+  fi
+  if [ -d "$APEX_DIR/docs/design-dna/recipes" ]; then
+    mkdir -p docs/design-dna/recipes
+    cp "$APEX_DIR"/docs/design-dna/recipes/*.md docs/design-dna/recipes/ 2>/dev/null || true
+    STARTER_COUNT=$((STARTER_COUNT + $(ls docs/design-dna/recipes/*.md 2>/dev/null | wc -l | tr -d ' ')))
+  fi
+
   echo "   ✅ $DNA_COUNT pattern pages + 2 JS modules"
+  [ "$STARTER_COUNT" -gt 0 ] && echo "   ✅ $STARTER_COUNT starter files (tokens, components, recipes)"
   echo "   Preview: node -e \"require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)\""
 fi
 
