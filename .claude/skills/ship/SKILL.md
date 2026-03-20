@@ -57,20 +57,44 @@ git push -u origin <branch>
 gh pr create --title "<commit subject>" --body "<summary + test plan>"
 ```
 
-### Step 5: Spawn Technical Writer
+### Step 5: Auto-Review (Code Reviewer + Technical Writer)
 
-**MANDATORY** — spawn the Technical Writer to update CHANGELOG and README:
+**MANDATORY** — After PR is created, spawn both in parallel:
+
 ```
+# Code Reviewer (Opus) — security gate, quality analysis
+Agent({
+  subagent_type: "code-reviewer",
+  run_in_background: true,
+  prompt: "Review PR #[NUMBER]: [TITLE]. Run full code review:
+    1. Read every changed file (git diff main..HEAD)
+    2. Check security (auth, injection, secrets, OWASP)
+    3. Check performance (N+1, bundle impact, unnecessary renders)
+    4. Check code quality (naming, complexity, DRY)
+    5. Report: APPROVED or BLOCKED with specific issues."
+})
+
+# Technical Writer — update docs
 Agent({
   subagent_type: "technical-writer",
   run_in_background: true,
-  prompt: "Audit and update docs. Changes: [DESCRIBE]. PRs: [LIST]. Run gap detection first."
+  prompt: "Update CHANGELOG and README for PR #[NUMBER]: [TITLE]. Run gap detection first."
 })
 ```
 
-### Step 6: Merge (only with user approval)
+**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for the Code Reviewer's verdict.
 
-**NEVER merge without explicit user approval.** Show the PR URL first and ask.
+### Step 6: Review Gate
+
+Wait for the Code Reviewer to report:
+- **APPROVED** → proceed to merge
+- **BLOCKED** → show the issues, fix them, push again, re-review
+
+This is the quality gate. The Code Reviewer uses Opus — the best model — specifically for this moment. It catches what QA misses: subtle security issues, architectural concerns, performance traps.
+
+### Step 7: Merge (only with user approval)
+
+**NEVER merge without explicit user approval.** Show the PR URL and Code Reviewer verdict first.
 
 If user says "merge", "merge it", "ship it":
 ```bash

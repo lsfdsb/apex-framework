@@ -93,25 +93,42 @@ This runs a diagnostic that checks every component. If everything is green, you'
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 23 scripts, 9 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
+APEX makes Claude Code build world-class apps. You focus on **what** to build. APEX handles **how**.
 
-**Built for leaders and PMs who want to learn engineering while building.** Every action explains What, Why, and How. Over weeks of use, you'll go from "what is a branch?" to reviewing PRs and debugging issues independently.
+**Built for leaders and PMs who want to ship beautiful, secure, performant apps** — and learn engineering along the way.
 
-### The Workflow
+### Three Commands. That's It.
 
 ```
-📜 /prd          → Define what you're building (APEX blocks code without one)
-🗺️ /architecture  → Plan the system design
-🔍 /research     → Verify APIs exist before using them
-🤖 /teams        → Auto-spawn agent team (Watcher, Builder, QA, Debugger)
-⚒️  Build         → Write code (agents work in parallel, APEX enforces standards)
-✅ /qa           → 6-phase quality gate (or QA agent runs automatically)
-🛡️ /security     → OWASP checklist on sensitive code
-♿ /a11y         → Accessibility audit (WCAG 2.2 AA)
-🎯 /cx-review    → Customer experience review
-📝 /commit       → Clean conventional commit
-🚀 /ship        → Fast-track branch → commit → push → PR → merge
+/prd     → Tell APEX what to build
+           APEX plans the architecture, researches APIs, spawns a team
+
+build    → APEX builds it
+           Agents work in parallel. Design DNA ensures pixel-perfect UI.
+           Quality gates run automatically. Security is scanned. Docs update.
+
+/ship    → Ship it
+           Code review (Opus) → PR → merge. Nothing ships without review.
 ```
+
+Everything else is automatic. You don't need to learn 29 commands — you need 3.
+
+### What Happens Behind the Scenes
+
+When you say `/prd my LMS app`, APEX:
+
+1. **Generates a PRD** with personas, features, data model, and API requirements
+2. **Plans the architecture** — picks components, database schema, page structure
+3. **Researches external APIs** — verifies docs before writing integration code
+4. **Reads the Design DNA recipe** — picks the right palette, fonts, backgrounds, components
+5. **Spawns a team** — Builder, Watcher, QA, Design Reviewer, Technical Writer work in parallel
+6. **Builds the app** — using starter components from Design DNA (not from scratch)
+7. **Runs quality gates** — QA agent checks code, security, performance, accessibility
+8. **Code review** — Opus-level Code Reviewer catches what QA misses
+9. **Updates docs** — CHANGELOG, README updated automatically
+10. **Ships** — PR created, reviewed, merged with one command
+
+**You see steps 1 and 10.** Steps 2-9 are invisible.
 
 ### The Philosophy
 
@@ -119,7 +136,7 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 |--------|--------|-----------|
 | **Steve Jobs** | Product | Say no to 1000 things — focus on what matters |
 | **Jony Ive** | Design | Radical simplicity — every element earns its place |
-| **Torvalds & Dean** | Code | Every line has purpose — precision, performance, no waste |
+| **Torvalds & Dean** | Code | Every line has purpose — no waste |
 | **Ionescu & Rutkowska** | Security | Defense in depth — trust nothing |
 | **Dario Amodei** | Business | Build what matters, ship with intention |
 | **Walt Disney** | Experience | Magic in every interaction |
@@ -128,20 +145,60 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 
 ## What You Get
 
-Everything installs into your project's `.claude/` directory:
+One install. Everything in your project's `.claude/` directory.
 
-| Category | Count | What it does |
-|----------|-------|-------------|
-| **Skills** | 29 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, `/ship`, etc.) — each is a specialized knowledge module |
-| **Scripts** | 23 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, dev server, etc.) |
-| **Agents** | 9 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, framework-evolver |
-| **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
-| **Output Style** | 1 | Educational — explains What/Why/How for every action |
-| **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
-| **StatusLine** | 1 | Real-time dashboard: model, context %, tokens, agents, lines changed |
-| **Design DNA** | 14 pages | Premium UI pattern library (hub, design-system, landing, CRM, e-commerce, SaaS, blog, portfolio, social, LMS, presentation, e-book, email, backoffice) + 2 JS modules |
-| **Sandbox** | 1 | OS-level protection: blocks writes to /etc, ~/.ssh, ~/.aws |
-| **Tests** | 4 suites | framework (348), hooks (94), agents (122), behavioral (95) — 659 tests total |
+### The Visible Layer (what you use)
+
+| Command | When | What happens |
+|---------|------|-------------|
+| `/prd` | Start of any new feature | Generates requirements, blocks code without one |
+| `/architecture` | After PRD approval | Plans system design, picks DNA recipe |
+| `/ship` | When ready to deploy | Commit → push → PR → code review → merge |
+| `/teach` | When you're learning | Explains concepts at your level |
+| `/qa` | Manual quality check | 6-phase gate (also runs automatically) |
+| `/teams` | Complex features | Spawns parallel agent team |
+| `/commit` | Save a checkpoint | Clean conventional commit + changelog |
+
+### The Invisible Army (works automatically)
+
+| What | How |
+|------|-----|
+| **Code standards** | Auto-enforced when you write code (TypeScript strict, no `any`, ≤30-line functions) |
+| **Security scanning** | Hook blocks hardcoded API keys, SQL injection, `eval()` on every file write |
+| **Design compliance** | Design Reviewer checks token usage, DNA patterns, branding |
+| **Library verification** | Auto-checks every `npm install` for CVEs, maintenance, license |
+| **Dangerous command blocking** | `rm -rf`, force push, `DROP TABLE` blocked deterministically |
+| **Commit format** | Conventional commits enforced by git hook (72-char, `type(scope): desc`) |
+| **Documentation** | Technical Writer updates CHANGELOG/README on every commit |
+| **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
+| **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
+
+### The Championship Roster (9 agents)
+
+| Agent | Model | Role |
+|-------|-------|------|
+| **Lead** (you + Claude) | Opus | Orchestrates everything |
+| **Code Reviewer** | Opus | Security gate — catches what QA misses |
+| **Builder** | Sonnet | Writes production code |
+| **Debugger** | Sonnet | Root cause analysis, definitive fixes |
+| **QA** | Sonnet | 6-phase quality gate |
+| **Design Reviewer** | Sonnet | UI/UX, design token compliance |
+| **Framework Evolver** | Sonnet | Self-improvement from real sessions |
+| **Watcher** | Haiku | Continuous monitoring |
+| **Technical Writer** | Haiku | Documentation, CHANGELOG |
+| **Researcher** | Haiku | API docs, library evaluation |
+
+### Design DNA — Pixel-Perfect from Day One
+
+14 premium UI pattern pages + **42 starter files** you can copy directly into your project:
+
+| Layer | Files | What |
+|-------|-------|------|
+| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) + animations + foundation |
+| **Starters** | 21 TSX | Sidebar, Header, Card, Badge, Button, Input, ProgressRing, DataTable, Modal, Tabs, Accordion, Pagination, and more |
+| **Recipes** | 13 MD | One per app type — tells the builder exactly which palette, background, and components to use |
+
+The builder reads the recipe, copies the starters, and writes only business logic. Design is inherited, not translated.
 
 ---
 
@@ -176,13 +233,13 @@ Layer 3: Hook scripts (runtime enforcement)
 
 ---
 
-## 3-Tier Model Strategy
+## Model Strategy (Benchmark-Backed)
 
-| Tier | Model | Used For |
-|------|-------|----------|
-| **Architect** | Opus | PRD, architecture, planning — the deep thinker |
-| **Builder** | Sonnet | Code writing, reviews — fast and precise |
-| **Scout** | Haiku | Research — cheap and quick for doc lookups |
+| Tier | Model | Agents | Why |
+|------|-------|--------|-----|
+| **Decision + Security** | Opus | Lead, Code Reviewer | Best reasoning. Security gate needs the best eye. Catches vulnerabilities Sonnet misses. |
+| **Build + Analyze** | Sonnet | Builder, Debugger, QA, Design Reviewer, Evolver | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
+| **Monitor + Research** | Haiku | Watcher, Technical Writer, Researcher | Fast, cheap, excellent for reading/monitoring tasks. |
 
 ---
 
@@ -208,12 +265,14 @@ When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to
 
 ## Testing
 
-APEX tests itself with three test suites:
+APEX tests itself with 659 tests across 4 suites:
 
 ```bash
-./tests/test-framework.sh  # 288 tests — validates the entire framework structure
-./tests/test-hooks.sh      # 115 tests — validates every hook script
-./tests/test-agents.sh     # 137 tests — validates agents, skills, tools, isolation, and model fitness
+bash tests/test-all.sh           # Run everything (659 tests, ~5 seconds)
+bash tests/test-framework.sh     # 348 structural tests
+bash tests/test-hooks.sh         # 94 hook behavior tests
+bash tests/test-agents.sh        # 122 agent validation tests
+bash tests/test-behavioral-v2.sh # 95 real behavioral tests (JSON payloads, security scanning)
 ```
 
 ---
