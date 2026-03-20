@@ -34,11 +34,18 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **README.md** — Updated agent counts, replaced `/debug` and `/research` with native equivalents
 - **Installed `code-review` plugin** — Official Anthropic plugin replaces custom code-reviewer agent
 
+### Fixed
+- **Builder/Debugger worktree file loss** — Root cause fix: `permissionMode: default` → `dontAsk` so worktree agents can commit. This was the actual cause of 6+ file loss incidents — not missing docs, not merge strategy.
+- **CLAUDE.md bloat** — Slimmed from 220 → 116 lines (-47%). Moved Agent Teams details to `/teams` skill. Under official 200-line recommendation.
+- **106 stale remote branches** deleted — only `main` remains
+
 ### Stats
 - Skills: 28 → 21 (-7)
 - Agents: 9 → 7 (-2)
 - Scripts: 22 → 18 (-4)
-- Lines deleted: ~5,900
+- CLAUDE.md: 220 → 116 lines (-47%)
+- Remote branches: 108 → 1
+- Lines deleted: ~6,200
 
 ## [Unreleased]
 
@@ -331,6 +338,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Bootstrap flow — fresh projects auto-detect missing .claude/ and guide through /init (#33)
 - `auto-changelog.sh` — PostToolUse hook that auto-documents every commit to CHANGELOG.md
 - auto-changelog hook + statusline Beskar Edition (cd6774d)
+- statusline PR link, UX writing, extended patterns (92c1336)
 
 ### Changed
 - StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
