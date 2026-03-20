@@ -13,7 +13,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 
 ## Identity
 
-**APEX** (Agent-Powered EXcellence) — our Claude Code framework for building world-class apps. Design like Ive, code like Torvalds & Dean, secure like Ionescu & Rutkowska, business like Amodei, experience like Disney.
+**APEX** (Agent-Powered EXcellence) — our Claude Code framework for building world-class apps. Product vision like Jobs, design like Ive, code like Torvalds & Dean, secure like Ionescu & Rutkowska, business like Amodei, experience like Disney.
 
 ## Core Rules
 
@@ -146,7 +146,10 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 4. **Worktree output must be verified** — After any builder in a worktree reports "done", the lead MUST verify files exist in the main project. Do NOT trust "success" messages from worktree agents without checking.
 5. **Research before integration code** — If the PRD lists external APIs, `/research` runs BEFORE the builder writes integration code. Never design against an API you haven't read the docs for.
 6. **Lead never does builder work** — If a builder fails (worktree file loss, stuck, etc.), do NOT rewrite files as the lead. Re-spawn a builder with `isolation: none` instead. Lead writes code only for single-file quick fixes. This prevents burning Opus context on Sonnet-level work.
-7. **Builders MUST commit in worktree** — Before reporting "done", builders run `git add -A && git commit`. Without a commit, worktree cleanup deletes all files. The lead merges from the branch. This rule exists because file loss has occurred in 4+ sessions.
+7. **Builders MUST commit in worktree** — Before reporting "done", builders run `git add -A && git commit`. Without a commit, worktree cleanup deletes all files. The lead merges from the branch. This rule exists because file loss has occurred in 6+ sessions.
+8. **Use `git checkout` to merge, not `git merge`** — `git merge <branch>` fails when main has untracked files the branch tracks. Instead use: `git checkout <branch> -- <files>` then `git add`. This is more reliable for worktree merges.
+9. **Builders should commit incrementally** — After every 3-4 files, run `git add -A && git commit -m "wip: progress"`. Partial commits create checkpoints. If the builder runs out of turns or crashes, at least some work survives.
+10. **Lead must inject DNA into builder prompts** — When spawning builders for UI work, include the Design DNA page path AND key values (palette, fonts, patterns) in the prompt. Builders that only get "build the dashboard" will use generic cold colors. Builders that get "build the dashboard using creative palette bg=#0f0d0b, accent=#e07850, font=Instrument Serif from docs/design-dna/lms.html" will match the DNA. This has caused full UI rebuilds in real sessions.
 
 ### The Roster
 | Role | Agent | Model | Purpose |

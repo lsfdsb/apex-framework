@@ -1,10 +1,11 @@
-# ⚔️ APEX Framework v5.11.2
+# ⚔️ APEX Framework v5.12.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.11.2           ║
+  ║         ⚔️  APEX Framework v5.12.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
+  ║  Product vision like Steve Jobs              ║
   ║  Design like Jony Ive                        ║
   ║  Code like Torvalds & Dean                   ║
   ║  Secure like Ionescu & Rutkowska             ║
@@ -18,7 +19,7 @@
   ╚══════════════════════════════════════════════╝
 ```
 
-> *"Whatever you do, do it well."* — Walt Disney
+> *"People don't know what they want until you show it to them."* — Steve Jobs
 
 ---
 
@@ -109,13 +110,14 @@ APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It
 ♿ /a11y         → Accessibility audit (WCAG 2.2 AA)
 🎯 /cx-review    → Customer experience review
 📝 /commit       → Clean conventional commit
-🦇 /batman       → Summon the Sentinel — full framework self-test
+🚀 /ship        → Fast-track branch → commit → push → PR → merge
 ```
 
 ### The Philosophy
 
 | Master | Domain | Principle |
 |--------|--------|-----------|
+| **Steve Jobs** | Product | Say no to 1000 things — focus on what matters |
 | **Jony Ive** | Design | Radical simplicity — every element earns its place |
 | **Torvalds & Dean** | Code | Every line has purpose — precision, performance, no waste |
 | **Ionescu & Rutkowska** | Security | Defense in depth — trust nothing |
@@ -139,7 +141,7 @@ Everything installs into your project's `.claude/` directory:
 | **StatusLine** | 1 | Real-time dashboard: model, context %, tokens, agents, lines changed |
 | **Design DNA** | 14 pages | Premium UI pattern library (hub, design-system, landing, CRM, e-commerce, SaaS, blog, portfolio, social, LMS, presentation, e-book, email, backoffice) + 2 JS modules |
 | **Sandbox** | 1 | OS-level protection: blocks writes to /etc, ~/.ssh, ~/.aws |
-| **Tests** | 3 suites | framework (352 tests), hooks (115 tests), agents (137 tests) |
+| **Tests** | 4 suites | framework (348), hooks (94), agents (122), behavioral (95) — 659 tests total |
 
 ---
 

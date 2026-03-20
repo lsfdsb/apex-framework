@@ -5,13 +5,48 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
+
+The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.
+
 ### Added
-- **CRM Patterns Expansion** — CRM page scaled from 15 to 19 patterns: sidebar navigation (collapsible with logo, sections, icons, active states, badges, user avatar), CRM dashboard (KPI strip with sparklines, bar charts, donut charts, activity feed), helpdesk dashboard (SLA metrics, queue by channel, agent performance cards)
-- **Design DNA Routing Table** — design-system SKILL.md updated with dedicated entries for sidebar navigation and dashboard layouts, helping builders find the right pattern faster
+- **Behavioral Test Suite v2** — 95 real behavioral tests: security payload scanning (Stripe/AWS/GitHub/OpenAI keys), PRD enforcement with temp directories, commit-msg format validation, Breathing Loop wiring verification, model assignment checks (#105)
+- **DNA Extraction Protocol** — Builders must extract palette/fonts/patterns into a checklist BEFORE writing any code. Prevents the "read DNA then ignore it" failure seen in real builds (#105)
+- **Rule Zero** — Commit protocol moved to TOP of builder agent prompt. Incremental commits every 3-4 files. Prevents worktree file loss (66% failure rate in Axel LMS build) (#105)
+- **Auto-update rollback** — If update fails, automatically restores from backup. Backup cleanup after 7 days (#105)
+- **Scan Responsibility Matrix** — Each check has ONE owner. No agent duplication. Watcher=continuous, QA=final gate, Design Reviewer=visual (#105)
+- **Task Auto-Claim Protocol** — Builder, Debugger, QA, Technical Writer auto-claim tasks tagged with `[build]`/`[bug]`/`[qa]`/`[docs]` from TaskList (#105)
+- **Research→Build dependency** — Tasks with `addBlockedBy` prevent builders from starting integration code before research completes (#105)
+- **Steve Jobs** — Product vision added to framework philosophy. "Say no to 1000 things" (#105)
 
 ### Changed
-- **Default Palette** — Changed from SaaS to Creative Warm (emerald + coral + warm grays) for more distinctive brand expression
-- **Default Backgrounds** — Dots static pattern + Nebula animated background as visual system defaults (persisted via localStorage)
+- **Code Reviewer → Opus** — Security gate gets the best model. Benchmark-backed: Opus catches 1-2 more vulnerabilities per 10 reviews than Sonnet (#105)
+- **Framework Evolver → Sonnet** — Architectural reasoning needs Sonnet, not Haiku (#105)
+- **Design Reviewer gets Bash** — Can now run automated design token compliance checks (#105)
+- **Watcher delta monitoring** — Continuous loop that only re-checks changed files, not full scans (#105)
+- **Merge strategy** — `git checkout <branch> -- <files>` instead of `git merge` (avoids untracked file conflicts) (#105)
+- **jq → soft requirement** — Installation continues without jq; hooks degrade gracefully (#105)
+- **Linux install guidance** — Platform-aware instructions (apt/dnf) (#105)
+- **Teams TL;DR** — Quick-start section at top of 349-line skill (#105)
+- **Cost-management expanded** — From 28 to 60 lines with model cost table and context indicators (#105)
+- **Builder HTML→React translation** — 7-step guide for converting DNA HTML pages to React/Tailwind components (#105)
+
+### Fixed
+- **GitHub repo reference** — `lfrfrfl` → `lsfdsb` in install.sh (broke first-time installs) (#105)
+- **Missing script warnings** — Removed `enforce-commit-msg`, `log-subagent`, `post-compact` from session-context hook check (#105)
+- **Security regex hardened** — GitHub tokens (ghp_30+ chars), OpenAI keys (sk-*-* with hyphens) now detected (#105)
+- **PRD detection simplified** — 2 canonical checks instead of 4 fragile fallbacks (#105)
+- **CLAUDE.md rules 1-19** — Fixed numbering (was 1-12, 16-19, 13-15) (#105)
+- **Stale counts everywhere** — README, about skill, init skill, install guide all now show correct numbers (29 skills, 9 agents, 23 scripts, 659 tests) (#105)
+- **test-all.sh** — Now runs all 4 suites with correct count parsing for agents output format (#105)
+- **test-agents.sh** — Fixed syntax error (stray `fi`) and unbound `ROSTER_AGENTS` variable (#105)
+- **Log rotation** — handle-failure.sh trims to 200 lines when exceeding 500 (#105)
+- **health-check.sh** — Removed reference to deleted `enforce-commit-msg.sh` (#105)
+- **test-simulation.sh** — Replaced stale `enforce-commit-msg` assertion (#105)
+
+### Removed
+- **CRM Patterns Expansion** — Moved to [Unreleased] in previous version, now part of v5.11.2 scope
+- remove fake testing — sentinel, self-test, observatory (#104)
 
 ## [5.11.2] — 2026-03-19 — Design DNA Distribution + Framework Tooling
 

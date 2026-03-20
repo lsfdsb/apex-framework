@@ -124,10 +124,14 @@ The framework *breathes* when the team operates as a continuous cycle without hu
 After ANY builder agent completes:
 
 1. **Check the builder's completion message** — it MUST include a branch name and commit hash
-2. **Merge the branch**: `git merge <builder-branch> --no-commit` or `git cherry-pick <commit>`
-3. **Verify files exist**: `ls -la` on every file the builder listed
-4. **If files are missing but branch exists**: `git show <branch>:<path>` to recover
-5. **If no commit was made**: Files are LOST. Re-spawn builder with `isolation: none`
+2. **If no commit hash**: Files are LOST. Re-spawn builder with `isolation: none`
+3. **Merge files** (use checkout, NOT git merge — avoids untracked file conflicts):
+   ```bash
+   git checkout <builder-branch> -- src/ # checkout specific dirs from builder's branch
+   git add src/                          # stage the new files
+   ```
+4. **Verify files exist**: `ls -la` on every file the builder listed
+5. **If files are missing but branch exists**: `git show <branch>:<path> > <path>` to recover
 
 ### When Builders Fail — Recovery Protocol
 
@@ -251,7 +255,10 @@ Agent({
   team_name: "feat-landing-page",
   name: "builder",
   subagent_type: "builder",
-  prompt: "Implement the landing page with hero, features grid, and CTA."
+  prompt: "Implement the landing page with hero, features grid, and CTA.
+    DESIGN DNA: Read docs/design-dna/landing.html FIRST.
+    Extract the palette, fonts, and patterns before writing ANY code.
+    globals.css must match the DNA palette exactly."
 })
 
 Agent({
