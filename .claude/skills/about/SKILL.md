@@ -24,6 +24,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ║   Location:   São Paulo, BR → The World                   ║
      ║                                                           ║
      ║   Philosophy:                                             ║
+     ║     Product vision like Steve Jobs                        ║
      ║     Design like Jony Ive                                  ║
      ║     Code like Linus Torvalds & Jeff Dean                  ║
      ║     Secure like Alex Ionescu & Joanna Rutkowska           ║
