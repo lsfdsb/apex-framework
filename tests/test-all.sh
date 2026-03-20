@@ -51,7 +51,6 @@ run_suite "Framework"    "$SCRIPT_DIR/test-framework.sh"
 run_suite "Hooks"        "$SCRIPT_DIR/test-hooks.sh"
 run_suite "Agents"       "$SCRIPT_DIR/test-agents.sh"
 run_suite "Behavioral"   "$SCRIPT_DIR/test-behavioral.sh"
-run_suite "Observatory"  "$SCRIPT_DIR/test-observatory.sh"
 
 END_TIME=$(date +%s)
 DURATION=$((END_TIME - START_TIME))

@@ -157,7 +157,6 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 | Design Reviewer | design-reviewer | sonnet | UI/UX and accessibility |
 | Technical Writer | technical-writer | haiku | CHANGELOG, README, docs |
 | Researcher | researcher | haiku | API/docs investigation |
-| Sentinel | sentinel | sonnet | The Dark Knight — /self-test, /batman |
 | Framework Evolver | framework-evolver | sonnet | Self-improvement — /evolve |
 
 ### Presets

@@ -34,7 +34,6 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
 | **Researcher** | researcher | haiku | background | API/docs investigation |
-| **Sentinel** | sentinel | sonnet | worktree | The Dark Knight — /self-test, /batman |
 | **Framework Evolver** | framework-evolver | sonnet | none | Self-improvement — /evolve |
 
 ## Team Presets
