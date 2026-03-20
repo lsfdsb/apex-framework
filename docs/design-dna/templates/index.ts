@@ -39,3 +39,4 @@ export { default as EmailTemplate } from "./EmailTemplate";
 export { default as PresentationSlide } from "./PresentationSlide";
 export { default as EbookPage } from "./EbookPage";
 export { default as DesignSystemPage } from "./DesignSystemPage";
+export { default as PatternShowcase } from "./PatternShowcase";

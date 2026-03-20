@@ -200,7 +200,7 @@ export default function SaaSDashboard() {
     <Sidebar
       logo={
         <span className="text-[14px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text)" }}>
-          {!collapsed && "Acme"}
+          {!collapsed && "AppName"}
         </span>
       }
       sections={sidebarSections}

@@ -190,15 +190,16 @@ One install. Everything in your project's `.claude/` directory.
 
 ### Design DNA — Pixel-Perfect from Day One
 
-14 premium UI pattern pages + **42 starter files** you can copy directly into your project:
+14 premium UI pattern pages + **65 production-ready files** you can copy directly into your project:
 
 | Layer | Files | What |
 |-------|-------|------|
-| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) + animations + foundation |
-| **Starters** | 21 TSX | Sidebar, Header, Card, Badge, Button, Input, ProgressRing, DataTable, Modal, Tabs, Accordion, Pagination, and more |
+| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + animations + foundation |
+| **Starters** | 24 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal) |
+| **Templates** | 14 TSX | Landing, SaaS Dashboard, CRM Pipeline, E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase — full pages ready to customize |
 | **Recipes** | 13 MD | One per app type — tells the builder exactly which palette, background, and components to use |
 
-The builder reads the recipe, copies the starters, and writes only business logic. Design is inherited, not translated.
+The builder reads the recipe, copies the starters and templates, and writes only business logic. Design is inherited, not translated.
 
 ---
 
