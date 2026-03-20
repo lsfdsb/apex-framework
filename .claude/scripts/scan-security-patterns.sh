@@ -42,7 +42,7 @@ deny() {
 
 # ── Pattern 1: Hardcoded API keys with known prefixes ──
 # These prefixes are provider-specific and should NEVER be in source code.
-if echo "$CONTENT" | grep -qE "(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[A-Z0-9]{16}|sk_live_[a-zA-Z0-9]+|sk_test_[a-zA-Z0-9]+)"; then
+if echo "$CONTENT" | grep -qE "(sk-[a-zA-Z0-9_-]{20,}|ghp_[a-zA-Z0-9]{30,}|AKIA[A-Z0-9]{16}|sk_live_[a-zA-Z0-9]+|sk_test_[a-zA-Z0-9]+)"; then
   deny "⚔️ APEX SECURITY: Hardcoded API key detected.
 
   📚 WHY THIS IS DANGEROUS:

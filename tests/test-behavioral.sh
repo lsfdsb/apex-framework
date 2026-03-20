@@ -77,7 +77,7 @@ assert_exit "handles empty input" 0 "$E"
 section "enforce-workflow"
 
 E=0; run_hook enforce-workflow.sh pretooluse-write.json || E=$?
-assert_exit "allows safe write" 0 "$E"
+assert_exit "blocks src/app write without PRD" 2 "$E"
 
 E=0; run_hook enforce-workflow.sh empty.json || E=$?
 assert_exit "handles empty input" 0 "$E"

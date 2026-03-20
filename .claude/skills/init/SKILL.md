@@ -42,8 +42,8 @@ done
      They block dangerous commands, enforce PRDs, validate commits,
      and auto-format your code. You can't accidentally break things.
 
-  🤖 Agents — 4 autonomous sub-agents (code review, research, etc.)
-     Claude spawns these automatically when needed.
+  🤖 Agents — 9 autonomous agents (watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, framework-evolver)
+     Claude spawns these automatically as championship teams when needed.
 
   📏 Rules — auto-load when you edit certain file types (React, SQL, etc.)
 

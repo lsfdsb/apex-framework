@@ -2,7 +2,7 @@
 # install.sh — One-command APEX Framework installer
 #
 # Usage:
-#   git clone https://github.com/lfrfrfl/apex-framework.git ~/.apex-framework
+#   git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework
 #   cd my-project
 #   ~/.apex-framework/install.sh
 #
@@ -30,20 +30,30 @@ fi
 MISSING=""
 if ! command -v git &>/dev/null; then
   MISSING="$MISSING git"
+  echo "❌ git is required"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "   Install: xcode-select --install"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "   Install: sudo apt install git  (Debian/Ubuntu)"
+    echo "         or: sudo dnf install git  (Fedora/RHEL)"
+  fi
 fi
 if ! command -v jq &>/dev/null; then
-  MISSING="$MISSING jq"
+  echo "⚠️  jq is recommended (hooks degrade gracefully without it)"
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "   Install: brew install jq"
+  elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    echo "   Install: sudo apt install jq  (Debian/Ubuntu)"
+    echo "         or: sudo dnf install jq  (Fedora/RHEL)"
+  fi
 fi
 if ! command -v claude &>/dev/null; then
   MISSING="$MISSING claude"
+  echo "❌ claude CLI is required"
+  echo "   Install: https://docs.anthropic.com/en/docs/claude-code"
 fi
 
 if [ -n "$MISSING" ]; then
-  echo "❌ Missing required tools:$MISSING"
-  echo ""
-  [ -z "$(command -v git 2>/dev/null)" ] && echo "  git    → comes with macOS (xcode-select --install)"
-  [ -z "$(command -v jq 2>/dev/null)" ] && echo "  jq     → https://jqlang.github.io/jq/download/"
-  [ -z "$(command -v claude 2>/dev/null)" ] && echo "  claude → https://docs.anthropic.com/en/docs/claude-code"
   echo ""
   echo "Install the missing tools, then run this script again."
   exit 1
@@ -57,7 +67,7 @@ elif [ -d "$HOME/.apex-framework/.claude" ]; then
   APEX_DIR="$HOME/.apex-framework"
 else
   echo "❌ APEX Framework not found. Clone it first:"
-  echo "   git clone https://github.com/lfrfrfl/apex-framework.git ~/.apex-framework"
+  echo "   git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework"
   exit 1
 fi
 

@@ -92,7 +92,7 @@ This runs a diagnostic that checks every component. If everything is green, you'
 
 ## What Is APEX?
 
-APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 29 scripts, 10 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
+APEX (Agent-Powered EXcellence) is a configuration framework for Claude Code. It's not a library or npm package — it's **29 skills, 23 scripts, 9 agents, 7 rules, and 1 output style** that enforce a disciplined development workflow with a self-learning, self-testing feedback loop.
 
 **Built for leaders and PMs who want to learn engineering while building.** Every action explains What, Why, and How. Over weeks of use, you'll go from "what is a branch?" to reviewing PRs and debugging issues independently.
 
@@ -131,8 +131,8 @@ Everything installs into your project's `.claude/` directory:
 | Category | Count | What it does |
 |----------|-------|-------------|
 | **Skills** | 29 | Slash commands (`/prd`, `/qa`, `/security`, `/teach`, `/ship`, etc.) — each is a specialized knowledge module |
-| **Scripts** | 29 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, dev server, etc.) |
-| **Agents** | 10 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, sentinel (Batman), framework-evolver |
+| **Scripts** | 23 | Hook scripts + utilities — the automation layer (auto-format, dangerous command blocking, dev server, etc.) |
+| **Agents** | 9 | Championship roster: watcher, builder, debugger, qa, code-reviewer, design-reviewer, technical-writer, researcher, framework-evolver |
 | **Rules** | 7 | Path-based rules that auto-load when you edit certain file types (React, SQL, API, etc.) |
 | **Output Style** | 1 | Educational — explains What/Why/How for every action |
 | **Git Hooks** | 2 | pre-commit (type check + lint + format) and commit-msg (conventional format) |
@@ -167,7 +167,7 @@ Layer 3: Hook scripts (runtime enforcement)
 | Hook | What it catches | Why it matters |
 |------|----------------|----------------|
 | `block-dangerous-commands.sh` | `rm -rf`, force push, `DROP TABLE` | Prevents irreversible data loss |
-| `enforce-commit-msg.sh` | Non-conventional commit messages | Keeps git history readable |
+| `scan-security-patterns.sh` | Hardcoded secrets, API keys, SQL injection | Catches vulnerabilities before they enter the codebase |
 | `protect-files.sh` | Direct edits to `.env`, lock files, `node_modules` | Protects secrets and generated files |
 | `enforce-workflow.sh` | New app/component files without a PRD | Prevents building without a plan |
 | `stop-gate.sh` | Code written but tests not run | Reminds you to verify your work |

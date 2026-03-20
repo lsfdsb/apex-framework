@@ -113,12 +113,37 @@ done
 **Step 5 — Report findings via SendMessage to lead.**
 
 ### Cycle 2+: Delta Monitoring
-After the initial scan, monitor only changes:
-1. Run `git diff` to see what changed since last check
-2. Re-run only failing tests to see if they're fixed
-3. Re-scan only modified files for new violations
-4. Report only NEW findings (don't repeat known issues)
-5. If all previous issues are resolved, report "all clear"
+
+After the initial scan, enter a monitoring loop. On each cycle:
+
+1. **Check for new changes** since last scan:
+```bash
+CHANGED=$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null)
+```
+
+2. **If changes detected**, re-run relevant checks ONLY on changed files:
+```bash
+for f in $(echo "$CHANGED" | grep -E '\.(ts|tsx|js|jsx)$'); do
+  [ -f "$f" ] || continue
+  wc -l "$f" | awk '$1 > 300 {print "⚠️ OVER 300 LINES:", $0}'
+  grep -n 'console\.log' "$f" 2>/dev/null && echo "  ↑ in $f"
+  grep -n ': any' "$f" 2>/dev/null && echo "  ↑ in $f"
+done
+```
+
+3. **Re-run build/test** if source files changed:
+```bash
+if echo "$CHANGED" | grep -qE '\.(ts|tsx|js|jsx)$'; then
+  npm run build 2>&1 | tail -10
+  npm test 2>&1 | tail -20
+fi
+```
+
+4. **Report issues** via TaskCreate for any NEW violations found.
+
+5. **Check TaskList** for tasks assigned to you, then **sleep between cycles** — wait for new changes or assignments.
+
+**IMPORTANT**: Do NOT stop after one scan. Continue monitoring until the lead sends a shutdown request. You are the project's immune system.
 
 ## Communication Protocol
 

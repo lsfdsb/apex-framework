@@ -566,7 +566,7 @@ assert_file_contains "$SETTINGS" "block-dangerous-commands" "Dangerous command b
 assert_file_contains "$SETTINGS" "enforce-workflow" "Workflow enforcer is wired"
 assert_file_contains "$SETTINGS" "scan-security-patterns" "Security scanner is wired"
 assert_file_contains "$SETTINGS" "protect-files" "File protector is wired"
-assert_file_contains "$SETTINGS" "enforce-commit-msg" "Commit message enforcer is wired"
+assert_file_contains "$SETTINGS" "auto-changelog" "Auto-changelog is wired"
 assert_file_contains "$SETTINGS" "session-context" "Session context is wired"
 
 # 12.3 All referenced scripts exist

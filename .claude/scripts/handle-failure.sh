@@ -107,4 +107,10 @@ PREV=0
 [ -f "$ERROR_COUNTER" ] && PREV=$(cat "$ERROR_COUNTER" 2>/dev/null || echo "0")
 echo $((PREV + 1)) > "$ERROR_COUNTER"
 
+# ── Log rotation — prevent unbounded growth ──
+LOG_FILE="${CLAUDE_PROJECT_DIR:-.}/.claude/.failure-log"
+if [ -f "$LOG_FILE" ] && [ "$(wc -l < "$LOG_FILE")" -gt 500 ]; then
+  tail -200 "$LOG_FILE" > "${LOG_FILE}.tmp" && mv "${LOG_FILE}.tmp" "$LOG_FILE"
+fi
+
 exit 0

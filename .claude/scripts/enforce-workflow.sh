@@ -71,12 +71,11 @@ prd_exists() {
   [ -d "$dir" ] && [ "$(find "$dir" -name "*.md" -type f 2>/dev/null | wc -l | tr -d ' ')" -gt 0 ]
 }
 
-# Check CLAUDE_PROJECT_DIR first, then CWD, then relative path
-if [ -n "${CLAUDE_PROJECT_DIR:-}" ] && prd_exists "$CLAUDE_PROJECT_DIR"; then exit 0; fi
-if prd_exists "$(pwd)"; then exit 0; fi
-if prd_exists "."; then exit 0; fi
-# Also accept PRD files anywhere in docs/ as a fallback
-if [ -d "docs" ] && find docs -name "*prd*" -o -name "*PRD*" -o -name "*requirements*" 2>/dev/null | grep -qE '\.(md|txt)$'; then exit 0; fi
+# Check canonical location: docs/prd/ with at least one .md file
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
+if prd_exists "$PROJECT_DIR"; then exit 0; fi
+# Also accept a single PRD.md at project root or one level deep (simple projects)
+if find "$PROJECT_DIR" -maxdepth 2 -name "PRD.md" -size +0 -type f 2>/dev/null | head -1 | grep -q .; then exit 0; fi
 
 # --- BLOCK: No PRD found ---
 deny "BLOCKED: No PRD found in docs/prd/. APEX enforces: PRD before code. Creating new app/component files requires a Product Requirements Document first. To unblock: (1) Run /prd [feature name] to generate a PRD, or (2) create docs/prd/your-feature-prd.md manually. Exemptions (these always pass): editing existing files, test files, docs, config, migrations, scripts, files outside src/app/, src/components/, app/, components/."
