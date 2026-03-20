@@ -47,7 +47,20 @@ When reviewing, check:
    - Run the **9-point verification checklist** from `reference.md` Translation Guide: font sizes ±1px, spacing ±2px, same radius, correct tokens, hover states, active states, typography hierarchy, animations, dark+light mode
    - If the builder "interpreted" or was "inspired by" instead of matching the DNA, BLOCK — the DNA is the spec, not inspiration
 
-10. **Visual Distinctiveness** (Ive Standard):
+10. **Component Duplication** (Architecture):
+   - Scan for similar components across the codebase: similar JSX structure, similar props, similar styling
+   - If two components do the same thing differently (e.g., two stat card variants), flag for consolidation
+   - Check: are shared components in `src/components/` being reused, or are pages re-implementing patterns?
+   - Pattern duplication = BLOCK — consolidate into a shared component first
+   - Verify the architecture doc's component tree matches the actual codebase
+
+11. **Mobile + Theme** (Non-negotiable):
+   - Every page/component MUST work at 320px width — check for horizontal scroll, overflow, unreadable text
+   - Both dark and light themes MUST render correctly — check for hardcoded colors, invisible text, broken contrast
+   - Missing responsive behavior = BLOCK
+   - Missing theme support = BLOCK
+
+12. **Visual Distinctiveness** (Ive Standard):
    - Does this look like every other AI-generated site? If yes, BLOCK
    - Check for banned anti-patterns (from reference.md): centered gradient hero, 3-column icon grid, blue/purple default palette, uniform card grid, two CTAs in hero, "Welcome to [App]" headline
    - Check for premium patterns: asymmetric layout, typography-driven hierarchy, one accent color, intentional whitespace, scroll-reveal animations, stagger effects

@@ -67,6 +67,24 @@ done | awk '$1 > 300 {print "⚠️ OVER LIMIT:", $0}'
 grep -rn 'console\.log' --include='*.ts' --include='*.tsx' src/ 2>/dev/null | grep -v test
 grep -rn ': any' --include='*.ts' --include='*.tsx' src/ 2>/dev/null
 
+# Phase 3.5: Component Duplication Scan
+# Find similar component names that suggest duplication
+find src/components src/pages -name "*.tsx" 2>/dev/null | xargs grep -l "export" 2>/dev/null | sort | while read f; do
+  basename "$f" .tsx
+done | sort | uniq -d | while read dup; do
+  echo "⚠️ DUPLICATE COMPONENT NAME: $dup.tsx exists in multiple locations"
+done
+
+# Check for hardcoded Tailwind palette colors (design token violation)
+grep -rnE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal)-(50|100|200|300|400|500|600|700|800|900)' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null | head -10 | while read line; do
+  echo "⚠️ HARDCODED COLOR: $line — use semantic tokens"
+done
+
+# Check for missing responsive: any fixed width over 400px without responsive
+grep -rnE 'w-\[([5-9][0-9]{2}|[0-9]{4,})px\]' --include='*.tsx' src/ 2>/dev/null | head -5 | while read line; do
+  echo "⚠️ FIXED WIDTH: $line — may break mobile"
+done
+
 # Phase 4: Security Scan
 grep -rnE '(sk-[a-zA-Z0-9]{20,}|ghp_|AKIA|password\s*=\s*["\x27])' --include='*.ts' src/ 2>/dev/null
 grep -rnE '(eval\s*\(|new\s+Function\s*\()' --include='*.ts' src/ 2>/dev/null

@@ -45,9 +45,41 @@ You are designing: $ARGUMENTS
 3. Design service abstraction layer (never call external APIs directly from components)
 4. Plan for mock/test mode that doesn't hit real APIs
 
+**Component Audit** — REQUIRED before any build starts:
+```markdown
+## Component Tree
+### Shared Components (used by 2+ pages)
+| Component | Used By | Props | Design DNA Reference |
+|-----------|---------|-------|---------------------|
+| PageHeader | All pages | label, title, description | apex-label + heading pattern |
+| StatCard | Dashboard, Analytics | label, value, sub, spark | crm.html KPI card |
+| DataTable | Contacts, Invoices | columns, data, pagination | crm.html data table |
+| FilterBar | Contacts, Pipeline | filters, activeFilters | crm.html filter bar |
+| SidebarNav | All app pages | items, active | crm.html sidebar |
+
+### Page-Specific Components
+| Component | Page | Why Not Shared |
+|-----------|------|---------------|
+| PipelineKanban | Pipeline | Unique drag-drop behavior |
+| ConversationView | Queue | Channel-specific rendering |
+```
+
+**Rules:**
+- If a pattern appears on 2+ pages, it MUST be a shared component
+- Every shared component references a specific Design DNA section
+- Builder agents MUST search for existing components before creating new ones
+- The component tree is reviewed BEFORE implementation begins
+
+**Mobile-First + Dark/Light Mode** — REQUIRED from architecture phase:
+- ALL layouts designed mobile-first (320px → 1440px)
+- Dark mode is the default; light mode must be designed simultaneously
+- Use CSS custom properties / Tailwind semantic tokens (never raw colors)
+- Breakpoints: 640, 768, 1024, 1280 (defined in design-system skill)
+- Test at minimum: 320px, 768px, 1280px + both themes
+
 **ADRs** — For every significant choice: Context, Decision, Consequences, Alternatives.
 
-4. **Return summary** of architecture decisions, the persona→page map, and any trade-offs for user review. Explicitly list any integrations that still need `/research`.
+4. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need `/research`.
 
 ## Production Observability
 

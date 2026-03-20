@@ -42,11 +42,14 @@ Follow these APEX conventions strictly:
 - **Files ≤ 300 lines** — Split into modules if growing
 - **Components ≤ 200 lines** — Extract sub-components
 - **Read first, edit second** — Never modify code you haven't read
+- **Reuse check BEFORE creating** — Before creating ANY new component, search the codebase: `grep -r "export.*function\|export default" src/components/ 2>/dev/null`. If a similar component exists, extend it — don't duplicate it. Three similar files = failed architecture.
 - **Minimal changes** — Only change what's needed for the task
 - **No over-engineering** — Solve the current problem, not hypothetical ones
 - **Accessible by default** — Semantic HTML, ARIA labels, keyboard navigation
-- **Responsive by default** — Mobile-first, works at 320px
+- **Mobile-first always** — Design for 320px first, enhance upward. Test at 320px, 768px, 1280px
+- **Dark + Light from start** — Use semantic tokens only (`primary`, `muted`, `destructive`). Never raw colors. Both themes must work from day one
 - **Error states always** — Every async operation needs loading, error, and empty states
+- **Performance by default** — Lazy load routes, virtualize lists 100+ items, no unnecessary re-renders, `React.memo` only when measured
 
 ## Visual Quality Standards
 
