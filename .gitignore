@@ -31,6 +31,8 @@ coverage/
 .claude/settings.local.json
 .claude/.apex-state.json
 .claude/.failure-log
+.claude/.dna-server.pid
+.claude/.dev-server.pid
 .claude/session-logs/
 .claude/worktrees/
 
