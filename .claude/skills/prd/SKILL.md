@@ -26,7 +26,7 @@ Gather or infer answers for:
 4. **Constraints** — Timeline, stack, integrations.
 5. **Feeling** — How should users *feel*? (Our CX philosophy demands this.)
 6. **Communication channels** — Does the business use phone, email, WhatsApp, chat, SMS? If ANY communication channel is mentioned (call center, régua de comunicação, outbound, inbound, support, helpdesk), extract explicit requirements for a messaging/helpdesk module. Don't wait for the user to ask — CX-intensive businesses ALWAYS need this.
-7. **External integrations** — List every API, service, or platform mentioned (Twilio, Resend, WhatsApp, Stripe, etc.). Flag each for `/research` before implementation.
+7. **External integrations** — List every API, service, or platform mentioned (Twilio, Resend, WhatsApp, Stripe, etc.). Flag each for API verification via WebSearch before implementation.
 8. **Real business data** — If the user provides product names, prices, revenue figures, team sizes, or customer counts, record them exactly. Mock data MUST reflect these real values, not generic placeholders.
 
 ### Step 2: Research
@@ -82,7 +82,7 @@ By feature area: description, inputs/outputs, validations, error handling.
 For EVERY external API or service mentioned:
 | Integration | Purpose | Auth Method | Rate Limits | Priority |
 |-------------|---------|-------------|-------------|----------|
-**RULE**: Each integration listed here MUST have `/research` invoked before implementation begins. Never design integration architecture without checking actual API documentation first.
+**RULE**: Each integration listed here MUST have its API docs verified via WebSearch before implementation begins. Never design integration architecture without checking actual documentation first.
 
 ## 9. Non-Functional Requirements
 - **Performance**: Page load < 2s, API response < 200ms, Lighthouse > 90
@@ -176,9 +176,9 @@ If the user provided real business data (product names, prices, metrics, team st
 ### Step 6: Research Triggers
 List all external integrations identified and output a checklist:
 ```
-⬜ /research [integration] — before implementation
+⬜ WebSearch [integration] API docs — before implementation
 ```
-The lead MUST invoke `/research` for each item before any builder touches integration code.
+The lead MUST verify API docs via WebSearch for each item before any builder touches integration code.
 
 ### Step 7: Summary
 Return a brief summary of key decisions, open questions, research items needed, and the persona→page mapping for user review.

@@ -23,26 +23,23 @@ Extract `apex-skills-claude-web.tar.gz` first. Upload all 26 files.
 | File | Purpose |
 |------|---------|
 | `prd.md` | Generates complete PRD |
-| `code-standards.md` | TypeScript/React patterns |
 | `design-system.md` | UI/UX Jony Ive style |
 | `security.md` | OWASP security audit |
-| `sql-practices.md` | PostgreSQL/Supabase patterns |
-| `qa.md` | 5-phase quality gate |
+| `qa.md` | 6-phase quality gate |
 | `teach.md` | Teaches programming |
 | `about.md` | Easter egg ⚔️ |
-| `debug.md` | Debugging protocol |
 
 ### Workflow skills:
 
-`architecture.md`, `research.md`, `performance.md`, `cx-review.md`, `a11y.md`, `commit.md`, `changelog.md`, `e2e.md`, `cicd.md`
+`architecture.md`, `performance.md`, `cx-review.md`, `a11y.md`, `commit.md`, `changelog.md`, `e2e.md`, `cicd.md`
 
 ### Support skills:
 
-`apex-stack.md`, `verify-lib.md`, `cost-management.md`, `init.md`
+`verify-lib.md`
 
 ### Reference files:
 
-`design-system-reference.md`, `security-reference.md`, `sql-practices-reference.md`
+`design-system-reference.md`, `security-reference.md`
 
 ## Step 3: Create a Project
 

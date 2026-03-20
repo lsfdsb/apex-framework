@@ -283,12 +283,12 @@ APEX is designed to teach you engineering while you build. Here's how to get the
 
 - Edit small things yourself (copy text, fix typos, adjust styling)
 - Run `npm run dev` to see your changes in real-time
-- Read error messages with Claude's help (`/debug`)
+- Read error messages with Claude's help — describe the error and ask for root cause
 
 ### Month 2: Review and Debug
 
 - Review PRs on GitHub — look at the diff, understand what changed
-- Debug issues using `/debug` — follow the root cause, not band-aids
+- Debug issues methodically — follow the root cause, not band-aids
 - Run `/security` on your auth code — understand why each check matters
 
 ### Month 3+: Independence
@@ -341,7 +341,7 @@ The enforced workflow saves you from yourself:
 |------|---------|-------------|
 | 1 | `/prd` | Define what you're building — scope, features, constraints |
 | 2 | `/architecture` | Plan the system — database schema, API design, component tree |
-| 3 | `/research` | Verify APIs and libraries exist — never hallucinate an endpoint |
+| 3 | WebSearch | Verify APIs and libraries exist — never hallucinate an endpoint |
 | 4 | Build | Write code — APEX auto-formats, enforces standards, validates types |
 | 5 | `/qa` | Run 5-phase quality gate — lint, types, tests, security, review |
 | 6 | `/security` | OWASP audit on auth, payments, PII handling |
@@ -352,12 +352,11 @@ The enforced workflow saves you from yourself:
 ### Step 4: Use the Right Skill for the Job
 
 **While building:**
-- `/debug` — Structured debugging when something breaks (no band-aids)
 - `/e2e` — Write Playwright end-to-end tests for critical flows
 - `/teach` — Ask Claude to explain what it's doing and why
 
 **Before installing anything:**
-- `/research` — Check docs first. APEX blocks hallucinated APIs.
+- Use WebSearch to verify API docs before integrating
 - Libraries are auto-verified before install (security, license, maintenance)
 
 **For database work:**
@@ -381,7 +380,6 @@ APEX has 9 specialized agents — a championship roster. Use `/teams` for parall
 | **code-reviewer** | Sonnet | Deep code review with severity ratings |
 | **design-reviewer** | Sonnet | UI/UX review against design system |
 | **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
-| **researcher** | Haiku | Verifies APIs, libraries, best practices |
 | **sentinel** | Sonnet | The Dark Knight — `/batman` for full self-test |
 
 Use `/teams` and Claude auto-selects the right roster. Use `/batman` when you need proof everything works.

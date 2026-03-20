@@ -49,7 +49,6 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security — security gate gets best model |
 | **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
-| **Researcher** | researcher | haiku | background | API/docs investigation |
 
 ## Team Presets
 
@@ -187,14 +186,6 @@ Each check has ONE owner. No two agents scan the same thing.
 | Code quality/patterns | **Code Reviewer** | — |
 
 **Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate. Design Reviewer owns all visual/UI checks. No overlap.
-
-## Task Dependencies (Enforced)
-
-When creating tasks for a team with both Researcher and Builder:
-- Create Researcher tasks FIRST
-- Create Builder integration tasks with `addBlockedBy: [researcher-task-id]`
-- Builder cannot start integration code until Researcher reports findings
-- This prevents building against APIs we haven't verified
 
 ## Auto-Spawn Logic
 
@@ -371,14 +362,12 @@ User: "Build the authentication flow with OAuth"
 
  3. Spawn order:
     → watcher (background) — starts monitoring immediately
-    → researcher (background) — starts on research task
-    → builder (worktree) — waits for research, then builds
+    → builder (worktree) — implements the feature
     → debugger (worktree) — standby, auto-claims any bugs
     → qa (worktree) — verifies each task as completed
     → code-reviewer (worktree) — final review when QA passes
 
  4. The breathing loop runs:
-    researcher completes → builder starts implementing
     watcher detects type error → creates bug task → debugger fixes it
     builder completes endpoint → qa verifies → code-reviewer reviews
     qa finds edge case → creates task → debugger fixes → qa re-verifies
@@ -400,4 +389,4 @@ User: "Build the authentication flow with OAuth"
 11. **Verify after build** — After ANY builder completes, verify files exist in main project before proceeding
 12. **Design review on UI** — If the task creates .tsx/.jsx files, Design Reviewer MUST review before QA
 13. **QA is a gate, not optional** — No task is marked complete without QA verification. If QA wasn't invoked, the task is NOT done
-14. **Research before integration** — If a task involves external APIs, `/research` runs BEFORE builder starts
+14. **Verify APIs before integration** — If a task involves external APIs, use WebSearch to verify docs BEFORE builder starts
