@@ -10,16 +10,21 @@ interface Column<T> {
 interface DataTableProps<T> {
   columns: Column<T>[];
   rows: T[];
+  rowKey: keyof T & string;
   onRowClick?: (row: T) => void;
 }
 
 export function DataTable<T extends Record<string, unknown>>({
   columns,
   rows,
+  rowKey,
   onRowClick,
 }: DataTableProps<T>) {
-  function handleRowHover(e: React.MouseEvent<HTMLTableRowElement>, enter: boolean) {
-    e.currentTarget.style.background = enter ? "var(--bg-surface)" : "transparent";
+  function handleKeyDown(e: React.KeyboardEvent<HTMLTableRowElement>, row: T) {
+    if ((e.key === "Enter" || e.key === " ") && onRowClick) {
+      e.preventDefault();
+      onRowClick(row);
+    }
   }
 
   return (
@@ -42,16 +47,21 @@ export function DataTable<T extends Record<string, unknown>>({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, i) => (
+          {rows.map((row) => (
             <tr
-              key={i}
-              className={`border-t transition-colors duration-[var(--duration-fast)] ${
+              key={String(row[rowKey])}
+              className={`border-t transition-colors duration-[var(--duration-fast)] hover:bg-[var(--bg-surface)] ${
                 onRowClick ? "cursor-pointer" : ""
               }`}
               style={{ borderColor: "var(--border)" }}
-              onMouseEnter={(e) => handleRowHover(e, true)}
-              onMouseLeave={(e) => handleRowHover(e, false)}
               onClick={() => onRowClick?.(row)}
+              {...(onRowClick
+                ? {
+                    tabIndex: 0,
+                    onKeyDown: (e: React.KeyboardEvent<HTMLTableRowElement>) =>
+                      handleKeyDown(e, row),
+                  }
+                : {})}
             >
               {columns.map((col) => (
                 <td key={col.key} className="px-4 py-3 text-[13px]" style={{ color: "var(--text)" }}>

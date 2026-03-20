@@ -3,17 +3,25 @@
    Accent: coral #e07850 | Warm dark backgrounds */
 :root {
   --bg: #1a1614; --bg-elevated: #242018; --bg-surface: #2e2820;
+  --bg-rgb: 26,22,20;
   --border: #3d3428; --border-hover: #524638;
   --text: #f5ebe0; --text-secondary: #b8a898; --text-muted: #7a6e60;
   --accent: #e07850; --accent-hover: #c8603a; --accent-glow: rgba(224,120,80,0.12);
-  --success: #6bc46b; --warning: #d4a843; --destructive: #e05454; --info: #7cacbe;
+  --success: #6bc46b; --success-rgb: 107,196,107;
+  --warning: #d4a843; --warning-rgb: 212,168,67;
+  --destructive: #e05454; --destructive-rgb: 224,84,84;
+  --info: #7cacbe; --info-rgb: 124,172,190;
   --cta-bg: #ffffff; --cta-text: #1a1614;
 }
 [data-theme="light"] {
   --bg: #fdf8f4; --bg-elevated: #ffffff; --bg-surface: #f5ede5;
+  --bg-rgb: 253,248,244;
   --border: #e8ddd2; --border-hover: #d4c5b5;
   --text: #2c1e10; --text-secondary: #785840; --text-muted: #a08870;
   --accent: #d4603a; --accent-hover: #b84a28; --accent-glow: rgba(212,96,58,0.08);
-  --success: #2d8659; --warning: #b8860b; --destructive: #c42b2b; --info: #3a7ca5;
+  --success: #2d8659; --success-rgb: 45,134,89;
+  --warning: #b8860b; --warning-rgb: 184,134,11;
+  --destructive: #c42b2b; --destructive-rgb: 196,43,43;
+  --info: #3a7ca5; --info-rgb: 58,124,165;
   --cta-bg: #2c1e10; --cta-text: #fdf8f4;
 }

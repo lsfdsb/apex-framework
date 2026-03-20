@@ -7,6 +7,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   href?: string;
+  as?: React.ElementType;
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -31,6 +32,7 @@ export function Button({
   variant = "primary",
   size = "md",
   href,
+  as: Tag,
   children,
   className = "",
   ...props
@@ -47,10 +49,11 @@ export function Button({
     .trim();
 
   if (href) {
+    const LinkTag = Tag ?? "a";
     return (
-      <a className={base} style={variantStyles[variant]} href={href}>
+      <LinkTag className={base} style={variantStyles[variant]} href={href}>
         {children}
-      </a>
+      </LinkTag>
     );
   }
 

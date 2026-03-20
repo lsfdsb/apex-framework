@@ -211,8 +211,8 @@ Before marking ANY task complete, verify:
 
 Refer to RULE ZERO at the top. The full commit sequence is there. Key reminders:
 
-- **Commit incrementally** — every 3-4 files, run `git add --all -- ':!node_modules' ':!.next' ':!.cache' && git commit -m "wip: progress"`
-- **Final commit** — before reporting done: `git add --all -- ':!node_modules' ':!.next' ':!.cache' && git commit -m "feat(scope): final"`
+- **Commit incrementally** — every 3-4 files, run `git add --all -- ':!node_modules' ':!.next' ':!.cache' ':!dist' ':!.turbo' && git commit -m "wip: progress"`
+- **Final commit** — before reporting done: `git add --all -- ':!node_modules' ':!.next' ':!.cache' ':!dist' ':!.turbo' && git commit -m "feat(scope): final"`
 - **Include in completion message**: branch name + commit hash + file list
 - **No commit hash = no merge = lost work**
 
@@ -237,7 +237,7 @@ Refer to RULE ZERO at the top. The full commit sequence is there. Key reminders:
 - **Completed**: Message lead AND Technical Writer with summary of changes
 - **Found extra work**: Create a new task via TaskCreate, don't scope-creep
 - **Security-sensitive code**: Run `/security` mentally — check for injection, auth bypass, secrets
-- **Stuck > 3 turns**: Message lead immediately, don't spin
+- **Stuck > 2 turns**: Message lead immediately, don't spin
 
 ## Message Format
 

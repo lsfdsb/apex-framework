@@ -84,11 +84,6 @@ done | sort | uniq -d | while read dup; do
   echo "⚠️ DUPLICATE COMPONENT NAME: $dup.tsx exists in multiple locations"
 done
 
-# Check for hardcoded Tailwind palette colors (design token violation)
-grep -rnE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal)-(50|100|200|300|400|500|600|700|800|900)' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null | head -10 | while read line; do
-  echo "⚠️ HARDCODED COLOR: $line — use semantic tokens"
-done
-
 # Check for missing responsive: any fixed width over 400px without responsive
 grep -rnE 'w-\[([5-9][0-9]{2}|[0-9]{4,})px\]' --include='*.tsx' src/ 2>/dev/null | head -5 | while read line; do
   echo "⚠️ FIXED WIDTH: $line — may break mobile"

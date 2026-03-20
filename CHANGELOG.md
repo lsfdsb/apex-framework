@@ -5,10 +5,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-
 ### Added
-- add 11 primitive starter components + barrel export (0ec955c)
-- v5.13 Design DNA Starters — 42 files, zero translation (868cd7a)
+- **React Page Templates** — 14 full-featured templates (Landing, SaaS, CRM, E-commerce, Blog, Portfolio, Social, LMS, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase) ready to copy into projects (#115)
+- **5 New Starter Components** — StatCard, ChartCard, ThemeToggle, EmptyState, KanbanColumn for richer dashboards and data flows (#115)
+- **RGB Tokens** — All 5 design palettes now include RGB values for dynamic theming and programmatic color manipulation (#115)
+
+### Changed
+- **Code Reviewer Agent** — Expanded from 91 to 130 lines with enhanced security scanning, OWASP rules integration, and better error categorization (#115)
+- **Design Reviewer Agent** — Added task auto-claim for continuous design compliance, expanded DNA path scanning to catch hardcoded colors (#115)
+- **Rules Refactored** — Narrowed API/SQL/Supabase/Testing/Error-Handling paths with code examples, deduplicated constraints, improved clarity (#115)
+- **DNA Starters Fixed** — DataTable, Input, Button, Header, MobileNav corrected for proper semantic structure and responsive behavior (#115)
+- **Gitignore** — Added `.dna-server.pid` to ignore runtime server PID files (#114)
+- **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
+
+### Fixed
+- **Debugger Git Bug** — Fixed critical `git add -A` to `git add --all -- ':!node_modules' ':!.next' ':!.cache'` that was silently staging build artifacts and breaking commits (#115)
+- **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
+- **Framework Evolver Memory** — Fixed memory type annotation for consistency with system expectations (#115)
+- **Removed Stale QA Cleanup** — Removed obsolete cleanup task from QA agent that was no longer referenced (#115)
+- **Worktree cleanup** — Stop orphaned dev servers properly on session end (7ab772b)
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
 
 The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.

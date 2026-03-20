@@ -10,14 +10,50 @@ paths:
 
 # Testing Conventions
 
-- Use `describe` blocks to group related tests. Name them after the function/component.
-- Use `it` or `test` with behavior descriptions: "it should return null when input is empty"
-- Arrange → Act → Assert pattern in every test.
-- Mock external dependencies (API calls, database). Never mock internal logic.
-- Test edge cases: null, undefined, empty string, empty array, max length, negative numbers.
-- One assertion per test when possible. Multiple assertions only if testing the same behavior.
+## Framework
+- Use **Vitest** for unit/integration tests, **Playwright** for E2E.
+- Component tests use `@testing-library/react` — test behavior, not implementation.
+
+## Coverage Targets
+- New code: 80% lines, 70% branches minimum.
+- Integration tests in `tests/integration/`. E2E in `tests/e2e/`.
+
+## Patterns
+
+```typescript
+// Component test with RTL
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+
+describe('LoginForm', () => {
+  it('should show validation error for invalid email', async () => {
+    render(<LoginForm />)
+    const user = userEvent.setup()
+
+    await user.type(screen.getByLabelText('Email'), 'invalid')
+    await user.click(screen.getByRole('button', { name: 'Sign in' }))
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Invalid email')
+  })
+})
+```
+
+```typescript
+// API route test
+import { createMockRequest } from 'tests/helpers'
+
+describe('POST /api/users', () => {
+  it('should return 400 for invalid body', async () => {
+    const req = createMockRequest({ method: 'POST', body: {} })
+    const res = await POST(req)
+    expect(res.status).toBe(400)
+  })
+})
+```
+
+## Rules
+- Mock external deps (API, database). Never mock internal logic.
 - Use `beforeEach` for shared setup. Clean up in `afterEach`.
-- Name test files `[module].test.ts` next to the source file, or mirror in `tests/`.
-- Minimum coverage: 80% lines, 70% branches for new code.
-- Integration tests go in `tests/integration/`. E2E tests in `tests/e2e/`.
-- Never test implementation details. Test behavior and outputs.
+- Test files colocated: `[module].test.ts` next to source, or mirror in `tests/`.
+- Server components: test via integration tests (render the page), not unit tests.
+- Async operations: always use `waitFor` or `findBy*` — never raw `setTimeout`.
