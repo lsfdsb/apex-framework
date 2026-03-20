@@ -1,0 +1,22 @@
+@import "tailwindcss";
+@import "../../tokens/foundation.css";
+@import "../../tokens/animations.css";
+
+@source "../../../docs/design-dna/starters/**/*.tsx";
+@source "../../../docs/design-dna/templates/**/*.tsx";
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+pre {
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+}
+
+code {
+  font-family: "JetBrains Mono", monospace;
+}
