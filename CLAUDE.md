@@ -57,11 +57,6 @@ For projects using APEX:
 - `npm run dev` / `npm run build` / `npm run test` / `npm run lint` / `npm run format`
 
 For the APEX Framework itself:
-- `bash tests/test-all.sh` — Full suite (658 tests across 4 suites)
-- `bash tests/test-framework.sh` — 348 structural and functional tests
-- `bash tests/test-hooks.sh` — 94 hook behavior tests
-- `bash tests/test-agents.sh` — 121 agent validation tests
-- `bash tests/test-behavioral-v2.sh` — 95 real behavioral tests (JSON payloads, exit codes, output validation)
 - `bash -n .claude/scripts/*.sh` — syntax validation for all scripts
 
 ## Commit Message Rules
@@ -163,13 +158,12 @@ These rules exist because they were violated in real builds. Do NOT repeat these
 | Design Reviewer | design-reviewer | sonnet | UI/UX and accessibility |
 | Technical Writer | technical-writer | haiku | CHANGELOG, README, docs |
 | Researcher | researcher | haiku | API/docs investigation |
-| Framework Evolver | framework-evolver | sonnet | Self-improvement — /evolve |
 
 ### Presets
 - `build` — Watcher + Builder + Design Reviewer + QA + Technical Writer (features, refactoring — Design Reviewer auto-included when task creates UI)
 - `fix` — Watcher + Debugger + QA + Technical Writer (bugs, errors)
 - `review` — Code Reviewer + Design Reviewer + QA + Technical Writer (PR review)
-- `full` — All roles (major features, critical paths)
+- `full` — All 9 roles (major features, critical paths)
 
 ### The Breathing Loop
 ```

@@ -1,1 +1,0 @@
-{"session_id": "test", "transcript_path": "/tmp/t", "cwd": "/tmp", "permission_mode": "default", "hook_event_name": "PostToolUseFailure", "tool_name": "Bash", "tool_input": {"command": "npm run build"}, "tool_use_id": "toolu_10", "error": "Command failed with exit code 1"}

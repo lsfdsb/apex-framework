@@ -1,11 +1,10 @@
 #!/bin/bash
 # session-learner.sh — SessionEnd hook
 # Automatically analyzes session for mistakes, errors, and improvement opportunities.
-# Writes a lightweight report to .claude/session-logs/ for the framework-evolver to consume.
+# Writes a lightweight report to .claude/session-logs/ for review on next startup.
 #
-# This is the "learning" half of the self-evolution loop:
-#   1. session-learner.sh (this) — captures what went wrong
-#   2. framework-evolver agent — proposes fixes (triggered by /evolve)
+# Captures session errors, blocks, and user corrections so the next session
+# starts informed about recurring patterns.
 #
 # by L.B. & Claude · São Paulo, 2026
 

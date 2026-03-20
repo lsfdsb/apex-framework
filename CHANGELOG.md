@@ -3,6 +3,20 @@
 All notable changes to the APEX Framework will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [5.14.0] — 2026-03-20 — Feature Cleanup + Branch Hygiene
+
+### Removed
+- **`/evolve` skill** — Removed the self-evolution feature entirely. Skill, agent (`framework-evolver`), and supporting scripts (`extract-session.sh`, `apex-sync.sh`) all deleted. References cleaned from CLAUDE.md, README.md, session-context.sh, stop-gate.sh, handle-failure.sh, health-check.sh, init skill, teach skill, teams skill, about skill, and apex-init-project.sh
+- **Test infrastructure** — Removed entire `tests/` directory (test-all.sh, test-framework.sh, test-hooks.sh, test-agents.sh, test-behavioral-v2.sh, test-integration.sh, test-simulation.sh, test-behavioral.sh, fixtures/, lib/). Test infrastructure will be redesigned from scratch. References cleaned from CLAUDE.md and README.md. Note: `/qa` skill and project-level testing rules are preserved — only framework self-tests removed
+- **31 stale local branches** — Cleaned up accumulated feature/fix branches from past sessions
+- **Session logs** — Cleared `.claude/session-logs/` directory
+- **Error counter** — Removed proactive `/evolve` suggestion from stop-gate.sh and handle-failure.sh error counters
+
+### Changed
+- **Agent roster** — 10 → 9 agents (Framework Evolver removed). Updated roster tables in CLAUDE.md, README.md, teams skill, and about skill
+- **README version** — Updated to v5.14.0
+- **Session learner** — Updated comments to reflect standalone role (no longer feeds evolve agent)
+
 ## [Unreleased]
 
 ### Added
@@ -19,7 +33,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
 
 ### Fixed
-- **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results, blinding the self-improvement loop (#117)
+- **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results (#117)
 - **False Positive Hook Blocks** — BLOCKED grep now only matches real hook verdicts (`BLOCKED:`), not the word "BLOCKED" in agent documentation. Fixed 5+ sessions of inflated block counts (#117)
 - **Tailwind Warning Channel** — Design token warning now outputs to stdout (was stderr), so Claude actually receives the hint (#117)
 - **Detached HEAD Guard** — Commit blocker now catches detached HEAD state, preventing orphaned commits from worktree agents (#117)
@@ -27,7 +41,6 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Settings Allow List** — Added `gh pr/api/repo/run` and `git fetch/merge/rebase/push/worktree/tag` to prevent unnecessary permission prompts (#117)
 - **Debugger Git Bug** — Fixed critical `git add -A` to `git add --all -- ':!node_modules' ':!.next' ':!.cache'` that was silently staging build artifacts and breaking commits (#115)
 - **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
-- **Framework Evolver Memory** — Fixed memory type annotation for consistency with system expectations (#115)
 - **Removed Stale QA Cleanup** — Removed obsolete cleanup task from QA agent that was no longer referenced (#115)
 - **Worktree cleanup** — Stop orphaned dev servers properly on session end (7ab772b)
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
