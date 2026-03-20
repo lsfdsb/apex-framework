@@ -106,7 +106,7 @@ fi
 case "$FILE_PATH" in
   *.tsx|*.jsx)
     if echo "$CONTENT" | grep -qE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal|lime|fuchsia)-(50|100|200|300|400|500|600|700|800|900|950)'; then
-      echo '{"systemMessage":"⚠️ APEX DESIGN: Hardcoded Tailwind color detected. Use semantic tokens: primary, accent, success, warning, destructive, muted. See Translation Guide in reference.md."}' >&2
+      echo '{"systemMessage":"⚠️ APEX DESIGN: Hardcoded Tailwind color detected. Use semantic tokens: primary, accent, success, warning, destructive, muted. See Translation Guide in reference.md."}'
     fi
     ;;
 esac

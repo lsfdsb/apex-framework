@@ -93,6 +93,16 @@ if [ "$SOURCE" = "startup" ]; then
   # ── Reset session state for new session ──
   rm -f /tmp/apex-pr-cache-*.json /tmp/apex-session-errors.count 2>/dev/null
 
+  # ── Prune stale agent worktree branches ──
+  if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
+    git worktree prune 2>/dev/null
+    for branch in $(git branch --list 'agent-*' 2>/dev/null | tr -d ' *'); do
+      if ! git worktree list 2>/dev/null | grep -q "$branch"; then
+        git branch -D "$branch" 2>/dev/null
+      fi
+    done
+  fi
+
   # ── Animated banner (stderr → terminal) ──
   # Detect if stderr is a terminal for animations
   # Override with APEX_ANIMATE=1 for testing

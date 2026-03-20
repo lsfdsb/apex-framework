@@ -59,24 +59,28 @@ if [ -z "$TRANSCRIPT" ] || [ ! -f "$TRANSCRIPT" ]; then
   exit 0
 fi
 
-# Count metrics from transcript
-TOOL_ERRORS=$(grep -c '"is_error":true' "$TRANSCRIPT" 2>/dev/null || echo "0")
-HOOK_BLOCKS=$(grep -c 'BLOCKED' "$TRANSCRIPT" 2>/dev/null || echo "0")
+# Count metrics from transcript using jq for reliable JSONL parsing
+TOOL_ERRORS=$(jq -r 'select(.is_error==true or (.content[]?.text // "" | test("^Error"))) | "x"' "$TRANSCRIPT" 2>/dev/null | wc -l | tr -d ' ')
+[ -z "$TOOL_ERRORS" ] && TOOL_ERRORS=0
+
+# Count ONLY real hook blocks (exit 2 from PreToolUse), not "BLOCKED" in agent docs
+HOOK_BLOCKS=$(jq -r 'select(.is_error==true) | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | grep -c '^BLOCKED:' || echo "0")
+
 USER_MESSAGES=$(grep -c '"role":"user"' "$TRANSCRIPT" 2>/dev/null || echo "0")
 ASSISTANT_MESSAGES=$(grep -c '"role":"assistant"' "$TRANSCRIPT" 2>/dev/null || echo "0")
 TOOL_USES=$(grep -c '"type":"tool_use"' "$TRANSCRIPT" 2>/dev/null || echo "0")
 
-# Extract error messages (unique, last 20)
-ERRORS=$(grep -o '"is_error":true.*"content":"[^"]*"' "$TRANSCRIPT" 2>/dev/null | \
-  sed 's/.*"content":"//' | sed 's/"//' | sort -u | tail -20)
+# Extract error messages using jq (unique, last 20)
+ERRORS=$(jq -r 'select(.is_error==true) | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | \
+  grep -v '^$' | sort -u | tail -20)
 
-# Extract blocked actions
-BLOCKS=$(grep -o 'BLOCKED[^"]*' "$TRANSCRIPT" 2>/dev/null | sort -u | tail -10)
+# Extract blocked actions — only real hook blocks starting with "BLOCKED:"
+BLOCKS=$(jq -r 'select(.is_error==true) | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | \
+  grep '^BLOCKED:' | sort -u | tail -10)
 
-# Extract user corrections (messages starting with "no", "don't", "stop", "wrong")
-CORRECTIONS=$(grep -o '"content":\[{"type":"text","text":"[^"]*"}' "$TRANSCRIPT" 2>/dev/null | \
-  sed 's/.*"text":"//' | sed 's/"}.*//' | \
-  grep -iE '^(no[, ]|don.t|stop |wrong|not that|actually|wait)' | tail -10)
+# Extract user corrections — messages with correction intent
+CORRECTIONS=$(jq -r 'select(.role=="user") | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | \
+  grep -iE '^(no[, —-]|don.t|stop |wrong|not that|actually[, ]|wait[, ]|those aren)' | tail -10)
 
 # Only write report if there's something interesting
 if [ "$TOOL_ERRORS" -eq 0 ] && [ "$HOOK_BLOCKS" -eq 0 ] && [ -z "$CORRECTIONS" ]; then
