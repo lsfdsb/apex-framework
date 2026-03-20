@@ -40,6 +40,13 @@ Recovery:
 
 The APEX workflow requires all changes to go through feature branches and PRs."
   fi
+  if [ "$CURRENT_BRANCH" = "HEAD" ]; then
+    deny "BLOCKED: You are in detached HEAD state. Commits here create orphaned objects.
+
+Recovery:
+  git checkout -b feat/your-description
+  (then commit from the new branch)"
+  fi
 fi
 
 # Block direct push to main/master

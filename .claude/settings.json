@@ -30,6 +30,16 @@
       "Bash(git checkout *)",
       "Bash(git stash *)",
       "Bash(git commit *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(git worktree *)",
+      "Bash(git tag *)",
+      "Bash(git push *)",
+      "Bash(gh pr *)",
+      "Bash(gh api *)",
+      "Bash(gh repo *)",
+      "Bash(gh run *)",
       "Bash(cat > ~/.claude/apex-preferences.json *)"
     ],
     "deny": [
