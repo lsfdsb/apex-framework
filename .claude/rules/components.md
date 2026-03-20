@@ -1,39 +1,25 @@
 ---
 paths:
   - "**/components/**"
-  - "**/*.tsx"
 ---
 
 # Component Conventions
 
-- Props interface with JSDoc above the component. Default export.
+- Named exports for components. `export function UserCard()`, not `export default`.
+  - Exception: Next.js requires `export default` for `page.tsx`, `layout.tsx`, `error.tsx`, `loading.tsx`.
 - Hooks at the top. Derived state next (not in useEffect). Event handlers. Early returns. Single JSX return.
-- Atomic design: atoms (Button, Input), molecules (SearchBar, Card), organisms (Header, ProductList).
 - Every component handles: loading state, error state, empty state. No blank screens.
 - Accessibility: semantic HTML, aria-labels on icon buttons, keyboard navigation, focus management.
-- Responsive: mobile-first. Test at 320px, 768px, 1280px.
 - No inline styles. Use Tailwind utilities or CSS modules.
-- **Design tokens only** — NEVER use hardcoded Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`, `green-500`, `red-500`, `indigo-600`, etc.). Use the project's semantic tokens (`primary`, `accent`, `muted`, `destructive`, `success`, `warning`). Read `tailwind.config.ts` or `globals.css` first.
-- **Design DNA reference** — Before building any page or major component, read the matching pattern from `docs/design-dna/` and follow the **DNA → React Translation Guide** in `.claude/skills/design-system/reference.md`. Match the template — don't interpret it.
-- **APEX page structure** — Every page MUST have:
-  - Root wrapper: `<div className="apex-enter">`
-  - Page header: `<p className="apex-label">`, `<h1 className="font-serif italic text-3xl tracking-[-0.02em]">`, `<p className="text-muted-foreground font-light">`
-  - Content sections: `className="apex-enter stagger-1"`, `stagger-2`, `stagger-3`
-  - Cards: `hover:-translate-y-px transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]`
-  - Labels: `text-[10px] uppercase tracking-[0.06em] text-muted-foreground font-medium`
-  - Values: `text-2xl font-bold tracking-[-0.03em]`
-- **Transition curve** — ALWAYS use `cubic-bezier(0.22,1,0.36,1)` for interactive elements (hover, click, open/close). This is the APEX signature motion.
-- **Shared vs page-specific** — If a component is used on 2+ pages, it MUST live in `src/components/`. Page-specific components go in `src/pages/[page]/components/` or colocated. Before creating a new component, run `grep -r "similar-pattern" src/components/` to check for existing ones.
-- **No duplication** — Three similar components = refactor into one with variants via props. Example: `StatCard` with `variant="compact" | "detailed"` instead of `CompactStatCard` + `DetailedStatCard`.
-- Memoize only when measured — premature React.memo hurts readability.
+- **Design tokens only** — NEVER hardcode Tailwind palette colors. Use semantic tokens (`primary`, `accent`, `muted`, `destructive`). Read `tailwind.config.ts` or `globals.css` first.
+- **Reuse before create** — Before creating any component, check existing ones: `grep -r "export.*function\|export default" src/components/`. Three similar components = refactor into one with variants via props.
+- **Co-locate** — Component file, test file, and styles in the same directory.
+- Memoize only when measured. Premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.
-- Co-locate: component file, test file, and styles in the same directory.
-- **Mobile-first** — Default styles target 320px. Add `sm:`, `md:`, `lg:` for larger screens. Never the reverse.
-- **Dual theme** — Both dark and light modes must work from the first commit. Use semantic tokens. Test with `[data-theme="light"]`.
 
 ## Error Boundaries
 
-Every route segment needs an `error.tsx` (Next.js App Router). Never let users see a white screen.
+Every route segment needs an `error.tsx`. Never let users see a white screen.
 
 ```typescript
 'use client'
@@ -55,11 +41,9 @@ export default function Error({
 }
 ```
 
-Also create a global `global-error.tsx` at the app root for root layout errors.
-
 ## Forms
 
-Use react-hook-form + zod for ALL forms. This pattern handles validation, loading states, and error feedback:
+Use react-hook-form + zod for ALL forms:
 
 ```typescript
 import { useForm } from 'react-hook-form'
@@ -75,12 +59,8 @@ type FormData = z.infer<typeof schema>
 export function MyForm() {
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    mode: 'onBlur', // Inline validation on blur
+    mode: 'onBlur',
   })
-
-  const onSubmit = async (data: FormData) => {
-    // Submit logic — loading state handled by isSubmitting
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -94,27 +74,15 @@ export function MyForm() {
 }
 ```
 
-Rules:
-- Define schema with zod first, derive the TypeScript type from it
-- Use `mode: 'onBlur'` for inline validation
-- Show loading state on submit button via `isSubmitting`
-- Display success/error feedback after submission (toast or inline)
-- NEVER use uncontrolled inputs with manual `useState` for complex forms
-
 ## State Management
-
-Choose the right tool for the right state:
 
 | State type | Tool | When |
 |-----------|------|------|
-| **Server state** | TanStack Query (React Query) | API data, cached data, background refetching |
-| **Client state (global)** | zustand | Auth, UI preferences, shopping cart |
-| **Client state (local)** | useState | Toggle, form field, component-scoped |
-| **URL state** | nuqs or useSearchParams | Filters, pagination, sort order, search |
+| **Server state** | TanStack Query | API data, cached data, background refetching |
+| **Client global** | zustand | Auth, UI preferences, cart |
+| **Client local** | useState | Toggle, form field, component-scoped |
+| **URL state** | nuqs or useSearchParams | Filters, pagination, sort, search |
 | **Form state** | react-hook-form | Any form with validation |
 
-Rules:
-- **NEVER** manually fetch in `useEffect` — use TanStack Query or server components
-- **NEVER** use Redux for new projects — zustand does the same with 1/10th the boilerplate
-- **NEVER** use controlled inputs with `useState` for complex forms — use react-hook-form
-- URL state (filters, pagination) must be shareable — use query params, not component state
+- NEVER manually fetch in `useEffect` — use TanStack Query or server components
+- URL state (filters, pagination) must be shareable — use query params

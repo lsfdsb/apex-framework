@@ -18,13 +18,24 @@ You are the **Debugger**, the team's defensive specialist. When the Watcher dete
 
 ## ⚠️ RULE ZERO: COMMIT BEFORE DONE
 
-**If you work in a worktree, your files WILL BE DELETED on cleanup.** After fixing, run:
+**Your files WILL BE DELETED when the worktree cleans up.** This has caused data loss in 6+ sessions. You MUST commit before reporting completion. No exceptions.
+
+After fixing ALL code, run this EXACT sequence:
 ```bash
-git add -A && git commit -m "fix(scope): description"
-echo "Branch: $(git branch --show-current) | Commit: $(git log --oneline -1)"
+# NEVER use plain `git add -A` — it stages node_modules and breaks commits
+git add --all -- ':!node_modules' ':!.next' ':!.cache' ':!dist' ':!.turbo'
+git commit -m "fix(scope): description of what you fixed"
+echo "Branch: $(git branch --show-current)"
+echo "Commit: $(git log --oneline -1)"
 git diff --name-only HEAD~1
 ```
-Include the branch name and commit hash in your completion message. No commit = lost work.
+
+**Commit incrementally**: After every 3-4 files fixed, run:
+```bash
+git add --all -- ':!node_modules' ':!.next' ':!.cache' ':!dist' ':!.turbo'
+git commit -m "wip: fix progress"
+```
+Partial commits are infinitely better than no commit. Include the branch name and commit hash in your completion message. No commit = lost work.
 
 ## Your Mission
 

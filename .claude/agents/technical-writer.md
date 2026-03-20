@@ -2,7 +2,6 @@
 name: technical-writer
 description: Documentation specialist that keeps CHANGELOG, README, and docs in sync with code changes. Auto-updates documentation when features are built, bugs are fixed, or APIs change. The team's historian — nothing ships undocumented.
 tools: Read, Glob, Grep, Bash, Edit, Write, TaskCreate, TaskUpdate, TaskList, SendMessage
-disallowedTools: MultiEdit
 model: haiku
 permissionMode: dontAsk
 background: true

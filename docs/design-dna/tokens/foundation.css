@@ -37,6 +37,14 @@
   --card-padding: 16px;
   --card-hover-y: -2px;
 
+  /* Z-index layers */
+  --z-base: 0;
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-overlay: 30;
+  --z-modal: 40;
+  --z-toast: 50;
+
   /* Sidebar */
   --sidebar-width: 220px;
   --sidebar-collapsed-width: 64px;

@@ -57,10 +57,10 @@ For projects using APEX:
 - `npm run dev` / `npm run build` / `npm run test` / `npm run lint` / `npm run format`
 
 For the APEX Framework itself:
-- `bash tests/test-all.sh` — Full suite (659 tests across 4 suites)
+- `bash tests/test-all.sh` — Full suite (658 tests across 4 suites)
 - `bash tests/test-framework.sh` — 348 structural and functional tests
 - `bash tests/test-hooks.sh` — 94 hook behavior tests
-- `bash tests/test-agents.sh` — 122 agent validation tests
+- `bash tests/test-agents.sh` — 121 agent validation tests
 - `bash tests/test-behavioral-v2.sh` — 95 real behavioral tests (JSON payloads, exit codes, output validation)
 - `bash -n .claude/scripts/*.sh` — syntax validation for all scripts
 

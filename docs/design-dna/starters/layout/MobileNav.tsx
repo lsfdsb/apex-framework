@@ -15,7 +15,7 @@ export function MobileNav({ items }: MobileNavProps) {
     <nav
       className="lg:hidden fixed bottom-0 inset-x-0 z-50 border-t backdrop-blur-md"
       style={{
-        background: "rgba(var(--bg-rgb, 0,0,0), 0.9)",
+        background: "color-mix(in srgb, var(--bg) 90%, transparent)",
         borderColor: "var(--border)",
       }}
       aria-label="Mobile navigation"

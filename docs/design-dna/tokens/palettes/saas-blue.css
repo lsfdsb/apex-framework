@@ -3,17 +3,25 @@
    Accent: blue #3b82f6 | Zinc dark backgrounds */
 :root {
   --bg: #09090b; --bg-elevated: #18181b; --bg-surface: #27272a;
+  --bg-rgb: 9,9,11;
   --border: #27272a; --border-hover: #3f3f46;
   --text: #fafafa; --text-secondary: #a1a1aa; --text-muted: #71717a;
   --accent: #3b82f6; --accent-hover: #2563eb; --accent-glow: rgba(59,130,246,0.12);
-  --success: #22c55e; --warning: #eab308; --destructive: #ef4444; --info: #60a5fa;
+  --success: #22c55e; --success-rgb: 34,197,94;
+  --warning: #eab308; --warning-rgb: 234,179,8;
+  --destructive: #ef4444; --destructive-rgb: 239,68,68;
+  --info: #60a5fa; --info-rgb: 96,165,250;
   --cta-bg: #ffffff; --cta-text: #09090b;
 }
 [data-theme="light"] {
   --bg: #fafafa; --bg-elevated: #ffffff; --bg-surface: #f4f4f5;
+  --bg-rgb: 250,250,250;
   --border: #e4e4e7; --border-hover: #d4d4d8;
   --text: #18181b; --text-secondary: #52525b; --text-muted: #a1a1aa;
   --accent: #2563eb; --accent-hover: #1d4ed8; --accent-glow: rgba(37,99,235,0.08);
-  --success: #16a34a; --warning: #ca8a04; --destructive: #dc2626; --info: #2563eb;
+  --success: #16a34a; --success-rgb: 22,163,74;
+  --warning: #ca8a04; --warning-rgb: 202,138,4;
+  --destructive: #dc2626; --destructive-rgb: 220,38,38;
+  --info: #2563eb; --info-rgb: 37,99,235;
   --cta-bg: #18181b; --cta-text: #fafafa;
 }

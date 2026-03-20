@@ -6,7 +6,7 @@ disallowedTools: Write, Edit, MultiEdit
 model: sonnet
 permissionMode: plan
 maxTurns: 30
-memory: user
+memory: project
 skills: code-standards, security
 hooks:
   Stop:

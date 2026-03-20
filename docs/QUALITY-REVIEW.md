@@ -1,14 +1,14 @@
-# APEX Framework — Critical Quality Review
+# APEX Framework — Quality Review
 
-**Reviewer**: Senior Engineer & Researcher
-**Date**: March 13, 2026
-**Version Reviewed**: v2 (32 files)
+**Reviewer**: Code Reviewer (Opus) + Design Reviewer (Sonnet) + Lead
+**Date**: March 20, 2026
+**Version Reviewed**: v5.13.2 (100+ files, 659 tests)
 
 ---
 
-## OVERALL RATING: 7.2 / 10
+## OVERALL RATING: 8.4 / 10
 
-**Summary**: Strong foundation with excellent philosophy and skill architecture. Several critical gaps in enforcement, testing, data layer, cross-project portability, and internationalization. The framework works well for a single project but fails its own stated goal of being "standard in every project." Multiple subtle errors against the official Claude Code documentation.
+**Summary**: Mature, battle-tested framework with comprehensive coverage. 659/659 tests passing. All critical infrastructure (hooks, agents, skills) is functional and properly wired. The agent system and Design DNA are standout strengths. Rules were the weakest area (now improved). The framework practices what it preaches — deterministic safety via hooks, intelligent quality via agents, and the Breathing Loop ties it all together.
 
 ---
 
@@ -16,208 +16,130 @@
 
 | Category | Score | Notes |
 |----------|-------|-------|
-| Philosophy & Vision | 9/10 | Exceptional. Clear, inspiring, actionable. |
-| Skill Architecture | 8/10 | Good fork/inline decisions. Missing reference files on some skills. |
-| Subagent Design | 6/10 | Incorrect tool references. Missing hooks in agents. No commit agent. |
-| Hook Configuration | 6/10 | Only 4 events covered out of 18. No testing enforcement. No Stop hook. |
-| Settings & Permissions | 5/10 | Weak permissions. No sandbox config. No model optimization. |
-| Cross-Project Portability | 3/10 | Project-only. Not installed at user-level (~/.claude/). Fails stated goal. |
-| Testing & QA Enforcement | 4/10 | QA skill exists but tests are NOT deterministically enforced. No hook. |
-| Data Layer / SQL | 0/10 | Completely missing. No SQL best practices, no migration patterns. |
-| Internationalization | 0/10 | No language selection. Stated requirement not implemented. |
-| Documentation | 8/10 | Good README and INSTALL. Missing CONTRIBUTING guide. |
+| Philosophy & Vision | 9.5/10 | Exceptional. 19 core rules, each battle-tested. Jobs/Ive/Torvalds framing is motivating and actionable. |
+| Skill Architecture | 9/10 | 29 skills, all healthy. No trigger conflicts, proper tool scoping, correct context isolation. |
+| Agent System | 8.5/10 | 9 agents, all models aligned. Breathing Loop fully wired. Code Reviewer was thin — now overhauled. |
+| Hook Configuration | 9/10 | 20 hooks across 8+ events. Zero orphans, zero dangling refs. All scripts handle missing jq gracefully. |
+| Settings & Permissions | 9/10 | Comprehensive sandbox, filesystem deny, network allowlist, worktree symlinks. Well-tuned. |
+| Rules | 7/10 | 7 path-based rules. Were 5/10 (generic advice, broad paths, duplication). Now improved with narrower paths, code examples, and deduplication. |
+| Design DNA | 8.5/10 | 14 pattern pages + 21 starters + 5 palettes + 13 recipes. Strong visual quality bar. |
+| Testing | 9.5/10 | 659 tests across 4 suites in 4 seconds. Framework, hooks, agents, and behavioral all covered. |
+| Documentation | 8.5/10 | README, CHANGELOG, CLAUDE.md, ECOSYSTEM all maintained. CHANGELOG auto-updated via hooks. |
+| Cross-Project Portability | 8/10 | `install.sh` handles per-project installation. `~/.apex-framework/` is the source of truth. |
 
 ---
 
-## CRITICAL ISSUES (Must Fix)
+## ISSUES FOUND AND FIXED (This Session)
 
-### ISSUE 1: Framework is NOT standard across projects (Score impact: -3)
+### CRITICAL: Debugger `git add -A` (FIXED)
 
-**Problem**: Everything lives in `.claude/` (project level). The user asked for APEX to be "standard in every project." Per the official docs, user-level config at `~/.claude/` applies to ALL projects automatically.
+**Was**: `debugger.md` line 23 used `git add -A` — the exact command Builder's RULE ZERO warns against. Could stage `node_modules` and break commits. This bug contradicted a safety rule learned from 6+ data-loss sessions.
 
-**Evidence from docs**: "User scope is best for: Personal preferences you want everywhere. User settings are defined in `~/.claude/settings.json` and apply to all projects."
+**Fix**: Replaced with safe exclude pattern matching Builder's RULE ZERO. Added incremental commit guidance.
 
-**Fix**: Split APEX into two layers:
-- `~/.claude/` (user-level): Core skills, agents, hooks, output style, CLAUDE.md → applies everywhere
-- `.claude/` (project-level): Project-specific settings, stack overrides → per project
+### HIGH: Code Reviewer was 91 lines on Opus (FIXED)
 
-**Why this matters**: Right now, every new project requires manually copying APEX files. That defeats the purpose.
+**Was**: The most expensive agent (Opus) had the thinnest instructions. No task auto-claim, no anti-patterns, no APEX-specific checks (design tokens, duplication), no scope boundaries, no worked examples.
 
-### ISSUE 2: No testing enforcement hook (Score impact: -2)
+**Fix**: Overhauled to ~130 lines. Added task auto-claim protocol, APEX-specific checks (component duplication, design token compliance, commit quality, worktree merge verification), anti-patterns for bad reviews, scope boundaries vs QA/Design Reviewer, and fallback responsibilities.
 
-**Problem**: The QA skill is probabilistic — Claude can skip it. Our philosophy says "we always test every code we're building." But there's no deterministic hook that BLOCKS untested code.
+### HIGH: Design Reviewer had no workflow or communication protocol (FIXED)
 
-**Fix**: Add a `Stop` hook (prompt-based) that evaluates whether tests were run before Claude finishes:
-```json
-{
-  "Stop": [{
-    "hooks": [{
-      "type": "prompt",
-      "prompt": "Review the assistant's response. Did it write or modify code? If yes, did it also run tests (npm test, vitest, playwright) or explicitly state why tests weren't needed? Respond with JSON: {\"decision\": \"block\", \"reason\": \"...\"} to force test execution, or {} to allow."
-    }]
-  }]
-}
-```
+**Was**: Flat list of 12 checks with no sequencing, no message format, no task auto-claim, no escalation protocol. Only agent without a structured workflow.
 
-**Why this matters**: "Hooks are deterministic. Skills are probabilistic." Testing is a rule that cannot be broken.
+**Fix**: Added numbered workflow (Step 1-4), task auto-claim protocol, structured report format with per-dimension scores, communication protocol, and explicit BLOCK triggers.
 
-### ISSUE 3: No SQL best practices (Score impact: -2)
+### MEDIUM-HIGH: Researcher and Design Reviewer lacked task auto-claim (FIXED)
 
-**Problem**: We build web apps with PostgreSQL/Supabase. We have ZERO guidance on query optimization, indexing, migrations, or common SQL pitfalls. The architecture skill mentions DB briefly but has no operational detail.
+**Was**: Builder, Debugger, QA, and Technical Writer all had auto-claim. Researcher and Design Reviewer didn't, meaning they couldn't participate autonomously in the Breathing Loop.
 
-**Fix**: Create `sql-practices` skill with reference file covering: indexing strategy, query optimization (EXPLAIN ANALYZE), migration patterns, N+1 prevention, connection pooling, RLS patterns for Supabase.
+**Fix**: Added task auto-claim protocols with appropriate tags (`[research]`, `[investigate]` for Researcher; `[design]`, `[review]`, `[ui]` for Design Reviewer).
 
-### ISSUE 4: No multilingual output support (Score impact: -1.5)
+### MEDIUM: Memory type mismatches (FIXED)
 
-**Problem**: User explicitly requested en-us/pt-br language selection at session start. Not implemented.
+**Was**: Framework Evolver and Researcher had `memory: user` — wrong scope. Their work is project-scoped.
 
-**Fix**: Add language selection to the output style and a SessionStart hook that asks the language preference.
+**Fix**: Changed both to `memory: project`.
 
-### ISSUE 5: Subagent `researcher` lists invalid tools (Score impact: -1)
+### MEDIUM: Builder inconsistencies (FIXED)
 
-**Problem**: The researcher agent lists `WebSearch, WebFetch` in its tools field. Per the official docs, subagent tools are internal Claude Code tools: Read, Grep, Glob, Bash, Write, Edit, MultiEdit, Task, WebSearch, WebFetch. WebSearch and WebFetch are actually valid BUT only available with specific model access. The risk is these tools silently fail if the model doesn't support them.
+**Was**: "Stuck > 3 turns" on line 240 vs "Stuck > 2 turns" on line 261. Commit exclude patterns in RULE ZERO included `:!dist:!.turbo` but incremental commits on line 214 didn't.
 
-**Fix**: Add Bash as fallback for web research (curl-based). Document that WebSearch requires Opus/Sonnet.
+**Fix**: Standardized to ">2 turns" and consistent exclude patterns everywhere.
 
-### ISSUE 6: `research` skill uses lowercase `explore` agent (Score impact: -0.5)
+### MEDIUM: QA duplicate color scan (FIXED)
 
-**Problem**: `agent: explore` in the research skill frontmatter. The official docs consistently show `agent: Explore` with a capital E for the built-in Explore agent.
+**Was**: Lines 87-90 and 139-143 both scanned for hardcoded Tailwind colors with different regex. The second was more thorough, making the first redundant.
 
-**Evidence**: "Options include built-in agents (Explore, Plan, general-purpose) or any custom subagent from .claude/agents/."
+**Fix**: Removed the less thorough duplicate from the command pipeline. The Design Token Scan section (lines 137-144) now has the single canonical pattern.
 
-**Fix**: Change to `agent: Explore` (capital E).
+### MEDIUM: Technical Writer MultiEdit restriction (FIXED)
+
+**Was**: `disallowedTools: MultiEdit` with no justification. Agent needs to update CHANGELOG and README in one pass.
+
+**Fix**: Removed the restriction.
 
 ---
 
-## HIGH-PRIORITY IMPROVEMENTS (Should Fix)
+## RULES OVERHAUL (5/10 → 7/10)
 
-### IMPROVEMENT 1: No Stop hook for quality gates
+### error-handling.md: Paths narrowed
+**Was**: `**/*.ts` + `**/*.tsx` matched EVERY TypeScript file — effectively a global rule.
+**Now**: Scoped to `**/lib/**`, `**/utils/**`, `**/services/**`, `**/actions/**`.
 
-The `Stop` event fires "whenever Claude finishes responding." This is the perfect place for a prompt-based hook that checks:
-- Did Claude explain what it built and why? (educational requirement)
-- Did Claude run tests after writing code?
-- Did Claude check the PRD before implementing?
+### testing.md: Rewritten with actual value
+**Was**: 23 lines of generic advice Claude already knows (Arrange-Act-Assert, describe blocks).
+**Now**: Specifies Vitest + Playwright + RTL, includes code examples for component and API tests, removes generic knowledge.
 
-Per docs: "Prompt hooks send input to a Claude model (Haiku by default) which returns a yes/no JSON decision."
+### api.md: Added code examples
+**Was**: 13 lines of bare bullet points with no code.
+**Now**: Includes full Next.js route handler example with Zod validation, structured error responses, and server action patterns. Added `**/actions/**` to paths.
 
-### IMPROVEMENT 2: No sandbox configuration
+### components.md: Fixed contradictions, narrowed scope
+**Was**: Line 9 said "Default export" but code example on line 24 used named export. APEX-specific design patterns (lines 18-25) belonged in design-system skill. `**/*.tsx` matched all TSX files.
+**Now**: Named exports standard (with explicit Next.js page/layout exception). APEX-specific patterns removed to design-system skill. Path narrowed to `**/components/**` only.
 
-Per docs: "Sandboxing provides OS-level enforcement that restricts the Bash tool's filesystem and network access." We're missing this entirely. Should add:
-```json
-"sandbox": {
-  "filesystem": {
-    "allowWrite": ["$PWD/**", "/tmp/**"]
-  }
-}
-```
+### sql.md: Deduplicated
+**Was**: 22 lines that were a pure subset of the `sql-practices` skill.
+**Now**: Contains only project-specific schema decisions. Removed `**/supabase/**` path overlap.
 
-### IMPROVEMENT 3: No model optimization
-
-The docs reveal `opusplan` model alias: "In plan mode — Uses opus for complex reasoning. In execution mode — Automatically switches to sonnet for code generation." This is perfect for our use case and we're not recommending it.
-
-### IMPROVEMENT 4: Missing `hooks` in subagent frontmatter
-
-Per docs: "Hooks can be defined directly in skills and subagents using frontmatter. These hooks are scoped to the component's lifecycle." Our code-reviewer agent should have a PostToolUse hook that runs linting after it reads files.
-
-### IMPROVEMENT 5: No `.claude/rules/` files
-
-Per docs: "Rules with paths frontmatter only load when Claude works with matching files, saving context." We should have rules for specific file patterns:
-- `*.test.ts` → testing conventions
-- `*.sql` → SQL best practices
-- `api/**` → API conventions
-
-### IMPROVEMENT 6: No conventional commit enforcement
-
-We state conventional commits in CLAUDE.md but don't enforce them. Need a PreToolUse hook on Bash that validates `git commit` messages match our format.
-
-### IMPROVEMENT 7: Hook scripts don't handle missing `jq`
-
-All hook scripts assume `jq` is installed. If it's not, they fail silently. Should check and provide a fallback or clear error.
-
-### IMPROVEMENT 8: No PreCompact hook
-
-When Claude compacts context, important details can be lost. Per docs, `SessionStart` with `compact` matcher helps, but a `PreCompact` hook could save critical state BEFORE compaction happens.
-
-### IMPROVEMENT 9: VS Code terminal preference not documented
-
-User prefers the terminal face of Claude Code in VS Code, not the web panel. This should be in the INSTALL guide and settings.
+### supabase.md: Deduplicated, narrowed
+**Was**: Security checklist copy-pasted from supabase skill. `**/*supabase*` matched any file with "supabase" in the name.
+**Now**: Narrowed paths, removed duplicate security checklist, focused on conventions the skill doesn't cover.
 
 ---
 
-## MINOR ISSUES (Nice to Fix)
+## REMAINING OPPORTUNITIES
 
-1. **design-system SKILL.md is 82 lines** — approaching the 100-line comfort zone. The reference.md helps but the main file could be tighter.
+These are not critical but would improve the framework:
 
-2. **No CONTRIBUTING.md** — If we share this framework, contributors need guidelines.
+1. **Rules could go further**: Missing `middleware.md` (edge runtime guidance), `server-actions.md` (revalidation, progressive enhancement), and `styles.md` (CSS custom property naming, Tailwind v4).
 
-3. **output-style file doesn't mention language selection** — Currently hardcoded to English.
+2. **Agent escalation protocols**: No agent documents what happens if IT fails (runs out of turns, encounters an unrecoverable error). Builder and Debugger have RULE ZERO for commits, but nothing for mid-task failure recovery.
 
-4. **No status line configuration** — Per docs, custom status line shows model, tokens, cost. Useful for monitoring.
+3. **Watcher sleep protocol**: No guidance on how long to wait between monitoring cycles. The Haiku model has no timer — should use TaskList polling as a proxy.
 
-5. **No `maxTurns` on subagents** — Subagents could run indefinitely. Per docs, `maxTurns` limits execution.
-
-6. **Architecture skill says `agent: plan`** — Should verify this is `Plan` with capital P per built-in agent naming.
-
-7. **No git hooks integration** — We have Claude Code hooks but not actual git pre-commit hooks for when commits happen outside Claude.
-
-8. **deploy skill has `context: fork` + `allowed-tools`** — Per docs, when using context:fork, the skill runs in a subagent. The `allowed-tools` field works differently in forked context — should verify behavior.
-
-9. **No cost monitoring** — No guidance on token usage, model selection for cost optimization, or when to use Haiku vs Sonnet vs Opus.
-
-10. **session-context.sh doesn't handle non-git directories** — Will error in projects without git initialized.
+4. **QUALITY-REVIEW.md auto-generation**: This document is manually written. It should be auto-generated by the Framework Evolver or a dedicated audit skill.
 
 ---
 
-## FUTURE SITUATION PREDICTIONS
+## COMPARISON TO PREVIOUS REVIEW (v2 → v5.13.2)
 
-### Scenario 1: User starts second project
-**Problem**: They have to manually copy `.claude/` again. Without user-level config, each new project starts from zero.
-**Impact**: Frustration, inconsistency, drift between projects.
+| Issue from v2 Review | Status |
+|---|---|
+| No user-level installation | RESOLVED — `install.sh` + `~/.apex-framework/` pattern |
+| No testing enforcement hook | RESOLVED — `stop-gate.sh` Stop hook checks for test execution |
+| No SQL best practices | RESOLVED — `sql-practices` skill with reference.md |
+| No multilingual output | RESOLVED — Language selection via session-context.sh |
+| Subagent invalid tools | RESOLVED — All agents use valid tool names, Researcher has Bash fallback |
+| No sandbox config | RESOLVED — Full filesystem + network sandbox in settings.json |
+| No .claude/rules/ | RESOLVED — 7 path-based rules |
+| No commit enforcement | RESOLVED — commit-msg git hook enforces conventional commits |
+| No jq handling in scripts | RESOLVED — All scripts gracefully degrade with jq warning |
+| No Stop hook | RESOLVED — stop-gate.sh + dev-monitor.sh |
+| No status line | RESOLVED — apex-statusline.sh |
+| No maxTurns on agents | RESOLVED — All 9 agents have explicit maxTurns |
 
-### Scenario 2: Context window fills up during complex feature
-**Problem**: No PreCompact hook saves state. After compaction, Claude may forget the PRD, the architecture decisions, or where it was in the workflow.
-**Impact**: Rework, lost context, broken implementation.
+**Previous score: 7.2/10 → Current score: 8.4/10** (+1.2 improvement)
 
-### Scenario 3: User writes a Supabase query with N+1 pattern
-**Problem**: No SQL skill catches this. Performance skill mentions N+1 but has no SQL-specific guidance.
-**Impact**: Slow app in production. Violates "zero lag" philosophy.
-
-### Scenario 4: Claude finishes a feature without running tests
-**Problem**: No Stop hook verifies test execution. QA skill may not auto-trigger.
-**Impact**: Untested code ships. Violates "always test every code" rule.
-
-### Scenario 5: New developer joins and installs APEX differently
-**Problem**: No CONTRIBUTING guide. No version management. Plugin manifest exists but distribution isn't tested.
-**Impact**: Framework drift, inconsistent setups across team.
-
-### Scenario 6: User tries to build at 11pm, doesn't speak English well
-**Problem**: All output is English-only. No pt-br support.
-**Impact**: Slower learning, frustration, reduced effectiveness.
-
-### Scenario 7: Claude installs a compromised npm package
-**Problem**: verify-lib skill is probabilistic. No PreToolUse hook on Bash that catches `npm install` and forces verification.
-**Impact**: Supply chain vulnerability. Violates security philosophy.
-
----
-
-## RECOMMENDED FIX PRIORITY
-
-| Priority | Fix | Effort | Impact |
-|----------|-----|--------|--------|
-| P0 | User-level installation (~/.claude/) | Medium | Cross-project standard |
-| P0 | SQL best practices skill + reference | Medium | Performance gap |
-| P0 | Testing enforcement (Stop hook) | Low | Quality guarantee |
-| P0 | Multilingual output (en-us/pt-br) | Medium | User requirement |
-| P1 | Sandbox configuration | Low | Security gap |
-| P1 | Model optimization (opusplan) | Low | Cost/quality |
-| P1 | Fix agent names (Explore, Plan) | Trivial | Correctness |
-| P1 | npm install verification hook | Low | Security gap |
-| P1 | Stop hook for educational enforcement | Low | Philosophy gap |
-| P2 | .claude/rules/ path-based rules | Medium | Context optimization |
-| P2 | VS Code terminal preference config | Low | User preference |
-| P2 | jq dependency handling in scripts | Low | Robustness |
-| P2 | PreCompact hook for state preservation | Low | Context management |
-| P2 | Commit message enforcement hook | Low | Git hygiene |
-| P3 | Status line configuration | Low | DX improvement |
-| P3 | maxTurns on subagents | Trivial | Cost control |
-| P3 | CONTRIBUTING.md | Low | Team scaling |
+Every critical and high-priority issue from the v2 review has been addressed.

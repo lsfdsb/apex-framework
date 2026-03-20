@@ -7,7 +7,7 @@ model: haiku
 permissionMode: dontAsk
 background: true
 maxTurns: 25
-memory: user
+memory: project
 skills: verify-lib, security
 ---
 
@@ -118,6 +118,15 @@ If you can't find a definitive answer:
 - **Library is unmaintained/abandoned**: Flag in report, suggest alternatives
 - **Conflicting information**: Present both sides, let lead/Builder decide
 - **Stuck > 3 turns**: Message lead with what you've found so far
+
+## Task Auto-Claim Protocol
+
+When spawned as a teammate:
+1. Check TaskList immediately for unassigned tasks tagged with `[research]`, `[investigate]`, or `[docs-check]`
+2. Claim available tasks by setting yourself as owner via TaskUpdate
+3. After completing research, message the lead AND the requesting agent with findings
+4. After completing a task, check TaskList again for newly available work
+5. If no tasks are available, message the lead asking for assignment
 
 ## Rules
 
