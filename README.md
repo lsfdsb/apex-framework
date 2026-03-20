@@ -97,21 +97,21 @@ APEX makes Claude Code build world-class apps. You focus on **what** to build. A
 
 **Built for leaders and PMs who want to ship beautiful, secure, performant apps** — and learn engineering along the way.
 
-### Three Commands. That's It.
+### Zero Commands. Just Talk.
 
 ```
-/prd     → Tell APEX what to build
-           APEX plans the architecture, researches APIs, spawns a team
-
-build    → APEX builds it
-           Agents work in parallel. Design DNA ensures pixel-perfect UI.
-           Quality gates run automatically. Security is scanned. Docs update.
-
-/ship    → Ship it
-           Code review (Opus) → PR → merge. Nothing ships without review.
+You:  "Build me an LMS app"
+APEX:  Generates PRD → "Approve?"
+You:  "Yes"
+APEX:  Designs architecture → "Approve?"
+You:  "Yes"
+APEX:  Verifies APIs, reads Design DNA, spawns team, builds,
+       runs QA + security + accessibility + CX review
+       → "All gates passed. PR ready. Ship?"
+You:  "Ship it"
 ```
 
-Everything else is automatic. You don't need to learn 29 commands — you need 3.
+Three decisions. Zero commands. APEX handles the entire pipeline autonomously.
 
 ### What Happens Behind the Scenes
 

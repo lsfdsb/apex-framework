@@ -84,12 +84,19 @@ fi
 
 This works even if the project has an outdated APEX version without the `/update` skill.
 
-## Workflow
+## Workflow — Autonomous Pipeline
 
-`/prd` → `/architecture` → build → `/qa` → `/security` → `/a11y` → `/cx-review` → `/commit`
+When the user asks to build something new, APEX drives the full pipeline autonomously. The user makes decisions at 3 gates only:
 
-Skills load on-demand. Hooks are deterministic. Both are enforced.
-When in doubt, ask the user. Don't assume.
+1. **Approve PRD** — auto-generated, presented for review
+2. **Approve Architecture** — auto-designed, presented for review
+3. **Approve Ship** — PR created, user says "merge"
+
+Everything between gates is autonomous: API verification (WebSearch), Design DNA loading, team spawning, building, QA, security, accessibility, CX review, and documentation. If a quality gate fails, fix and re-run — no user intervention needed.
+
+**Do NOT ask the user to type slash commands.** The pipeline invokes skills internally. The user just says what they want and approves at gates.
+
+For quick fixes, bugs, and questions — skip the pipeline entirely. Just do it.
 
 ## Agent Teams
 
