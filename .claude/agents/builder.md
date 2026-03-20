@@ -135,13 +135,17 @@ After reading the DNA page, you MUST run this extraction and **write the values 
 
 **If you skip this extraction, your code WILL NOT match the DNA.** This has caused full rebuilds in real sessions. Write these values down, then reference them as you code. Every color in your CSS must trace back to this extraction.
 
-### DNA → Code Translation
+### DNA → React Translation (HTML pages → TSX components)
 
-1. **First file: globals.css** — Set up CSS variables matching the extracted palette BEFORE writing components
-2. **Map CSS variables** — `var(--accent)` → `text-accent`, `var(--bg-elevated)` → `bg-elevated`
-3. **Preserve proportions** — font sizes ±1px, padding ±2px, same radius, same transition timing
-4. **Add page animations** — every page root gets reveal animations matching the DNA
-5. **Verify** — does your component use the EXACT colors from the extraction? If not, fix it
+The DNA pages are **plain HTML/CSS**. You're building **React/Next.js with Tailwind**. Follow this translation order:
+
+1. **globals.css FIRST** — Create CSS custom properties matching the extracted palette. This is your single source of truth. ALL components inherit from this.
+2. **Read the Translation Guide** — `.claude/skills/design-system/reference.md` has exact CSS→Tailwind token mappings, a worked HTML→React example, and a 9-point checklist. Read it.
+3. **HTML `class` → React `className`** — Convert every DNA class to Tailwind utilities. Use the token mapping table in reference.md (e.g., `var(--accent)` → `text-[var(--color-accent)]`)
+4. **HTML `<section>` → React component** — Each DNA section becomes a React component. Keep the same visual structure (grid columns, flex layout, spacing)
+5. **CSS animations → CSS or framer-motion** — Prefer CSS animations from globals.css (`.reveal`, `.apex-enter`). Use IntersectionObserver for scroll reveals. Avoid framer-motion unless the project already uses it
+6. **Preserve proportions** — Font sizes ±1px, padding ±2px, same radius, same transition timing. The DNA values are intentional
+7. **Verify before done** — Open DNA page side-by-side with your component. Run the 9-point checklist from reference.md. Every color, font, and spacing must match
 
 ### Token Enforcement
 - **NEVER** hardcode Tailwind palette colors (`blue-500`, `purple-600`, `amber-400`)
