@@ -92,16 +92,7 @@ export default function TopBar({ title, breadcrumbs = [], notificationCount = 0,
           </svg>
         </IconBtn>
 
-        <button aria-label="User menu" style={{
-          width:28, height:28, borderRadius:'50%', border:'2px solid transparent',
-          background:'var(--accent-glow,rgba(99,107,240,.12))', color:'var(--accent,#636bf0)',
-          fontSize:10, fontWeight:600, display:'flex', alignItems:'center', justifyContent:'center',
-          cursor:'pointer', boxShadow:'0 0 0 2px var(--bg-elevated,#111114), 0 0 0 4px var(--success,#34d399)',
-          transition:'border-color .3s',
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.borderColor='var(--accent,#636bf0)' }}
-        onMouseLeave={(e) => { e.currentTarget.style.borderColor='transparent' }}
-        >{userInitials}</button>
+        {/* No avatar here — sidebar handles user identity */}
       </div>
     </header>
   )
