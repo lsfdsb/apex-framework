@@ -98,6 +98,15 @@ export function applyPalette(name: PaletteName, mode: "dark" | "light") {
   r.setProperty("--warning", p.warning);
   r.setProperty("--destructive", p.destructive);
   r.setProperty("--info", p.info);
+  // Nav background with transparency
+  const hexToRgb = (hex: string) => {
+    const n = parseInt(hex.slice(1), 16);
+    return `${(n >> 16) & 255},${(n >> 8) & 255},${n & 255}`;
+  };
+  r.setProperty("--nav-bg", mode === "dark" ? `rgba(${hexToRgb(p.bg)},0.7)` : `rgba(${hexToRgb(p.bg)},0.85)`);
+  // CTA colors (for landing page buttons)
+  r.setProperty("--cta-bg", mode === "dark" ? "#ffffff" : p.text);
+  r.setProperty("--cta-text", mode === "dark" ? p.bg : p.elevated);
   document.documentElement.setAttribute("data-theme", mode);
   localStorage.setItem("apex-palette", name);
   localStorage.setItem("apex-theme", mode);

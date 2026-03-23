@@ -21,12 +21,32 @@ export default function TemplatePage({ component: Component, label, defaultPalet
   return (
     <div>
       {/* Template toolbar */}
-      <div className="nav-glass sticky top-[49px] z-30 flex items-center justify-between px-6 py-3">
-        <div className="flex items-center gap-3">
-          <h2 className="text-sm font-semibold" style={{ color: "var(--text)" }}>{label}</h2>
+      <div
+        style={{
+          position: "sticky",
+          top: 52,
+          zIndex: 30,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "8px 24px",
+          background: "var(--nav-bg, rgba(6,6,10,0.6))",
+          backdropFilter: "blur(20px) saturate(1.4)",
+          borderBottom: "1px solid var(--border)",
+          transition: "background 0.4s, border-color 0.4s",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <h2 style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{label}</h2>
           <span
-            className="text-xs px-2.5 py-1 rounded-full font-medium"
-            style={{ background: "var(--accent-glow)", color: "var(--accent)" }}
+            style={{
+              fontSize: 11,
+              padding: "2px 8px",
+              borderRadius: 999,
+              fontWeight: 500,
+              background: "var(--accent-glow)",
+              color: "var(--accent)",
+            }}
           >
             {defaultPalette}
           </span>
@@ -34,8 +54,14 @@ export default function TemplatePage({ component: Component, label, defaultPalet
         {source && (
           <button
             onClick={() => setShowSource(!showSource)}
-            className="text-xs px-4 py-2 rounded-lg font-medium transition-all"
             style={{
+              fontSize: 12,
+              padding: "5px 14px",
+              borderRadius: 8,
+              fontWeight: 500,
+              transition: "all 0.25s",
+              cursor: "pointer",
+              fontFamily: "'Inter', -apple-system, sans-serif",
               background: showSource ? "var(--accent)" : "transparent",
               color: showSource ? "var(--bg)" : "var(--text-secondary)",
               border: `1px solid ${showSource ? "var(--accent)" : "var(--border)"}`,
