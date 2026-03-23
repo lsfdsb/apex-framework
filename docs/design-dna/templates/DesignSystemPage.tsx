@@ -289,41 +289,44 @@ export default function DesignSystemPage() {
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><SH label="Formulários" title="Primitivas de input." sub="Select, toggle, textarea, search, date — os blocos de construção de todo formulário." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24 }}>
+          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 16 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>Select / Combobox</PLabel>
-              <Select label="Status" options={[{ value: "lead", label: "Novo Lead" }, { value: "qualified", label: "Qualificado" }, { value: "proposal", label: "Proposta" }, { value: "won", label: "Ganho" }]} placeholder="Selecionar status..." />
+              <div style={{ marginTop: 12 }}><Select label="Status" options={[{ value: "lead", label: "Novo Lead" }, { value: "qualified", label: "Qualificado" }, { value: "proposal", label: "Proposta" }, { value: "won", label: "Ganho" }]} placeholder="Selecionar status..." /></div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>DatePicker</PLabel>
-              <DatePicker label="Data de follow-up" />
+              <div style={{ marginTop: 12 }}><DatePicker label="Data de follow-up" /></div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>SearchInput</PLabel>
-              <SearchInputDemo />
+              <div style={{ marginTop: 12 }}><SearchInputDemo /></div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>Toggle Switch</PLabel>
-              <ToggleDemo />
-            </div>
-            <div style={{ gridColumn: "1 / -1", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24 }}>
-              <PLabel>Textarea</PLabel>
-              <TextareaDemo />
+              <div style={{ marginTop: 12 }}><ToggleDemo /></div>
             </div>
           </div>
 
-          <div className="reveal reveal-delay-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+          <div className="reveal reveal-delay-2" style={{ marginTop: 20 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
+              <PLabel>Textarea</PLabel>
+              <div style={{ marginTop: 12 }}><TextareaDemo /></div>
+            </div>
+          </div>
+
+          <div className="reveal reveal-delay-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginTop: 20 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
               <PLabel>Tooltip</PLabel>
-              <Tooltip content="Informação adicional sobre este campo"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Passe o mouse aqui</span></Tooltip>
+              <div style={{ marginTop: 16 }}><Tooltip content="Informação adicional sobre este campo"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Passe o mouse aqui</span></Tooltip></div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
               <PLabel>ConfirmDialog</PLabel>
-              <ConfirmDialogDemo />
+              <div style={{ marginTop: 16 }}><ConfirmDialogDemo /></div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
               <PLabel>Toast</PLabel>
-              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>useToast() hook</span>
+              <div style={{ marginTop: 16 }}><span style={{ fontSize: 12, color: "var(--text-muted)" }}>useToast() hook</span></div>
             </div>
           </div>
         </div>
