@@ -30,7 +30,7 @@ function parseChangelog(): ChangelogEntry[] {
     const items: string[] = [];
     for (const line of body.split("\n")) {
       const bulletMatch = line.match(/^- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
-      if (bulletMatch && items.length < 5) {
+      if (bulletMatch && items.length < 15) {
         items.push(`${bulletMatch[1]} — ${bulletMatch[2].trim()}`);
       }
     }
