@@ -4,7 +4,6 @@
 // Body font: Newsreader (serif), UI font: Inter, Display: Instrument Serif
 
 import React, { useState, useEffect, useRef } from "react";
-import { SectionHeader, Button } from "../starters/primitives";
 
 // --- Reveal hook ---
 
@@ -148,7 +147,7 @@ function ReadingPage({ chapter, content, sideNotes, pageNum }: { chapter: Chapte
   let pIdx = 0;
 
   return (
-    <div className="max-w-[860px] mx-auto">
+    <div>
       <div className="grid gap-8" style={{ gridTemplateColumns: "1fr 180px" }}>
         <div className="rounded-[var(--radius)] border relative" style={{ background: "var(--bg-elevated)", borderColor: "var(--border)", padding: "56px 48px" }}>
           <p className="text-[11px] uppercase tracking-[0.08em] mb-5" style={{ fontFamily: "var(--font-sans,'Inter',sans-serif)", color: "var(--accent)" }}>
@@ -241,8 +240,7 @@ export default function EbookPage() {
         <div style={{ width: `${scrollProgress}%`, height: "100%", background: "var(--accent)", transition: "width 0.1s" }} />
       </div>
 
-      <div className="px-4 py-16 pt-20">
-        <div className="mx-auto" style={{ maxWidth: 1100 }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px 64px" }}>
 
           {/* Cover section */}
           <section style={{ marginBottom: 80 }}>
@@ -254,9 +252,13 @@ export default function EbookPage() {
           </section>
 
           {/* TOC + Reading */}
-          <SectionHeader label="E-Book Reader" title="Long-form reading." subtitle="Table of contents, chapter prose, callouts, sidenotes, navigation." align="center" />
+          <div className="section-header reveal" style={{ textAlign: "center", marginBottom: 48 }}>
+            <p style={{ fontFamily: "var(--font-sans,'Inter',sans-serif)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", marginBottom: 12 }}>E-Book Reader</p>
+            <h2 style={{ fontFamily: "var(--font-display,'Instrument Serif',Georgia,serif)", fontSize: "clamp(32px,4vw,48px)", fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 12 }}>Long-form reading.</h2>
+            <p style={{ fontFamily: "var(--font-sans,'Inter',sans-serif)", fontSize: 16, color: "var(--text-secondary)", fontWeight: 300 }}>Table of contents, chapter prose, callouts, sidenotes, navigation.</p>
+          </div>
 
-          <div className="grid gap-12 lg:grid-cols-[280px_1fr]">
+          <div className="grid gap-12 lg:grid-cols-[260px_1fr]">
             <div className="reveal">
               <TableOfContents chapters={CHAPTERS} activeChapter={activeChapter} onSelect={setActiveChapter} />
             </div>
@@ -266,7 +268,6 @@ export default function EbookPage() {
             </div>
           </div>
 
-        </div>
       </div>
     </div>
   );

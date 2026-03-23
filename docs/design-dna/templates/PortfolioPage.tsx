@@ -3,7 +3,6 @@
 // DNA palette: bg=var(--bg), accent=var(--accent), Instrument Serif display, centered hero
 
 import React, { useEffect, FormEvent, useState } from "react";
-import { Header } from "../starters/layout";
 import { Badge } from "../starters/primitives";
 
 // ── Reveal hook (IntersectionObserver → .visible) ─────────────
@@ -118,11 +117,6 @@ export default function PortfolioPage() {
         @media(max-width:768px){.pg-grid,.ab-split,.sv-grid{grid-template-columns:1fr!important}}
         @media(prefers-reduced-motion:reduce){.reveal{opacity:1!important;transform:none!important;filter:none!important}}
       `}</style>
-
-      <Header
-        logo={<span style={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em", color: "var(--text)" }}>Creative Studio</span>}
-        links={[{ label: "Work", href: "#work", active: true }, { label: "About", href: "#about" }, { label: "Services", href: "#services" }, { label: "Contact", href: "#contact" }]}
-      />
 
       {/* Hero — centered serif "Creative studio." */}
       <section id="main-content" style={{ minHeight: "80vh", display: "flex", alignItems: "center", justifyContent: "center", textAlign: "center", padding: "80px 32px 100px" }}>
