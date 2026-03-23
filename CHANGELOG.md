@@ -64,6 +64,12 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
 
 ### Fixed
+- **LandingPage.tsx** — Rewritten to match landing.html design: added Pricing, Dashboard, Auth sections; fixed Features to 3-column grid; added reveal animations with IntersectionObserver, glow-pulse, and lift hover effects; corrected CTA with bg-surface + gradient; rewrote footer with multi-column layout and 3 link columns
+- **BlogLayout.tsx** — Rewritten to match blog.html design: added hero section; removed sidebar (aligned with template); fixed article grid to 3-column layout; added reading experience section with blockquote styling; added standalone newsletter box
+- **SaaSDashboard.tsx** — Rewritten to match saas.html design: added hero section and 4 app-frame sections (Dashboard with sidebar/stats/sparklines/chart, Data Table, Settings with toggles, Empty State); integrated macOS window chrome
+- **ShowcaseNav.tsx** — Rewritten to match DNA palette.js nav: fixed position, pill-shaped links with hover translateY(-1px) + accent-glow animation, active state with accent background, 52px height
+- **PaletteSwitcher.tsx** — Replaced flat dot bar with apex-widget design: gear button with rotate animation, expandable panel with palette dots and dark/light mode toggle
+- **App.tsx** — Added spacer div for fixed nav layout
 - **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results (#117)
 - **False Positive Hook Blocks** — BLOCKED grep now only matches real hook verdicts (`BLOCKED:`), not the word "BLOCKED" in agent documentation. Fixed 5+ sessions of inflated block counts (#117)
 - **Tailwind Warning Channel** — Design token warning now outputs to stdout (was stderr), so Claude actually receives the hint (#117)
@@ -74,6 +80,7 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
 - **Removed Stale QA Cleanup** — Removed obsolete cleanup task from QA agent that was no longer referenced (#115)
 - **Worktree cleanup** — Stop orphaned dev servers properly on session end (7ab772b)
+- pixel-perfect templates + showcase nav/widget (5f297af)
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
 
 The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.
