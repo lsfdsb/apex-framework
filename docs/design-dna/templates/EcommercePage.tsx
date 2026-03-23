@@ -5,8 +5,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { Header } from "../starters/layout";
-import { Badge, Button } from "../starters/primitives";
+// No external layout imports — showcase pages are self-contained
 
 // ── useReveal hook ─────────────────────────────────────────────
 function useReveal() {
@@ -125,16 +124,6 @@ export default function EcommercePage() {
       `}</style>
 
       <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
-        <Header
-          logo={<span style={{ fontSize: 14, fontWeight: 600, letterSpacing: "-0.01em" }}>APEX Store</span>}
-          links={[{ label: "Products", href: "#products", active: true }, { label: "Collections", href: "#collections" }]}
-          actions={
-            <button style={{ padding: 8, borderRadius: 8, color: "var(--text-secondary)", background: "none", border: "none", cursor: "pointer" }} aria-label="Cart">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5" width="20" height="20"><path d="M6 2L3 6v12a2 2 0 002 2h10a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="17" y2="6"/><path d="M13 10a3 3 0 01-6 0"/></svg>
-            </button>
-          }
-        />
-
         {/* Hero */}
         <section style={{ textAlign: "center", padding: "160px 32px 80px" }}>
           <div className="hero-svg reveal" style={{ display: "flex", justifyContent: "center", marginBottom: 48 }}>

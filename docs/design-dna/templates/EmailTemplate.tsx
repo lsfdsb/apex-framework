@@ -241,9 +241,9 @@ export default function EmailTemplate() {
   return (
     <>
       <style>{revealStyles}</style>
-      <div className="min-h-screen px-4 apex-enter" style={{ color: "var(--text)" }}>
-        <section className="text-center" style={{ paddingTop: 140, paddingBottom: 40 }}>
-          <div className="mx-auto" style={{ maxWidth: 1200 }}>
+      <div className="min-h-screen apex-enter" style={{ color: "var(--text)" }}>
+        <section className="text-center" style={{ padding: "100px 32px 40px" }}>
+          <div className="mx-auto" style={{ maxWidth: 1200, margin: "0 auto" }}>
             <p className="apex-label mb-4 reveal" style={{ color: "var(--accent)" }}>Email Templates</p>
             <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px,7vw,80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
               Emails people<br />actually <em style={{ fontStyle: "italic", color: "var(--accent)" }}>open.</em>
@@ -253,10 +253,12 @@ export default function EmailTemplate() {
             </p>
           </div>
         </section>
-        <div className="mx-auto flex flex-col gap-20 pb-20" style={{ maxWidth: 720 }}>
-          <WelcomeEmail /><VerificationEmail /><OrderEmail /><ShippingEmail />
-          <PasswordResetEmail /><TeamInvitationEmail /><PaymentFailedEmail /><WeeklyDigestEmail />
-        </div>
+        <section style={{ padding: "0 32px 100px" }}>
+          <div className="flex flex-col gap-20" style={{ maxWidth: 720, margin: "0 auto" }}>
+            <WelcomeEmail /><VerificationEmail /><OrderEmail /><ShippingEmail />
+            <PasswordResetEmail /><TeamInvitationEmail /><PaymentFailedEmail /><WeeklyDigestEmail />
+          </div>
+        </section>
       </div>
     </>
   );
