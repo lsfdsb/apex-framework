@@ -1,4 +1,4 @@
-import { useState, Suspense, useEffect } from "react";
+import { useState, Suspense, useEffect, useRef } from "react";
 import { SourceViewer } from "../components/SourceViewer";
 import { usePalette } from "../context/PaletteContext";
 import { type PaletteName } from "../data/palettes";
@@ -13,64 +13,26 @@ interface TemplatePageProps {
 export default function TemplatePage({ component: Component, label, defaultPalette, source }: TemplatePageProps) {
   const [showSource, setShowSource] = useState(false);
   const { setPalette } = usePalette();
+  const initialized = useRef(false);
 
+  // Only set palette on first mount or when navigating to a different template
   useEffect(() => {
-    setPalette(defaultPalette);
+    if (!initialized.current) {
+      setPalette(defaultPalette);
+      initialized.current = true;
+    }
   }, [defaultPalette, setPalette]);
+
+  // Reset ref when template changes so palette applies on navigation
+  useEffect(() => {
+    initialized.current = false;
+    setPalette(defaultPalette);
+    initialized.current = true;
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultPalette]);
 
   return (
     <div>
-      {/* Template toolbar — floating pill */}
-      <div style={{ display: "flex", justifyContent: "center", padding: "0 24px", marginBottom: 8 }}>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 10,
-            padding: "6px 6px 6px 16px",
-            borderRadius: 999,
-            background: "color-mix(in srgb, var(--bg-elevated) 60%, transparent)",
-            backdropFilter: "blur(16px) saturate(1.5)",
-            WebkitBackdropFilter: "blur(16px) saturate(1.5)",
-            border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)",
-            transition: "all 0.4s",
-          }}
-        >
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>{label}</span>
-          <span
-            style={{
-              fontSize: 10,
-              padding: "2px 8px",
-              borderRadius: 999,
-              fontWeight: 500,
-              background: "var(--accent-glow)",
-              color: "var(--accent)",
-            }}
-          >
-            {defaultPalette}
-          </span>
-          {source && (
-            <button
-              onClick={() => setShowSource(!showSource)}
-              style={{
-                fontSize: 11,
-                padding: "4px 12px",
-                borderRadius: 999,
-                fontWeight: 500,
-                transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
-                cursor: "pointer",
-                fontFamily: "'Inter', -apple-system, sans-serif",
-                background: showSource ? "var(--accent)" : "transparent",
-                color: showSource ? "white" : "var(--text-muted)",
-                border: showSource ? "1px solid var(--accent)" : "1px solid color-mix(in srgb, var(--border) 50%, transparent)",
-              }}
-            >
-              {showSource ? "Hide" : "Source"}
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Source panel */}
       {showSource && source && (
         <div className="max-w-screen-xl mx-auto p-6">
@@ -78,7 +40,7 @@ export default function TemplatePage({ component: Component, label, defaultPalet
         </div>
       )}
 
-      {/* Template render — full width, proper padding */}
+      {/* Template render */}
       <Suspense
         fallback={
           <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
@@ -96,6 +58,40 @@ export default function TemplatePage({ component: Component, label, defaultPalet
           <Component />
         </div>
       </Suspense>
+
+      {/* Floating action — bottom right, minimal */}
+      {source && (
+        <button
+          onClick={() => setShowSource(!showSource)}
+          style={{
+            position: "fixed",
+            bottom: 24,
+            right: 24,
+            zIndex: 200,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 16px",
+            borderRadius: 999,
+            fontSize: 12,
+            fontWeight: 500,
+            fontFamily: "'Inter', -apple-system, sans-serif",
+            cursor: "pointer",
+            transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            background: showSource ? "var(--accent)" : "color-mix(in srgb, var(--bg-elevated) 75%, transparent)",
+            color: showSource ? "white" : "var(--text-secondary)",
+            border: showSource ? "1px solid var(--accent)" : "1px solid color-mix(in srgb, var(--text-muted) 20%, transparent)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+          }}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+          </svg>
+          {showSource ? "Hide" : "Source"}
+        </button>
+      )}
     </div>
   );
 }
