@@ -27,8 +27,8 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
           margin: "0 auto",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
           height: 52,
+          gap: 8,
         }}
       >
         <Link
@@ -41,6 +41,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             color: "var(--text)",
             letterSpacing: "-0.02em",
             flexShrink: 0,
+            marginRight: 8,
           }}
         >
           APEX{" "}
@@ -48,6 +49,16 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             DNA
           </span>
         </Link>
+
+        <div
+          style={{
+            width: 1,
+            height: 16,
+            background: "var(--border)",
+            flexShrink: 0,
+            marginRight: 4,
+          }}
+        />
 
         <div
           style={{
