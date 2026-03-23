@@ -11,7 +11,7 @@ import PipelineAnalytics from "./crm/PipelineAnalytics";
 import TaskList from "./crm/TaskList";
 import ChatWidget from "./crm/ChatWidget";
 import TicketDetail from "./crm/TicketDetail";
-import EmailComposer from "./crm/EmailComposer";
+import Sender from "./crm/Sender";
 import NotesPanel from "./crm/NotesPanel";
 import FilterBar from "./crm/FilterBar";
 import EmptyState from "./crm/EmptyState";
@@ -294,8 +294,8 @@ export default function CRMPipeline() {
       {/* ═══ EMAIL COMPOSER ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>E-mail</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Escreva uma vez, feche mais rápido.</h2></div>
-          <div className="reveal reveal-delay-1"><EmailComposer /></div>
+          <div className="reveal"><Label>Sender</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Comunique-se em qualquer canal.</h2></div>
+          <div className="reveal reveal-delay-1"><Sender /></div>
         </div>
       </section>
 
