@@ -16,7 +16,8 @@ interface ChangelogEntry {
 function parseChangelog(): ChangelogEntry[] {
   const entries: ChangelogEntry[] = [];
   // Match versioned sections: ## [5.14.0] — 2026-03-20 — Title
-  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*—\s*(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/gm;
+  // Match: ## [5.14.0] — 2026-03-20 — Title  (supports —, –, and - as separators)
+  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*[—–-]\s*(\d{4}-\d{2}-\d{2})\s*[—–-]\s*(.+)$/gm;
   let match;
   const positions: { version: string; date: string; title: string; start: number }[] = [];
   while ((match = sectionRegex.exec(changelogRaw)) !== null) {
@@ -37,6 +38,13 @@ function parseChangelog(): ChangelogEntry[] {
       entries.push({ ...positions[i], items });
     }
   }
+  // Sort newest first (by version number descending)
+  entries.sort((a, b) => {
+    const va = a.version.replace("v", "").split(".").map(Number);
+    const vb = b.version.replace("v", "").split(".").map(Number);
+    for (let i = 0; i < 3; i++) { if (vb[i] !== va[i]) return vb[i] - va[i]; }
+    return 0;
+  });
   return entries;
 }
 
