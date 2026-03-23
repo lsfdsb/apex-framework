@@ -83,6 +83,17 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 - **NotesPanel Component** — Activity notes interface with input and note cards showing author, tags, and timestamps in Portuguese
 - **FilterBar Component** — Advanced filtering with dropdowns and active filter pills with remove functionality
 - **EmptyState Component** — Configurable empty state display with icon, title, description, and CTA button for consistent UX
+- **Phoenix V3 Phase 1 Foundation** — 9 P0 form primitives with full keyboard nav, glass morphism panels, and accessible interactions (#160):
+  - **Select/Combobox** — Searchable dropdown with keyboard navigation, glass morphism panel, supports custom filtering
+  - **DatePicker** — Styled native date and datetime-local input with dark/light theme support
+  - **SearchInput** — Magnifying glass icon, clear button, focus ring, optimized for data discovery
+  - **Toast** — useToast() hook + ToastProvider; 4 variants (success, error, info, warning) with auto-dismiss and progress bar
+  - **ConfirmDialog** — Modal with backdrop blur, destructive variant, escape and click-outside dismiss handling
+  - **DropdownMenu** — Trigger + panel with hover highlight, destructive item support, glass morphism styling
+  - **Tooltip** — Hover delay, 4 directional positions, smooth fade-in animation
+  - **Toggle** — 40x22 switch with spring animation, fully accessible with ARIA labels
+  - **Textarea** — Auto-resize, maxLength counter display, error state styling
+- **Tokens/Design System Showcase Page** — Live demo page showcasing all P0 form primitives with interactive examples and design token documentation (#160)
 
 ### Changed
 - **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy; floating glass design with scroll transparency (#139, #136, #134, #131)
