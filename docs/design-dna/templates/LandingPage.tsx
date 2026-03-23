@@ -74,7 +74,7 @@ export default function LandingPage() {
   useReveal();
   const s = (vars: React.CSSProperties) => vars;
   return (
-    <div style={{ background: "var(--bg)", color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

@@ -280,7 +280,7 @@ function CreatePost() {
 
 export default function SocialFeed() {
   return (
-    <div className="min-h-screen apex-enter" style={{ background: "var(--bg)", color: "var(--text)" }}>
+    <div className="min-h-screen apex-enter" style={{ color: "var(--text)" }}>
       <Header
         logo={<span className="text-[15px] font-semibold tracking-tight">Social</span>}
         actions={<Button size="sm">Sign in</Button>}
