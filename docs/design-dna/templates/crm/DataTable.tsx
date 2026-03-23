@@ -52,8 +52,8 @@ export default function DataTable() {
         </div>
       </div>
 
-      {/* Header */}
-      <div style={{ display: "grid", gridTemplateColumns: "40px 2fr 2fr 1.5fr 80px 100px", padding: "10px 20px", borderBottom: "1px solid var(--border)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-muted)", fontWeight: 500, background: "var(--bg-surface)" }}>
+      {/* Sticky header */}
+      <div style={{ display: "grid", gridTemplateColumns: "40px 2fr 2fr 1.5fr 80px 100px", padding: "10px 20px", borderBottom: "1px solid var(--border)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-muted)", fontWeight: 500, background: "var(--bg-surface)", position: "sticky", top: 0, zIndex: 2, backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}>
         <span><input type="checkbox" style={{ width: 14, height: 14, cursor: "pointer" }} /></span>
         <span>Nome</span><span>E-mail</span><span>Empresa</span><span>Score</span><span>Status</span>
       </div>
