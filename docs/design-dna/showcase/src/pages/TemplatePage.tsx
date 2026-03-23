@@ -20,27 +20,26 @@ export default function TemplatePage({ component: Component, label, defaultPalet
 
   return (
     <div>
-      {/* Template toolbar */}
-      <div
-        style={{
-          position: "sticky",
-          top: 52,
-          zIndex: 30,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "8px 24px",
-          background: "var(--nav-bg, rgba(6,6,10,0.6))",
-          backdropFilter: "blur(20px) saturate(1.4)",
-          borderBottom: "1px solid var(--border)",
-          transition: "background 0.4s, border-color 0.4s",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <h2 style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{label}</h2>
+      {/* Template toolbar — floating pill */}
+      <div style={{ display: "flex", justifyContent: "center", padding: "0 24px", marginBottom: 8 }}>
+        <div
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 10,
+            padding: "6px 6px 6px 16px",
+            borderRadius: 999,
+            background: "color-mix(in srgb, var(--bg-elevated) 60%, transparent)",
+            backdropFilter: "blur(16px) saturate(1.5)",
+            WebkitBackdropFilter: "blur(16px) saturate(1.5)",
+            border: "1px solid color-mix(in srgb, var(--border) 40%, transparent)",
+            transition: "all 0.4s",
+          }}
+        >
+          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>{label}</span>
           <span
             style={{
-              fontSize: 11,
+              fontSize: 10,
               padding: "2px 8px",
               borderRadius: 999,
               fontWeight: 500,
@@ -50,26 +49,26 @@ export default function TemplatePage({ component: Component, label, defaultPalet
           >
             {defaultPalette}
           </span>
+          {source && (
+            <button
+              onClick={() => setShowSource(!showSource)}
+              style={{
+                fontSize: 11,
+                padding: "4px 12px",
+                borderRadius: 999,
+                fontWeight: 500,
+                transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)",
+                cursor: "pointer",
+                fontFamily: "'Inter', -apple-system, sans-serif",
+                background: showSource ? "var(--accent)" : "transparent",
+                color: showSource ? "white" : "var(--text-muted)",
+                border: showSource ? "1px solid var(--accent)" : "1px solid color-mix(in srgb, var(--border) 50%, transparent)",
+              }}
+            >
+              {showSource ? "Hide" : "Source"}
+            </button>
+          )}
         </div>
-        {source && (
-          <button
-            onClick={() => setShowSource(!showSource)}
-            style={{
-              fontSize: 12,
-              padding: "5px 14px",
-              borderRadius: 8,
-              fontWeight: 500,
-              transition: "all 0.25s",
-              cursor: "pointer",
-              fontFamily: "'Inter', -apple-system, sans-serif",
-              background: showSource ? "var(--accent)" : "transparent",
-              color: showSource ? "var(--bg)" : "var(--text-secondary)",
-              border: `1px solid ${showSource ? "var(--accent)" : "var(--border)"}`,
-            }}
-          >
-            {showSource ? "Hide Source" : "View Source"}
-          </button>
-        )}
       </div>
 
       {/* Source panel */}

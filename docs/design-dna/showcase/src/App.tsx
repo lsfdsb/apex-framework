@@ -24,7 +24,7 @@ export default function App() {
     <PaletteProvider>
       <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <ShowcaseNav activePath={hash} />
-        <div style={{ height: 52 }} /> {/* Spacer for fixed nav */}
+        <div style={{ height: 68 }} /> {/* Spacer for floating nav (44px + 12px top + 12px gap) */}
 
         {hash === "/" ? (
           <HomePage />
