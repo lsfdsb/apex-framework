@@ -120,7 +120,7 @@ export default function SaaSDashboard() {
                 <div style={{ fontWeight: 600, fontSize: 14, padding: "4px 12px", marginBottom: 20, letterSpacing: "-0.01em" }}>Acme</div>
                 <div className="saas-sidebar-item active"><SidebarIcon d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z" />Overview</div>
                 <div className="saas-sidebar-item"><SidebarIcon d="M22 12l-4 0l-3 9l-6-18l-3 9l-4 0" />Analytics</div>
-                <div className="saas-sidebar-item"><SidebarIcon d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />Users<span style={{ marginLeft: "auto", fontSize: 10, padding: "1px 6px", borderRadius: 999, background: "var(--accent)", color: "white" }}>24</span></div>
+                <div className="saas-sidebar-item"><SidebarIcon d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8" />Users<span style={{ marginLeft: "auto", fontSize: 10, padding: "1px 6px", borderRadius: 999, background: "var(--accent)", color: "var(--accent-contrast, white)" }}>24</span></div>
                 <div className="saas-sidebar-item"><SidebarIcon d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zM22 6l-10 7L2 6" />Messages</div>
                 <div style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", padding: "8px 12px 4px", marginTop: 12 }}>Settings</div>
                 <div className="saas-sidebar-item"><SidebarIcon d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />Preferences</div>
@@ -130,7 +130,7 @@ export default function SaaSDashboard() {
                   <h2 style={{ fontSize: 18, fontWeight: 600, letterSpacing: "-0.02em" }}>Overview</h2>
                   <div style={{ display: "flex", gap: 8 }}>
                     <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)" }}>Export</button>
-                    <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "white", border: "none" }}>Add metric</button>
+                    <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none" }}>Add metric</button>
                   </div>
                 </div>
                 <div className="saas-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 24 }}>
@@ -242,7 +242,7 @@ export default function SaaSDashboard() {
                     </div>
                     <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginTop: 8 }}>
                       <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", cursor: "pointer" }}>Cancel</button>
-                      <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, background: "var(--accent)", color: "white", border: "none", cursor: "pointer" }}>Save changes</button>
+                      <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", cursor: "pointer" }}>Save changes</button>
                     </div>
                   </div>
                   <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", padding: 28 }}>
@@ -280,7 +280,7 @@ export default function SaaSDashboard() {
               </div>
               <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 6 }}>No projects yet</h3>
               <p style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 24 }}>Create your first project to get started.</p>
-              <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, background: "var(--accent)", color: "white", border: "none", cursor: "pointer" }}>Create project</button>
+              <button style={{ padding: "7px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", cursor: "pointer" }}>Create project</button>
             </div>
           </AppFrame>
         </div>

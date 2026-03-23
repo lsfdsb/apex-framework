@@ -72,7 +72,7 @@ Ana`,
           <ToolBtn d="M3 3h18v18H3zM8.5 8.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM21 15l-5-5L5 21" />
           <ToolBtn d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" />
         </div>
-        <button onClick={onSend} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 20px", borderRadius: "var(--radius-sm, 8px)", background: "var(--accent)", color: "white", border: "none", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", transition: "all .2s" }}>
+        <button onClick={onSend} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 20px", borderRadius: "var(--radius-sm, 8px)", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", fontSize: 13, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", transition: "all .2s" }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
           Enviar
         </button>

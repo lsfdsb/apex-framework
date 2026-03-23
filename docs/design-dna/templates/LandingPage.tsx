@@ -133,7 +133,7 @@ export default function LandingPage() {
                     </li>
                   ))}
                 </ul>
-                <button style={{ display: "block", width: "100%", textAlign: "center", padding: 13, borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, border: p.featured ? "none" : "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-body)", background: p.featured ? "var(--accent)" : "transparent", color: p.featured ? "white" : "var(--text)", transition: "all .25s" }}>{p.featured ? "Start trial" : p.tier === "Enterprise" ? "Contact sales" : "Start free"}</button>
+                <button style={{ display: "block", width: "100%", textAlign: "center", padding: 13, borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, border: p.featured ? "none" : "1px solid var(--border)", cursor: "pointer", fontFamily: "var(--font-body)", background: p.featured ? "var(--accent)" : "transparent", color: p.featured ? "var(--accent-contrast, white)" : "var(--text)", transition: "all .25s" }}>{p.featured ? "Start trial" : p.tier === "Enterprise" ? "Contact sales" : "Start free"}</button>
               </div>
             ))}
           </div>
@@ -151,7 +151,7 @@ export default function LandingPage() {
             <div style={{ padding: "14px 24px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div style={{ display: "flex", gap: 6 }}><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#ff5f57" }} /><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#febc2e" }} /><span style={{ width: 10, height: 10, borderRadius: "50%", background: "#28c840" }} /></div>
               <h3 style={{ fontSize: 14, fontWeight: 600 }}>Overview</h3>
-              <button style={{ background: "var(--accent)", color: "white", border: "none", padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>Export</button>
+              <button style={{ background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", padding: "5px 14px", borderRadius: 999, fontSize: 12, fontWeight: 500, cursor: "pointer" }}>Export</button>
             </div>
             <div style={{ padding: 24 }}>
               <div className="dash-stats" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12, marginBottom: 20 }}>
@@ -190,7 +190,7 @@ export default function LandingPage() {
                     <input type={label === "Password" ? "password" : label === "Email" ? "email" : "text"} placeholder={label === "Full name" ? "Jane Smith" : label === "Email" ? "jane@company.com" : "8+ characters"} style={{ width: "100%", padding: "11px 14px", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", color: "var(--text)", fontSize: 14, fontFamily: "var(--font-body)", outline: "none" }} />
                   </div>
                 ))}
-                <button style={{ width: "100%", padding: 12, background: "var(--accent)", color: "white", border: "none", borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", marginTop: 8 }}>Create account</button>
+                <button style={{ width: "100%", padding: 12, background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", marginTop: 8 }}>Create account</button>
                 <div style={{ marginTop: 24, textAlign: "center", fontSize: 13, color: "var(--text-muted)" }}>Have an account? <a href="#" style={{ color: "var(--accent)", textDecoration: "none" }}>Sign in</a></div>
               </div>
             </div>

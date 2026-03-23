@@ -225,7 +225,7 @@ export default function EcommercePage() {
                 <div style={{ display: "flex", justifyContent: "space-between", borderTop: "1px solid var(--border)", marginTop: 8, paddingTop: 16, fontWeight: 600, fontSize: 16, color: "var(--text)" }}>
                   <span>Total</span><span>$310</span>
                 </div>
-                <button style={{ width: "100%", padding: 14, background: "var(--accent)", color: "white", border: "none", borderRadius: "var(--radius-sm,8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", marginTop: 24, transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)", fontFamily: "inherit" }}>
+                <button style={{ width: "100%", padding: 14, background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", borderRadius: "var(--radius-sm,8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", marginTop: 24, transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)", fontFamily: "inherit" }}>
                   Proceed to checkout
                 </button>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, justifyContent: "center", marginTop: 12, fontSize: 11, color: "var(--text-muted)" }}>

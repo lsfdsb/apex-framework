@@ -185,7 +185,7 @@ export default function PresentationSlide() {
             <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: "radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)", top: "50%", left: "50%", transform: "translate(-50%, -50%)", pointerEvents: "none" }} />
             <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(44px, 5vw, 72px)", fontWeight: 400, letterSpacing: "-0.03em", position: "relative" }}>Ready to go <em style={{ fontStyle: "italic", color: "var(--accent)" }}>async?</em></h2>
             <p style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, marginTop: 12, position: "relative" }}>Let&rsquo;s build the future of work together.</p>
-            <a href="#" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 24, padding: "12px 28px", borderRadius: "var(--radius-sm, 8px)", background: "var(--accent)", color: "white", fontSize: 14, fontWeight: 500, textDecoration: "none", position: "relative", transition: "all .3s cubic-bezier(0.22,1,0.36,1)" }}>Schedule a demo</a>
+            <a href="#" style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 24, padding: "12px 28px", borderRadius: "var(--radius-sm, 8px)", background: "var(--accent)", color: "var(--accent-contrast, white)", fontSize: 14, fontWeight: 500, textDecoration: "none", position: "relative", transition: "all .3s cubic-bezier(0.22,1,0.36,1)" }}>Schedule a demo</a>
             <SlideNum n={10} />
           </div>
         </div>
