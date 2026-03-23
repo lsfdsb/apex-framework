@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.14.0
+# ⚔️ APEX Framework v5.15.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.14.0           ║
+  ║         ⚔️  APEX Framework v5.15.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
