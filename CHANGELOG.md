@@ -6,53 +6,6 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Fixed
-- resolve merge conflict in EmailComposer (50f4988)
-
-## [5.14.0] — 2026-03-20 — Native Alignment Audit
-
-Comprehensive audit against Claude Code's native capabilities. Every feature must earn its place — if Claude Code does it natively, APEX doesn't duplicate it.
-
-### Removed
-- **`/evolve` skill** — Removed self-evolution feature. Skill, agent (`framework-evolver`), scripts (`extract-session.sh`, `apex-sync.sh`) deleted
-- **`/debug` skill** — Claude Code has native `/debug` bundled skill
-- **`/research` skill** — Claude Code has native WebSearch + WebFetch tools
-- **`/code-standards` skill** — Redundant with `.claude/rules/` path-based rules
-- **`/sql-practices` skill** — Redundant with `.claude/rules/sql.md`
-- **`/cost-management` skill** — Claude Code handles auto-compaction natively
-- **`/init` skill** — Claude Code has native `/init` command
-- **`/apex-stack` skill** — Stack recommendations go stale; WebSearch provides current data
-- **`researcher` agent** — Claude Code's native WebSearch + WebFetch + Explore subagent replace this
-- **`guard-workflow-skip.sh`** — Advisory nudge, redundant with `enforce-workflow.sh`
-- **`auto-format.sh`** — Redundant with Prettier pre-commit hook
-- **`verify-install.sh`** — Redundant with session-context.sh bootstrap detection
-- **`track-agent-start.sh`** — Claude Code natively tracks subagents
-- **Test infrastructure** — Entire `tests/` directory removed for redesign
-- **31 stale local branches** — Accumulated feature/fix branches cleaned
-
-### Changed
-- **Agent roster** — 10 → 7 agents (Framework Evolver, Researcher removed; code-reviewer replaced by official plugin)
-- **Agent skills** — Removed `code-standards`, `sql-practices`, `debug` from all agent frontmatter. Agents now reference only skills that still exist
-- **settings.json** — Removed 4 hook entries pointing to deleted scripts (UserPromptSubmit, PreToolUse verify-install, PostToolUse auto-format, SubagentStart track-agent-start)
-- **session-context.sh** — Hook verification loop updated to match actual scripts
-- **health-check.sh** — Removed auto-format.sh from critical scripts check
-- **CLAUDE.md** — `/research` references → WebSearch; Researcher agent removed from roster
-- **README.md** — Updated agent counts, replaced `/debug` and `/research` with native equivalents
-- **Installed `code-review` plugin** — Official Anthropic plugin replaces custom code-reviewer agent
-
-### Fixed
-- **Builder/Debugger worktree file loss** — Root cause fix: `permissionMode: default` → `dontAsk` so worktree agents can commit. This was the actual cause of 6+ file loss incidents — not missing docs, not merge strategy.
-- **CLAUDE.md bloat** — Slimmed from 220 → 116 lines (-47%). Moved Agent Teams details to `/teams` skill. Under official 200-line recommendation.
-- **106 stale remote branches** deleted — only `main` remains
-
-### Stats
-- Skills: 28 → 21 (-7)
-- Agents: 9 → 7 (-2)
-- Scripts: 22 → 18 (-4)
-- CLAUDE.md: 220 → 116 lines (-47%)
-- Remote branches: 108 → 1
-- Lines deleted: ~6,200
-
 ## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
 
 Pixel-perfect template matching, component extraction, and self-contained showcase pages with 20+ commits completing the Design DNA showcase overhaul.
@@ -128,6 +81,50 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 - **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
 - **Removed Stale QA Cleanup** — Removed obsolete cleanup task from QA agent that was no longer referenced (#115)
 - **Worktree cleanup** — Stop orphaned dev servers properly on session end (7ab772b)
+
+## [5.14.0] — 2026-03-20 — Native Alignment Audit
+
+Comprehensive audit against Claude Code's native capabilities. Every feature must earn its place — if Claude Code does it natively, APEX doesn't duplicate it.
+
+### Removed
+- **`/evolve` skill** — Removed self-evolution feature. Skill, agent (`framework-evolver`), scripts (`extract-session.sh`, `apex-sync.sh`) deleted
+- **`/debug` skill** — Claude Code has native `/debug` bundled skill
+- **`/research` skill** — Claude Code has native WebSearch + WebFetch tools
+- **`/code-standards` skill** — Redundant with `.claude/rules/` path-based rules
+- **`/sql-practices` skill** — Redundant with `.claude/rules/sql.md`
+- **`/cost-management` skill** — Claude Code handles auto-compaction natively
+- **`/init` skill** — Claude Code has native `/init` command
+- **`/apex-stack` skill** — Stack recommendations go stale; WebSearch provides current data
+- **`researcher` agent** — Claude Code's native WebSearch + WebFetch + Explore subagent replace this
+- **`guard-workflow-skip.sh`** — Advisory nudge, redundant with `enforce-workflow.sh`
+- **`auto-format.sh`** — Redundant with Prettier pre-commit hook
+- **`verify-install.sh`** — Redundant with session-context.sh bootstrap detection
+- **`track-agent-start.sh`** — Claude Code natively tracks subagents
+- **Test infrastructure** — Entire `tests/` directory removed for redesign
+- **31 stale local branches** — Accumulated feature/fix branches cleaned
+
+### Changed
+- **Agent roster** — 10 → 7 agents (Framework Evolver, Researcher removed; code-reviewer replaced by official plugin)
+- **Agent skills** — Removed `code-standards`, `sql-practices`, `debug` from all agent frontmatter. Agents now reference only skills that still exist
+- **settings.json** — Removed 4 hook entries pointing to deleted scripts (UserPromptSubmit, PreToolUse verify-install, PostToolUse auto-format, SubagentStart track-agent-start)
+- **session-context.sh** — Hook verification loop updated to match actual scripts
+- **health-check.sh** — Removed auto-format.sh from critical scripts check
+- **CLAUDE.md** — `/research` references → WebSearch; Researcher agent removed from roster
+- **README.md** — Updated agent counts, replaced `/debug` and `/research` with native equivalents
+- **Installed `code-review` plugin** — Official Anthropic plugin replaces custom code-reviewer agent
+
+### Fixed
+- **Builder/Debugger worktree file loss** — Root cause fix: `permissionMode: default` → `dontAsk` so worktree agents can commit. This was the actual cause of 6+ file loss incidents — not missing docs, not merge strategy.
+- **CLAUDE.md bloat** — Slimmed from 220 → 116 lines (-47%). Moved Agent Teams details to `/teams` skill. Under official 200-line recommendation.
+- **106 stale remote branches** deleted — only `main` remains
+
+### Stats
+- Skills: 28 → 21 (-7)
+- Agents: 9 → 7 (-2)
+- Scripts: 22 → 18 (-4)
+- CLAUDE.md: 220 → 116 lines (-47%)
+- Remote branches: 108 → 1
+- Lines deleted: ~6,200
 
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
 
