@@ -200,7 +200,7 @@ export default function EcommercePage() {
       : sampleProducts.filter((p) => p.category === activeCategory);
 
   return (
-    <div className="apex-enter" style={{ background: "var(--bg)", color: "var(--text)" }}>
+    <div className="apex-enter" style={{ color: "var(--text)" }}>
       <Header
         logo={
           <span className="text-[14px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text)" }}>

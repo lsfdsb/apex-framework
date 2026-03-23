@@ -277,7 +277,7 @@ export default function EmailTemplate() {
   return (
     <div
       className="min-h-screen px-4 py-16 apex-enter"
-      style={{ background: "var(--bg)", color: "var(--text)" }}
+      style={{ color: "var(--text)" }}
     >
       <div className="mx-auto" style={{ maxWidth: 720 }}>
         <SectionHeader

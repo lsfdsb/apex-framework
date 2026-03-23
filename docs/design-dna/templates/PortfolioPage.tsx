@@ -179,7 +179,7 @@ function SkillBar({ skill }: { skill: Skill }) {
 // ── Page ──────────────────────────────────────────────────────
 export default function PortfolioPage() {
   return (
-    <div className="apex-enter" style={{ background: "var(--bg)", color: "var(--text)" }}>
+    <div className="apex-enter" style={{ color: "var(--text)" }}>
       <Header
         logo={
           <span className="text-[14px] font-semibold tracking-[-0.01em]" style={{ color: "var(--text)" }}>

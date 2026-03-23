@@ -93,7 +93,7 @@ function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
 export default function SaaSDashboard() {
   useReveal();
   return (
-    <div style={{ background: "var(--bg)", color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

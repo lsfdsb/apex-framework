@@ -51,7 +51,7 @@ function Author({ initials, name, date }: { initials: string; name: string; date
 export default function BlogLayout() {
   useReveal();
   return (
-    <div style={{ background: "var(--bg)", color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

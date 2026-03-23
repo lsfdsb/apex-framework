@@ -322,7 +322,7 @@ export default function EbookPage() {
   return (
     <div
       className="min-h-screen apex-enter"
-      style={{ background: "var(--bg)", color: "var(--text)" }}
+      style={{ color: "var(--text)" }}
       ref={mainRef}
     >
       {/* Reading progress bar */}
