@@ -7,35 +7,98 @@ interface ShowcaseNavProps {
 
 export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
   return (
-    <nav className="nav-glass sticky top-0 z-40">
-      <div className="max-w-screen-xl mx-auto flex items-center gap-1 px-6 overflow-x-auto scrollbar-none">
+    <nav
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+        padding: "0 32px",
+        background: "var(--nav-bg, rgba(6,6,10,0.6))",
+        backdropFilter: "blur(20px) saturate(1.4)",
+        borderBottom: "1px solid var(--border)",
+        transition: "background 0.4s, border-color 0.4s",
+      }}
+    >
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "0 auto",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 52,
+        }}
+      >
         <Link
           to="/"
-          className="shrink-0 py-4 px-3 text-sm font-bold tracking-wider"
-          style={{ color: activePath === "/" ? "var(--accent)" : "var(--text)", fontFamily: "Inter, sans-serif" }}
+          style={{
+            fontFamily: "'Inter', -apple-system, sans-serif",
+            fontWeight: 600,
+            fontSize: 14,
+            textDecoration: "none",
+            color: "var(--text)",
+            letterSpacing: "-0.02em",
+            flexShrink: 0,
+          }}
         >
-          APEX DNA
+          APEX{" "}
+          <span style={{ color: "var(--text-muted)", fontWeight: 300, marginLeft: 4, fontSize: 13 }}>
+            DNA
+          </span>
         </Link>
-        <div className="w-px h-4 mx-2 shrink-0" style={{ background: "var(--border)" }} />
-        {TEMPLATE_ROUTES.map((route) => {
-          const isActive = activePath === route.path;
-          return (
-            <Link
-              key={route.path}
-              to={route.path}
-              className="shrink-0 py-4 px-2.5 text-xs font-medium transition-all relative"
-              style={{ color: isActive ? "var(--accent)" : "var(--text-muted)" }}
-            >
-              {route.label}
-              {isActive && (
-                <span
-                  className="absolute bottom-0 left-2.5 right-2.5 h-0.5 rounded-full"
-                  style={{ background: "var(--accent)" }}
-                />
-              )}
-            </Link>
-          );
-        })}
+
+        <div
+          style={{
+            display: "flex",
+            gap: 4,
+            overflowX: "auto",
+            WebkitOverflowScrolling: "touch",
+            scrollbarWidth: "none",
+            whiteSpace: "nowrap",
+          }}
+          className="scrollbar-none"
+        >
+          {TEMPLATE_ROUTES.map((route) => {
+            const isActive = activePath === route.path;
+            return (
+              <Link
+                key={route.path}
+                to={route.path}
+                style={{
+                  fontFamily: "'Inter', -apple-system, sans-serif",
+                  fontSize: 13,
+                  color: isActive ? "var(--accent)" : "var(--text-muted)",
+                  textDecoration: "none",
+                  padding: "5px 10px",
+                  borderRadius: 999,
+                  transition: "all 0.25s",
+                  flexShrink: 0,
+                  whiteSpace: "nowrap",
+                  background: isActive ? "var(--accent-glow)" : "transparent",
+                  fontWeight: isActive ? 500 : 400,
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--text)";
+                    e.currentTarget.style.background = "var(--accent-glow)";
+                    e.currentTarget.style.transform = "translateY(-1px)";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) {
+                    e.currentTarget.style.color = "var(--text-muted)";
+                    e.currentTarget.style.background = "transparent";
+                    e.currentTarget.style.transform = "none";
+                  }
+                }}
+              >
+                {route.label}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );
