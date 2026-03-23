@@ -43,13 +43,14 @@ export default function TemplatePage({ component: Component, label, defaultPalet
       {/* Template render */}
       <Suspense
         fallback={
-          <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
-            <div className="text-center">
-              <div
-                className="w-8 h-8 rounded-full mx-auto mb-3"
-                style={{ border: "2px solid var(--border)", borderTopColor: "var(--accent)", animation: "spin 0.8s linear infinite" }}
-              />
-              <p className="text-sm" style={{ fontFamily: "Instrument Serif, serif", fontStyle: "italic" }}>Forging the beskar...</p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ width: 48, height: 48, margin: "0 auto 24px", position: "relative" }}>
+                <div style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "1px solid var(--border)" }} />
+                <div style={{ position: "absolute", inset: -2, borderRadius: "50%", border: "2px solid transparent", borderTopColor: "var(--accent)", animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite" }} />
+                <div style={{ position: "absolute", inset: 8, borderRadius: "50%", background: "var(--accent)", opacity: 0.15, animation: "apex-pulse 2s ease-in-out infinite" }} />
+              </div>
+              <p style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: "italic", fontSize: 16, color: "var(--text-muted)", letterSpacing: "-0.02em" }}>Forging the beskar...</p>
             </div>
           </div>
         }
