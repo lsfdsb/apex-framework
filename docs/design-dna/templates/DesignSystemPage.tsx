@@ -2,320 +2,276 @@
 // DNA source: docs/design-dna/design-system.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 
-import React from "react";
-import { SectionHeader, Card, Button, Badge, Input } from "../starters/primitives";
+import React, { useEffect } from "react";
 
-// --- Sample data ---
-
-interface ColorSwatch {
-  name: string;
-  cssVar: string;
-  hex: string;
-  textDark?: boolean;
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll(".reveal");
+    if (!els.length) return;
+    const io = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, []);
 }
 
-interface TypeSample {
-  label: string;
-  className: string;
-  style: React.CSSProperties;
-  sample: string;
+const dnaStyles = `
+.reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all .9s cubic-bezier(0.22,1,0.36,1)}
+.reveal.visible{opacity:1;transform:none;filter:none}
+.reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
+.ds-swatch-color{height:64px;border-radius:var(--radius-sm,8px);border:1px solid var(--border);margin-bottom:6px;transition:transform .3s cubic-bezier(0.22,1,0.36,1)}
+.ds-swatch-color:hover{transform:scale(1.08)}
+.ds-space-box{background:var(--accent-glow);border:1px solid var(--accent);border-radius:4px;transition:transform .3s}
+.ds-space-box:hover{transform:scale(1.1)}
+.ds-motion-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius,12px);padding:24px;text-align:center;cursor:pointer}
+.ds-motion-card:hover .ds-motion-demo{animation-play-state:running!important}
+.ds-motion-demo{width:40px;height:40px;background:var(--accent);border-radius:8px;margin:0 auto 16px;animation-play-state:paused}
+@keyframes ds-fade{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes ds-slide{0%,100%{transform:translateY(12px)}50%{transform:translateY(-12px)}}
+@keyframes ds-scale{0%,100%{transform:scale(.7)}50%{transform:scale(1.1)}}
+@keyframes ds-blur{0%,100%{filter:blur(6px);opacity:.3}50%{filter:blur(0);opacity:1}}
+@keyframes ds-bounce{0%,100%{transform:translateY(0)}30%{transform:translateY(-16px)}50%{transform:translateY(-4px)}70%{transform:translateY(-10px)}}
+@keyframes ds-pulse{0%,100%{transform:scale(1);box-shadow:0 0 0 0 var(--accent-glow)}50%{transform:scale(1.05);box-shadow:0 0 0 12px transparent}}
+@keyframes ds-morph{0%,100%{border-radius:8px}50%{border-radius:50%}}
+@keyframes ds-rotate{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+.ds-state-chip{padding:10px 24px;border-radius:var(--radius-sm,8px);font-size:13px;font-weight:500;border:none;display:inline-flex;align-items:center;gap:8px}
+.ds-live-btn{padding:10px 28px;border-radius:var(--radius-sm,8px);font-size:14px;font-weight:500;cursor:pointer;border:none;background:var(--accent);color:white;transition:all .3s cubic-bezier(0.22,1,0.36,1);outline:none}
+.ds-live-btn:hover{background:var(--accent-hover);transform:translateY(-2px)}
+.ds-live-btn:focus-visible{box-shadow:0 0 0 3px var(--accent-glow)}
+.ds-live-btn:active{transform:scale(.96)}
+.ds-radius-box{width:80px;height:80px;background:var(--bg-elevated);border:1px solid var(--border);margin-bottom:8px;transition:transform .3s}
+.ds-radius-box:hover{transform:scale(1.08)}
+.ds-shadow-box{width:100px;height:100px;background:var(--bg-elevated);border-radius:var(--radius,12px);margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);font-family:var(--font-mono)}
+.ds-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;border-radius:var(--radius,12px);overflow:hidden;margin-bottom:8px}
+.ds-strip-cell{height:80px;display:flex;align-items:flex-end;padding:8px;font-size:10px;font-family:var(--font-mono)}
+@media(max-width:768px){.ds-motion-grid{grid-template-columns:repeat(2,1fr)!important}.ds-states-grid{grid-template-columns:repeat(3,1fr)!important}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none;filter:none}}
+`;
+
+const motions = [
+  { name: "Fade", timing: "opacity 0→1", anim: "ds-fade 2s ease-in-out infinite" },
+  { name: "Slide", timing: "translateY", anim: "ds-slide 2s cubic-bezier(0.22,1,0.36,1) infinite" },
+  { name: "Scale", timing: "scale 0.7→1.1", anim: "ds-scale 2s cubic-bezier(0.22,1,0.36,1) infinite" },
+  { name: "Blur Focus", timing: "blur 6px→0", anim: "ds-blur 2.5s cubic-bezier(0.22,1,0.36,1) infinite" },
+  { name: "Bounce", timing: "spring physics", anim: "ds-bounce 1.5s cubic-bezier(0.22,1,0.36,1) infinite" },
+  { name: "Pulse", timing: "scale + glow", anim: "ds-pulse 2s ease-in-out infinite" },
+  { name: "Morph", timing: "radius 8→50%", anim: "ds-morph 3s cubic-bezier(0.22,1,0.36,1) infinite" },
+  { name: "Rotate", timing: "360° linear", anim: "ds-rotate 3s linear infinite" },
+];
+const radii = [0, 4, 8, 12, 16, 999];
+const shadows = [
+  { label: "xs", val: "0 1px 2px rgba(0,0,0,0.1)" }, { label: "sm", val: "0 2px 8px rgba(0,0,0,0.12)" },
+  { label: "md", val: "0 4px 16px rgba(0,0,0,0.15)" }, { label: "lg", val: "0 8px 32px rgba(0,0,0,0.18)" },
+  { label: "xl", val: "0 16px 48px rgba(0,0,0,0.22)" },
+];
+const states = [
+  { label: "rest", chip: { background: "var(--accent)", color: "white" } },
+  { label: ":hover", chip: { background: "var(--accent-hover)", color: "white", transform: "translateY(-2px)" } },
+  { label: ":focus", chip: { background: "var(--accent)", color: "white", boxShadow: "0 0 0 3px var(--accent-glow)" } },
+  { label: ":active", chip: { background: "var(--accent-hover)", color: "white", transform: "scale(0.96)" } },
+  { label: "disabled", chip: { background: "var(--bg-surface)", color: "var(--text-muted)", opacity: 0.5 } },
+];
+const palettes = [
+  { name: "SaaS Dark", cells: [{ bg: "#09090b", c: "#666", t: "SaaS" },{ bg: "#18181b" },{ bg: "#27272a" },{ bg: "#3b82f6", c: "#fff", t: "accent" },{ bg: "#fafafa", c: "#000", t: "text" }] },
+  { name: "Editorial", cells: [{ bg: "#faf9f6", c: "#666", t: "Edit" },{ bg: "#ffffff", border: true },{ bg: "#f5f0eb" },{ bg: "#c45d3e", c: "#fff", t: "accent" },{ bg: "#1a1a1a", c: "#fff", t: "text" }] },
+  { name: "Fintech", cells: [{ bg: "#0c1222", c: "#666", t: "Fin" },{ bg: "#131c31" },{ bg: "#1a2540" },{ bg: "#00d4aa", c: "#000", t: "accent" },{ bg: "#e8edf5", c: "#000", t: "text" }] },
+  { name: "Startup", cells: [{ bg: "#ffffff", c: "#999", t: "Start", border: true },{ bg: "#f8f8f8" },{ bg: "#f0f0f0" },{ bg: "#0a0a0a", c: "#fff", t: "accent" },{ bg: "#0a0a0a", c: "#fff", t: "text" }] },
+  { name: "Creative", cells: [{ bg: "#1a1614", c: "#666", t: "Crea" },{ bg: "#242018" },{ bg: "#2e2820" },{ bg: "#e07850", c: "#fff", t: "accent" },{ bg: "#f5ebe0", c: "#000", t: "text" }] },
+];
+
+function Label({ children }: { children: string }) {
+  return <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>{children}</div>;
 }
-
-interface SpacingStep {
-  px: number;
-  cssVar: string;
-}
-
-const COLOR_SWATCHES: ColorSwatch[][] = [
-  [
-    { name: "Background", cssVar: "--bg", hex: "#08080a" },
-    { name: "Elevated", cssVar: "--bg-elevated", hex: "#111114" },
-    { name: "Surface", cssVar: "--bg-surface", hex: "#19191d" },
-  ],
-  [
-    { name: "Text", cssVar: "--text", hex: "#ececf0", textDark: true },
-    { name: "Secondary", cssVar: "--text-secondary", hex: "#8a8a96", textDark: true },
-    { name: "Muted", cssVar: "--text-muted", hex: "#55555e", textDark: true },
-  ],
-  [
-    { name: "Accent", cssVar: "--accent", hex: "#636bf0", textDark: true },
-    { name: "Accent hover", cssVar: "--accent-hover", hex: "#5158d4", textDark: true },
-    { name: "Accent glow", cssVar: "--accent-glow", hex: "rgba(99,107,240,0.12)" },
-  ],
-  [
-    { name: "Success", cssVar: "--success", hex: "#34d399", textDark: true },
-    { name: "Warning", cssVar: "--warning", hex: "#fbbf24", textDark: true },
-    { name: "Destructive", cssVar: "--destructive", hex: "#f87171", textDark: true },
-  ],
-];
-
-const TYPE_SAMPLES: TypeSample[] = [
-  {
-    label: "Display — 64px",
-    className: "",
-    style: {
-      fontFamily: "var(--font-display, 'Instrument Serif', Georgia, serif)",
-      fontSize: 64,
-      fontWeight: 400,
-      letterSpacing: "-0.04em",
-      lineHeight: 1,
-      color: "var(--text)",
-    },
-    sample: "The quick brown fox",
-  },
-  {
-    label: "Heading — 32px",
-    className: "",
-    style: {
-      fontFamily: "var(--font-display, 'Instrument Serif', Georgia, serif)",
-      fontSize: 32,
-      fontWeight: 400,
-      letterSpacing: "-0.02em",
-      lineHeight: 1.2,
-      color: "var(--text)",
-    },
-    sample: "Typography drives hierarchy",
-  },
-  {
-    label: "Body — 17px",
-    className: "",
-    style: {
-      fontFamily: "var(--font-body, 'Inter', sans-serif)",
-      fontSize: 17,
-      fontWeight: 400,
-      lineHeight: 1.7,
-      color: "var(--text-secondary)",
-    },
-    sample: "Body text is the workhorse of any interface. Clear, readable, with enough line-height to breathe.",
-  },
-  {
-    label: "Label — 11px",
-    className: "",
-    style: {
-      fontFamily: "var(--font-body, 'Inter', sans-serif)",
-      fontSize: 11,
-      fontWeight: 500,
-      letterSpacing: "0.12em",
-      textTransform: "uppercase" as const,
-      color: "var(--accent)",
-    },
-    sample: "Section label",
-  },
-  {
-    label: "Caption — 12px",
-    className: "",
-    style: {
-      fontFamily: "var(--font-body, 'Inter', sans-serif)",
-      fontSize: 12,
-      fontWeight: 400,
-      color: "var(--text-muted)",
-    },
-    sample: "Supporting caption text for data and metadata",
-  },
-];
-
-const SPACING_STEPS: SpacingStep[] = [
-  { px: 4, cssVar: "1" },
-  { px: 8, cssVar: "2" },
-  { px: 12, cssVar: "3" },
-  { px: 16, cssVar: "4" },
-  { px: 24, cssVar: "6" },
-  { px: 32, cssVar: "8" },
-  { px: 48, cssVar: "12" },
-  { px: 64, cssVar: "16" },
-  { px: 96, cssVar: "24" },
-];
-
-// --- Sub-components ---
-
-function ColorRow({ swatches }: { swatches: ColorSwatch[] }) {
+function SH({ label, title, sub }: { label: string; title: string; sub?: string }) {
   return (
-    <div className="grid gap-3" style={{ gridTemplateColumns: `repeat(${swatches.length}, 1fr)` }}>
-      {swatches.map(swatch => (
-        <div key={swatch.cssVar}>
-          <div
-            className="h-16 rounded-[var(--radius-sm)] mb-2 border transition-transform duration-200 hover:-translate-y-0.5"
-            style={{
-              background: swatch.hex,
-              borderColor: "var(--border)",
-            }}
-            aria-label={`Color: ${swatch.name}`}
-          />
-          <p className="text-[13px] font-medium mb-0.5" style={{ color: "var(--text)" }}>{swatch.name}</p>
-          <p className="text-[11px] font-mono" style={{ color: "var(--text-muted)" }}>{swatch.cssVar}</p>
-          <p className="text-[11px] font-mono" style={{ color: "var(--text-muted)" }}>{swatch.hex}</p>
-        </div>
-      ))}
+    <div style={{ marginBottom: 48 }}>
+      <Label>{label}</Label>
+      <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 12 }}>{title}</h2>
+      {sub && <p style={{ fontSize: 16, color: "var(--text-secondary)", fontWeight: 300 }}>{sub}</p>}
     </div>
   );
 }
-
-function SpacingRow() {
-  return (
-    <div className="flex flex-wrap items-end gap-4">
-      {SPACING_STEPS.map(step => (
-        <div key={step.px} className="flex flex-col items-center gap-2">
-          <div
-            className="rounded-sm"
-            style={{
-              width: step.px,
-              height: step.px,
-              background: "var(--accent)",
-              opacity: 0.6,
-              minWidth: 4,
-            }}
-            aria-label={`${step.px}px spacing`}
-          />
-          <p className="text-[10px]" style={{ color: "var(--text-muted)" }}>{step.px}</p>
-        </div>
-      ))}
-    </div>
-  );
+function PLabel({ children }: { children: string }) {
+  return <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 12, color: "var(--text-secondary)" }}>{children}</div>;
 }
-
-function ComponentGallery() {
-  return (
-    <div className="flex flex-col gap-12">
-      {/* Button variants */}
-      <div>
-        <p className="text-[12px] uppercase tracking-[0.08em] font-medium mb-4" style={{ color: "var(--text-muted)" }}>
-          Button
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <Button variant="primary">Primary</Button>
-          <Button variant="ghost">Ghost</Button>
-          <Button variant="accent">Accent</Button>
-          <Button variant="primary" size="sm">Small</Button>
-          <Button variant="primary" size="lg">Large</Button>
-          <Button variant="primary" disabled>Disabled</Button>
-        </div>
-      </div>
-
-      {/* Badge variants */}
-      <div>
-        <p className="text-[12px] uppercase tracking-[0.08em] font-medium mb-4" style={{ color: "var(--text-muted)" }}>
-          Badge
-        </p>
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="default">Default</Badge>
-          <Badge variant="accent">Accent</Badge>
-          <Badge variant="success">Success</Badge>
-          <Badge variant="warning">Warning</Badge>
-          <Badge variant="error">Error</Badge>
-          <Badge variant="info">Info</Badge>
-          <Badge variant="success" size="md">Medium</Badge>
-        </div>
-      </div>
-
-      {/* Input variants */}
-      <div>
-        <p className="text-[12px] uppercase tracking-[0.08em] font-medium mb-4" style={{ color: "var(--text-muted)" }}>
-          Input
-        </p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Input label="Default input" placeholder="Enter text..." />
-          <Input label="With value" defaultValue="Ana Souza" />
-          <Input label="With error" placeholder="Email" error="Please enter a valid email address." />
-        </div>
-      </div>
-
-      {/* Card variants */}
-      <div>
-        <p className="text-[12px] uppercase tracking-[0.08em] font-medium mb-4" style={{ color: "var(--text-muted)" }}>
-          Card
-        </p>
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card>
-            <Card.Body>
-              <p className="text-[14px] font-semibold mb-1" style={{ color: "var(--text)" }}>Default card</p>
-              <p className="text-[13px]" style={{ color: "var(--text-secondary)" }}>With hover lift effect and border transition.</p>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Thumbnail>
-              <span className="text-[12px]" style={{ color: "var(--text-muted)", zIndex: 1, position: "relative" }}>Thumbnail</span>
-            </Card.Thumbnail>
-            <Card.Body>
-              <p className="text-[14px] font-semibold" style={{ color: "var(--text)" }}>With thumbnail</p>
-            </Card.Body>
-          </Card>
-          <Card hover={false}>
-            <Card.Body>
-              <p className="text-[14px] font-semibold mb-1" style={{ color: "var(--text)" }}>No hover</p>
-              <p className="text-[13px]" style={{ color: "var(--text-secondary)" }}>Static variant for content blocks.</p>
-            </Card.Body>
-            <Card.Footer>
-              <Button size="sm" variant="ghost">Action</Button>
-            </Card.Footer>
-          </Card>
-        </div>
-      </div>
-    </div>
-  );
+function Mono({ children }: { children: React.ReactNode }) {
+  return <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{children}</span>;
 }
-
-// --- Page ---
 
 export default function DesignSystemPage() {
+  useReveal();
   return (
-    <div
-      className="min-h-screen px-4 py-16 apex-enter"
-      style={{ background: "var(--bg)", color: "var(--text)" }}
-    >
-      <div className="mx-auto" style={{ maxWidth: 1100 }}>
-        <SectionHeader
-          label="Design System"
-          title="Tokens, type, and components."
-          subtitle="The APEX visual vocabulary. Every token, every scale, every component variant."
-          align="center"
-        />
+    <div style={{ background: "var(--bg)", color: "var(--text)", fontFamily: "var(--font-body)" }}>
+      <style>{dnaStyles}</style>
 
-        {/* Color palette */}
-        <section className="mb-16">
-          <SectionHeader label="Color" title="Palette." subtitle="Semantic tokens only. No hardcoded hex values in components." />
-          <div className="flex flex-col gap-6">
-            {COLOR_SWATCHES.map((row, i) => <ColorRow key={i} swatches={row} />)}
-          </div>
-        </section>
+      {/* ═══ HERO ═══ */}
+      <section style={{ padding: "140px 32px 100px", textAlign: "center" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <Label>Foundation</Label>
+          <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
+            The system<br />behind the <em style={{ fontStyle: "italic", color: "var(--accent)" }}>soul.</em>
+          </h1>
+          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Tokens, type, color, space, motion. The invisible rules that make everything feel intentional.</p>
+        </div>
+      </section>
 
-        {/* Typography scale */}
-        <section className="mb-16">
-          <SectionHeader label="Typography" title="Type scale." subtitle="Instrument Serif for display, Inter for UI. Perfect Fourth ratio." />
-          <Card hover={false}>
-            <Card.Body>
-              <div className="flex flex-col gap-8">
-                {TYPE_SAMPLES.map(sample => (
-                  <div key={sample.label} className="flex items-baseline gap-6 py-4 border-b last:border-0" style={{ borderColor: "var(--border)" }}>
-                    <p
-                      className="text-[11px] uppercase tracking-[0.06em] shrink-0 w-32"
-                      style={{ color: "var(--text-muted)", fontFamily: "var(--font-body, 'Inter', sans-serif)" }}
-                    >
-                      {sample.label}
-                    </p>
-                    <p style={sample.style}>{sample.sample}</p>
+      {/* ═══ COLOR ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Color" title="One accent. Infinite depth." sub="Restraint is the design. 90% neutrals, one accent for meaning." /></div>
+          {[
+            { label: "Surfaces", swatches: [["bg","--bg"],["elevated","--bg-elevated"],["surface","--bg-surface"],["border","--border"],["border-hover","--border-hover"]] },
+            { label: "Text", swatches: [["text","--text"],["secondary","--text-secondary"],["muted","--text-muted"]] },
+            { label: "Semantic", swatches: [["accent","--accent"],["success","--success"],["warning","--warning"],["destructive","--destructive"],["info","--info"]] },
+          ].map((group, gi) => (
+            <div key={group.label} className={`reveal reveal-delay-${gi + 1}`} style={{ marginBottom: 48 }}>
+              <PLabel>{group.label}</PLabel>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+                {group.swatches.map(([name, cssVar]) => (
+                  <div key={cssVar} style={{ width: 80, textAlign: "center" }}>
+                    <div className="ds-swatch-color" style={{ background: `var(${cssVar})` }} />
+                    <Mono>{name}</Mono>
                   </div>
                 ))}
               </div>
-            </Card.Body>
-          </Card>
-        </section>
+            </div>
+          ))}
+          <div className="reveal" style={{ marginBottom: 48 }}>
+            <PLabel>Curated Palettes</PLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
+              {palettes.map((p) => (
+                <div key={p.name}>
+                  <div className="ds-strip">
+                    {p.cells.map((cell, i) => (
+                      <div key={i} className="ds-strip-cell" style={{ background: cell.bg, color: cell.c || "transparent", border: cell.border ? "1px solid #eee" : undefined }}>{cell.t || ""}</div>
+                    ))}
+                  </div>
+                  <Mono>{p.name}</Mono>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Spacing scale */}
-        <section className="mb-16">
-          <SectionHeader label="Spacing" title="4px base unit." subtitle="All spacing is a multiple of 4. No arbitrary values." />
-          <Card hover={false}>
-            <Card.Body>
-              <SpacingRow />
-            </Card.Body>
-          </Card>
-        </section>
+      {/* ═══ TYPOGRAPHY ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Typography" title="Type is the design." sub="Large display, weight contrast, letter-spacing precision." /></div>
+          {[
+            { name: "Display — Instrument Serif", sample: "The quick brown fox jumps.", style: { fontFamily: "'Instrument Serif', Georgia, serif", fontSize: 56, lineHeight: 1.05 }, meta: "400 weight · -0.04em tracking · 1.0 line-height" },
+            { name: "Body — Inter", sample: "Every pixel earns its place or it doesn't exist. Restraint is the design. Typography does the work. Whitespace isn't empty — it's the most powerful element on the page.", style: { fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: 600 }, meta: "400 weight · 0em tracking · 1.7 line-height" },
+          ].map((spec, i) => (
+            <div key={spec.name} className={`reveal reveal-delay-${i + 1}`} style={{ marginBottom: 48, padding: 32, background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)" }}>
+              <Mono>{spec.name}</Mono>
+              <div style={{ ...spec.style, marginTop: 12, marginBottom: 8, letterSpacing: "-0.03em" }}>{spec.sample}</div>
+              <Mono>{spec.meta}</Mono>
+            </div>
+          ))}
+          <div className="reveal" style={{ marginTop: 48 }}>
+            <PLabel>Type Scale</PLabel>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {[
+                { label: "96px", sample: "Display", style: { fontFamily: "var(--font-display)", fontSize: 64, lineHeight: 1 } },
+                { label: "48px", sample: "Heading 1", style: { fontSize: 36, fontWeight: 700, lineHeight: 1.1 } },
+                { label: "32px", sample: "Heading 2", style: { fontSize: 28, fontWeight: 600, lineHeight: 1.2 } },
+                { label: "24px", sample: "Heading 3", style: { fontSize: 22, fontWeight: 600 } },
+                { label: "16px", sample: "Body text — the reading size.", style: { fontSize: 16 } },
+                { label: "14px", sample: "Secondary — labels, captions", style: { fontSize: 14, color: "var(--text-secondary)" } },
+                { label: "12px", sample: "OVERLINE — categories, timestamps", style: { fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.08em" } },
+              ].map((row) => (
+                <div key={row.label} style={{ display: "flex", alignItems: "baseline", gap: 24, padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
+                  <span style={{ minWidth: 80, fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>{row.label}</span>
+                  <span style={{ letterSpacing: "-0.02em", ...row.style }}>{row.sample}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-        {/* Component gallery */}
-        <section>
-          <SectionHeader label="Components" title="Component gallery." subtitle="Every primitive, every variant. Copy and compose." />
-          <ComponentGallery />
-        </section>
-      </div>
+      {/* ═══ SPACING ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Spacing" title="Space is intentional." sub="Every gap has a reason. Consistent rhythm creates calm." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
+            {[4, 8, 12, 16, 24, 32, 48, 64, 96, 128].map((px) => (
+              <div key={px} style={{ textAlign: "center" }}>
+                <div className="ds-space-box" style={{ width: px, height: px }} />
+                <Mono>{px}</Mono>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ MOTION ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Motion" title="Movement with meaning." sub="Hover each card to see the animation. Apple easing: cubic-bezier(0.22, 1, 0.36, 1)." /></div>
+          <div className="ds-motion-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+            {motions.map((m, i) => (
+              <div key={m.name} className={`ds-motion-card reveal${i > 0 && i < 4 ? ` reveal-delay-${i}` : ""}`}>
+                <div className="ds-motion-demo" style={{ animation: m.anim }} />
+                <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 4 }}>{m.name}</div>
+                <Mono>{m.timing}</Mono>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ STATES ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="States" title="Every state, considered." sub="Default, hover, focus, active, disabled, loading. No state left behind." /></div>
+          <div className="reveal reveal-delay-1" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 48, textAlign: "center", marginBottom: 48 }}>
+            <Mono>Try it — hover, click, tab to focus</Mono>
+            <div style={{ marginTop: 20 }}><button className="ds-live-btn">Interactive Button</button></div>
+          </div>
+          <div className="reveal reveal-delay-2">
+            <PLabel>All States</PLabel>
+            <div className="ds-states-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 12, textAlign: "center" }}>
+              {[...states, { label: "async", chip: { background: "var(--accent)", color: "transparent", position: "relative" as const, minWidth: 90 } }].map((s) => (
+                <div key={s.label}>
+                  <span className="ds-state-chip" style={s.chip}>{s.label === "async" ? "Loading" : s.label === "rest" ? "Default" : s.label === ":hover" ? "Hover" : s.label === ":focus" ? "Focus" : s.label === ":active" ? "Active" : "Disabled"}</span>
+                  <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", minWidth: 56, textAlign: "center", marginTop: 8 }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ SHAPE + SHADOW ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Shape + Shadow" title="Soft edges. Quiet depth." /></div>
+          <div className="reveal reveal-delay-1" style={{ marginBottom: 48 }}>
+            <PLabel>Border Radius</PLabel>
+            <div style={{ display: "flex", gap: 24, alignItems: "flex-end", flexWrap: "wrap" }}>
+              {radii.map((r) => (
+                <div key={r} style={{ textAlign: "center" }}>
+                  <div className="ds-radius-box" style={{ borderRadius: r === 999 ? 999 : r }} />
+                  <Mono>{r === 999 ? "full" : `${r}px`}</Mono>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="reveal reveal-delay-2">
+            <PLabel>Shadows</PLabel>
+            <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+              {shadows.map((s) => (
+                <div key={s.label} style={{ textAlign: "center" }}>
+                  <div className="ds-shadow-box" style={{ boxShadow: s.val }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
