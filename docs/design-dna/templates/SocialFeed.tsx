@@ -2,9 +2,23 @@
 // DNA source: docs/design-dna/social.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Header } from "../starters/layout";
 import { Card, Button, Badge, Input, Avatar } from "../starters/primitives";
+
+// --- Reveal animation hook ---
+
+function useReveal() {
+  useEffect(() => {
+    const els = document.querySelectorAll<HTMLElement>(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
+      { threshold: 0.1 }
+    );
+    els.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
 
 // --- Sample data ---
 
@@ -72,21 +86,19 @@ const SAMPLE_POSTS: Post[] = [
 ];
 
 const SAMPLE_COMMENTS: Comment[] = [
-  { author: "Julia Park", text: "The spacing alone tells me how much thought went into it.", time: "1h ago" },
+  { author: "Julia Park", text: "This is gorgeous. The spacing alone tells me how much thought went into it.", time: "1h ago" },
   { author: "Ana Souza", text: "The type hierarchy is perfect. Instrument Serif was the right call.", time: "45m ago" },
 ];
 
 const TRENDING: TrendingItem[] = [
   { tag: "Design", topic: "Design Systems in 2026", count: "1.2K posts" },
   { tag: "Engineering", topic: "Next.js 16 Release", count: "834 posts" },
-  { tag: "Product", topic: "AI-first Workflows", count: "621 posts" },
-  { tag: "Community", topic: "APEX Framework v6", count: "412 posts" },
+  { tag: "Product", topic: "AI-First Interfaces", count: "567 posts" },
 ];
 
 const SUGGESTED: SuggestedUser[] = [
-  { name: "Ana Souza", handle: "@anasouza", role: "Product Designer" },
-  { name: "Tom Rivera", handle: "@tomrivera", role: "Frontend Engineer" },
-  { name: "Mia Zhang", handle: "@miazhang", role: "Design Lead" },
+  { name: "Lucas Bueno", handle: "@lucasbueno", role: "Framework creator" },
+  { name: "Claude", handle: "@claude", role: "AI pair programmer" },
 ];
 
 // --- Sub-components ---
@@ -279,16 +291,49 @@ function CreatePost() {
 // --- Page ---
 
 export default function SocialFeed() {
+  useReveal();
+
   return (
     <div className="min-h-screen apex-enter" style={{ color: "var(--text)" }}>
+      <style>{`
+        .reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all 0.9s cubic-bezier(0.22,1,0.36,1)}
+        .reveal.visible{opacity:1;transform:none;filter:none}
+        .reveal-delay-1{transition-delay:0.1s}
+        .reveal-delay-2{transition-delay:0.2s}
+        .reveal-delay-3{transition-delay:0.3s}
+        @media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;filter:none}}
+      `}</style>
       <Header
         logo={<span className="text-[15px] font-semibold tracking-tight">Social</span>}
         actions={<Button size="sm">Sign in</Button>}
       />
-      <main className="px-4 pb-16 pt-24">
+      <section style={{ paddingTop: 140, paddingBottom: 0, textAlign: "center", paddingLeft: 32, paddingRight: 32 }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div
+            className="reveal"
+            style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 16 }}
+          >
+            Social + Community
+          </div>
+          <h1
+            className="reveal reveal-delay-1"
+            style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px,7vw,80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}
+          >
+            Conversations<br />
+            with <em style={{ fontStyle: "italic", color: "var(--accent)" }}>context.</em>
+          </h1>
+          <p
+            className="reveal reveal-delay-2"
+            style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 440, margin: "20px auto 0" }}
+          >
+            Feeds, profiles, comments, trending. Social patterns that feel human.
+          </p>
+        </div>
+      </section>
+      <main className="px-4 pb-16 pt-16">
         <div className="mx-auto" style={{ maxWidth: 1000 }}>
           {/* 3-col feed layout — left sidebar hidden on mobile */}
-          <div className="hidden lg:grid gap-6" style={{ gridTemplateColumns: "280px 1fr 280px" }}>
+          <div className="hidden lg:grid gap-6 reveal reveal-delay-3" style={{ gridTemplateColumns: "280px 1fr 280px" }}>
             <aside className="sticky top-24 self-start">
               <ProfileSidebar />
             </aside>
