@@ -107,6 +107,12 @@ export function applyPalette(name: PaletteName, mode: "dark" | "light") {
   // CTA colors (for landing page buttons)
   r.setProperty("--cta-bg", mode === "dark" ? "#ffffff" : p.text);
   r.setProperty("--cta-text", mode === "dark" ? p.bg : p.elevated);
+  // Accent contrast — text color that's readable on accent background
+  // Light accents (like Startup's #fafafa) need dark text; dark accents need white
+  const accentHex = p.accent.startsWith("#") ? p.accent : "#636bf0";
+  const rgb = parseInt(accentHex.slice(1), 16);
+  const luminance = (0.299 * ((rgb >> 16) & 255) + 0.587 * ((rgb >> 8) & 255) + 0.114 * (rgb & 255)) / 255;
+  r.setProperty("--accent-contrast", luminance > 0.5 ? "#0a0a0a" : "#ffffff");
   document.documentElement.setAttribute("data-theme", mode);
   localStorage.setItem("apex-palette", name);
   localStorage.setItem("apex-theme", mode);

@@ -84,7 +84,7 @@ function ContactForm() {
           <div style={{ marginBottom: 20 }}><label htmlFor="cf-name" style={lbl}>Name</label><input id="cf-name" type="text" placeholder="Your name" autoComplete="name" required style={inp} /></div>
           <div style={{ marginBottom: 20 }}><label htmlFor="cf-email" style={lbl}>Email</label><input id="cf-email" type="email" placeholder="your@email.com" autoComplete="email" required style={inp} /></div>
           <div style={{ marginBottom: 20 }}><label htmlFor="cf-msg" style={lbl}>Message</label><textarea id="cf-msg" rows={4} placeholder="Tell us about your project..." required style={inp} /></div>
-          <button type="submit" disabled={status === "sending"} style={{ width: "100%", padding: 13, background: "var(--accent)", color: "white", border: "none", borderRadius: "var(--radius-sm)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)", opacity: status === "sending" ? 0.7 : 1 }}>
+          <button type="submit" disabled={status === "sending"} style={{ width: "100%", padding: 13, background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", borderRadius: "var(--radius-sm)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-body)", transition: "all 0.3s cubic-bezier(0.22,1,0.36,1)", opacity: status === "sending" ? 0.7 : 1 }}>
             {status === "sending" ? "Sending..." : "Send message"}
           </button>
         </form>

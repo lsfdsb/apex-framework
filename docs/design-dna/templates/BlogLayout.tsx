@@ -151,7 +151,7 @@ export default function BlogLayout() {
             <p style={{ fontFamily: "var(--font-sans)", fontSize: 14, color: "var(--text-muted)", marginBottom: 24 }}>One email per week. No spam. Unsubscribe anytime.</p>
             <div className="newsletter-form" style={{ display: "flex", gap: 8 }}>
               <input type="email" placeholder="your@email.com" style={{ flex: 1, padding: "11px 16px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", color: "var(--text)", fontSize: 14, fontFamily: "var(--font-sans)", outline: "none" }} />
-              <button style={{ padding: "11px 24px", background: "var(--accent)", color: "white", border: "none", borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all .3s cubic-bezier(0.22,1,0.36,1)" }}>Subscribe</button>
+              <button style={{ padding: "11px 24px", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", borderRadius: "var(--radius-sm, 8px)", fontSize: 14, fontWeight: 500, cursor: "pointer", fontFamily: "var(--font-sans)", transition: "all .3s cubic-bezier(0.22,1,0.36,1)" }}>Subscribe</button>
             </div>
           </div>
         </div>

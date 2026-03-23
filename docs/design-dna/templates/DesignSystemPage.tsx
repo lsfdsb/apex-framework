@@ -67,9 +67,9 @@ const shadows = [
   { label: "xl", val: "0 16px 48px rgba(0,0,0,0.22)" },
 ];
 const states = [
-  { label: "rest", chip: { background: "var(--accent)", color: "white" } },
+  { label: "rest", chip: { background: "var(--accent)", color: "var(--accent-contrast, white)" } },
   { label: ":hover", chip: { background: "var(--accent-hover)", color: "white", transform: "translateY(-2px)" } },
-  { label: ":focus", chip: { background: "var(--accent)", color: "white", boxShadow: "0 0 0 3px var(--accent-glow)" } },
+  { label: ":focus", chip: { background: "var(--accent)", color: "var(--accent-contrast, white)", boxShadow: "0 0 0 3px var(--accent-glow)" } },
   { label: ":active", chip: { background: "var(--accent-hover)", color: "white", transform: "scale(0.96)" } },
   { label: "disabled", chip: { background: "var(--bg-surface)", color: "var(--text-muted)", opacity: 0.5 } },
 ];

@@ -9,6 +9,12 @@ import LeadScoreCards from "./crm/LeadScoreCards";
 import DataTable from "./crm/DataTable";
 import PipelineAnalytics from "./crm/PipelineAnalytics";
 import TaskList from "./crm/TaskList";
+import ChatWidget from "./crm/ChatWidget";
+import TicketDetail from "./crm/TicketDetail";
+import EmailComposer from "./crm/EmailComposer";
+import NotesPanel from "./crm/NotesPanel";
+import FilterBar from "./crm/FilterBar";
+import EmptyState from "./crm/EmptyState";
 
 function useReveal() {
   useEffect(() => {
@@ -188,7 +194,7 @@ export default function CRMPipeline() {
               </div>
               <div style={{ padding: 20, display: "flex", flexDirection: "column", gap: 12 }}>
                 <div style={{ maxWidth: "80%", padding: "10px 14px", borderRadius: 12, fontSize: 14, lineHeight: 1.5, background: "var(--bg-surface)", color: "var(--text-secondary)", alignSelf: "flex-start", borderBottomLeftRadius: 4 }}>Hi! I need help with the API integration.</div>
-                <div style={{ maxWidth: "80%", padding: "10px 14px", borderRadius: 12, fontSize: 14, lineHeight: 1.5, background: "var(--accent)", color: "white", alignSelf: "flex-end", borderBottomRightRadius: 4 }}>Sure! Let me pull up your account details.</div>
+                <div style={{ maxWidth: "80%", padding: "10px 14px", borderRadius: 12, fontSize: 14, lineHeight: 1.5, background: "var(--accent)", color: "var(--accent-contrast, white)", alignSelf: "flex-end", borderBottomRightRadius: 4 }}>Sure! Let me pull up your account details.</div>
                 <div style={{ maxWidth: "80%", padding: "12px 16px", borderRadius: 12, background: "var(--bg-surface)", alignSelf: "flex-start", borderBottomLeftRadius: 4, display: "flex", gap: 4, alignItems: "center" }}>
                   {[0, 0.2, 0.4].map((d) => <div key={d} style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--text-muted)", animation: `typing-bounce 1.2s ease-in-out ${d}s infinite` }} />)}
                 </div>
@@ -265,6 +271,53 @@ export default function CRMPipeline() {
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><Label>Tarefas</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Nenhum follow-up esquecido.</h2></div>
           <div className="reveal reveal-delay-1"><TaskList /></div>
+        </div>
+      </section>
+      {/* ═══ CHAT WIDGET ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Helpdesk</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Chat em tempo real.</h2></div>
+          <div className="reveal reveal-delay-1"><ChatWidget /></div>
+        </div>
+      </section>
+
+      {/* ═══ TICKET DETAIL ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Ticket</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Cada detalhe, rastreado.</h2></div>
+          <div className="reveal reveal-delay-1"><TicketDetail /></div>
+        </div>
+      </section>
+
+      {/* ═══ EMAIL COMPOSER ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>E-mail</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Escreva uma vez, feche mais rápido.</h2></div>
+          <div className="reveal reveal-delay-1"><EmailComposer /></div>
+        </div>
+      </section>
+
+      {/* ═══ NOTES ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Notas</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Contexto que se acumula.</h2></div>
+          <div className="reveal reveal-delay-1"><NotesPanel /></div>
+        </div>
+      </section>
+
+      {/* ═══ FILTER BAR ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Filtros</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Encontre qualquer coisa.</h2></div>
+          <div className="reveal reveal-delay-1"><FilterBar /></div>
+        </div>
+      </section>
+
+      {/* ═══ EMPTY STATE ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Estado Vazio</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Primeiro contato.</h2></div>
+          <div className="reveal reveal-delay-1"><EmptyState /></div>
         </div>
       </section>
     </div>

@@ -98,7 +98,7 @@ export default function DealDrawer({ deal = defaultDeal, onClose }: DealDrawerPr
 
       {/* Actions */}
       <div style={{ padding: "16px 24px", borderTop: "1px solid var(--border)", display: "flex", gap: 8 }}>
-        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "white", border: "none", transition: "all .2s", fontFamily: "var(--font-body)" }}>Enviar follow-up</button>
+        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", transition: "all .2s", fontFamily: "var(--font-body)" }}>Enviar follow-up</button>
         <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Adicionar nota</button>
         <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Agendar ligação</button>
       </div>
