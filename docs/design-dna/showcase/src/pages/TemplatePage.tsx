@@ -32,7 +32,7 @@ export default function TemplatePage({ component: Component, label, defaultPalet
             background: "color-mix(in srgb, var(--bg-elevated) 60%, transparent)",
             backdropFilter: "blur(16px) saturate(1.5)",
             WebkitBackdropFilter: "blur(16px) saturate(1.5)",
-            border: "1px solid color-mix(in srgb, var(--border) 40%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)",
             transition: "all 0.4s",
           }}
         >
