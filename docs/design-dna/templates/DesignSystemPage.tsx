@@ -2,7 +2,14 @@
 // DNA source: docs/design-dna/design-system.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import Select from "./crm/Select";
+import Toggle from "./crm/Toggle";
+import Textarea from "./crm/Textarea";
+import SearchInput from "./crm/SearchInput";
+import DatePicker from "./crm/DatePicker";
+import Tooltip from "./crm/Tooltip";
+import ConfirmDialog from "./crm/ConfirmDialog";
 
 function useReveal() {
   useEffect(() => {
@@ -99,6 +106,11 @@ function PLabel({ children }: { children: string }) {
 function Mono({ children }: { children: React.ReactNode }) {
   return <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{children}</span>;
 }
+
+function SearchInputDemo() { const [v, setV] = useState(""); return <SearchInput value={v} onChange={setV} placeholder="Buscar contatos..." /> }
+function ToggleDemo() { const [on, setOn] = useState(true); return <Toggle checked={on} onChange={setOn} label="Notificações por e-mail" description="Receber alertas de novos deals" /> }
+function TextareaDemo() { const [v, setV] = useState(""); return <Textarea value={v} onChange={setV} label="Anotações" placeholder="Adicionar nota sobre o contato..." maxLength={280} /> }
+function ConfirmDialogDemo() { const [open, setOpen] = useState(false); return (<><button onClick={() => setOpen(true)} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--destructive)", background: "rgba(248,113,113,0.08)", color: "var(--destructive)", cursor: "pointer", fontSize: 13 }}>Excluir (dialog)</button><ConfirmDialog open={open} onConfirm={() => setOpen(false)} onCancel={() => setOpen(false)} title="Excluir contato?" description="Esta ação não pode ser desfeita. Todos os dados serão perdidos." confirmText="Excluir" variant="destructive" /></>) }
 
 export default function DesignSystemPage() {
   useReveal();
@@ -268,6 +280,44 @@ export default function DesignSystemPage() {
                   <div className="ds-shadow-box" style={{ boxShadow: s.val }}>{s.label}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ FORM PRIMITIVES ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Formulários" title="Primitivas de input." sub="Select, toggle, textarea, search, date — os blocos de construção de todo formulário." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            <div>
+              <PLabel>Select / Combobox</PLabel>
+              <Select label="Status" options={[{ value: "lead", label: "Novo Lead" }, { value: "qualified", label: "Qualificado" }, { value: "proposal", label: "Proposta" }, { value: "won", label: "Ganho" }]} placeholder="Selecionar status..." />
+            </div>
+            <div>
+              <PLabel>DatePicker</PLabel>
+              <DatePicker label="Data de follow-up" />
+            </div>
+            <div>
+              <PLabel>SearchInput</PLabel>
+              <SearchInputDemo />
+            </div>
+            <div>
+              <PLabel>Toggle Switch</PLabel>
+              <ToggleDemo />
+            </div>
+            <div style={{ gridColumn: "1 / -1" }}>
+              <PLabel>Textarea</PLabel>
+              <TextareaDemo />
+            </div>
+          </div>
+
+          <div className="reveal reveal-delay-2" style={{ marginTop: 48 }}>
+            <PLabel>Feedback & Interação</PLabel>
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+              <Tooltip content="Informação adicional"><button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", background: "transparent", color: "var(--text-secondary)", cursor: "pointer", fontSize: 13 }}>Hover para tooltip</button></Tooltip>
+              <ConfirmDialogDemo />
+              <button onClick={() => {}} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", background: "transparent", color: "var(--text-secondary)", cursor: "pointer", fontSize: 13 }}>DropdownMenu ···</button>
             </div>
           </div>
         </div>
