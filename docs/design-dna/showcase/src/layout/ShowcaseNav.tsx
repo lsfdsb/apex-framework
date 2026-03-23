@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { Link } from "../router/Router";
 import { TEMPLATE_ROUTES } from "../data/routes";
 
@@ -6,13 +7,10 @@ interface ShowcaseNavProps {
 }
 
 const navStyles = `
-.apex-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:8px 16px}
+.apex-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:8px 16px;transition:padding .3s}
 .apex-nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;height:40px;padding:0 12px;
-  border-radius:12px;background:color-mix(in srgb, var(--bg-elevated) 80%, transparent);
-  backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);
-  border:1px solid color-mix(in srgb, var(--text-muted) 12%, transparent);
-  box-shadow:0 2px 16px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.02);
-  transition:background .4s,border-color .4s}
+  border-radius:12px;backdrop-filter:blur(24px) saturate(1.8);-webkit-backdrop-filter:blur(24px) saturate(1.8);
+  transition:background .4s,border-color .4s,box-shadow .4s,border-radius .3s}
 .apex-nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 8px),transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 8px,#000 calc(100% - 8px),transparent);
@@ -27,11 +25,34 @@ const navStyles = `
 `;
 
 export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <>
       <style>{navStyles}</style>
-      <div className="apex-nav">
-        <div className="apex-nav-inner">
+      <div className="apex-nav" style={scrolled ? { padding: "4px 16px" } : undefined}>
+        <div
+          className="apex-nav-inner"
+          style={{
+            background: scrolled
+              ? "color-mix(in srgb, var(--bg-elevated) 90%, transparent)"
+              : "color-mix(in srgb, var(--bg-elevated) 50%, transparent)",
+            border: scrolled
+              ? "1px solid color-mix(in srgb, var(--text-muted) 18%, transparent)"
+              : "1px solid color-mix(in srgb, var(--text-muted) 8%, transparent)",
+            boxShadow: scrolled
+              ? "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.03)"
+              : "0 2px 12px rgba(0,0,0,0.06)",
+            borderRadius: scrolled ? 12 : 16,
+          }}
+        >
           <Link
             to="/"
             style={{
@@ -52,16 +73,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             </span>
           </Link>
 
-          <div
-            style={{
-              width: 1,
-              height: 12,
-              background: "var(--border)",
-              flexShrink: 0,
-              margin: "0 4px",
-              opacity: 0.4,
-            }}
-          />
+          <div style={{ width: 1, height: 12, background: "var(--border)", flexShrink: 0, margin: "0 4px", opacity: 0.4 }} />
 
           <div className="apex-nav-links">
             {TEMPLATE_ROUTES.map((route) => (
