@@ -272,6 +272,50 @@ export default function DesignSystemPage() {
           </div>
         </div>
       </section>
+
+      {/* ═══ LAYOUT PATTERNS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Layout" title="Headers & Sidebars." sub="Floating glass morphism. The app breathes with the background." /></div>
+          <div className="reveal reveal-delay-1" style={{ marginBottom: 48 }}>
+            <PLabel>Floating Header</PLabel>
+            <div style={{ position: "relative", height: 80, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)" }}>
+              <div style={{ position: "absolute", top: 12, left: 12, right: 12, height: 44, borderRadius: 14, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}><span style={{ fontSize: 12, color: "var(--text-muted)" }}>CRM</span><span style={{ fontSize: 13, fontWeight: 600 }}>Dashboard</span></div>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <div style={{ width: 120, height: 28, borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6 }}>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Buscar...</span>
+                  </div>
+                  <div style={{ width: 24, height: 24, borderRadius: "50%", background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 9, fontWeight: 600, color: "var(--accent)" }}>AS</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="reveal reveal-delay-2">
+            <PLabel>Floating Sidebar</PLabel>
+            <div style={{ position: "relative", height: 300, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)", display: "flex" }}>
+              <div style={{ position: "absolute", left: 12, top: 12, bottom: 12, width: 56, borderRadius: 16, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px 0", gap: 2 }}>
+                <div style={{ width: 28, height: 28, borderRadius: 8, background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 16 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><path d="M22 12l-4 0l-3 9l-6-18l-3 9l-4 0" /></svg>
+                </div>
+                {[true, false, false, false].map((active, i) => (
+                  <div key={i} style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: active ? "var(--accent-glow)" : "transparent", color: active ? "var(--accent)" : "var(--text-muted)" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      {i === 0 && <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>}
+                      {i === 1 && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /></>}
+                      {i === 2 && <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></>}
+                      {i === 3 && <><circle cx="12" cy="12" r="3" /></>}
+                    </svg>
+                  </div>
+                ))}
+                <div style={{ marginTop: "auto" }}><div style={{ width: 28, height: 28, borderRadius: "50%", background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 10, fontWeight: 600, color: "var(--accent)", border: "2px solid var(--bg-elevated)", boxShadow: "0 0 0 2px var(--success)" }}>AS</div></div>
+              </div>
+              <div style={{ marginLeft: 80, padding: 24, display: "flex", alignItems: "center", justifyContent: "center", flex: 1, color: "var(--text-muted)", fontSize: 13 }}>Conteúdo da aplicação</div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

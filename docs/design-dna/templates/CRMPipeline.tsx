@@ -15,6 +15,8 @@ import EmailComposer from "./crm/EmailComposer";
 import NotesPanel from "./crm/NotesPanel";
 import FilterBar from "./crm/FilterBar";
 import EmptyState from "./crm/EmptyState";
+import AppShell from "./crm/AppShell";
+import TopBar from "./crm/TopBar";
 
 function useReveal() {
   useEffect(() => {
@@ -318,6 +320,23 @@ export default function CRMPipeline() {
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><Label>Estado Vazio</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Primeiro contato.</h2></div>
           <div className="reveal reveal-delay-1"><EmptyState /></div>
+        </div>
+      </section>
+      {/* ═══ APP SHELL ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Layout</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 16 }}>O shell da aplicação.</h2><p style={{ fontSize: 17, color: "var(--text-secondary)", fontWeight: 300, marginBottom: 48 }}>Sidebar flutuante + barra superior. O layout respira com o background.</p></div>
+          <div className="reveal reveal-delay-1" style={{ position: "relative", height: 500, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg)" }}>
+            <AppShell>
+              <TopBar title="Dashboard" breadcrumbs={[{ label: "CRM" }, { label: "Visão Geral" }]} />
+              <div style={{ padding: "80px 32px 32px", display: "flex", alignItems: "center", justifyContent: "center", minHeight: 400 }}>
+                <div style={{ textAlign: "center", color: "var(--text-muted)" }}>
+                  <p style={{ fontSize: 14 }}>Conteúdo da aplicação aqui</p>
+                  <p style={{ fontSize: 12, marginTop: 8 }}>Sidebar à esquerda · Barra superior flutuante</p>
+                </div>
+              </div>
+            </AppShell>
+          </div>
         </div>
       </section>
     </div>
