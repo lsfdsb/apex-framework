@@ -50,7 +50,7 @@ export default function App() {
       <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <AnimatedBackground />
         <ShowcaseNav activePath={hash} />
-        <div style={{ height: 68 }} />
+        <div style={{ height: 56 }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
           {hash === "/" ? (
