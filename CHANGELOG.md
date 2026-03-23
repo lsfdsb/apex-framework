@@ -3,6 +3,12 @@
 All notable changes to the APEX Framework will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+
+## [Unreleased]
+
+### Fixed
+- resolve merge conflict in EmailComposer (50f4988)
+
 ## [5.14.0] — 2026-03-20 — Native Alignment Audit
 
 Comprehensive audit against Claude Code's native capabilities. Every feature must earn its place — if Claude Code does it natively, APEX doesn't duplicate it.
