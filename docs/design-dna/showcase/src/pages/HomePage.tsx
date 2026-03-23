@@ -3,6 +3,43 @@ import { Link } from "../router/Router";
 import { TEMPLATE_ROUTES } from "../data/routes";
 import { PALETTES } from "../data/palettes";
 
+// Dynamic changelog — reads from CHANGELOG.md at build time
+import changelogRaw from "../../../../../CHANGELOG.md?raw";
+
+interface ChangelogEntry {
+  version: string;
+  date: string;
+  title: string;
+  items: string[];
+}
+
+function parseChangelog(): ChangelogEntry[] {
+  const entries: ChangelogEntry[] = [];
+  // Match versioned sections: ## [5.14.0] — 2026-03-20 — Title
+  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*—\s*(\d{4}-\d{2}-\d{2})\s*—\s*(.+)$/gm;
+  let match;
+  const positions: { version: string; date: string; title: string; start: number }[] = [];
+  while ((match = sectionRegex.exec(changelogRaw)) !== null) {
+    positions.push({ version: `v${match[1]}`, date: match[2], title: match[3].trim(), start: match.index + match[0].length });
+  }
+  for (let i = 0; i < positions.length; i++) {
+    const end = i + 1 < positions.length ? positions[i + 1].start - 50 : changelogRaw.length;
+    const body = changelogRaw.slice(positions[i].start, end);
+    // Extract bullet items (lines starting with - **...**)
+    const items: string[] = [];
+    for (const line of body.split("\n")) {
+      const bulletMatch = line.match(/^- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
+      if (bulletMatch && items.length < 5) {
+        items.push(`${bulletMatch[1]} — ${bulletMatch[2].trim()}`);
+      }
+    }
+    if (items.length > 0) {
+      entries.push({ ...positions[i], items });
+    }
+  }
+  return entries;
+}
+
 export default function HomePage() {
   const templates = TEMPLATE_ROUTES.filter((r) => r.category === "template");
   const system = TEMPLATE_ROUTES.filter((r) => r.category === "system");
@@ -167,7 +204,7 @@ import { PageShell } from "@/components/dna/layout/PageShell";`}
           </div>
         </div>
 
-        {/* ── Changelog ── */}
+        {/* ── Changelog (parsed from CHANGELOG.md) ── */}
         <div className="section">
           <div className="section-inner">
             <div className="reveal" style={{ textAlign: "center", marginBottom: 60 }}>
@@ -175,26 +212,11 @@ import { PageShell } from "@/components/dna/layout/PageShell";`}
               <div className="section-title">Changelog</div>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <Entry v="v5.14.0" d="2026-03-20" t="Native Alignment Audit">
-                <li>Autonomous pipeline — zero commands, 3 approval gates</li>
-                <li>Removed 7 redundant skills, 2 agents, 4 scripts</li>
-                <li>Builder worktree file loss root cause fixed</li>
-                <li>Design DNA Showcase App (this page)</li>
-              </Entry>
-              <Entry v="v5.13.0" d="2026-03-19" t="Design DNA Starters">
-                <li>24 TSX starter components (layout, primitives, patterns)</li>
-                <li>14 full-page templates ready to copy</li>
-                <li>5 curated palettes with dark/light and RGB tokens</li>
-              </Entry>
-              <Entry v="v5.12.0" d="2026-03-20" t="Championship Roster">
-                <li>Scan Responsibility Matrix — each check has ONE owner</li>
-                <li>Code Reviewer elevated to Opus for security gate</li>
-              </Entry>
-              <Entry v="v5.11.0" d="2026-03-18" t="Design DNA Launch">
-                <li>14 premium UI pattern pages</li>
-                <li>SVG background library — 14 static + 8 animated</li>
-                <li>Global palette switcher with persistence</li>
-              </Entry>
+              {parseChangelog().map((entry) => (
+                <Entry key={entry.version} v={entry.version} d={entry.date} t={entry.title}>
+                  {entry.items.map((item, i) => <li key={i}>{item}</li>)}
+                </Entry>
+              ))}
             </div>
           </div>
         </div>
