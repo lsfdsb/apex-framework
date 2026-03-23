@@ -7,9 +7,9 @@ interface ShowcaseNavProps {
 }
 
 const navStyles = `
-.apex-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:10px 20px;transition:padding .4s cubic-bezier(0.22,1,0.36,1)}
+.apex-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:10px 20px;transition:padding .4s cubic-bezier(0.22,1,0.36,1);display:flex;justify-content:center}
 .apex-nav.scrolled{padding:6px 20px}
-.apex-nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;height:42px;padding:0 16px;
+.apex-nav-inner{display:inline-flex;align-items:center;height:42px;padding:0 16px;
   border-radius:14px;backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
   transition:all .4s cubic-bezier(0.22,1,0.36,1)}
 .apex-nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;

@@ -47,43 +47,52 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - Remote branches: 108 → 1
 - Lines deleted: ~6,200
 
-## [Unreleased]
+## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
+
+Pixel-perfect template matching, component extraction, and self-contained showcase pages with 20+ commits completing the Design DNA showcase overhaul.
 
 ### Added
 - **React Page Templates** — 14 full-featured templates (Landing, SaaS, CRM, E-commerce, Blog, Portfolio, Social, LMS, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase) ready to copy into projects (#115)
 - **5 New Starter Components** — StatCard, ChartCard, ThemeToggle, EmptyState, KanbanColumn for richer dashboards and data flows (#115)
 - **RGB Tokens** — All 5 design palettes now include RGB values for dynamic theming and programmatic color manipulation (#115)
 - **CRM Pipeline Showcase** — Full rewrite with hero, orbiting SVG animation, 5-column kanban pipeline, animated contact cards with ring effects, timeline+chat integration, helpdesk tickets (#138)
+- **6 Individual CRM Components** — DealDrawer, ContactProfile, LeadScoreCards, DataTable, PipelineAnalytics, TaskList extracted as reusable showcase-mode components (#147, #148)
 - **Presentation Slide Template** — 10 slide types: title, section divider, stats, content grid, quote, split layout, timeline, team roster, pricing cards, and CTA sections (#138)
+- **LMS + E-book Unified Page** — Single reading experience page with course catalog, lesson viewer, progress tracking, and e-book chapter navigation (#150)
 - **LMS Dashboard Showcase** — Added hero section, certificate showcase, reveal animations, and layout matching design DNA (#138, #140)
 - **Social Feed Showcase** — Added hero section with reveal animations, removed Avatar import crashing issues (#138)
-- **Email Template Showcase** — Added hero section, improved containment/centering, fixed sidenote layout bleeding (#138)
+- **Email Template Showcase** — Added hero section, improved containment/centering, fixed sidenote layout bleeding; 8 email types in pt-BR (#138, #144, #145)
 - **Portfolio Showcase** — Hero section, contact form integration, numbered services grid, about stats, reveal animations, removed duplicate Header nav (#139)
 - **E-commerce Showcase** — Hero with animated SVG bag, product detail view, cart layout, checkout flow with steps, reveal animations (#139)
 - **Backoffice Showcase** — Complete rewrite from sidebar layout to showcase format with hero, KPI cards grid, activity log, invoice table, permissions matrix (#139)
 - **E-book Showcase** — Cover section, 7 chapter layouts, callout boxes, table of contents with sidenote structure, reveal animations (#139)
+- **Dynamic Changelog** — Showcase homepage now reads CHANGELOG.md at build time and renders latest version with all entries dynamically (#143)
+- **Premium Loading State** — Orbital animation with rotating rings, premium visual treatment for async states (#149)
+- **Source Button** — Floating bottom-right button linking to HTML source template for each showcase page (#133)
 
 ### Changed
-- **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy (#139)
+- **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy; floating glass design with scroll transparency (#139, #136, #134, #131)
 - **Code Reviewer Agent** — Expanded from 91 to 130 lines with enhanced security scanning, OWASP rules integration, and better error categorization (#115)
 - **Design Reviewer Agent** — Added task auto-claim for continuous design compliance, expanded DNA path scanning to catch hardcoded colors (#115)
 - **Rules Refactored** — Narrowed API/SQL/Supabase/Testing/Error-Handling paths with code examples, deduplicated constraints, improved clarity (#115)
 - **DNA Starters Fixed** — DataTable, Input, Button, Header, MobileNav corrected for proper semantic structure and responsive behavior (#115)
+- **PaletteSwitcher.tsx** — Replaced flat dot bar with apex-widget design: gear button with rotate animation, expandable panel with palette dots and dark/light mode toggle; useCallback fix for palette switching (#133)
+- **Global Animated Background** — All templates now feature unified animated SVG orb background with dynamic accent colors (#135, #132)
+- **Patterns Page** — Full rewrite with nav scroll transparency and proper DOM structure (#136)
 - **Gitignore** — Added `.dna-server.pid` to ignore runtime server PID files (#114)
 - **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
 
 ### Fixed
+- **Self-Contained Templates** — All 14 showcase pages now zero-import starters, every component inline or from src/components; removed PageShell/Sidebar wrappers (#141, #140)
 - **LandingPage.tsx** — Rewritten to match landing.html design: added Pricing, Dashboard, Auth sections; fixed Features to 3-column grid; added reveal animations with IntersectionObserver, glow-pulse, and lift hover effects; corrected CTA with bg-surface + gradient; rewrote footer with multi-column layout and 3 link columns
 - **BlogLayout.tsx** — Rewritten to match blog.html design: added hero section; removed sidebar (aligned with template); fixed article grid to 3-column layout; added reading experience section with blockquote styling; added standalone newsletter box
 - **SaaSDashboard.tsx** — Rewritten to match saas.html design: added hero section and 4 app-frame sections (Dashboard with sidebar/stats/sparklines/chart, Data Table, Settings with toggles, Empty State); integrated macOS window chrome
 - **ShowcaseNav.tsx** — Rewritten to match DNA palette.js nav: fixed position, pill-shaped links with hover translateY(-1px) + accent-glow animation, active state with accent background, 52px height
-- **PaletteSwitcher.tsx** — Replaced flat dot bar with apex-widget design: gear button with rotate animation, expandable panel with palette dots and dark/light mode toggle
 - **App.tsx** — Added spacer div for fixed nav layout
-- **LMS Layout** — Removed PageShell/Sidebar wrapper, now proper showcase page matching HTML template structure (#140)
+- **Portfolio** — Removed duplicate Header nav that was creating double navigation (#139, #146)
+- **E-book Hero** — Added proper hero section and self-contained structure (#146)
+- **Email Templates** — Fixed containment issues, centered layout, and added Portuguese (pt-BR) versions (#144, #145)
 - **Social Feed** — Removed crashing Avatar import, converted to self-contained component (#140)
-- **Email Template** — Fixed containment issues and centered layout properly (#140)
-- **Portfolio** — Removed duplicate Header nav that was creating double navigation (#140)
-- **E-commerce** — Removed Header import for cleaner showcase structure (#140)
 - **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results (#117)
 - **False Positive Hook Blocks** — BLOCKED grep now only matches real hook verdicts (`BLOCKED:`), not the word "BLOCKED" in agent documentation. Fixed 5+ sessions of inflated block counts (#117)
 - **Tailwind Warning Channel** — Design token warning now outputs to stdout (was stderr), so Claude actually receives the hint (#117)
@@ -94,7 +103,7 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **Researcher Memory Types** — Corrected memory field definitions from `object` to `string` (#115)
 - **Removed Stale QA Cleanup** — Removed obsolete cleanup task from QA agent that was no longer referenced (#115)
 - **Worktree cleanup** — Stop orphaned dev servers properly on session end (7ab772b)
-- pixel-perfect templates + showcase nav/widget (5f297af)
+
 ## [5.12.0] — 2026-03-20 — Brutal Self-Assessment + Championship Roster
 
 The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.
