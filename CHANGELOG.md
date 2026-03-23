@@ -69,6 +69,14 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 - **Dynamic Changelog** — Showcase homepage now reads CHANGELOG.md at build time and renders latest version with all entries dynamically (#143)
 - **Premium Loading State** — Orbital animation with rotating rings, premium visual treatment for async states (#149)
 - **Source Button** — Floating bottom-right button linking to HTML source template for each showcase page (#133)
+- **AppShell Component** — Floating sidebar layout with 56px icon-only design, glass morphism, position fixed with 12px offset and 16px radius for helpdesk integration
+- **TopBar Component** — Floating top bar with search, notifications, user avatar, and glass morphism styling matching AppShell design
+- **ChatWidget Component** — Live helpdesk chat with agent/customer bubbles, typing indicator, auto-reply, and Portuguese language support
+- **TicketDetail Component** — Full ticket view with priority bar, status badges, activity timeline, and action buttons for CRM workflows
+- **EmailComposer Component** — In-CRM email composition with recipients, subject, body, and toolbar featuring attach/image/link buttons in Portuguese
+- **NotesPanel Component** — Activity notes interface with input and note cards showing author, tags, and timestamps in Portuguese
+- **FilterBar Component** — Advanced filtering with dropdowns and active filter pills with remove functionality
+- **EmptyState Component** — Configurable empty state display with icon, title, description, and CTA button for consistent UX
 
 ### Changed
 - **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy; floating glass design with scroll transparency (#139, #136, #134, #131)
