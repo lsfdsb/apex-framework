@@ -19,37 +19,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* Animated Background — same as HTML DNA */}
-      <div className="bg-canvas" aria-hidden="true">
-        <div className="orb orb-1" />
-        <div className="orb orb-2" />
-        <div className="orb orb-3" />
-        <svg className="grid-overlay" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
-          <defs>
-            <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-              <path d="M 60 0 L 0 0 0 60" fill="none" stroke="currentColor" strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#grid)" />
-          <circle cx="180" cy="120" r="2" className="node node-1" />
-          <circle cx="420" cy="200" r="1.5" className="node node-2" />
-          <circle cx="700" cy="150" r="2" className="node node-3" />
-          <circle cx="950" cy="280" r="1.5" className="node node-4" />
-          <circle cx="300" cy="400" r="2" className="node node-2" />
-          <circle cx="600" cy="500" r="1.5" className="node node-1" />
-          <circle cx="850" cy="450" r="2" className="node node-3" />
-          <circle cx="150" cy="600" r="1.5" className="node node-4" />
-          <circle cx="500" cy="700" r="2" className="node node-2" />
-          <circle cx="1050" cy="600" r="1.5" className="node node-1" />
-          <line x1="180" y1="120" x2="420" y2="200" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
-          <line x1="420" y1="200" x2="700" y2="150" stroke="currentColor" strokeWidth="0.3" opacity="0.1" />
-          <line x1="700" y1="150" x2="950" y2="280" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
-          <line x1="300" y1="400" x2="600" y2="500" stroke="currentColor" strokeWidth="0.3" opacity="0.1" />
-          <line x1="600" y1="500" x2="850" y2="450" stroke="currentColor" strokeWidth="0.3" opacity="0.15" />
-          <line x1="150" y1="600" x2="500" y2="700" stroke="currentColor" strokeWidth="0.3" opacity="0.1" />
-        </svg>
-      </div>
-
       <div ref={revealRef} style={{ position: "relative", zIndex: 1 }}>
         {/* ── Hero ── */}
         <div className="hero">

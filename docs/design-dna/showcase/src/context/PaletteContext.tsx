@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
-import { type PaletteName, applyPalette, PALETTES } from "../data/palettes";
+import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { type PaletteName, applyPalette } from "../data/palettes";
 
 interface PaletteState {
   palette: PaletteName;
@@ -22,8 +22,8 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
     applyPalette(palette, mode);
   }, [palette, mode]);
 
-  const setPalette = (name: PaletteName) => setPaletteState(name);
-  const toggleMode = () => setMode((m) => (m === "dark" ? "light" : "dark"));
+  const setPalette = useCallback((name: PaletteName) => setPaletteState(name), []);
+  const toggleMode = useCallback(() => setMode((m) => (m === "dark" ? "light" : "dark")), []);
 
   return (
     <PaletteCtx.Provider value={{ palette, mode, setPalette, toggleMode }}>
