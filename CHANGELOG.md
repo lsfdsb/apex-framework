@@ -53,9 +53,18 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **React Page Templates** — 14 full-featured templates (Landing, SaaS, CRM, E-commerce, Blog, Portfolio, Social, LMS, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase) ready to copy into projects (#115)
 - **5 New Starter Components** — StatCard, ChartCard, ThemeToggle, EmptyState, KanbanColumn for richer dashboards and data flows (#115)
 - **RGB Tokens** — All 5 design palettes now include RGB values for dynamic theming and programmatic color manipulation (#115)
-- scaffold showcase app (3424d7d)
+- **CRM Pipeline Showcase** — Full rewrite with hero, orbiting SVG animation, 5-column kanban pipeline, animated contact cards with ring effects, timeline+chat integration, helpdesk tickets (#138)
+- **Presentation Slide Template** — 10 slide types: title, section divider, stats, content grid, quote, split layout, timeline, team roster, pricing cards, and CTA sections (#138)
+- **LMS Dashboard Showcase** — Added hero section, certificate showcase, reveal animations, and layout matching design DNA (#138, #140)
+- **Social Feed Showcase** — Added hero section with reveal animations, removed Avatar import crashing issues (#138)
+- **Email Template Showcase** — Added hero section, improved containment/centering, fixed sidenote layout bleeding (#138)
+- **Portfolio Showcase** — Hero section, contact form integration, numbered services grid, about stats, reveal animations, removed duplicate Header nav (#139)
+- **E-commerce Showcase** — Hero with animated SVG bag, product detail view, cart layout, checkout flow with steps, reveal animations (#139)
+- **Backoffice Showcase** — Complete rewrite from sidebar layout to showcase format with hero, KPI cards grid, activity log, invoice table, permissions matrix (#139)
+- **E-book Showcase** — Cover section, 7 chapter layouts, callout boxes, table of contents with sidenote structure, reveal animations (#139)
 
 ### Changed
+- **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy (#139)
 - **Code Reviewer Agent** — Expanded from 91 to 130 lines with enhanced security scanning, OWASP rules integration, and better error categorization (#115)
 - **Design Reviewer Agent** — Added task auto-claim for continuous design compliance, expanded DNA path scanning to catch hardcoded colors (#115)
 - **Rules Refactored** — Narrowed API/SQL/Supabase/Testing/Error-Handling paths with code examples, deduplicated constraints, improved clarity (#115)
@@ -70,6 +79,11 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **ShowcaseNav.tsx** — Rewritten to match DNA palette.js nav: fixed position, pill-shaped links with hover translateY(-1px) + accent-glow animation, active state with accent background, 52px height
 - **PaletteSwitcher.tsx** — Replaced flat dot bar with apex-widget design: gear button with rotate animation, expandable panel with palette dots and dark/light mode toggle
 - **App.tsx** — Added spacer div for fixed nav layout
+- **LMS Layout** — Removed PageShell/Sidebar wrapper, now proper showcase page matching HTML template structure (#140)
+- **Social Feed** — Removed crashing Avatar import, converted to self-contained component (#140)
+- **Email Template** — Fixed containment issues and centered layout properly (#140)
+- **Portfolio** — Removed duplicate Header nav that was creating double navigation (#140)
+- **E-commerce** — Removed Header import for cleaner showcase structure (#140)
 - **Session Learner Extraction** — Replaced broken regex with jq-based JSONL parsing for errors, blocks, and user corrections. Previous regex silently returned empty results (#117)
 - **False Positive Hook Blocks** — BLOCKED grep now only matches real hook verdicts (`BLOCKED:`), not the word "BLOCKED" in agent documentation. Fixed 5+ sessions of inflated block counts (#117)
 - **Tailwind Warning Channel** — Design token warning now outputs to stdout (was stderr), so Claude actually receives the hint (#117)
