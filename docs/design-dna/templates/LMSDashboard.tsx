@@ -1,8 +1,8 @@
-// Copy this file into your app and customize
-// Visual reference: docs/design-dna/lms.html
-// DNA: bg=#08080a, accent=#636bf0, font-display=Instrument Serif
+// Unified LMS — courses, lesson player, reading, progress, certificates
+// Visual references: lms.html + ebook.html combined
+// Zero external dependencies
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 
 function useReveal() {
   useEffect(() => {
@@ -17,21 +17,20 @@ function useReveal() {
   }, []);
 }
 
-const dnaStyles = `
+const css = `
 .reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all .9s cubic-bezier(0.22,1,0.36,1)}
 .reveal.visible{opacity:1;transform:none;filter:none}
 .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
 .lms-course{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius,12px);overflow:hidden;transition:all .4s cubic-bezier(0.22,1,0.36,1);cursor:pointer}
 .lms-course:hover{border-color:var(--border-hover);transform:translateY(-3px)}
 .lms-lesson{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .2s}
-.lms-lesson:last-child{border:none}
-.lms-lesson:hover{background:var(--bg-surface)}
-.lms-lesson.active{background:var(--accent-glow)}
+.lms-lesson:last-child{border:none}.lms-lesson:hover{background:var(--bg-surface)}.lms-lesson.active{background:var(--accent-glow)}
 .lms-progress-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius,12px);padding:24px;text-align:center;transition:all .3s cubic-bezier(0.22,1,0.36,1)}
 .lms-progress-card:hover{border-color:var(--border-hover);transform:translateY(-2px)}
 .lms-cert::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,var(--accent-glow),transparent 60%)}
-@media(max-width:768px){.lms-courses{grid-template-columns:1fr!important}.lms-player{grid-template-columns:1fr!important}.lms-progress{grid-template-columns:repeat(2,1fr)!important}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}.reveal{opacity:1;transform:none;filter:none}}
+.lms-reading{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius,12px);padding:56px 48px;position:relative}
+@media(max-width:768px){.lms-courses,.lms-progress{grid-template-columns:1fr!important}.lms-player{grid-template-columns:1fr!important}.lms-reading{padding:32px 24px!important}}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;filter:none;transition:none}}
 `;
 
 const courses = [
@@ -40,16 +39,16 @@ const courses = [
   { cat: "Architecture", title: "Scaling React Applications", desc: "State management, code splitting, performance. Production patterns that scale.", instructor: "David Lee", initials: "DL", lessons: 24, hours: 8, progress: 0, badge: "Advanced", badgeBg: "rgba(248,113,113,0.15)", badgeC: "var(--destructive)" },
 ];
 const lessons = [
-  { title: "What is a Design System?", duration: "12:30", done: true },
-  { title: "Token Fundamentals", duration: "18:45", done: true },
-  { title: "Token Architecture", duration: "22:10", active: true },
-  { title: "Component Patterns", duration: "15:00" },
-  { title: "Documentation", duration: "10:20" },
-  { title: "Maintenance & Evolution", duration: "14:55" },
+  { title: "What is a Design System?", dur: "12:30", done: true },
+  { title: "Token Fundamentals", dur: "18:45", done: true },
+  { title: "Token Architecture", dur: "22:10", active: true },
+  { title: "Component Patterns", dur: "15:00" },
+  { title: "Documentation", dur: "10:20" },
+  { title: "Maintenance & Evolution", dur: "14:55" },
 ];
 const progress = [
-  { name: "Design Systems", sub: "8 of 12 lessons", pct: 65, offset: 62 },
-  { name: "TypeScript", sub: "5 of 18 lessons", pct: 30, offset: 123 },
+  { name: "Design Systems", sub: "8 of 12", pct: 65, offset: 62 },
+  { name: "TypeScript", sub: "5 of 18", pct: 30, offset: 123 },
   { name: "Git Fundamentals", sub: "Completed", pct: 100, offset: 0, color: "var(--success)" },
   { name: "Scaling React", sub: "Not started", pct: 0, offset: 176 },
 ];
@@ -64,11 +63,34 @@ function SH({ label, title, sub }: { label: string; title: string; sub?: string 
   );
 }
 
+function LessonNum({ i, done, active }: { i: number; done?: boolean; active?: boolean }) {
+  return (
+    <div style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${done ? "var(--success)" : active ? "var(--accent)" : "var(--border)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, flexShrink: 0, color: done ? "var(--success)" : active ? "var(--accent)" : "var(--text-muted)", background: done ? "rgba(52,211,153,0.1)" : active ? "var(--accent-glow)" : "transparent" }}>
+      {done ? "✓" : i}
+    </div>
+  );
+}
+
+function ProgressRing({ pct, offset, color }: { pct: number; offset: number; color?: string }) {
+  const c = color || "var(--accent)";
+  return (
+    <div style={{ width: 64, height: 64, margin: "0 auto 12px", position: "relative" }}>
+      <svg viewBox="0 0 64 64" width="64" height="64" style={{ transform: "rotate(-90deg)" }}>
+        <circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" strokeWidth="4" />
+        <circle cx="32" cy="32" r="28" fill="none" stroke={c} strokeWidth="4" strokeLinecap="round" strokeDasharray="176" strokeDashoffset={offset} style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1)" }} />
+      </svg>
+      <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: c }}>{pct}%</div>
+    </div>
+  );
+}
+
 export default function LMSDashboard() {
   useReveal();
+  const [activeTab, setActiveTab] = useState<"video" | "reading">("video");
+
   return (
     <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
-      <style>{dnaStyles}</style>
+      <style>{css}</style>
 
       {/* ═══ HERO ═══ */}
       <section style={{ padding: "140px 32px 100px", textAlign: "center" }}>
@@ -77,7 +99,7 @@ export default function LMSDashboard() {
           <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
             Learn at your<br />own <em style={{ fontStyle: "italic", color: "var(--accent)" }}>pace.</em>
           </h1>
-          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 440, margin: "20px auto 0" }}>Courses, lessons, progress tracking, certificates. Education that respects attention.</p>
+          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 440, margin: "20px auto 0" }}>Courses, lessons, reading, progress tracking, certificates. Education that respects attention.</p>
         </div>
       </section>
 
@@ -114,24 +136,53 @@ export default function LMSDashboard() {
         </div>
       </section>
 
-      {/* ═══ LESSON PLAYER ═══ */}
+      {/* ═══ LESSON EXPERIENCE ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Now Playing" title="The lesson experience." sub="Video player + lesson navigation. Focused learning." /></div>
+          <div className="reveal"><SH label="Now Playing" title="The lesson experience." sub="Video player + lesson navigation. Switch between video and reading." /></div>
+
+          {/* Tab switcher */}
+          <div className="reveal" style={{ display: "flex", gap: 4, marginBottom: 24 }}>
+            {(["video", "reading"] as const).map((tab) => (
+              <button key={tab} onClick={() => setActiveTab(tab)} style={{ padding: "6px 16px", borderRadius: 999, fontSize: 12, fontWeight: activeTab === tab ? 600 : 400, border: "none", cursor: "pointer", background: activeTab === tab ? "var(--accent-glow)" : "transparent", color: activeTab === tab ? "var(--accent)" : "var(--text-muted)", transition: "all .25s", fontFamily: "var(--font-body)" }}>{tab === "video" ? "Video" : "Reading"}</button>
+            ))}
+          </div>
+
           <div className="lms-player reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 24 }}>
+            {/* Main content — video or reading */}
             <div>
-              <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
-                <div style={{ aspectRatio: "16/9", background: "var(--bg-surface)", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}>
-                  <button style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: "none", transition: "all .3s cubic-bezier(0.22,1,0.36,1)" }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ marginLeft: 3 }}><polygon points="5,3 19,12 5,21" /></svg>
-                  </button>
+              {activeTab === "video" ? (
+                <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+                  <div style={{ aspectRatio: "16/9", background: "var(--bg-surface)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <button style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--accent)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", border: "none" }}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="white" style={{ marginLeft: 3 }}><polygon points="5,3 19,12 5,21" /></svg>
+                    </button>
+                  </div>
+                  <div style={{ padding: 20 }}>
+                    <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4, letterSpacing: "-0.01em" }}>Lesson 3: Token Architecture</h2>
+                    <p style={{ fontSize: 13, color: "var(--text-muted)" }}>Building a token system that scales across platforms.</p>
+                  </div>
                 </div>
-                <div style={{ padding: 20 }}>
-                  <h2 style={{ fontSize: 18, fontWeight: 600, marginBottom: 4, letterSpacing: "-0.01em" }}>Lesson 3: Design Token Architecture</h2>
-                  <p style={{ fontSize: 13, color: "var(--text-muted)" }}>Building a token system that scales across platforms and themes.</p>
+              ) : (
+                /* Reading experience — from Ebook DNA */
+                <div className="lms-reading">
+                  <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)", marginBottom: 20, fontFamily: "var(--font-body)" }}>Chapter 03</p>
+                  <h2 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 400, letterSpacing: "-0.02em", marginBottom: 32, color: "var(--text)" }}>Token Architecture</h2>
+                  <div style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 17, lineHeight: 1.9, color: "var(--text-secondary)" }}>
+                    <p style={{ marginBottom: 20 }}>
+                      <span style={{ fontFamily: "var(--font-display)", fontSize: 56, float: "left", lineHeight: 1, marginRight: 12, color: "var(--accent)" }}>T</span>
+                      he first principle of any lasting system is that it must be understood by the people who maintain it. Complexity that cannot be reasoned about cannot be trusted, and systems that cannot be trusted will be replaced.
+                    </p>
+                    <p style={{ marginBottom: 20, textIndent: "1.5em" }}>This is not an argument against sophistication — it is an argument for clarity. A design token architecture should feel inevitable: each layer exists for a reason, each name communicates its purpose.</p>
+                    <blockquote style={{ borderLeft: "3px solid var(--accent)", paddingLeft: 24, margin: "28px 0", fontStyle: "italic", fontSize: 19, color: "var(--text)", lineHeight: 1.6 }}>A design system is a shared language. If the language cannot be spoken by everyone on the team, it is not a language — it is a dialect.</blockquote>
+                    <p style={{ marginBottom: 20, textIndent: "1.5em" }}>The hierarchy of tokens follows a natural progression: from the most primitive values (raw colors, pixel sizes) to the most semantic (what does this color mean, what does this spacing achieve).</p>
+                  </div>
+                  <div style={{ position: "absolute", bottom: 24, right: 32, fontSize: 11, color: "var(--text-muted)" }}>21</div>
                 </div>
-              </div>
+              )}
             </div>
+
+            {/* Lesson sidebar */}
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
               <div style={{ padding: "16px 20px", borderBottom: "1px solid var(--border)" }}>
                 <h3 style={{ fontSize: 14, fontWeight: 600 }}>Design Systems Fundamentals</h3>
@@ -139,11 +190,9 @@ export default function LMSDashboard() {
               </div>
               {lessons.map((l, i) => (
                 <div key={l.title} className={`lms-lesson${l.active ? " active" : ""}`}>
-                  <div style={{ width: 28, height: 28, borderRadius: "50%", border: `1px solid ${l.done ? "var(--success)" : l.active ? "var(--accent)" : "var(--border)"}`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 600, flexShrink: 0, color: l.done ? "var(--success)" : l.active ? "var(--accent)" : "var(--text-muted)", background: l.done ? "rgba(52,211,153,0.1)" : l.active ? "var(--accent-glow)" : "transparent" }}>
-                    {l.done ? "✓" : i + 1}
-                  </div>
+                  <LessonNum i={i + 1} done={l.done} active={l.active} />
                   <div style={{ fontSize: 13, fontWeight: 500, flex: 1 }}>{l.title}</div>
-                  <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.duration}</span>
+                  <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.dur}</span>
                 </div>
               ))}
             </div>
@@ -158,13 +207,7 @@ export default function LMSDashboard() {
           <div className="lms-progress reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
             {progress.map((p) => (
               <div key={p.name} className="lms-progress-card">
-                <div style={{ width: 64, height: 64, margin: "0 auto 12px", position: "relative" }}>
-                  <svg viewBox="0 0 64 64" width="64" height="64" style={{ transform: "rotate(-90deg)" }}>
-                    <circle cx="32" cy="32" r="28" fill="none" stroke="var(--border)" strokeWidth="4" />
-                    <circle cx="32" cy="32" r="28" fill="none" stroke={p.color || "var(--accent)"} strokeWidth="4" strokeLinecap="round" strokeDasharray="176" strokeDashoffset={p.offset} style={{ transition: "stroke-dashoffset 1s cubic-bezier(0.22,1,0.36,1)" }} />
-                  </svg>
-                  <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, fontWeight: 700, color: p.color }}>{p.pct}%</div>
-                </div>
+                <ProgressRing pct={p.pct} offset={p.offset} color={p.color} />
                 <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 2 }}>{p.name}</h4>
                 <p style={{ fontSize: 12, color: "var(--text-muted)" }}>{p.sub}</p>
               </div>
