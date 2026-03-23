@@ -3,6 +3,12 @@
 // DNA palette: bg=#08080a, accent=#636bf0, pipeline stage colors per column
 
 import React, { useEffect } from "react";
+import DealDrawer from "./crm/DealDrawer";
+import ContactProfile from "./crm/ContactProfile";
+import LeadScoreCards from "./crm/LeadScoreCards";
+import DataTable from "./crm/DataTable";
+import PipelineAnalytics from "./crm/PipelineAnalytics";
+import TaskList from "./crm/TaskList";
 
 function useReveal() {
   useEffect(() => {
@@ -212,6 +218,53 @@ export default function CRMPipeline() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+      {/* ═══ DEAL DRAWER ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Detalhe</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Tudo em um clique.</h2></div>
+          <div className="reveal reveal-delay-1"><DealDrawer /></div>
+        </div>
+      </section>
+
+      {/* ═══ CONTACT PROFILE ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Perfil</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Conheça seu cliente.</h2></div>
+          <div className="reveal reveal-delay-1"><ContactProfile /></div>
+        </div>
+      </section>
+
+      {/* ═══ LEAD SCORES ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Scoring</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Qualifique seus leads.</h2></div>
+          <div className="reveal reveal-delay-1"><LeadScoreCards /></div>
+        </div>
+      </section>
+
+      {/* ═══ PIPELINE ANALYTICS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Análise</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Pipeline em números.</h2></div>
+          <div className="reveal reveal-delay-1"><PipelineAnalytics /></div>
+        </div>
+      </section>
+
+      {/* ═══ DATA TABLE ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Dados</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Tabelas que contam histórias.</h2></div>
+          <div className="reveal reveal-delay-1"><DataTable /></div>
+        </div>
+      </section>
+
+      {/* ═══ TASKS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><Label>Tarefas</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Nenhum follow-up esquecido.</h2></div>
+          <div className="reveal reveal-delay-1"><TaskList /></div>
         </div>
       </section>
     </div>
