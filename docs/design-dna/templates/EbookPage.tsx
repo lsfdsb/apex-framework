@@ -240,7 +240,18 @@ export default function EbookPage() {
         <div style={{ width: `${scrollProgress}%`, height: "100%", background: "var(--accent)", transition: "width 0.1s" }} />
       </div>
 
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "80px 32px 64px" }}>
+      {/* ═══ HERO ═══ */}
+      <section style={{ padding: "140px 32px 100px", textAlign: "center" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal" style={{ fontFamily: "var(--font-sans,'Inter',sans-serif)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 16 }}>E-Book</div>
+          <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display,'Instrument Serif',Georgia,serif)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
+            Reading that<br /><em style={{ fontStyle: "italic", color: "var(--accent)" }}>flows.</em>
+          </h1>
+          <p className="reveal reveal-delay-2" style={{ fontFamily: "var(--font-sans,'Inter',sans-serif)", fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "20px auto 0" }}>Book covers, table of contents, reading pages, callouts, sidenotes, chapter navigation.</p>
+        </div>
+      </section>
+
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 32px 64px" }}>
 
           {/* Cover section */}
           <section style={{ marginBottom: 80 }}>
