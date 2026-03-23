@@ -3,7 +3,7 @@
 // DNA palette: bg=var(--bg), accent=var(--accent), Instrument Serif display, centered hero
 
 import React, { useEffect, FormEvent, useState } from "react";
-import { Badge } from "../starters/primitives";
+// No external imports — self-contained showcase template
 
 // ── Reveal hook (IntersectionObserver → .visible) ─────────────
 function useReveal() {
@@ -60,7 +60,7 @@ function ProjectCard({ p, delay }: { p: Project; delay?: number }) {
         <h3 style={{ fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em", marginBottom: 6, color: "var(--text)" }}>{p.title}</h3>
         <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.6 }}>{p.description}</p>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 12 }}>
-          {p.tags.map((t) => <Badge key={t} variant="default">{t}</Badge>)}
+          {p.tags.map((t) => <span key={t} style={{ fontSize: 11, padding: "3px 10px", borderRadius: 999, background: "var(--bg-surface)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>{t}</span>)}
         </div>
       </div>
     </article>
