@@ -312,12 +312,18 @@ export default function DesignSystemPage() {
             </div>
           </div>
 
-          <div className="reveal reveal-delay-2" style={{ marginTop: 48 }}>
-            <PLabel>Feedback & Interação</PLabel>
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-              <Tooltip content="Informação adicional"><button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", background: "transparent", color: "var(--text-secondary)", cursor: "pointer", fontSize: 13 }}>Hover para tooltip</button></Tooltip>
+          <div className="reveal reveal-delay-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16 }}>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+              <PLabel>Tooltip</PLabel>
+              <Tooltip content="Informação adicional sobre este campo"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Passe o mouse aqui</span></Tooltip>
+            </div>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+              <PLabel>ConfirmDialog</PLabel>
               <ConfirmDialogDemo />
-              <button onClick={() => {}} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", background: "transparent", color: "var(--text-secondary)", cursor: "pointer", fontSize: 13 }}>DropdownMenu ···</button>
+            </div>
+            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+              <PLabel>Toast</PLabel>
+              <span style={{ fontSize: 12, color: "var(--text-muted)" }}>useToast() hook</span>
             </div>
           </div>
         </div>
