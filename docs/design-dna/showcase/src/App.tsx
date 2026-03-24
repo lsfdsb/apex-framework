@@ -135,6 +135,7 @@ function getTemplateName(path: string): string {
     "/presentation": "PresentationSlide",
     "/design-system": "DesignSystemPage",
     "/patterns": "PatternShowcase",
+    "/animations": "AnimationsShowcase",
   };
   return map[path] ?? "";
 }
