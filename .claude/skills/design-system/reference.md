@@ -92,7 +92,7 @@ These patterns scream "AI made this." They are banned from every APEX project:
 | Rainbow of colors | No restraint, no brand | One accent color + neutrals. That's it. |
 | Shadow-heavy cards floating on white | 2019 design trend | Subtle borders, surface hierarchy through shade |
 
-If the Design Reviewer sees any of these, it's an automatic BLOCK.
+If QA sees any of these, it's an automatic BLOCK.
 
 ## Premium Design Patterns — What Beautiful Looks Like
 

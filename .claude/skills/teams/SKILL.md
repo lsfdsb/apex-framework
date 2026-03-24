@@ -19,7 +19,7 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 ```
 
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
-`Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop`
+`Builder creates → Watcher monitors → Builder fixes → QA verifies → loop`
 
 **3 rules**: (1) Watcher always first, (2) Default isolation: none, (3) Technical Writer before every PR.
 
@@ -178,17 +178,17 @@ Each check has ONE owner. No two agents scan the same thing.
 | File size > 300 lines | **Watcher** | — |
 | Function size > 30 lines | **Watcher** | — |
 | Hardcoded secrets | **Watcher** | Security hook (PreToolUse) |
-| Hardcoded Tailwind colors | **Design Reviewer** | — |
-| Design DNA compliance | **Design Reviewer** | — |
-| Branding sweep | **Design Reviewer** | — |
-| Responsive/mobile-first | **Design Reviewer** | — |
-| Accessibility (WCAG) | **Design Reviewer** | — |
+| Hardcoded Tailwind colors | **QA** (phase 1) | — |
+| Design DNA compliance | **QA** (phase 4) | — |
+| Branding sweep | **QA** (phase 1) | — |
+| Responsive/mobile-first | **QA** (phase 4) | — |
+| Accessibility (WCAG) | **QA** (phase 4) | — |
 | Performance (N+1, bundle) | **QA** (phase 5) | — |
 | Security (OWASP) | **QA** (phase 6) | — |
 | Logic correctness | **QA** (phase 2) | — |
-| Code quality/patterns | **Code Reviewer** | — |
+| Code quality/patterns | **QA** (phase 1) | — |
 
-**Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate. Design Reviewer owns all visual/UI checks. No overlap.
+**Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate covering all dimensions. No overlap.
 
 ## Auto-Spawn Logic
 
@@ -228,10 +228,9 @@ Break the work into discrete tasks using TaskCreate:
 Spawn in this order:
 
 1. **Watcher FIRST** — monitoring must start before any changes
-2. **Researcher** (if needed) — background research starts early
-3. **Builder or Debugger** — the primary workers
-4. **QA** — ready to verify as work completes
-5. **Code Reviewer** — final pass
+2. **Builder** — the primary worker
+3. **QA** — ready to verify as work completes
+4. **Technical Writer** — documents as work ships
 
 Each teammate MUST have `team_name` set:
 
@@ -272,16 +271,16 @@ The autonomous handoff chain ensures work flows without manual intervention:
 Builder completes task
   → Lead sends message to QA: "Task #{id} ready for verification"
   → QA runs quality gate
-  → If APPROVED: Lead notifies Code Reviewer for final review
-  → If BLOCKED: Lead creates bug task → Debugger auto-claims it
+  → If APPROVED: Lead proceeds to ship
+  → If BLOCKED: Lead creates bug task → Builder auto-claims it
 ```
 
 ```
 Watcher detects issue
   → Watcher creates task with [bug] tag
   → Watcher messages Lead: "Issue detected: {summary}"
-  → Lead assigns to Debugger (or Debugger auto-claims)
-  → Debugger fixes → messages QA
+  → Builder auto-claims the bug task
+  → Builder fixes → messages QA
   → QA verifies → reports to Lead
 ```
 
@@ -291,11 +290,9 @@ The key APEX principle: **don't wait unnecessarily.**
 
 - Builder starts implementing immediately
 - Watcher monitors from the first second
-- Researcher runs alongside Builder when docs are needed
 - Multiple Builders can work on independent tasks simultaneously
 - QA starts verification the moment any task completes
-- Debugger and Builder can work in parallel on different tasks
-- Code Reviewer starts on completed+verified work while Builder continues on next task
+- Technical Writer updates docs in parallel with QA
 
 ### Step 6: Shutdown
 
@@ -310,7 +307,7 @@ When all tasks are complete and QA approved:
 - **Broadcast** (`to: "*"`) ONLY for critical blocking issues — it's expensive
 - **Tasks** are the source of truth for work status (not messages)
 - **Be patient** with idle teammates — idle means waiting for input, not broken
-- **Teammates can DM each other** — Debugger can message QA directly
+- **Teammates can DM each other** — Builder can message QA directly
 
 ### Standardized Message Format
 
@@ -327,13 +324,9 @@ ALL agents must use this structure when messaging the lead:
 | Agent | Emoji | Action Examples |
 |-------|-------|----------------|
 | Watcher | 🔍 | Watcher Report, Issue Detected, All Clear |
-| Builder | ✅ | Task Complete, Blocked, Starting Task |
-| Debugger | 🔧 | Bug Fix Complete, Investigating, Blocked |
+| Builder | ✅ | Task Complete, Bug Fix Complete, Blocked |
 | QA | 📋 | QA Report, APPROVED, BLOCKED |
-| Code Reviewer | 🔍 | Code Review, APPROVED, CHANGES REQUESTED |
-| Design Reviewer | 🎨 | Design Review, APPROVED, CHANGES REQUESTED |
 | Technical Writer | 📝 | Docs Updated, Breaking Change Detected |
-| Researcher | 📚 | Research Complete, Inconclusive |
 
 ### Timeout and Escalation Rules
 
@@ -388,6 +381,6 @@ User: "Build the authentication flow with OAuth"
 9. **Right-size the team** — Don't spawn `full` for a bug fix
 10. **The loop breathes** — Detect→Fix→Verify→Ship runs autonomously
 11. **Verify after build** — After ANY builder completes, verify files exist in main project before proceeding
-12. **Design review on UI** — If the task creates .tsx/.jsx files, Design Reviewer MUST review before QA
+12. **Design review on UI** — If the task creates .tsx/.jsx files, QA MUST check Design DNA compliance
 13. **QA is a gate, not optional** — No task is marked complete without QA verification. If QA wasn't invoked, the task is NOT done
 14. **Verify APIs before integration** — If a task involves external APIs, use WebSearch to verify docs BEFORE builder starts

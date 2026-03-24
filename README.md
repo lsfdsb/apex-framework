@@ -121,10 +121,9 @@ When you say `/prd my LMS app`, APEX:
 2. **Plans the architecture** — picks components, database schema, page structure
 3. **Researches external APIs** — verifies docs before writing integration code
 4. **Reads the Design DNA recipe** — picks the right palette, fonts, backgrounds, components
-5. **Spawns a team** — Builder, Watcher, QA, Design Reviewer, Technical Writer work in parallel
+5. **Spawns a team** — Builder, Watcher, QA, Technical Writer work in parallel
 6. **Builds the app** — using starter components from Design DNA (not from scratch)
 7. **Runs quality gates** — QA agent checks code, security, performance, accessibility
-8. **Code review** — Opus-level Code Reviewer catches what QA misses
 9. **Updates docs** — CHANGELOG, README updated automatically
 10. **Ships** — PR created, reviewed, merged with one command
 
@@ -182,7 +181,6 @@ One install. Everything in your project's `.claude/` directory.
 | **QA** | Sonnet | 6-phase quality gate |
 | **Watcher** | Haiku | Continuous monitoring |
 | **Technical Writer** | Haiku | Documentation, CHANGELOG |
-| **Researcher** | Haiku | API docs, library evaluation |
 
 ### Design DNA — Pixel-Perfect from Day One
 
@@ -234,9 +232,9 @@ Layer 3: Hook scripts (runtime enforcement)
 
 | Tier | Model | Agents | Why |
 |------|-------|--------|-----|
-| **Decision + Security** | Opus | Lead, Code Reviewer | Best reasoning. Security gate needs the best eye. Catches vulnerabilities Sonnet misses. |
-| **Build + Analyze** | Sonnet | Builder, Debugger, QA, Design Reviewer | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
-| **Monitor + Research** | Haiku | Watcher, Technical Writer, Researcher | Fast, cheap, excellent for reading/monitoring tasks. |
+| **Decision** | Opus | Lead | Best reasoning for orchestration and architectural decisions. |
+| **Build + Analyze** | Sonnet | Builder, QA | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
+| **Monitor + Document** | Haiku | Watcher, Technical Writer | Fast, cheap, excellent for reading/monitoring/docs tasks. |
 
 ---
 

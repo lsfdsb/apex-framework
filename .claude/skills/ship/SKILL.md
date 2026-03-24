@@ -89,7 +89,7 @@ The plugin is the single review gate. It covers CLAUDE.md compliance (which incl
 
 ### Step 7: Merge (only with user approval)
 
-**NEVER merge without explicit user approval.** Show the PR URL and Code Reviewer verdict first.
+**NEVER merge without explicit user approval.** Show the PR URL and QA verdict first.
 
 If user says "merge", "merge it", "ship it":
 ```bash
