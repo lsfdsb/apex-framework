@@ -6,6 +6,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **Showcase Test Infrastructure** — Vitest + React Testing Library with 12 tests covering Router, PaletteContext, and build smoke validation
+- **Showcase ESLint + Prettier** — ESLint 9 flat config with typescript-eslint, react-hooks, react-refresh plugins; Prettier with project conventions
+- **CI Showcase Pipeline** — GitHub Actions now runs typecheck → lint → test → build for the Design DNA React app
+- **Statusline v3 (Σ Token Sum)** — Shows session-wide token total (main + all agents), USD cost, and 5-hour rate limit with color-coded health
+
+### Fixed
+- **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip
+- **ShowcaseNav setState-in-effect** — React 19 lint error replaced with derived state pattern (no effect, no ref-during-render)
+- **PaletteSwitcher Unused Import** — Removed dead `PaletteName` type import
+
 ## [5.18.0] — 2026-03-24
 
 ### Added

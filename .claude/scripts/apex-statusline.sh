@@ -1,8 +1,14 @@
 #!/bin/bash
-# apex-statusline.sh — APEX Framework Status Line v2
+# apex-statusline.sh — APEX Framework Status Line v3
 # by L.B. & Claude · São Paulo, 2026
 #
 # Philosophy: Glance, don't read. Hide zeros. Earn every character.
+#
+# v3 changes:
+#   - TOK_TOTAL = total_input + total_output (session-wide SUM, includes agents)
+#   - Context bar still shows main thread % (that's the overflow constraint)
+#   - Added session cost (total_cost_usd)
+#   - Added rate limit indicator (five_hour.used_percentage)
 #
 # JSON schema (code.claude.com/docs/en/statusline):
 #   .model.id / .model.display_name
@@ -10,6 +16,7 @@
 #   .context_window.total_output_tokens / .context_window.context_window_size
 #   .cost.total_cost_usd / .cost.total_duration_ms
 #   .cost.total_lines_added / .cost.total_lines_removed
+#   .rate_limits.five_hour.used_percentage
 
 export LC_NUMERIC=C
 
@@ -29,15 +36,18 @@ PARSED=$(echo "$INPUT" | jq -r '
     (.context_window.context_window_size // 0 | tostring),
     (.context_window.total_input_tokens // 0 | tostring),
     (.context_window.total_output_tokens // 0 | tostring),
-    ((.context_window.used_percentage // 0) * (.context_window.context_window_size // 0) / 100 | floor | tostring),
     (.cost.total_cost_usd // 0 | tostring),
     (.cost.total_lines_added // 0 | tostring),
     (.cost.total_lines_removed // 0 | tostring),
-    (.cost.total_duration_ms // 0 | tostring)
+    (.cost.total_duration_ms // 0 | tostring),
+    (.rate_limits.five_hour.used_percentage // 0 | tostring)
   ] | join("\t")
 ' 2>/dev/null)
 
-IFS=$'\t' read -r MODEL_DISPLAY MODEL_ID CTX_PCT CTX_SIZE TOK_IN TOK_OUT TOK_USED COST_RAW LA LR DUR_MS <<< "$PARSED"
+IFS=$'\t' read -r MODEL_DISPLAY MODEL_ID CTX_PCT CTX_SIZE TOK_IN TOK_OUT COST_RAW LA LR DUR_MS RATE_5H <<< "$PARSED"
+
+# ── Session-wide token sum (main thread + all agents) ──
+TOK_TOTAL=$((TOK_IN + TOK_OUT))
 
 # ── Model ──
 case "$MODEL_DISPLAY" in
@@ -79,6 +89,25 @@ fmt_tok() {
   fi
 }
 
+# ── Format cost ──
+fmt_cost() {
+  local c=$1
+  if command -v bc &>/dev/null; then
+    local cents
+    cents=$(echo "$c * 100" | bc 2>/dev/null || echo "0")
+    cents_int=$(printf '%.0f' "$cents" 2>/dev/null || echo "0")
+    if [ "$cents_int" -lt 1 ] 2>/dev/null; then
+      echo ""
+    elif [ "$cents_int" -lt 100 ] 2>/dev/null; then
+      printf '$%.2f' "$c"
+    else
+      printf '$%.1f' "$c"
+    fi
+  else
+    [ "$c" != "0" ] && [ "$c" != "0.00" ] && echo "\$$c" || echo ""
+  fi
+}
+
 # ── Context bar (clean fill) ──
 BW=10
 F=$((CTX_INT * BW / 100))
@@ -88,7 +117,7 @@ BAR=""
 for ((i=0;i<F;i++)); do BAR="${BAR}█"; done
 for ((i=0;i<E;i++)); do BAR="${BAR}░"; done
 
-# ── Health indicator ──
+# ── Health indicator (based on main thread %) ──
 if [ "$CTX_INT" -gt 80 ] 2>/dev/null; then
   HEALTH="🔴"
 elif [ "$CTX_INT" -gt 60 ] 2>/dev/null; then
@@ -99,7 +128,6 @@ fi
 
 # ── Plan badge (only show MAX after first API call) ──
 PLAN=""
-TOK_TOTAL=$((TOK_IN + TOK_OUT))
 if [ "$COST_RAW" = "0" ] || [ "$COST_RAW" = "0.00" ]; then
   [ "$TOK_TOTAL" -gt 0 ] 2>/dev/null && PLAN="MAX "
 fi
@@ -119,12 +147,31 @@ LINES_STR=""
 NET=$((LA - LR))
 if [ "$LA" -gt 0 ] 2>/dev/null || [ "$LR" -gt 0 ] 2>/dev/null; then
   [ "$NET" -ge 0 ] 2>/dev/null && NET_FMT="+${NET}" || NET_FMT="${NET}"
-  LINES_STR=" ┃ +${LA}/-${LR} (${NET_FMT})"
+  LINES_STR=" ┃ Δ +${LA} / -${LR}"
 fi
 
-# ── Alerts (context only — cost is in Claude's native UI) ──
+# ── Cost (session-wide, hide if zero) ──
+COST_STR=""
+COST_FMT=$(fmt_cost "$COST_RAW")
+[ -n "$COST_FMT" ] && COST_STR=" ┃ ${COST_FMT}"
+
+# ── Rate limit (hide if zero or unavailable) ──
+RATE_STR=""
+RATE_INT=$(printf '%.0f' "$RATE_5H" 2>/dev/null || echo "0")
+if [ "$RATE_INT" -gt 0 ] 2>/dev/null; then
+  if [ "$RATE_INT" -gt 80 ] 2>/dev/null; then
+    RATE_STR=" ┃ ⏱ 🔴 ${RATE_INT}%"
+  elif [ "$RATE_INT" -gt 50 ] 2>/dev/null; then
+    RATE_STR=" ┃ ⏱ 🟡 ${RATE_INT}%"
+  else
+    RATE_STR=" ┃ ⏱ ${RATE_INT}%"
+  fi
+fi
+
+# ── Alerts ──
 ALERTS=""
 [ "$CTX_INT" -gt 80 ] 2>/dev/null && ALERTS=" ⚠️ CTX"
+[ "$RATE_INT" -gt 90 ] 2>/dev/null && ALERTS="${ALERTS} ⚠️ RATE"
 
 # ── Version (from VERSION file, lazy git fallback) ──
 VER=""
@@ -138,12 +185,14 @@ fi
 VER_STR="${VER:+v${VER} }"
 
 # ── Build context segment ──
+# Bar + % = main thread context (overflow constraint)
+# Σ tokens = session-wide SUM (main + all agents)
 if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
-  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% $(fmt_tok "$TOK_USED")/$(fmt_tok "$CTX_SIZE")"
+  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% · Σ $(fmt_tok "$TOK_TOTAL") / $(fmt_tok "$CTX_SIZE")"
 else
   CTX_STR="${HEALTH} ready"
 fi
 
 # ── Output ──
-# Segments: APEX version | model | context | lines | duration | alerts
-printf '%b' "⚔️ APEX ${VER_STR}┃ ${M} ${PLAN}┃ ${CTX_STR}${LINES_STR} ┃ ${DUR_FMT}${ALERTS}\n"
+# Segments: APEX version | model | context (Σ all agents) | cost | lines | duration | rate | alerts
+printf '%b' "⚔️ APEX ${VER_STR}┃ ${M} ${PLAN}┃ ${CTX_STR}${COST_STR}${LINES_STR} ┃ ${DUR_FMT}${RATE_STR}${ALERTS}\n"

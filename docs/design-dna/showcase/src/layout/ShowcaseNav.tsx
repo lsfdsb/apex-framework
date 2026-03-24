@@ -72,10 +72,13 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    closeMobile();
-  }, [activePath]);
+  // Close mobile menu on route change (derived state, no effect needed)
+  const [prevPath, setPrevPath] = useState(activePath);
+  if (prevPath !== activePath) {
+    setPrevPath(activePath);
+    if (mobileOpen) setMobileOpen(false);
+    if (closing) setClosing(false);
+  }
 
   // Escape key closes menu
   useEffect(() => {

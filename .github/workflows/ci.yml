@@ -121,6 +121,34 @@ jobs:
             exit 1
           fi
 
+      # ── Showcase app: build + test ──────────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: docs/design-dna/showcase/package-lock.json
+
+      - name: Install showcase dependencies
+        working-directory: docs/design-dna/showcase
+        run: npm ci
+
+      - name: Typecheck showcase app
+        working-directory: docs/design-dna/showcase
+        run: npm run typecheck
+
+      - name: Lint showcase app
+        working-directory: docs/design-dna/showcase
+        run: npm run lint
+
+      - name: Test showcase app
+        working-directory: docs/design-dna/showcase
+        run: npm test
+
+      - name: Build showcase app
+        working-directory: docs/design-dna/showcase
+        run: npm run build
+
       # ── Inventory report ─────────────────────────────────────────────────────
       - name: Report framework inventory
         run: |
