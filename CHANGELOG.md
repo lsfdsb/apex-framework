@@ -6,13 +6,22 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.16.0] — 2026-03-24 — Auto-Versioning + Pipeline Improvements
+
+Ship pipeline overhaul: official code-review plugin as single gate, auto-versioning after merge, responsive showcase nav, and Vite dev server.
+
+### Added
+- **Auto-Versioning** — `/ship` now auto-promotes `[Unreleased]` to semver after merge: feat→MINOR, fix→PATCH, BREAKING→MAJOR (#173)
+- **Changelog Showcase Sync** — Showcase homepage now displays `[Unreleased]` entries with "next" badge (#171)
+
 ### Changed
-- **Statusline** — Removed custom PR/git tracking calls, added framework version display (v5.15.0); relies on native Claude Code git indicator (#168)
-- **Dev Server** — Replaced static HTML server with Vite React showcase app from `docs/design-dna/showcase/`; auto-installs dependencies (#168)
-- **Ship Skill** — Single review gate via official `code-review` plugin; removed duplicate APEX code-reviewer from ship pipeline, scoped to `/teams` only (#170)
+- **Statusline** — Removed custom PR/git tracking calls, added framework version display; relies on native Claude Code git indicator (#168)
+- **Dev Server** — Replaced static HTML server with Vite React showcase app from `docs/design-dna/showcase/` (#168)
+- **Ship Skill** — Single review gate via official `code-review` plugin; removed duplicate APEX code-reviewer, scoped to `/teams` only (#170)
+- **Technical Writer** — Added versioning rules: new changes go under `[Unreleased]`, released versions are frozen (#171)
 
 ### Fixed
-- **ShowcaseNav** — Responsive navigation now collapses to hamburger menu on screens below 640px with glass morphism dropdown and smooth animated transitions (#172)
+- **ShowcaseNav** — Responsive hamburger menu on screens below 640px with glass morphism dropdown, outside-click dismiss, Escape key, and slide-out animation (#172)
 
 ## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
 

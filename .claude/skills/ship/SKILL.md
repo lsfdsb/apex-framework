@@ -97,6 +97,31 @@ gh pr merge <number> --squash --delete-branch
 
 Then commit and push any Technical Writer changes as a follow-up.
 
+### Step 8: Version Promotion (automatic after merge)
+
+After successful merge, auto-version the release:
+
+1. Switch to main and pull:
+   ```bash
+   git checkout main && git pull origin main
+   ```
+
+2. Check if `[Unreleased]` in CHANGELOG.md has entries. If empty, skip.
+
+3. Invoke the changelog skill for version promotion:
+   ```
+   Skill("changelog", args: "promote")
+   ```
+
+   This will automatically:
+   - Scan commits for version bump type (feat→MINOR, fix→PATCH)
+   - Promote `[Unreleased]` → `[X.Y.Z] — YYYY-MM-DD — Title`
+   - Update VERSION file
+   - Update README.md version refs
+   - Create a micro-PR (`chore/release-X.Y.Z`), auto-merge it
+
+4. Report the new version to the user.
+
 ## Rules
 
 1. **Never push to main directly** — always branch first
@@ -105,3 +130,4 @@ Then commit and push any Technical Writer changes as a follow-up.
 4. **Conventional commits** — `type(scope): description`
 5. **72-char subject lines** — enforced by commit-msg hook
 6. **Squash merge** — clean history, delete branch
+7. **Auto-version after merge** — `chore(release):` micro-PR promotes [Unreleased] to semver
