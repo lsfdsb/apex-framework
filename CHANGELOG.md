@@ -9,7 +9,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ### Changed
 - **Statusline** — Removed custom PR/git tracking calls, added framework version display (v5.15.0); relies on native Claude Code git indicator (#168)
 - **Dev Server** — Replaced static HTML server with Vite React showcase app from `docs/design-dna/showcase/`; auto-installs dependencies (#168)
-- **Ship Skill** — Integrated official `code-review` plugin into auto-review pipeline alongside APEX code-reviewer agent for layered code review (#168)
+- **Ship Skill** — Single review gate via official `code-review` plugin; removed duplicate APEX code-reviewer from ship pipeline, scoped to `/teams` only (#170)
 
 ## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
 
