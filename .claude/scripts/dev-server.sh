@@ -35,12 +35,16 @@ if [ ! -f "$PACKAGE_JSON" ]; then
     fi
     # Install deps if needed
     if [ ! -d "$SHOWCASE_DIR/node_modules" ]; then
-      (cd "$SHOWCASE_DIR" && npm install --silent) 2>/dev/null
+      (cd "$SHOWCASE_DIR" && npm install --silent) 2>/dev/null || {
+        echo "⚠️ Design DNA: npm install failed. Check network/package.json."
+        exit 0
+      }
     fi
-    # Start Vite dev server
+    # Start Vite dev server (nohup at top level to avoid subshell SIGHUP)
     > "$DNA_LOG_FILE" 2>/dev/null
-    (cd "$SHOWCASE_DIR" && nohup npm run dev > "$DNA_LOG_FILE" 2>&1 &
-    echo "$!" > "$DNA_PID_FILE")
+    cd "$SHOWCASE_DIR" && nohup npm run dev > "$DNA_LOG_FILE" 2>&1 &
+    echo "$!" > "$DNA_PID_FILE"
+    cd "$PROJECT_DIR"
     sleep 2
     if [ -f "$DNA_PID_FILE" ] && kill -0 "$(cat "$DNA_PID_FILE" 2>/dev/null)" 2>/dev/null; then
       echo "🟢 Design DNA server started · http://localhost:3001"

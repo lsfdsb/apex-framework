@@ -126,14 +126,15 @@ fi
 ALERTS=""
 [ "$CTX_INT" -gt 80 ] 2>/dev/null && ALERTS=" ⚠️ CTX"
 
-# ── Version (from VERSION file, cached in var) ──
+# ── Version (from VERSION file, lazy git fallback) ──
 VER=""
-for VER_PATH in "$CLAUDE_PROJECT_DIR/VERSION" "$(git rev-parse --show-toplevel 2>/dev/null)/VERSION"; do
-  if [ -f "$VER_PATH" ]; then
-    VER=$(head -1 "$VER_PATH" 2>/dev/null | tr -d '[:space:]')
-    break
-  fi
-done
+VER_PATH="${CLAUDE_PROJECT_DIR:+$CLAUDE_PROJECT_DIR/VERSION}"
+if [ -n "$VER_PATH" ] && [ -f "$VER_PATH" ]; then
+  VER=$(head -1 "$VER_PATH" 2>/dev/null | tr -d '[:space:]')
+else
+  VER_PATH="$(git rev-parse --show-toplevel 2>/dev/null)/VERSION"
+  [ -f "$VER_PATH" ] && VER=$(head -1 "$VER_PATH" 2>/dev/null | tr -d '[:space:]')
+fi
 VER_STR="${VER:+v${VER} }"
 
 # ── Build context segment ──
@@ -144,5 +145,5 @@ else
 fi
 
 # ── Output ──
-# Segments: APEX | model | context | lines | duration | alerts | PR
+# Segments: APEX version | model | context | lines | duration | alerts
 printf '%b' "⚔️ APEX ${VER_STR}┃ ${M} ${PLAN}┃ ${CTX_STR}${LINES_STR} ┃ ${DUR_FMT}${ALERTS}\n"
