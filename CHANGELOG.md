@@ -11,6 +11,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Dev Server** — Replaced static HTML server with Vite React showcase app from `docs/design-dna/showcase/`; auto-installs dependencies (#168)
 - **Ship Skill** — Single review gate via official `code-review` plugin; removed duplicate APEX code-reviewer from ship pipeline, scoped to `/teams` only (#170)
 
+### Fixed
+- **ShowcaseNav** — Responsive navigation now collapses to hamburger menu on screens below 640px with glass morphism dropdown and smooth animated transitions (#172)
+
 ## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
 
 Pixel-perfect template matching, component extraction, and self-contained showcase pages with 20+ commits completing the Design DNA showcase overhaul.
