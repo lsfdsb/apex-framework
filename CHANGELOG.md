@@ -21,17 +21,28 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Supabase RAG Knowledge Base** — Optional persistent vector database layer with migration, sync, query, and edge function support; modernized to `sb_secret_` and `sb_publishable_` key format (#180)
 - **Agent Memory + Effort Frontmatter** — All 4 agents now include `memory: project` and `effort` fields for persistent context and parallel execution (#180)
 - **CronCreate Guidance** — Watcher agent documents periodic health checks via native CronCreate scheduling mechanism (#180)
+- **`/verify-api` Skill** — Auto-triggers on external API references (Supabase, Stripe, OpenAI, etc.), WebSearches official docs for current auth patterns and deprecated keys, blocks stale integrations. 7 APIs verified with code templates (#180)
+- **CI/CD Auto-Release** — GitHub Actions `release` job auto-tags and publishes GitHub Releases from VERSION + CHANGELOG on merge to main. Idempotent, stamps CHANGELOG with version+date (#180)
+- **Production Edge Function** — Supabase RAG edge function upgraded from scaffold to 571-line production reference: Deno.serve(), CORS, Bearer auth with constant-time comparison, rate limiting, structured logging, input validation, health check (#180)
 
 ### Changed
 - **Context-Aware Agents** — Watcher and QA agents now detect repository type (framework vs project) and adapt commands, output, and validation rules accordingly (#180)
-- **Teams Skill** — Streamlined roster to 4 core agents (Builder, Watcher, QA, Technical Writer) plus Lead; removed references to deprecated agent implementations (#180)
-- **README.md** — Updated agent roster (8→5 agents), removed Observatory section, removed obsolete claude-web guide link (#180)
-- **Output Style** — Replaced false "MANDATORY" claims with honest enforcement docs; added Session Depth guidance and Memory vs Framework taxonomy (#180)
-- **CLAUDE.md Rule #20** — New constitutional rule: "Rules in framework, stories in memory" — behavioral rules go in framework files, historical context goes in memory (#180)
-- **CLAUDE.md Rule #2** — Strengthened API verification requirement: must check for deprecated patterns; official docs take precedence over memory (#180)
-- **Supabase Skill Reference** — Updated from deprecated `anon`/`service_role` JWT keys to modern `sb_publishable_`/`sb_secret_` format (#180)
-- **QA Skill** — Added repository type detection and Phase 0 dependency graph verification before shipping (#180)
-- framework cleanup, self-awareness, Supabase RAG (#180) (53928da)
+- **Teams Skill** — Streamlined roster to 4 core agents (Builder, Watcher, QA, Technical Writer) plus Lead; removed ALL references to dead agents across roster, breathing loop, scan matrix, spawn order, status table, and communication rules (#180)
+- **README.md** — Updated agent roster (8→4 agents), removed Observatory section, removed Researcher row, updated model strategy table (#180)
+- **Output Style** — Added Session Depth guidance (use 1M context fully), Memory vs Framework taxonomy, and honest enforcement docs replacing false "MANDATORY" claims (#180)
+- **CLAUDE.md Rule #2** — Now references `/verify-api` skill directly; must check deprecated patterns; official docs > memory (#180)
+- **CLAUDE.md Rule #16** — Updated: QA (not Design Reviewer) blocks pages that don't match DNA quality (#180)
+- **CLAUDE.md Rule #20** — New constitutional rule: "Rules in framework, stories in memory" (#180)
+- **Supabase Skill Reference** — Updated all key references from deprecated `anon`/`service_role` to modern `sb_publishable_`/`sb_secret_` format (#180)
+- **QA Skill** — Added repo type detection and Phase 0 dependency verification (#180)
+- **QA Agent** — All "Debugger" references updated to "Builder" (Builder handles both building and bug fixes) (#180)
+- **Technical Writer Agent** — Updated workflow references from Debugger to Builder (#180)
+- **Ship Skill** — Updated verdict reference from "Code Reviewer" to "QA" (#180)
+- **Design System Reference** — Updated enforcer from "Design Reviewer" to "QA agent" (#180)
+- **About Skill** — Agent roster updated to actual 4-agent lineup (#180)
+- **Pre-commit Hook** — Exempt `docs/` from console.log check (reference code like edge functions use console.log for Supabase structured logging) (#180)
+- **Builder Agent** — Added rule: builders must NEVER create git branches; branch management is lead's responsibility (#180)
+- **.gitignore** — Added `.claude/.manifest.json` and `.claude/agent-memory/` (runtime-generated, not source) (#180)
 
 ### Removed
 - **3 Dead Agent Implementations** — Removed `code-reviewer.md`, `debugger.md`, `design-reviewer.md` (never spawned in practice, functionality migrated to plugins) (#180)
@@ -40,8 +51,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Observatory Section** — Removed from README (dashboard was never built; monitoring via GitHub Actions) (#180)
 - **3 Stale Memory Records** — Removed `batman_session`, `changelog_every_pr`, `agent_teams` (superseded by CLAUDE.md rules and active policies) (#180)
 
+### Removed
+- **docs/QUALITY-REVIEW.md** — Outdated v5.13 quality review referencing deleted agents and Framework Evolver (#180)
+- **docs/design-dna/showcase/.claude/** — Orphaned runtime directory from a dev session (#180)
+- **Root .DS_Store** — OS cruft removed from tracking (#180)
+
 ### Fixed
-- **health-check.sh** — Updated agent list reference from dead agents to current roster (Builder, Watcher, QA, Technical Writer) (#180)
+- **health-check.sh** — Updated agent list reference from dead agents to current roster (#180)
+- **Stale Agent References** — Purged ALL remaining Debugger/Code Reviewer/Design Reviewer/Researcher/Sentinel references from 8 active files: about, teams, ship, design-system, qa agent, technical-writer agent, README, CLAUDE.md (#180)
+- **Builder Branch Bug** — Builders with `isolation: none` were creating orphan branches causing cherry-pick failures; added explicit "never create branches" rule (#180)
 
 ## [5.17.0] — 2026-03-24 — Onboarding Guide + Worktree Safety
 
