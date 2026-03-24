@@ -65,65 +65,56 @@ If ANY check fails → **STOP**. Fix the issue first. Show the user the error an
 
 ## Commit Process
 
-1. Run `git status` and `git diff --staged` to see what's being committed
-2. If nothing is staged, run `git add .` (or ask user what to stage)
-3. Generate a conventional commit message:
+### Step 1: Stage changes
+Run `git status` and `git diff --staged` to see what's being committed.
+If nothing is staged, run `git add .` (or ask user what to stage).
 
+### Step 2: Generate commit message
 **Format**: `type(scope): description`
 
 **Types**: feat, fix, docs, refactor, test, perf, security, chore
 **Scope**: the module or area changed (auth, cart, api, ui)
 **Description**: imperative mood, ≤72 chars, no period
 
-**Examples**:
-
 ```
 feat(auth): add OAuth login with Google provider
 fix(cart): prevent negative quantities in cart items
 refactor(api): extract pagination into shared utility
-test(user): add integration tests for registration flow
-perf(images): implement lazy loading for product gallery
-security(auth): add rate limiting to login endpoint
 ```
 
-4. Show the proposed commit message to the user for approval
-5. After committing, invoke the changelog skill to update docs
+### Step 3: Update CHANGELOG (BEFORE committing — not after)
+
+**This is the critical step.** The #1 recurring failure in APEX's history is commits shipping without CHANGELOG updates. The fix: do it INLINE, right here, before the commit happens. No separate agent, no "I'll do it later."
+
+1. Read `CHANGELOG.md`
+2. Determine the correct category based on commit type:
+   - `feat:` → `### Added`
+   - `fix:` → `### Fixed`
+   - `refactor:`, `perf:`, `security:`, `chore:` → `### Changed`
+   - `docs:` → Skip (pure docs commits don't need a CHANGELOG entry about themselves)
+3. Add a one-line entry under `## [Unreleased]` in the right category:
+   ```
+   - **Bold Feature Name** — description (#PR or commit ref)
+   ```
+4. Stage the CHANGELOG: `git add CHANGELOG.md`
+
+**If CHANGELOG.md doesn't exist**, create it with the Keep a Changelog header.
+**If this is a docs-only change** (commit type `docs:`), skip the CHANGELOG update.
+
+### Step 4: Commit
+Show the proposed commit message to the user for approval, then commit.
+
+### Step 5: Post-commit
+- Show: `git log --oneline -3`
+- Remind about pushing: "Your changes are saved locally. Run `git push` when ready."
+- For multi-file changes or PRs, spawn Technical Writer for README updates:
+  ```
+  Agent({ subagent_type: "technical-writer", run_in_background: true,
+    prompt: "Verify README.md is current with latest changes." })
+  ```
 
 ## Multi-File Commits
 
-If changes span multiple concerns, suggest splitting into multiple commits:
+If changes span multiple concerns, suggest splitting into multiple commits. Each commit gets its own CHANGELOG entry.
 
-```
-git add src/auth/
-git commit -m "feat(auth): add OAuth login flow"
-
-git add src/components/
-git commit -m "feat(ui): add login page component"
-```
-
-📚 _Teaching_: Each commit should be one logical change. If you can't describe it in one line, it's probably doing too much.
-
-## After Commit — Docs Gate (MANDATORY)
-
-**Nothing ships undocumented.** After committing, you MUST update docs. This is deterministic, not optional.
-
-### Option A: Spawn Technical Writer (recommended for multi-file changes)
-```
-Agent({
-  subagent_type: "technical-writer",
-  run_in_background: true,
-  prompt: "Update CHANGELOG.md and README.md for this session.
-    Recent commit: [PASTE git log --oneline -1 OUTPUT HERE]
-    Changes: [DESCRIBE WHAT CHANGED IN 1-2 SENTENCES]
-    Run gap detection first — verify CHANGELOG covers this commit."
-})
-```
-
-### Option B: Update CHANGELOG inline (for small changes)
-Run the changelog skill: add an entry under `## [Unreleased]` in the correct category (Added/Changed/Fixed).
-
-### Always do:
-- Show the user: `git log --oneline -3` (last 3 commits for context)
-- Remind about pushing: "Your changes are saved locally. Run `git push` when ready to share."
-
-📚 _Teaching_: The Technical Writer exists so you never ship without docs. If you commit code and forget to update CHANGELOG, the next person who reads the repo won't know what changed. Documentation is a love letter to your future self.
+📚 _Teaching_: CHANGELOG updates happen BEFORE the commit, not after. This eliminates the "forgot to update docs" failure that has plagued 3+ APEX versions. The entry is staged alongside the code, committed together, and can never be forgotten.

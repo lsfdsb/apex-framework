@@ -17,7 +17,57 @@ Changed files: !`git diff --name-only HEAD~1 2>/dev/null | head -20`
 
 ## What This Skill Does
 
-This runs a 6-phase quality gate. It checks code quality, logic, test coverage, UX, and performance. Every issue is categorized by severity so you know exactly what must be fixed before shipping.
+This runs a 7-phase quality gate (Phase 0 verifies dependencies, Phases 1-6 check code quality, logic, test coverage, UX, and performance). Every issue is categorized by severity so you know exactly what must be fixed before shipping.
+
+## Repo Type Detection
+
+Before running any phase, detect the repo type:
+```bash
+# If .manifest.json exists, read repo_type
+jq -r '.repo_type' .claude/.manifest.json 2>/dev/null || echo "unknown"
+# Fallback: framework repos have VERSION + install.sh, projects have package.json
+```
+
+**If repo_type=framework** (APEX Framework itself):
+- Phase 0: Skip package.json dependency checks — validate shell script syntax instead (`bash -n .claude/scripts/*.sh`)
+- Phase 1: Replace TypeScript checks with shell script and markdown frontmatter validation
+- Phase 3: Replace test suite checks with `bash .claude/scripts/health-check.sh`
+- Phase 4-5: Skip UX and performance (not applicable to CLI framework)
+- Focus on: script syntax, JSON validity, agent frontmatter, cross-references, hook wiring
+
+**If repo_type=project** (default): Run all phases as documented below.
+
+## Phase 0: Dependency Verification
+
+Look for an architecture doc containing a "Dependencies Manifest" section:
+```bash
+grep -rl "Dependencies Manifest" docs/architecture/ 2>/dev/null | head -1
+```
+
+If found, verify each section of the manifest:
+
+**Packages** — for each listed package, check it is present in `package.json`:
+```bash
+grep -E '"<package>"' package.json
+```
+Missing package = BLOCKING issue.
+
+**Environment Variables** — for each listed variable, check it appears in `.env.example` or `.env.local`:
+```bash
+grep "VARIABLE_NAME" .env.example .env.local 2>/dev/null
+```
+Required variable absent from both files = BLOCKING issue.
+
+**Internal Dependencies** — for each listed component/hook/module, verify the file exists:
+```bash
+# e.g., src/hooks/useAuth.ts or src/components/AuthPage.tsx
+ls <path> 2>/dev/null
+```
+Missing file = BLOCKING issue.
+
+If the manifest is absent, add a warning: "No Dependencies Manifest found — run /architecture first or create docs/architecture/*.md with a Dependencies Manifest section."
+
+Report all dependency failures under a dedicated section **before** the Phase 1 findings.
 
 ## Phase 1: Static Analysis
 
@@ -75,6 +125,11 @@ Only run this phase if deploying (`/qa deploy` or `/qa production`):
 ```markdown
 ## QA Report: [Feature/PR Name]
 **Status**: 🔴 BLOCKED / 🟡 CONDITIONAL / 🟢 APPROVED
+
+### Phase 0: Dependency Verification
+- Packages: [count] verified / [count] missing
+- Env vars: [count] verified / [count] missing
+- Internal deps: [count] verified / [count] missing
 
 ### 🔴 Critical (must fix)
 - [Issue] → [Fix]

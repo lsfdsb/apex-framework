@@ -1,0 +1,424 @@
+/**
+ * APEX Design DNA — Token Definitions (CSS Custom Properties)
+ * Import this file once at your app root to get all APEX tokens as CSS vars.
+ *
+ * Usage:
+ *   @import '@apex/tokens/index.css';
+ *   /* then choose a palette class on <html> or <body> */
+ *
+ * Palette activation:
+ *   <html data-palette="startup">          — startup mono (default: dark)
+ *   <html data-palette="saas">             — saas blue
+ *   <html data-palette="fintech">          — fintech teal
+ *   <html data-palette="editorial">        — editorial warm
+ *   <html data-palette="creative">         — creative warm (DNA default)
+ *   <html data-palette="saas" data-theme="light"> — light mode
+ *
+ * by L.B. & Claude · São Paulo, 2026
+ */
+
+/* ============================================================
+   GOOGLE FONTS
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ============================================================
+   FOUNDATION — palette-independent tokens
+   ============================================================ */
+:root {
+  /* Typography */
+  --font-body:    'Inter', -apple-system, system-ui, sans-serif;
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* Font sizes */
+  --text-2xs:  0.625rem;    /* 10px */
+  --text-xs:   0.6875rem;   /* 11px */
+  --text-sm:   0.8125rem;   /* 13px */
+  --text-base: 0.875rem;    /* 14px */
+  --text-md:   1rem;        /* 16px */
+  --text-lg:   1.125rem;    /* 18px */
+  --text-xl:   1.25rem;     /* 20px */
+  --text-2xl:  1.5rem;      /* 24px */
+  --text-3xl:  1.875rem;    /* 30px */
+  --text-4xl:  2.25rem;     /* 36px */
+  --text-5xl:  3rem;        /* 48px */
+  --text-6xl:  3.75rem;     /* 60px */
+  --text-7xl:  4.5rem;      /* 72px */
+
+  /* Spacing — 4px base unit */
+  --space-0:    0;
+  --space-px:   1px;
+  --space-0_5:  0.125rem;   /* 2px  */
+  --space-1:    0.25rem;    /* 4px  */
+  --space-1_5:  0.375rem;   /* 6px  */
+  --space-2:    0.5rem;     /* 8px  */
+  --space-2_5:  0.625rem;   /* 10px */
+  --space-3:    0.75rem;    /* 12px */
+  --space-3_5:  0.875rem;   /* 14px */
+  --space-4:    1rem;       /* 16px */
+  --space-5:    1.25rem;    /* 20px */
+  --space-6:    1.5rem;     /* 24px */
+  --space-7:    1.75rem;    /* 28px */
+  --space-8:    2rem;       /* 32px */
+  --space-9:    2.25rem;    /* 36px */
+  --space-10:   2.5rem;     /* 40px */
+  --space-11:   2.75rem;    /* 44px — min touch target */
+  --space-12:   3rem;       /* 48px */
+  --space-14:   3.5rem;     /* 56px */
+  --space-16:   4rem;       /* 64px */
+  --space-20:   5rem;       /* 80px */
+  --space-24:   6rem;       /* 96px */
+  --space-28:   7rem;       /* 112px */
+  --space-32:   8rem;       /* 128px */
+  --space-40:   10rem;      /* 160px */
+  --space-48:   12rem;      /* 192px */
+  --space-64:   16rem;      /* 256px */
+
+  /* Border radius */
+  --radius-none: 0;
+  --radius-sm:   8px;
+  --radius:      12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-2xl:  32px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-none:  none;
+  --shadow-sm:    0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+  --shadow:       0 4px 16px rgba(0,0,0,0.12);
+  --shadow-md:    0 8px 32px rgba(0,0,0,0.18);
+  --shadow-lg:    0 12px 48px rgba(0,0,0,0.25);
+  --shadow-glow:  0 0 20px var(--accent-glow);
+  --shadow-inner: inset 0 2px 4px rgba(0,0,0,0.06);
+
+  /* Breakpoints (as raw values — use in JS; CSS has no breakpoint vars) */
+  --bp-xs: 320px;
+  --bp-sm: 640px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+  --bp-2xl: 1440px;
+
+  /* Z-index layers */
+  --z-base:     0;
+  --z-raised:   1;
+  --z-dropdown: 10;
+  --z-sticky:   20;
+  --z-overlay:  30;
+  --z-modal:    40;
+  --z-toast:    50;
+  --z-widget:   200;
+
+  /* Motion — APEX DNA easing */
+  --ease-out:    cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: ease-in-out;
+  --duration-fast:   150ms;
+  --duration-normal: 300ms;
+  --duration-slow:   500ms;
+  --duration-slower: 900ms;
+
+  /* Section header pattern */
+  --section-label-size:     11px;
+  --section-label-tracking: 0.12em;
+  --section-heading-size:   clamp(32px, 5vw, 56px);
+  --section-heading-weight: 400;
+  --section-heading-tracking: -0.03em;
+  --section-heading-leading:  1.1;
+
+  /* Layout */
+  --content-max-width: 1200px;
+  --sidebar-width: 220px;
+  --sidebar-collapsed-width: 64px;
+  --card-padding: 16px;
+  --card-hover-y: -2px;
+}
+
+/* ============================================================
+   PALETTE — Startup Mono (dark)
+   Minimal/monochrome. Landing, presentations, minimal apps.
+   ============================================================ */
+:root,
+[data-palette="startup"] {
+  --bg:            #0a0a0a;
+  --bg-elevated:   #141414;
+  --bg-surface:    #1e1e1e;
+  --bg-rgb:        10,10,10;
+  --border:        #282828;
+  --border-hover:  #383838;
+  --text:          #fafafa;
+  --text-secondary:#a3a3a3;
+  --text-muted:    #666666;
+  --accent:        #fafafa;
+  --accent-hover:  #e0e0e0;
+  --accent-glow:   rgba(250,250,250,0.08);
+  --success:       #22c55e; --success-rgb: 34,197,94;
+  --warning:       #eab308; --warning-rgb: 234,179,8;
+  --destructive:   #ef4444; --destructive-rgb: 239,68,68;
+  --info:          #60a5fa; --info-rgb: 96,165,250;
+  --cta-bg:        #ffffff;
+  --cta-text:      #0a0a0a;
+  --nav-bg:        rgba(10,10,10,0.7);
+}
+
+[data-palette="startup"][data-theme="light"] {
+  --bg:            #ffffff;
+  --bg-elevated:   #f8f8f8;
+  --bg-surface:    #f0f0f0;
+  --bg-rgb:        255,255,255;
+  --border:        #e5e5e5;
+  --border-hover:  #d4d4d4;
+  --text:          #0a0a0a;
+  --text-secondary:#525252;
+  --text-muted:    #a3a3a3;
+  --accent:        #0a0a0a;
+  --accent-hover:  #262626;
+  --accent-glow:   rgba(10,10,10,0.05);
+  --success:       #16a34a; --success-rgb: 22,163,74;
+  --warning:       #ca8a04; --warning-rgb: 202,138,4;
+  --destructive:   #dc2626; --destructive-rgb: 220,38,38;
+  --info:          #2563eb; --info-rgb: 37,99,235;
+  --cta-bg:        #0a0a0a;
+  --cta-text:      #ffffff;
+  --nav-bg:        rgba(255,255,255,0.85);
+}
+
+/* ============================================================
+   PALETTE — SaaS Blue (dark)
+   Blue/zinc. SaaS dashboards, backoffice, admin panels.
+   ============================================================ */
+[data-palette="saas"] {
+  --bg:            #09090b;
+  --bg-elevated:   #18181b;
+  --bg-surface:    #27272a;
+  --bg-rgb:        9,9,11;
+  --border:        #27272a;
+  --border-hover:  #3f3f46;
+  --text:          #fafafa;
+  --text-secondary:#a1a1aa;
+  --text-muted:    #71717a;
+  --accent:        #3b82f6;
+  --accent-hover:  #2563eb;
+  --accent-glow:   rgba(59,130,246,0.12);
+  --success:       #22c55e; --success-rgb: 34,197,94;
+  --warning:       #eab308; --warning-rgb: 234,179,8;
+  --destructive:   #ef4444; --destructive-rgb: 239,68,68;
+  --info:          #60a5fa; --info-rgb: 96,165,250;
+  --cta-bg:        #ffffff;
+  --cta-text:      #09090b;
+  --nav-bg:        rgba(9,9,11,0.7);
+}
+
+[data-palette="saas"][data-theme="light"] {
+  --bg:            #fafafa;
+  --bg-elevated:   #ffffff;
+  --bg-surface:    #f4f4f5;
+  --bg-rgb:        250,250,250;
+  --border:        #e4e4e7;
+  --border-hover:  #d4d4d8;
+  --text:          #18181b;
+  --text-secondary:#52525b;
+  --text-muted:    #a1a1aa;
+  --accent:        #2563eb;
+  --accent-hover:  #1d4ed8;
+  --accent-glow:   rgba(37,99,235,0.08);
+  --success:       #16a34a; --success-rgb: 22,163,74;
+  --warning:       #ca8a04; --warning-rgb: 202,138,4;
+  --destructive:   #dc2626; --destructive-rgb: 220,38,38;
+  --info:          #2563eb; --info-rgb: 37,99,235;
+  --cta-bg:        #18181b;
+  --cta-text:      #fafafa;
+  --nav-bg:        rgba(250,250,250,0.85);
+}
+
+/* ============================================================
+   PALETTE — Fintech Teal (dark)
+   Teal/navy. CRM, e-commerce, fintech apps.
+   ============================================================ */
+[data-palette="fintech"] {
+  --bg:            #0c1222;
+  --bg-elevated:   #131c31;
+  --bg-surface:    #1a2540;
+  --bg-rgb:        12,18,34;
+  --border:        #1e2d4a;
+  --border-hover:  #2a3f66;
+  --text:          #e8edf5;
+  --text-secondary:#8899b8;
+  --text-muted:    #5c6e8f;
+  --accent:        #00d4aa;
+  --accent-hover:  #00b892;
+  --accent-glow:   rgba(0,212,170,0.12);
+  --success:       #00d4aa; --success-rgb: 0,212,170;
+  --warning:       #ffb547; --warning-rgb: 255,181,71;
+  --destructive:   #ff5c5c; --destructive-rgb: 255,92,92;
+  --info:          #60a5fa; --info-rgb: 96,165,250;
+  --cta-bg:        #ffffff;
+  --cta-text:      #0c1222;
+  --nav-bg:        rgba(12,18,34,0.7);
+}
+
+[data-palette="fintech"][data-theme="light"] {
+  --bg:            #f8fafc;
+  --bg-elevated:   #ffffff;
+  --bg-surface:    #f1f5f9;
+  --bg-rgb:        248,250,252;
+  --border:        #e2e8f0;
+  --border-hover:  #cbd5e1;
+  --text:          #0f172a;
+  --text-secondary:#475569;
+  --text-muted:    #94a3b8;
+  --accent:        #0d9488;
+  --accent-hover:  #0f766e;
+  --accent-glow:   rgba(13,148,136,0.08);
+  --success:       #0d9488; --success-rgb: 13,148,136;
+  --warning:       #d97706; --warning-rgb: 217,119,6;
+  --destructive:   #dc2626; --destructive-rgb: 220,38,38;
+  --info:          #2563eb; --info-rgb: 37,99,235;
+  --cta-bg:        #0f172a;
+  --cta-text:      #f8fafc;
+  --nav-bg:        rgba(248,250,252,0.85);
+}
+
+/* ============================================================
+   PALETTE — Editorial Warm (dark)
+   Terracotta/sepia. Blogs, e-books, editorial/content apps.
+   ============================================================ */
+[data-palette="editorial"] {
+  --bg:            #0f0d0b;
+  --bg-elevated:   #1a1714;
+  --bg-surface:    #24201b;
+  --bg-rgb:        15,13,11;
+  --border:        #2e2820;
+  --border-hover:  #3d3428;
+  --text:          #f5ebe0;
+  --text-secondary:#b8a898;
+  --text-muted:    #7a6e60;
+  --accent:        #c45d3e;
+  --accent-hover:  #a8492d;
+  --accent-glow:   rgba(196,93,62,0.12);
+  --success:       #6bc46b; --success-rgb: 107,196,107;
+  --warning:       #d4a843; --warning-rgb: 212,168,67;
+  --destructive:   #c45d3e; --destructive-rgb: 196,93,62;
+  --info:          #7cacbe; --info-rgb: 124,172,190;
+  --cta-bg:        #ffffff;
+  --cta-text:      #0f0d0b;
+  --nav-bg:        rgba(15,13,11,0.7);
+}
+
+[data-palette="editorial"][data-theme="light"] {
+  --bg:            #faf9f6;
+  --bg-elevated:   #ffffff;
+  --bg-surface:    #f5f0eb;
+  --bg-rgb:        250,249,246;
+  --border:        #e8e0d8;
+  --border-hover:  #d4c8bc;
+  --text:          #1a1a1a;
+  --text-secondary:#6b6560;
+  --text-muted:    #9c9590;
+  --accent:        #c45d3e;
+  --accent-hover:  #a8492d;
+  --accent-glow:   rgba(196,93,62,0.06);
+  --success:       #2d8659; --success-rgb: 45,134,89;
+  --warning:       #b8860b; --warning-rgb: 184,134,11;
+  --destructive:   #c42b2b; --destructive-rgb: 196,43,43;
+  --info:          #3a7ca5; --info-rgb: 58,124,165;
+  --cta-bg:        #1a1a1a;
+  --cta-text:      #faf9f6;
+  --nav-bg:        rgba(250,249,246,0.85);
+}
+
+/* ============================================================
+   PALETTE — Creative Warm (dark) — DNA DEFAULT
+   Coral/warm-dark. LMS, portfolio, artistic/creative apps.
+   ============================================================ */
+[data-palette="creative"] {
+  --bg:            #1a1614;
+  --bg-elevated:   #242018;
+  --bg-surface:    #2e2820;
+  --bg-rgb:        26,22,20;
+  --border:        #3d3428;
+  --border-hover:  #524638;
+  --text:          #f5ebe0;
+  --text-secondary:#b8a898;
+  --text-muted:    #7a6e60;
+  --accent:        #e07850;
+  --accent-hover:  #c8603a;
+  --accent-glow:   rgba(224,120,80,0.12);
+  --success:       #6bc46b; --success-rgb: 107,196,107;
+  --warning:       #d4a843; --warning-rgb: 212,168,67;
+  --destructive:   #e05454; --destructive-rgb: 224,84,84;
+  --info:          #7cacbe; --info-rgb: 124,172,190;
+  --cta-bg:        #ffffff;
+  --cta-text:      #1a1614;
+  --nav-bg:        rgba(26,22,20,0.7);
+}
+
+[data-palette="creative"][data-theme="light"] {
+  --bg:            #fdf8f4;
+  --bg-elevated:   #ffffff;
+  --bg-surface:    #f5ede5;
+  --bg-rgb:        253,248,244;
+  --border:        #e8ddd2;
+  --border-hover:  #d4c5b5;
+  --text:          #2c1e10;
+  --text-secondary:#785840;
+  --text-muted:    #a08870;
+  --accent:        #d4603a;
+  --accent-hover:  #b84a28;
+  --accent-glow:   rgba(212,96,58,0.08);
+  --success:       #2d8659; --success-rgb: 45,134,89;
+  --warning:       #b8860b; --warning-rgb: 184,134,11;
+  --destructive:   #c42b2b; --destructive-rgb: 196,43,43;
+  --info:          #3a7ca5; --info-rgb: 58,124,165;
+  --cta-bg:        #2c1e10;
+  --cta-text:      #fdf8f4;
+  --nav-bg:        rgba(253,248,244,0.85);
+}
+
+/* ============================================================
+   BASE STYLES — apply semantic tokens to elements
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-glow);
+  color: var(--text);
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

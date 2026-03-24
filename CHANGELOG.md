@@ -6,6 +6,63 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **LICENSE** — MIT license for open-source distribution of the APEX Framework (#180)
+- **SECURITY.md** — Vulnerability disclosure process and patch timeline for responsible reporting (#180)
+- **CONTRIBUTING.md** — Contribution guidelines, code standards, and community review process (#180)
+- **.editorconfig** — Cross-IDE formatting standards for consistent development experience (#180)
+- **GitHub Actions CI/CD Pipeline** — 6-step automated validation: script syntax, JSON validation, hook verification, frontmatter parsing, skill inventory, and framework health checks (#180)
+- **Design Tokens Code Export** — Importable TypeScript/JavaScript/CSS token files with 5 color palettes, spacing scale, typography system, shadow definitions, and responsive breakpoints (#180)
+- **Architecture Dependency Graph** — `/architecture` skill outputs complete dependency manifest; `/qa` Phase 0 verifies graph integrity; `/ship` blocks on failures (#180)
+- **MCP Elicitation Gates** — Documentation and .mcp.json.template for structured approval workflows (requires v2.1.76+) (#180)
+- **Framework Manifest** — `.manifest.json` generated automatically at SessionStart with full component map, cross-references, and skill inventory (#180)
+- **Framework Validation Hook** — PostToolUse hook verifies cross-references whenever `.claude/` files are modified (#180)
+- **Stop Gate Hook Enforcement** — Validation gate blocks merges if CHANGELOG.md not updated after framework changes (#180)
+- **Supabase RAG Knowledge Base** — Optional persistent vector database layer with migration, sync, query, and edge function support; modernized to `sb_secret_` and `sb_publishable_` key format (#180)
+- **Agent Memory + Effort Frontmatter** — All 4 agents now include `memory: project` and `effort` fields for persistent context and parallel execution (#180)
+- **CronCreate Guidance** — Watcher agent documents periodic health checks via native CronCreate scheduling mechanism (#180)
+- **`/verify-api` Skill** — Auto-triggers on external API references (Supabase, Stripe, OpenAI, etc.), WebSearches official docs for current auth patterns and deprecated keys, blocks stale integrations. 7 APIs verified with code templates (#180)
+- **CI/CD Auto-Release** — GitHub Actions `release` job auto-tags and publishes GitHub Releases from VERSION + CHANGELOG on merge to main. Idempotent, stamps CHANGELOG with version+date (#180)
+- **Production Edge Function** — Supabase RAG edge function upgraded from scaffold to 571-line production reference: Deno.serve(), CORS, Bearer auth with constant-time comparison, rate limiting, structured logging, input validation, health check (#180)
+- **Kanban Task Chaining** — Teams skill auto-creates QA verification tasks when builder completes; WIP limits (builder:2, QA:1, writer:1); backpressure blocks builders when review queue full (#180)
+- **Inline CHANGELOG in /commit** — CHANGELOG updates now happen BEFORE the commit (Step 3), not after. Eliminates the #1 recurring failure across 3+ APEX versions (#180)
+
+### Changed
+- **Context-Aware Agents** — Watcher and QA agents now detect repository type (framework vs project) and adapt commands, output, and validation rules accordingly (#180)
+- **Teams Skill** — Streamlined roster to 4 core agents (Builder, Watcher, QA, Technical Writer) plus Lead; removed ALL references to dead agents across roster, breathing loop, scan matrix, spawn order, status table, and communication rules (#180)
+- **README.md** — Updated agent roster (8→4 agents), removed Observatory section, removed Researcher row, updated model strategy table (#180)
+- **Output Style** — Added Session Depth guidance (use 1M context fully), Memory vs Framework taxonomy, and honest enforcement docs replacing false "MANDATORY" claims (#180)
+- **CLAUDE.md Rule #2** — Now references `/verify-api` skill directly; must check deprecated patterns; official docs > memory (#180)
+- **CLAUDE.md Rule #16** — Updated: QA (not Design Reviewer) blocks pages that don't match DNA quality (#180)
+- **CLAUDE.md Rule #20** — New constitutional rule: "Rules in framework, stories in memory" (#180)
+- **Supabase Skill Reference** — Updated all key references from deprecated `anon`/`service_role` to modern `sb_publishable_`/`sb_secret_` format (#180)
+- **QA Skill** — Added repo type detection and Phase 0 dependency verification (#180)
+- **QA Agent** — All "Debugger" references updated to "Builder" (Builder handles both building and bug fixes) (#180)
+- **Technical Writer Agent** — Updated workflow references from Debugger to Builder (#180)
+- **Ship Skill** — Updated verdict reference from "Code Reviewer" to "QA" (#180)
+- **Design System Reference** — Updated enforcer from "Design Reviewer" to "QA agent" (#180)
+- **About Skill** — Agent roster updated to actual 4-agent lineup (#180)
+- **Pre-commit Hook** — Exempt `docs/` from console.log check (reference code like edge functions use console.log for Supabase structured logging) (#180)
+- **Builder Agent** — Added rule: builders must NEVER create git branches; branch management is lead's responsibility (#180)
+- **.gitignore** — Added `.claude/.manifest.json` and `.claude/agent-memory/` (runtime-generated, not source) (#180)
+
+### Removed
+- **3 Dead Agent Implementations** — Removed `code-reviewer.md`, `debugger.md`, `design-reviewer.md` (never spawned in practice, functionality migrated to plugins) (#180)
+- **Orphaned Agent Memory Directories** — Cleaned up unused memory folders: `framework-evolver/`, `sentinel/`, `code-reviewer/`, `design-reviewer/` (#180)
+- **claude-web/ Directory** — Removed 17 obsolete custom skill copies and 2 custom instruction files; Claude Code now handles skill discovery natively (#180)
+- **Observatory Section** — Removed from README (dashboard was never built; monitoring via GitHub Actions) (#180)
+- **3 Stale Memory Records** — Removed `batman_session`, `changelog_every_pr`, `agent_teams` (superseded by CLAUDE.md rules and active policies) (#180)
+
+### Removed
+- **docs/QUALITY-REVIEW.md** — Outdated v5.13 quality review referencing deleted agents and Framework Evolver (#180)
+- **docs/design-dna/showcase/.claude/** — Orphaned runtime directory from a dev session (#180)
+- **Root .DS_Store** — OS cruft removed from tracking (#180)
+
+### Fixed
+- **health-check.sh** — Updated agent list reference from dead agents to current roster (#180)
+- **Stale Agent References** — Purged ALL remaining Debugger/Code Reviewer/Design Reviewer/Researcher/Sentinel references from 8 active files: about, teams, ship, design-system, qa agent, technical-writer agent, README, CLAUDE.md (#180)
+- **Builder Branch Bug** — Builders with `isolation: none` were creating orphan branches causing cherry-pick failures; added explicit "never create branches" rule (#180)
+
 ## [5.17.0] — 2026-03-24 — Onboarding Guide + Worktree Safety
 
 About skill rewritten as full onboarding guide, agent isolation defaulted to none (eliminating worktree file loss), Technical Writer perfected with showcase sync awareness.
@@ -434,6 +491,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - NEVER Ship list expanded with "Submit" buttons, stack traces, blank pages (cx-review)
 - Cost column removed from statusline (redundant for MAX plan users)
 - audit cleanup — remove redundant skills, fix refs (28422e5)
+- simplify — English only, one output style (9b84b41)
 
 ### Fixed
 - outputStyle uses frontmatter `name` field, not file path (#32)

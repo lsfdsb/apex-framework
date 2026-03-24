@@ -79,7 +79,40 @@ You are designing: $ARGUMENTS
 
 **ADRs** — For every significant choice: Context, Decision, Consequences, Alternatives.
 
-4. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need API verification via WebSearch.
+4. **Produce Dependencies Manifest** — append to the architecture doc at `docs/architecture/`:
+
+```markdown
+## Dependencies Manifest
+
+### Packages (npm/pip)
+| Package | Version | Purpose | Required |
+|---------|---------|---------|----------|
+| react | ^19.0.0 | UI framework | yes |
+
+### APIs (external)
+| API | Endpoint | Auth | Purpose |
+|-----|----------|------|---------|
+| Supabase | SUPABASE_URL | API key | Database |
+
+### Environment Variables
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| SUPABASE_URL | yes | — | Database URL |
+
+### Database Tables
+| Table | Purpose | Migration |
+|-------|---------|-----------|
+| users | User accounts | 001_create_users.sql |
+
+### Internal Dependencies
+| Component | Depends On | Type |
+|-----------|-----------|------|
+| AuthPage | useAuth hook | import |
+```
+
+Fill every row with the actual packages, APIs, env vars, tables, and internal imports this system requires. This manifest is the contract QA uses to verify the build — incomplete rows block QA.
+
+5. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need API verification via WebSearch.
 
 ## Production Observability
 

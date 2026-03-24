@@ -105,11 +105,8 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Builder** | Sonnet | Implements features directly in the project |
-| **Debugger** | Sonnet | Hunts bugs to root cause, no band-aids |
+| **Builder** | Sonnet | Implements features and fixes bugs directly |
 | **QA** | Sonnet | Runs full quality gate, blocks bad code |
-| **Code Reviewer** | Opus | Deep code review for team builds |
-| **Design Reviewer** | Sonnet | UI/UX against design DNA standards |
 | **Technical Writer** | Haiku | CHANGELOG, README, docs in sync |
 | **Watcher** | Haiku | Background monitoring for errors |
 

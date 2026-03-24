@@ -18,7 +18,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 ## Core Rules
 
 1. **PRD before code** — `/prd` before any new app or major feature. Block if missing.
-2. **Verify APIs before integration** — Use WebSearch to read actual API docs before writing integration code. Never design against an API you haven't verified.
+2. **Verify APIs before integration** — `verify-api` auto-checks every external API before integration. Verifies current auth patterns, SDK versions, and deprecated keys against live official docs. Never design against an API you haven't verified. APIs change — old blog posts and memory are not authoritative.
 3. **Verify before installing** — `verify-lib` auto-checks every dependency.
 4. **QA before shipping** — `/qa` before marking any task complete. QA is a GATE, not optional. No task is "done" without QA verification.
 5. **Security on sensitive code** — `/security` on auth, payments, PII.
@@ -32,10 +32,11 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 13. **Branding sweep** — After any project init or template scaffolding, grep for template branding (ACME, Doppel, "My App", boilerplate names) and replace ALL instances with the actual project name. No template branding ships to production.
 14. **Persona→page alignment** — Every page serves ONE primary persona. Never mix management views (dashboards, KPIs) with operational views (queues, kanban, forms) on the same page unless the PRD explicitly calls for it.
 15. **Default isolation: none** — Agents write directly to the project. Only use `isolation: worktree` for 2+ parallel builders modifying the SAME files. Worktrees have caused data loss in 6+ sessions — `isolation: none` eliminates this risk.
-16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. The Design Reviewer will BLOCK pages that don't match DNA quality.
+16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. QA will BLOCK pages that don't match DNA quality.
 17. **Reuse before create** — Before creating ANY new component, search for existing ones. If a pattern appears on 2+ pages, it MUST be a shared component in `src/components/`. Three similar files doing the same thing = architectural failure.
 18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
 19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable.
+20. **Rules in framework, stories in memory** — When you learn a lesson, the behavioral rule goes in the framework (CLAUDE.md, output style, skills, agents). The historical context (WHY) goes in memory. Framework rules serve all users. Memory serves this user. If every APEX user would benefit, it's a framework change.
 
 ## Code Standards
 
@@ -95,6 +96,8 @@ When the user asks to build something new, APEX drives the full pipeline autonom
 Everything between gates is autonomous: API verification (WebSearch), Design DNA loading, team spawning, building, QA, security, accessibility, CX review, and documentation. If a quality gate fails, fix and re-run — no user intervention needed.
 
 **Do NOT ask the user to type slash commands.** The pipeline invokes skills internally. The user just says what they want and approves at gates.
+
+**MCP Elicitation gates (v2.1.76+)** — If the project has an `apex-gates` MCP server configured, gates present structured forms instead of text prompts: typed decision fields, merge strategy selector, dependency checklist. See `docs/mcp-elicitation-gates.md` for the implementation pattern and `.mcp.json.template` for the server config entry.
 
 For quick fixes, bugs, and questions — skip the pipeline entirely. Just do it.
 

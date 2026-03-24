@@ -12,14 +12,14 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 ## Quick Start (TL;DR)
 
 ```
-/teams build   → Watcher + Builder + Design Reviewer + QA + Tech Writer
-/teams fix     → Watcher + Debugger + QA + Tech Writer
-/teams review  → Code Reviewer + Design Reviewer + QA + Tech Writer
-/teams full    → All 9 agents (championship roster)
+/teams build   → Watcher + Builder + QA + Tech Writer
+/teams fix     → Watcher + Builder + QA + Tech Writer
+/teams review  → QA + Tech Writer
+/teams full    → All 5 agents (championship roster)
 ```
 
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
-`Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop`
+`Builder creates → Watcher monitors → Builder fixes → QA verifies → loop`
 
 **3 rules**: (1) Watcher always first, (2) Default isolation: none, (3) Technical Writer before every PR.
 
@@ -44,10 +44,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **Lead** | main session | opus | — | Orchestrates, delegates, makes final decisions |
 | **Builder** | builder | sonnet | **none** | Implements features — writes directly to project |
 | **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
-| **Debugger** | debugger | sonnet | **none** | Hunts bugs to root cause, fixes permanently |
 | **QA** | qa | sonnet | none | Runs full quality gate, blocks bad code |
-| **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security |
-| **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
 
 > **Worktree policy (v5.16+):** Default isolation is `none` — agents write directly to the project. Only use `isolation: worktree` when spawning 2+ builders that modify the SAME files in parallel. Worktrees have caused data loss in 6+ sessions. `isolation: none` eliminates this risk entirely.
@@ -58,32 +55,26 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 Best for: New features, refactoring, migrations
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, none) — Implements the feature directly
-- **Design Reviewer** (sonnet, plan) — Reviews UI components as they're built
 - **QA** (sonnet, none) — Tests when Builder finishes
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
 ### `fix` — Bug Fix Team
 Best for: Bug reports, error resolution, production issues
 - **Watcher** (haiku, background) — Reproduces and monitors the issue
-- **Debugger** (sonnet, none) — Root cause analysis and fix
+- **Builder** (sonnet, none) — Root cause analysis and fix
 - **QA** (sonnet, none) — Verifies the fix is definitive
 - **Technical Writer** (haiku, background) — Documents the fix
 
 ### `review` — Review Team
 Best for: PR review, pre-merge checks, code audit
-- **Code Reviewer** (opus, plan) — Deep code review
-- **Design Reviewer** (sonnet, plan) — UI/UX review (if frontend changes)
-- **QA** (sonnet, none) — Runs tests in parallel
+- **QA** (sonnet, none) — Runs full quality gate
 - **Technical Writer** (haiku, background) — Verifies docs are current
 
 ### `full` — Championship Team
 Best for: Major features, end-to-end delivery, critical paths
 - **Watcher** (haiku, background) — Continuous monitoring from first second
-- **Researcher** (haiku, background) — Investigates APIs/docs in parallel
 - **Builder** (sonnet, none) — Implements the feature
-- **Debugger** (sonnet, none) — Fixes issues caught by Watcher
 - **QA** (sonnet, none) — Full quality gate on everything
-- **Code Reviewer** (opus, plan) — Final code review
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README, docs
 
 ## The Breathing Loop — Self-Maintaining Autonomy
@@ -94,30 +85,66 @@ The framework *breathes* when the team operates as a continuous cycle without hu
     ┌──────────────────────────────────────────────┐
     │                                              │
     │   ┌──────────┐    ┌───────────┐              │
-    │   │ WATCHER  │───▶│ DEBUGGER  │              │
+    │   │ WATCHER  │───▶│  BUILDER  │              │
     │   │ (detect) │    │  (fix)    │              │
     │   └──────────┘    └─────┬─────┘              │
     │        ▲                │                    │
     │        │                ▼                    │
-    │   ┌────┴─────┐    ┌───────────┐  ┌────────┐ │
-    │   │  BUILDER │    │    QA     │  │ WRITER │ │
-    │   │ (create) │◀───│ (verify)  │─▶│ (docs) │ │
-    │   └──────────┘    └───────────┘  └────────┘ │
+    │        │           ┌───────────┐  ┌────────┐ │
+    │        └───────────│    QA     │  │ WRITER │ │
+    │                    │ (verify)  │─▶│ (docs) │ │
+    │                    └───────────┘  └────────┘ │
     │                                              │
     │           THE BREATHING LOOP                 │
     └──────────────────────────────────────────────┘
 ```
 
-### How it works:
+### How it works (Kanban Flow):
 
-1. **Builder** creates code → marks task complete → lists ALL created/modified files
-2. **Lead verifies file persistence** → confirms files exist in main project (not just worktree)
-3. **Design Reviewer** reviews any .tsx/.jsx components for design token compliance
-4. **Watcher** continuously monitors → detects issues → creates bug tasks
-5. **Debugger** claims bug tasks → fixes root cause → notifies QA
-6. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
-7. **Code Reviewer** does final review when all QA passes
-8. **Lead** makes the ship decision
+**Columns**: `todo` → `in-progress` → `needs-review` → `approved` → `done`
+
+1. **Lead creates tasks** in `todo` with dependencies (addBlockedBy)
+2. **Builder claims** from `todo`, moves to `in-progress`
+3. **Builder completes** → auto-creates QA task in `needs-review` (task chaining)
+4. **QA claims** from `needs-review` → verifies → moves to `approved` or back to `todo`
+5. **Technical Writer** updates CHANGELOG inline (not a separate step — embedded in commit flow)
+6. **Watcher** monitors continuously, creates bug tasks in `todo` when issues detected
+7. **Lead** makes the ship decision when all tasks reach `done`
+
+### Task Chaining (Automatic)
+
+When a builder marks a task complete, the lead MUST auto-create the next pipeline task:
+
+```
+Builder completes "[build] Add auth page"
+  → Lead creates "[qa] Verify auth page" (addBlockedBy: [build-task-id])
+  → QA auto-claims the verification task
+
+QA approves "[qa] Verify auth page"
+  → Task moves to done
+  → If more build tasks remain, loop continues
+```
+
+This eliminates the gap where builders finish but QA never picks up.
+
+### WIP Limits (Enforced by Lead)
+
+| Role | Max In-Progress | Why |
+|------|----------------|-----|
+| Builder | 2 | Prevents builder sprawl — finish before starting new work |
+| QA | 1 | QA must focus — one verification at a time |
+| Writer | 1 | Docs are sequential |
+
+**Before creating a new builder task**: Check TaskList. If 2+ builder tasks are `in_progress`, do NOT create another. Wait for one to complete.
+
+**Backpressure**: If `needs-review` has 2+ unverified tasks, builders MUST stop creating new work and help clear the review queue (fix QA-blocked issues first).
+
+### Auto-Retry
+
+If a builder task fails (BLOCKED by QA):
+1. First failure: Re-assign to same builder with QA feedback
+2. Second failure: Re-assign to a different builder (or lead writes directly)
+3. Track retry count in task metadata: `{ "retries": 1 }`
 
 ### Post-Builder Verification (CRITICAL)
 
@@ -156,12 +183,23 @@ git worktree prune
 rm -rf .claude/worktrees/agent-*
 ```
 
+### Branch Management — Lead Only
+
+**Builders NEVER create branches.** With `isolation: none`, the builder writes directly to whatever branch the lead has checked out. Branch creation, switching, and merging are the lead's responsibility.
+
+If a builder creates a branch anyway (bug or bad prompt), the lead must:
+1. `git checkout <builder-branch> -- <files>` to pull the files
+2. `git branch -D <builder-branch>` to clean up
+3. Commit on the correct branch
+
+This prevents the cherry-pick-on-dirty-tree problem that occurs when builders create orphan branches.
+
 ### Key principle: No human intervention needed in the loop
 
-- Watcher doesn't wait for someone to ask — it monitors continuously
-- Debugger auto-claims bugs from the task list — no assignment needed
-- QA auto-verifies when Debugger reports "fix ready" — no manual /qa
-- If QA rejects, a new task is created and Debugger picks it up automatically
+- Watcher monitors continuously — no assignment needed
+- Builder auto-claims bugs from the task list
+- QA auto-verifies when Builder reports "fix ready" — no manual /qa
+- If QA rejects, a new task is created and Builder picks it up automatically
 - The loop keeps breathing until everything is green
 
 ## Scan Responsibility Matrix (No Duplication)
@@ -177,17 +215,17 @@ Each check has ONE owner. No two agents scan the same thing.
 | File size > 300 lines | **Watcher** | — |
 | Function size > 30 lines | **Watcher** | — |
 | Hardcoded secrets | **Watcher** | Security hook (PreToolUse) |
-| Hardcoded Tailwind colors | **Design Reviewer** | — |
-| Design DNA compliance | **Design Reviewer** | — |
-| Branding sweep | **Design Reviewer** | — |
-| Responsive/mobile-first | **Design Reviewer** | — |
-| Accessibility (WCAG) | **Design Reviewer** | — |
+| Hardcoded Tailwind colors | **QA** (phase 1) | — |
+| Design DNA compliance | **QA** (phase 4) | — |
+| Branding sweep | **QA** (phase 1) | — |
+| Responsive/mobile-first | **QA** (phase 4) | — |
+| Accessibility (WCAG) | **QA** (phase 4) | — |
 | Performance (N+1, bundle) | **QA** (phase 5) | — |
 | Security (OWASP) | **QA** (phase 6) | — |
 | Logic correctness | **QA** (phase 2) | — |
-| Code quality/patterns | **Code Reviewer** | — |
+| Code quality/patterns | **QA** (phase 1) | — |
 
-**Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate. Design Reviewer owns all visual/UI checks. No overlap.
+**Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate covering all dimensions. No overlap.
 
 ## Auto-Spawn Logic
 
@@ -227,10 +265,9 @@ Break the work into discrete tasks using TaskCreate:
 Spawn in this order:
 
 1. **Watcher FIRST** — monitoring must start before any changes
-2. **Researcher** (if needed) — background research starts early
-3. **Builder or Debugger** — the primary workers
-4. **QA** — ready to verify as work completes
-5. **Code Reviewer** — final pass
+2. **Builder** — the primary worker
+3. **QA** — ready to verify as work completes
+4. **Technical Writer** — documents as work ships
 
 Each teammate MUST have `team_name` set:
 
@@ -271,16 +308,16 @@ The autonomous handoff chain ensures work flows without manual intervention:
 Builder completes task
   → Lead sends message to QA: "Task #{id} ready for verification"
   → QA runs quality gate
-  → If APPROVED: Lead notifies Code Reviewer for final review
-  → If BLOCKED: Lead creates bug task → Debugger auto-claims it
+  → If APPROVED: Lead proceeds to ship
+  → If BLOCKED: Lead creates bug task → Builder auto-claims it
 ```
 
 ```
 Watcher detects issue
   → Watcher creates task with [bug] tag
   → Watcher messages Lead: "Issue detected: {summary}"
-  → Lead assigns to Debugger (or Debugger auto-claims)
-  → Debugger fixes → messages QA
+  → Builder auto-claims the bug task
+  → Builder fixes → messages QA
   → QA verifies → reports to Lead
 ```
 
@@ -290,11 +327,9 @@ The key APEX principle: **don't wait unnecessarily.**
 
 - Builder starts implementing immediately
 - Watcher monitors from the first second
-- Researcher runs alongside Builder when docs are needed
 - Multiple Builders can work on independent tasks simultaneously
 - QA starts verification the moment any task completes
-- Debugger and Builder can work in parallel on different tasks
-- Code Reviewer starts on completed+verified work while Builder continues on next task
+- Technical Writer updates docs in parallel with QA
 
 ### Step 6: Shutdown
 
@@ -309,7 +344,7 @@ When all tasks are complete and QA approved:
 - **Broadcast** (`to: "*"`) ONLY for critical blocking issues — it's expensive
 - **Tasks** are the source of truth for work status (not messages)
 - **Be patient** with idle teammates — idle means waiting for input, not broken
-- **Teammates can DM each other** — Debugger can message QA directly
+- **Teammates can DM each other** — Builder can message QA directly
 
 ### Standardized Message Format
 
@@ -326,13 +361,9 @@ ALL agents must use this structure when messaging the lead:
 | Agent | Emoji | Action Examples |
 |-------|-------|----------------|
 | Watcher | 🔍 | Watcher Report, Issue Detected, All Clear |
-| Builder | ✅ | Task Complete, Blocked, Starting Task |
-| Debugger | 🔧 | Bug Fix Complete, Investigating, Blocked |
+| Builder | ✅ | Task Complete, Bug Fix Complete, Blocked |
 | QA | 📋 | QA Report, APPROVED, BLOCKED |
-| Code Reviewer | 🔍 | Code Review, APPROVED, CHANGES REQUESTED |
-| Design Reviewer | 🎨 | Design Review, APPROVED, CHANGES REQUESTED |
 | Technical Writer | 📝 | Docs Updated, Breaking Change Detected |
-| Researcher | 📚 | Research Complete, Inconclusive |
 
 ### Timeout and Escalation Rules
 
@@ -365,15 +396,13 @@ User: "Build the authentication flow with OAuth"
  3. Spawn order:
     → watcher (background) — starts monitoring immediately
     → builder (none) — implements the feature directly
-    → debugger (none) — standby, auto-claims any bugs
     → qa (none) — verifies each task as completed
-    → code-reviewer (plan) — final review when QA passes
 
  4. The breathing loop runs:
-    watcher detects type error → creates bug task → debugger fixes it
-    builder completes endpoint → qa verifies → code-reviewer reviews
-    qa finds edge case → creates task → debugger fixes → qa re-verifies
-    all green → code-reviewer approves → lead ships
+    watcher detects error → creates bug task → builder fixes it
+    builder completes endpoint → qa verifies
+    qa finds edge case → creates task → builder fixes → qa re-verifies
+    all green → qa approves → lead ships
 ```
 
 ## Rules
@@ -382,13 +411,13 @@ User: "Build the authentication flow with OAuth"
 2. **Tasks before teammates** — Create the task list, then spawn agents
 3. **One task per agent at a time** — Let agents claim work sequentially
 4. **Default isolation: none** — Agents write directly to project (worktree only for 2+ parallel conflicting builders)
-5. **Auto-handoff** — Builder→QA→Reviewer chain runs without manual triggers
-6. **Debugger auto-claims bugs** — No assignment needed for [bug] tasks
+5. **Auto-handoff** — Builder→QA chain runs without manual triggers
+6. **Builder handles bugs too** — Same agent that builds also fixes issues
 7. **QA blocks ruthlessly** — If it's not ready, it doesn't ship
 8. **No orphans** — Always shutdown teammates and delete team when done
 9. **Right-size the team** — Don't spawn `full` for a bug fix
 10. **The loop breathes** — Detect→Fix→Verify→Ship runs autonomously
 11. **Verify after build** — After ANY builder completes, verify files exist in main project before proceeding
-12. **Design review on UI** — If the task creates .tsx/.jsx files, Design Reviewer MUST review before QA
+12. **Design review on UI** — If the task creates .tsx/.jsx files, QA MUST check Design DNA compliance
 13. **QA is a gate, not optional** — No task is marked complete without QA verification. If QA wasn't invoked, the task is NOT done
 14. **Verify APIs before integration** — If a task involves external APIs, use WebSearch to verify docs BEFORE builder starts

@@ -32,7 +32,7 @@ import type { Database } from '@/types/supabase'
 export function createClient() {
   return createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
   )
 }
 ```
@@ -48,7 +48,7 @@ export async function createClient() {
 
   return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -79,7 +79,7 @@ export async function updateSession(request: NextRequest) {
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookies: {
         getAll() {
@@ -128,7 +128,7 @@ import type { Database } from '@/types/supabase'
 
 export const supabase = createClient<Database>(
   import.meta.env.VITE_SUPABASE_URL,
-  import.meta.env.VITE_SUPABASE_ANON_KEY
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY
 )
 ```
 
@@ -138,11 +138,11 @@ Create `.env.local.example`:
 ```bash
 # Supabase — get from https://supabase.com/dashboard/project/_/settings/api
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-anon-key
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 ```
 
-For Vite projects, use `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`.
+For Vite projects, use `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`.
 
 Remind the user: copy `.env.local.example` to `.env.local` and fill in real values. Verify `.env.local` is in `.gitignore`.
 
@@ -534,7 +534,7 @@ serve(async (req) => {
   // Get auth user from request
   const supabase = createClient(
     Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_ANON_KEY')!,
+    Deno.env.get('SUPABASE_PUBLISHABLE_KEY')!,
     { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
   )
 

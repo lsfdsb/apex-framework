@@ -27,14 +27,16 @@ Thumbs.db
 # Testing
 coverage/
 
-# Claude Code personal overrides (team members customize locally)
+# Claude Code runtime (generated, not source)
 .claude/settings.local.json
 .claude/.apex-state.json
+.claude/.manifest.json
 .claude/.failure-log
 .claude/.dna-server.pid
 .claude/.dev-server.pid
 .claude/session-logs/
 .claude/worktrees/
+.claude/agent-memory/
 
 # Debug
 *.log

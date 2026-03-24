@@ -118,8 +118,8 @@ for FILE in $STAGED_FILES; do
 
   # Source-code-only checks (skip .md, .txt, .yaml, shell scripts, etc.)
   if [[ "$FILE" =~ \.(ts|tsx|js|jsx|mjs|cjs)$ ]]; then
-    # No console.log in production code (allow in test files)
-    if [[ ! "$FILE" =~ \.test\. ]] && [[ ! "$FILE" =~ \.spec\. ]] && [[ ! "$FILE" =~ __tests__ ]]; then
+    # No console.log in production code (allow in test files and docs/reference code)
+    if [[ ! "$FILE" =~ \.test\. ]] && [[ ! "$FILE" =~ \.spec\. ]] && [[ ! "$FILE" =~ __tests__ ]] && [[ ! "$FILE" =~ ^docs/ ]]; then
       if grep -n 'console\.log' "$FILE" 2>/dev/null | grep -v '// eslint-disable' > /dev/null; then
         PATTERN_ERRORS=$((PATTERN_ERRORS + 1))
         if [ "$APEX_COLORS" = true ]; then

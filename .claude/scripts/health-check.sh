@@ -141,7 +141,7 @@ AGENT_COUNT=0
 if [ -d "$CLAUDE_DIR/agents" ]; then
   AGENT_COUNT=$(ls "$CLAUDE_DIR/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
   if [ "$AGENT_COUNT" -ge 4 ]; then
-    ok "$AGENT_COUNT agents installed" "Autonomous sub-agents: builder, watcher, qa, debugger, and more"
+    ok "$AGENT_COUNT agents installed" "Autonomous sub-agents: builder, watcher, qa, technical-writer"
   else
     warn "Only $AGENT_COUNT agents (expected 4)" "Some agents may be missing" "Re-run: ~/.apex-framework/install.sh"
   fi

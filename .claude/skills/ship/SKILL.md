@@ -32,6 +32,7 @@ git diff --stat
 - If on `main` → create a feature branch first (`feat/`, `fix/`, `docs/`)
 - If no changes → nothing to ship
 - If uncommitted changes → stage and commit first
+- **Dependency verification** — if `/qa` was run and Phase 0 reported any BLOCKING dependency failures (missing packages, env vars, or internal imports), `/ship` will not proceed. Fix the dependency gaps and re-run `/qa` until Phase 0 is clean before shipping.
 
 ### Step 2: Branch (if needed)
 
@@ -88,7 +89,7 @@ The plugin is the single review gate. It covers CLAUDE.md compliance (which incl
 
 ### Step 7: Merge (only with user approval)
 
-**NEVER merge without explicit user approval.** Show the PR URL and Code Reviewer verdict first.
+**NEVER merge without explicit user approval.** Show the PR URL and QA verdict first.
 
 If user says "merge", "merge it", "ship it":
 ```bash

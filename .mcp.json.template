@@ -44,6 +44,18 @@
         "SENTRY_ORG": "your-org",
         "SENTRY_PROJECT": "your-project"
       }
-    }
+    },
+
+    "// ── MCP Elicitation Gate Server (Claude Code v2.1.76+) ──────────────────": "",
+    "// Replaces text-based approval gates with structured forms. Supports PRD,": "",
+    "// architecture, and ship (merge) gates. Build the server at:": "",
+    "//   ./mcp-servers/apex-gates/  (see docs/mcp-elicitation-gates.md)": "",
+    "// Then uncomment the entry below and run: claude mcp add apex-gates": "",
+    "//": "",
+    "// \"apex-gates\": {": "",
+    "//   \"command\": \"node\",": "",
+    "//   \"args\": [\"./mcp-servers/apex-gates/dist/index.js\"],": "",
+    "//   \"env\": {}": "",
+    "// }": ""
   }
 }
