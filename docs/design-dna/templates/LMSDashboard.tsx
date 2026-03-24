@@ -3,6 +3,7 @@
 // Zero external dependencies
 
 import React, { useState, useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 function useReveal() {
   useEffect(() => {
@@ -89,7 +90,8 @@ export default function LMSDashboard() {
   const [activeTab, setActiveTab] = useState<"video" | "reading">("video");
 
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+      <DnaBackground pattern="hexagons" animated="particles" />
       <style>{css}</style>
 
       {/* ═══ HERO ═══ */}

@@ -3,6 +3,7 @@
 // DNA palette: bg=#09090b, accent=#3b82f6, sidebar 220px, stats 4-col grid
 
 import React, { useEffect, useState } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 function useReveal() {
   useEffect(() => {
@@ -93,7 +94,8 @@ function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
 export default function SaaSDashboard() {
   useReveal();
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+      <DnaBackground pattern="grid" animated="gradient" />
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}
