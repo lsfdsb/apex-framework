@@ -103,6 +103,16 @@ Check these sections and update if ANY of them are affected by recent changes:
 - **Accurate counts** — if we say "14 pattern pages" and now it's 15, update the number
 - **No stale references** — if a feature was renamed or removed, update the README
 - **Examples work** — any code example in README must actually work
+- **Version in sync** — README version MUST match `VERSION` file. Check: `cat VERSION` vs `head -1 README.md`
+
+## Step 3.5: Verify Showcase Sync
+
+The Design DNA showcase app reads CHANGELOG.md at build time (`docs/design-dna/showcase/src/pages/HomePage.tsx`). After updating CHANGELOG.md:
+
+1. **[Unreleased] section** — entries appear as "next" badge in the showcase changelog
+2. **Versioned sections** — appear with version badge (e.g., "v5.16.0")
+3. **Entry format matters** — must be `- **Bold Name** — description (#PR)` to be parsed
+4. **No action needed** — showcase reads CHANGELOG.md via Vite `?raw` import. Just keep the format correct and it syncs automatically on next page load.
 
 ## Step 4: Update PRD Status
 

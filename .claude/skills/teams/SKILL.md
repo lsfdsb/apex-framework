@@ -21,7 +21,7 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
 `Builder creates → Watcher monitors → Debugger fixes → QA verifies → loop`
 
-**3 rules**: (1) Watcher always first, (2) Builders commit in worktree, (3) Verify files after builder completes.
+**3 rules**: (1) Watcher always first, (2) Default isolation: none, (3) Technical Writer before every PR.
 
 ---
 
@@ -364,10 +364,10 @@ User: "Build the authentication flow with OAuth"
 
  3. Spawn order:
     → watcher (background) — starts monitoring immediately
-    → builder (worktree) — implements the feature
-    → debugger (worktree) — standby, auto-claims any bugs
-    → qa (worktree) — verifies each task as completed
-    → code-reviewer (worktree) — final review when QA passes
+    → builder (none) — implements the feature directly
+    → debugger (none) — standby, auto-claims any bugs
+    → qa (none) — verifies each task as completed
+    → code-reviewer (plan) — final review when QA passes
 
  4. The breathing loop runs:
     watcher detects type error → creates bug task → debugger fixes it
@@ -381,7 +381,7 @@ User: "Build the authentication flow with OAuth"
 1. **Watcher is always first** — Start monitoring before any changes
 2. **Tasks before teammates** — Create the task list, then spawn agents
 3. **One task per agent at a time** — Let agents claim work sequentially
-4. **Worktree isolation for writers** — Builder, Debugger in worktrees
+4. **Default isolation: none** — Agents write directly to project (worktree only for 2+ parallel conflicting builders)
 5. **Auto-handoff** — Builder→QA→Reviewer chain runs without manual triggers
 6. **Debugger auto-claims bugs** — No assignment needed for [bug] tasks
 7. **QA blocks ruthlessly** — If it's not ready, it doesn't ship
