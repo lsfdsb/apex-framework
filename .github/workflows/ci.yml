@@ -247,10 +247,20 @@ jobs:
         run: |
           version="${{ steps.version.outputs.version }}"
           date_today=$(date -u '+%Y-%m-%d')
-          # Replace the [Unreleased] heading with the versioned heading, preserving the section
-          sed -i "s|^## \[Unreleased\]|## [${version}] — ${date_today}|" CHANGELOG.md
-          # Prepend a new empty [Unreleased] section above the stamped one (first match only)
-          sed -i "0,/^## \[${version}\]/s|^## \[${version}\]|## [Unreleased]\n\n## [${version}]|" CHANGELOG.md
+
+          # Skip if this version section already exists (curated manually or by auto-changelog)
+          if grep -q "^## \[${version}\]" CHANGELOG.md; then
+            echo "Version [${version}] already exists in CHANGELOG.md — skipping stamp."
+            # Just ensure [Unreleased] section exists above it
+            if ! grep -q "^## \[Unreleased\]" CHANGELOG.md; then
+              sed -i "0,/^## \[${version}\]/s|^## \[${version}\]|## [Unreleased]\n\n## [${version}]|" CHANGELOG.md
+            fi
+          else
+            # Replace [Unreleased] heading with versioned heading
+            sed -i "s|^## \[Unreleased\]|## [${version}] — ${date_today}|" CHANGELOG.md
+            # Prepend a new empty [Unreleased] section above it (first match only)
+            sed -i "0,/^## \[${version}\]/s|^## \[${version}\]|## [Unreleased]\n\n## [${version}]|" CHANGELOG.md
+          fi
 
       - name: Commit CHANGELOG update
         if: steps.check.outputs.skip == 'false'
