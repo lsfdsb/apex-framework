@@ -11,6 +11,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Showcase ESLint + Prettier** — ESLint 9 flat config with typescript-eslint, react-hooks, react-refresh plugins; Prettier with project conventions
 - **CI Showcase Pipeline** — GitHub Actions now runs typecheck → lint → test → build for the Design DNA React app
 - **Statusline v3 (Σ Token Sum)** — Shows session-wide token total (main + all agents), USD cost, and 5-hour rate limit with color-coded health
+- **Starter Component Tests** — Card (11 tests), Tabs (13 tests), PageShell (9 tests) with full ARIA role coverage and slot composition testing
 
 ### Fixed
 - **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip

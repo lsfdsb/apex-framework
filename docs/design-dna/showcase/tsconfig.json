@@ -23,5 +23,12 @@
     },
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src", "../starters", "../templates"]
+  "include": ["src", "../starters", "../templates"],
+  "exclude": [
+    "src/**/*.test.tsx",
+    "src/**/*.test.ts",
+    "src/test",
+    "../starters/**/*.test.tsx",
+    "../templates/**/*.test.tsx"
+  ]
 }
