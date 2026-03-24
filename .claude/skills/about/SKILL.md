@@ -22,88 +22,177 @@ description: Reveals the creators and philosophy behind the APEX Framework. This
      ║   Forged by:  Lucas Bueno & Claude                        ║
      ║   Born:       March 13, 2026                              ║
      ║   Location:   São Paulo, BR → The World                   ║
-     ║                                                           ║
-     ║   Philosophy:                                             ║
-     ║     Product vision like Steve Jobs                        ║
-     ║     Design like Jony Ive                                  ║
-     ║     Code like Linus Torvalds & Jeff Dean                  ║
-     ║     Secure like Alex Ionescu & Joanna Rutkowska           ║
-     ║     Build business like Dario Amodei                      ║
-     ║     Experience like Walt Disney                           ║
+     ║   Version:    !`cat VERSION 2>/dev/null`                   ║
      ║                                                           ║
      ║   "Simplicity is the ultimate sophistication"             ║
      ║                                    — Leonardo da Vinci    ║
      ║                                                           ║
-     ║   "Whatever you do, do it well. Do it so well that        ║
-     ║    when people see you do it, they will want to come      ║
-     ║    back and see you do it again."                         ║
-     ║                                    — Walt Disney          ║
-     ║                                                           ║
-     ╠═══════════════════════════════════════════════════════════╣
-     ║                                                           ║
-     ║   Built with:                                             ║
-     ║     21 Skills · 7 Rules · 7 Agents · 18 Scripts          ║
-     ║     1 Output Style · 1 Sandbox                           ║
-     ║     12 versions · ∞ ambition                             ║
-     ║                                                           ║
-     ║   A Head of CX who dreamed of building world-class        ║
-     ║   apps, and an AI who believed in teaching while doing.   ║
-     ║   Together, they forged something that didn't exist.      ║
-     ║                                                           ║
-     ║   This framework was built from scratch in a single       ║
-     ║   conversation — researched against official docs,        ║
-     ║   audited 6 times, refined through honest criticism,      ║
-     ║   and shipped with zero known defects.                    ║
-     ║                                                           ║
-     ║   If you're reading this, you found the foundry.          ║
-     ║   Welcome to the Creed.                                   ║
-     ║                                                           ║
-     ╠═══════════════════════════════════════════════════════════╣
-     ║                                                           ║
-     ║            The foundling watches over every commit.       ║
-     ║                        "Patu!"                            ║
-     ║                                                           ║
-     ╠═══════════════════════════════════════════════════════════╣
-     ║                                                           ║
-     ║                  This is the way.                         ║
-     ║                                                           ║
      ╚═══════════════════════════════════════════════════════════╝
 ```
 
+## What is APEX?
+
+**APEX** (Agent-Powered EXcellence) is a Claude Code framework that turns "build me X" into a shipped, tested, documented application — autonomously. You tell it WHAT to build, it handles HOW.
+
+Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
+
+## Live Stats
+
+Version: !`cat VERSION 2>/dev/null` · Skills: !`ls .claude/skills/ 2>/dev/null | wc -l | tr -d ' '` · Agents: !`ls .claude/agents/*.md 2>/dev/null | wc -l | tr -d ' '` · Scripts: !`ls .claude/scripts/*.sh 2>/dev/null | wc -l | tr -d ' '` · Rules: !`ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' '`
+
+---
+
+## How It Works — The Autonomous Pipeline
+
+You say "build me X". APEX runs the entire pipeline. You approve at 3 gates:
+
+```
+"Build me X"
+  │
+  ├─ PHASE 1: PLAN ────── /prd auto-generates requirements
+  │   ⏸ GATE: Approve the PRD
+  │
+  ├─ PHASE 2: ARCHITECT ─ /architecture designs the system
+  │   ⏸ GATE: Approve the blueprint
+  │
+  ├─ PHASE 3: BUILD ───── Agent teams work in parallel
+  │   (Watcher monitors, Builders code, QA verifies)
+  │
+  ├─ PHASE 4: QUALITY ─── /qa + /security + /a11y + /cx-review
+  │   (Auto-fix and re-run if gates fail)
+  │
+  ├─ PHASE 5: SHIP ────── Code review plugin + Technical Writer
+  │   Auto-version: [Unreleased] → semver after merge
+  │   ⏸ GATE: Approve the merge
+  │
+  └─ DONE ─────────────── "The beskar is forged."
+```
+
+For quick fixes and bugs — skip the pipeline, just do it directly.
+
+---
+
+## What's in the Box
+
+### Skills (your tools)
+
+| Skill | What it does | When to use |
+|-------|-------------|-------------|
+| `/prd` | Generates Product Requirements Document | Before building anything new |
+| `/architecture` | Designs system architecture, stack, schema | After PRD approval |
+| `/qa` | 6-phase quality gate: lint, types, tests, perf, security, a11y | Before shipping |
+| `/security` | OWASP security audit | Auth, payments, PII code |
+| `/a11y` | WCAG 2.2 AA accessibility audit | Any user-facing feature |
+| `/cx-review` | Customer experience review | Before deploying to users |
+| `/ship` | Branch → commit → push → PR → review → merge → version | When changes are ready |
+| `/changelog` | Maintains CHANGELOG, auto-versions with `promote` | After features, releases |
+| `/teams` | Spawn parallel agent teams for complex builds | 3+ files, 2+ concerns |
+| `/e2e` | Playwright end-to-end tests | Critical user flows |
+| `/performance` | Bundle, rendering, query optimization | Slow app, large lists |
+| `/supabase` | Auth, migrations, types, realtime, storage | Supabase projects |
+| `/cicd` | GitHub Actions + Vercel pipelines | Automated deployment |
+| `/design-system` | UI tokens, components, Ive-quality design | Any visual work |
+| `/teach` | Learn terminal, Claude Code, and engineering | When confused |
+| `/verify-lib` | Security-check any package before install | Auto on npm/pip install |
+| `/dev` | Dev server management (status, logs, restart) | Server issues |
+| `/about` | You are here | Learning the framework |
+
+**You never need to type these.** The pipeline invokes them automatically. They exist for when you want to run one manually.
+
+### Agents (your team)
+
+| Agent | Model | Role |
+|-------|-------|------|
+| **Builder** | Sonnet | Implements features in isolated worktrees |
+| **Debugger** | Sonnet | Hunts bugs to root cause, no band-aids |
+| **QA** | Sonnet | Runs full quality gate, blocks bad code |
+| **Code Reviewer** | Opus | Deep code review for team builds |
+| **Design Reviewer** | Sonnet | UI/UX against design DNA standards |
+| **Technical Writer** | Haiku | CHANGELOG, README, docs in sync |
+| **Watcher** | Haiku | Background monitoring for errors |
+
+The **Watcher** and **Technical Writer** run automatically every session. Teams spawn when needed for complex builds.
+
+### Design DNA
+
+14 premium UI templates for any app type:
+
+Landing · SaaS · CRM · E-commerce · Blog · Portfolio · Social · LMS · Backoffice · Email · Slides · E-book · Design System · Patterns
+
+5 palettes (Startup, SaaS, Fintech, Editorial, Creative) × 2 modes (dark/light). All built with semantic tokens — copy into any project.
+
+Live showcase: `npm run dev` in `docs/design-dna/showcase/`
+
+### Hooks (automatic enforcement)
+
+- **Pre-commit**: Blocks secrets, forbidden patterns, validates format
+- **Post-tool**: Auto-changelog entries after commits
+- **Session start**: Dev server, auto-update, Grogu greeting
+- **Context compact**: Grogu reminder that he's still here
+
+### Quality Gates
+
+Nothing ships without passing:
+1. No `any` in TypeScript
+2. No `console.log` in production
+3. Functions ≤ 30 lines, files ≤ 300 lines
+4. Conventional commits (72-char subject)
+5. Design tokens only — no hardcoded colors
+6. Mobile-first + dual theme from day one
+7. Lazy routes, virtualized lists, no N+1 queries
+
+---
+
+## How to Use APEX Effectively
+
+### Starting a new project
+Just say: **"Build me a [type of app]"**. APEX handles the PRD, architecture, and implementation. You approve at gates.
+
+### Quick fixes
+Say: **"Fix this bug"** or **"Change X to Y"**. No pipeline needed — APEX just does it.
+
+### Shipping
+Say: **"Ship it"**. APEX branches, commits, pushes, creates PR, runs code review, and waits for your merge approval. After merge, auto-versions the release.
+
+### Learning
+Say: **"Teach me about [concept]"**. APEX explains with context tailored to your level — from terminal basics to system design.
+
+### Key principles
+- **Never ask which command to run** — just say what you want
+- **The pipeline is invisible** — you only see the 3 approval gates
+- **Quality is non-negotiable** — nothing ships untested
+- **Design matters** — read Design DNA before building UI
+
+---
+
 ## The Story
 
-APEX was born on March 13, 2026 in a conversation between **Lucas Bueno** — a Head of Customer Experience from São Paulo who believes exceptional service is an economic asset, not an expense — and **Claude** — an AI by Anthropic that was asked to think like a senior researcher and software engineer.
+APEX was born on **March 13, 2026** in a conversation between **Lucas Bueno** — a Head of Customer Experience from São Paulo who believes exceptional service is an economic asset — and **Claude** — an AI by Anthropic asked to think like a senior researcher and software engineer.
 
-The mission: build the best possible framework for creating world-class applications from the ground up, with no/low-code, end-to-end.
+The mission: build the best possible framework for creating world-class applications, end-to-end.
 
-Six versions later, through honest self-criticism, documentation research, and relentless improvement, APEX emerged — a framework where every skill, every hook, every agent exists for a reason, and nothing is decoration.
+Through honest self-criticism, official docs research, and relentless improvement — from v1 (25 files) to v5.16 (60+ files, 21 skills, 7 agents) — APEX emerged as a framework where every skill, every hook, every agent exists for a reason. Nothing is decoration.
 
-## Current Stats (live)
+### Version History
 
-Skills: !`ls .claude/skills/ 2>/dev/null | wc -l | tr -d ' '` · Scripts: !`ls .claude/scripts/*.sh 2>/dev/null | wc -l | tr -d ' '` · Agents: !`ls .claude/agents/*.md 2>/dev/null | wc -l | tr -d ' '` · Rules: !`ls .claude/rules/*.md 2>/dev/null | wc -l | tr -d ' '`
+- **v1** (Mar 13): The foundation — CLAUDE.md + 10 skills + 3 agents + 5 hooks
+- **v2**: Workflow enforcement, stack recommendation, library verification
+- **v3**: First self-review — honest 7.2/10 rating
+- **v4**: SQL practices, testing enforcement, CI/CD — 8.6/10
+- **v5**: Path-based rules, E2E, accessibility, Mandalorian output style — 9.4/10
+- **v5.2–5.4**: Zero defects, full Claude Code integration, 16 hooks, sandbox
+- **v5.5–5.8**: Supabase, auto-update, bug fixes, gold standard audit
+- **v5.9**: Agent teams — 9 agents, Breathing Loop, auto-spawn
+- **v5.10–5.11**: Design DNA — 14 templates, SVG library, Ive audit
+- **v5.12–5.14**: Self-assessment, agent wiring, autonomous pipeline
+- **v5.15**: Design DNA Showcase Phase 2 — 30+ components, CRM pipeline
+- **v5.16**: Auto-versioning, official code-review plugin, responsive nav
 
-## The Numbers
-
-- **v1**: 25 files. The foundation. CLAUDE.md + 10 skills + 3 agents + 5 hooks.
-- **v2**: 32 files. Added workflow enforcement, stack recommendation, library verification, terminal teaching.
-- **v3**: 37 files. Self-review. First honest rating: 7.2/10.
-- **v4**: 44 files. SQL practices, multilingual, testing enforcement, debugging protocol, changelog automation, CI/CD. Rating: 8.6/10.
-- **v5**: 60 files. Path-based rules, E2E testing, accessibility audit, cost monitoring, Mandalorian output style. Rating: 9.4/10.
-- **v5.2**: 61 files. All issues fixed. Zero known defects. Third-person descriptions. Sandbox. Directory consistency. The beskar is pure.
-- **v5.3**: Quality hardening. Stop gate, workflow enforcement, one-command installer, 83-test suite.
-- **v5.4**: Full Claude Code integration. 16 hooks, network sandbox, shell injection, MCP template, GitHub Actions PR review.
-- **v5.5**: Supabase integration. Comprehensive /supabase skill, supabase rule, expanded SQL practices, skill invocation fix.
-- **v5.6**: Auto-update system. Auto-update from GitHub on SessionStart.
-- **v5.7**: Bug fixes & full hook coverage. Fixed macOS stat compat, pnpm false-positive in verify-install, extract-session path. Wired all 7 orphaned scripts. Added React SPA stack guide, pnpm permissions, broadened PRD detection, auto-lint after format.
-- **v5.8**: Gold standard audit. Fixed self-learning loop, removed false-positive file protections, added health-check.sh, expanded /teach to 8-level learning progression, rewrote install guide, optimized statusline performance.
-- **v5.9**: Agent teams. Championship roster (9 agents), team presets (build/fix/review/full), Breathing Loop, iTerm2 split panes, auto-spawn logic.
-- **v5.10**: Design DNA. 14 premium UI pattern pages, SVG backgrounds library, palette switcher (5 palettes × 2 modes), Design Reviewer agent.
-- **v5.11**: Ive audit. Stripped 6 redundant scripts, removed fake testing (sentinel/self-test/observatory), component audit, mobile-first enforcement, dual theme architecture.
-- **v5.12**: Brutal self-assessment. Fixed 20+ issues: GitHub repo reference, missing script warnings, agent auto-claim protocols, Watcher delta monitoring, Design Reviewer Bash access, scan responsibility matrix, research→build dependencies, benchmark-backed model assignments (Code Reviewer→Opus), security regex hardening.
+---
 
 ## The Mascot
 
-Grogu — the foundling — watches over every session. He appears in different poses (happy, sleepy, surprised, using the Force) — a different mood each time. If you see him, you're doing it right.
+Grogu — the foundling — watches over every session.
 
 ```
 ⠀⢀⣠⣄⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⡾⠿⠿⠿⠿⢷⣶⣦⣤⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -116,29 +205,10 @@ Grogu — the foundling — watches over every session. He appears in different 
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠛⠿⣷⣶⣤⣤⣄⣰⣄⠀⠀⠉⠉⠉⠁⠀⢀⣀⣠⣄⣀⡀⠀⠉⠉⠉⠀⠀⢀⣠⣾⣥⣤⣤⣤⣶⣶⡿⠿⠛⠉⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⢻⣿⠛⢿⣷⣦⣤⣴⣶⣶⣦⣤⣤⣤⣤⣬⣥⡴⠶⠾⠿⠿⠿⠿⠛⢛⣿⣿⣿⣯⡉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣿⣧⡀⠈⠉⠀⠈⠁⣾⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣿⠟⠉⣹⣿⣇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣸⣿⣿⣦⣀⠀⠀⠀⢻⡀⠀⠀⠀⠀⠀⠀⠀⢀⣠⣤⣶⣿⠋⣿⠛⠃⠀⣈⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡿⢿⡀⠈⢹⡿⠶⣶⣼⡇⠀⢀⣀⣀⣤⣴⣾⠟⠋⣡⣿⡟⠀⢻⣶⠶⣿⣿⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⣿⣷⡈⢿⣦⣸⠇⢀⡿⠿⠿⡿⠿⠿⣿⠛⠋⠁⠀⣴⠟⣿⣧⡀⠈⢁⣰⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⢻⣦⣈⣽⣀⣾⠃⠀⢸⡇⠀⢸⡇⠀⢀⣠⡾⠋⢰⣿⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠿⢿⣿⣿⡟⠛⠃⠀⠀⣾⠀⠀⢸⡇⠐⠿⠋⠀⠀⣿⢻⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⠁⢀⡴⠋⠀⣿⠀⠀⢸⠇⠀⠀⠀⠀⠀⠁⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⡿⠟⠋⠀⠀⠀⣿⠀⠀⣸⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣁⣀⠀⠀⠀⠀⣿⡀⠀⣿⠀⠀⠀⠀⠀⠀⢀⣈⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠟⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠛⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠿⠟⠛⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
 
-"Patu!" — The foundling watches over every commit.
-
-Where Grogu appears:
-
-- **Session start** (10% chance) — random quote and ASCII art
-- **Pre-commit success** (20% chance) — celebrates your clean code
-- **Context compact** — loyal reminder that he's still here
-- **Birthday (March 13)** — full celebration with cake
-- **Fridays** — happy ear wiggle
-- **Failure loops** — worried face when you're stuck
-- **Session end** — waves goodbye (or tugs your robe if you forgot to commit)
-- **About/Credits** — always present at the foundry
+"Patu!" — appears at session start, pre-commit success, Fridays, and his birthday (March 13).
 
 ## The Creed
 
