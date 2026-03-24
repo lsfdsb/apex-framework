@@ -6,6 +6,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.18.0] — 2026-03-24
+
 ### Added
 - **LICENSE** — MIT license for open-source distribution of the APEX Framework (#180)
 - **SECURITY.md** — Vulnerability disclosure process and patch timeline for responsible reporting (#180)
