@@ -6,6 +6,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.17.0] — 2026-03-24 — Onboarding Guide + Worktree Safety
+
+About skill rewritten as full onboarding guide, agent isolation defaulted to none (eliminating worktree file loss), Technical Writer perfected with showcase sync awareness.
+
 ### Added
 - **About Onboarding Guide** — Rewrote `/about` as full onboarding guide: pipeline diagram, skills table, agent roster, Design DNA overview, how-to section (#174)
 
