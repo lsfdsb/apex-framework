@@ -2,7 +2,7 @@
 name: ship
 description: Fast-track branch → commit → push → PR → merge workflow. Use when the user says "ship", "push and merge", "push pr merge", "ship it", or when changes are ready to go. Spawns Technical Writer automatically. Requires explicit user approval for merge.
 argument-hint: "[commit message or description of changes]"
-allowed-tools: Read, Grep, Glob, Bash, Agent, TaskCreate, TaskUpdate, TaskList, SendMessage
+allowed-tools: Read, Grep, Glob, Bash, Agent, Skill, TaskCreate, TaskUpdate, TaskList, SendMessage
 ---
 
 # Ship — Fast-Track Delivery
@@ -57,12 +57,15 @@ git push -u origin <branch>
 gh pr create --title "<commit subject>" --body "<summary + test plan>"
 ```
 
-### Step 5: Auto-Review (Code Reviewer + Technical Writer)
+### Step 5: Auto-Review (Plugin + Agent + Technical Writer)
 
-**MANDATORY** — After PR is created, spawn both in parallel:
+**MANDATORY** — After PR is created, run ALL three in parallel:
 
 ```
-# Code Reviewer (Opus) — security gate, quality analysis
+# 1. Official Code Review Plugin — multi-agent PR review (posts GitHub comment)
+Skill("code-review:code-review", args: "#[NUMBER]")
+
+# 2. APEX Code Reviewer (Opus) — internal security gate
 Agent({
   subagent_type: "code-reviewer",
   run_in_background: true,
@@ -74,7 +77,7 @@ Agent({
     5. Report: APPROVED or BLOCKED with specific issues."
 })
 
-# Technical Writer — update docs
+# 3. Technical Writer — update docs
 Agent({
   subagent_type: "technical-writer",
   run_in_background: true,
@@ -82,15 +85,21 @@ Agent({
 })
 ```
 
-**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for the Code Reviewer's verdict.
+The official plugin spawns 5 parallel Sonnet agents that check CLAUDE.md compliance, bugs, git history, previous PR comments, and code comments — then posts findings as a GitHub PR comment. The APEX agent runs Opus for deep security/performance analysis internally.
+
+**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for both reviewers' verdicts.
 
 ### Step 6: Review Gate
 
-Wait for the Code Reviewer to report:
-- **APPROVED** → proceed to merge
-- **BLOCKED** → show the issues, fix them, push again, re-review
+Wait for BOTH reviews to complete:
+- **Plugin**: Posts findings as GitHub PR comment (score-filtered, only 80+ confidence issues)
+- **APEX Agent**: Reports APPROVED or BLOCKED internally
 
-This is the quality gate. The Code Reviewer uses Opus — the best model — specifically for this moment. It catches what QA misses: subtle security issues, architectural concerns, performance traps.
+If either finds issues:
+- **BLOCKED** → show the issues, fix them, push again, re-review
+- **Both APPROVED** → proceed to merge
+
+This is the quality gate. Two layers of review — the plugin catches CLAUDE.md violations and historical patterns, the APEX agent catches security and performance issues.
 
 ### Step 7: Merge (only with user approval)
 

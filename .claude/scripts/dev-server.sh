@@ -19,9 +19,9 @@ PID_FILE="$LOG_DIR/.dev-server.pid"
 # Skip if no package.json — BUT check for Design DNA (APEX framework repo)
 if [ ! -f "$PACKAGE_JSON" ]; then
   # Check if this is the APEX framework repo with Design DNA
-  DNA_DIR="$PROJECT_DIR/docs/design-dna"
-  if [ -d "$DNA_DIR" ] && [ -f "$DNA_DIR/index.html" ]; then
-    # Start the Design DNA dev server
+  SHOWCASE_DIR="$PROJECT_DIR/docs/design-dna/showcase"
+  if [ -d "$SHOWCASE_DIR" ] && [ -f "$SHOWCASE_DIR/package.json" ]; then
+    # Start the Design DNA React showcase (Vite)
     DNA_PID_FILE="$LOG_DIR/.dna-server.pid"
     DNA_LOG_FILE="$LOG_DIR/dna-server.log"
     # Check if already running
@@ -33,23 +33,16 @@ if [ ! -f "$PACKAGE_JSON" ]; then
       fi
       rm -f "$DNA_PID_FILE" 2>/dev/null
     fi
-    # Start DNA server
-    nohup node -e "
-const http=require('http'),fs=require('fs'),path=require('path');
-const dir='$DNA_DIR';
-const types={'.html':'text/html;charset=utf-8','.js':'text/javascript;charset=utf-8'};
-http.createServer((q,s)=>{
-  let file=q.url.split('?')[0];if(file==='/') file='/index.html';
-  if(!path.extname(file)) file+='.html';
-  const p=path.join(dir,file);
-  if(!fs.existsSync(p)){s.writeHead(404);s.end('Not found');return;}
-  s.writeHead(200,{'Content-Type':types[path.extname(p)]||'text/plain'});
-  fs.createReadStream(p).pipe(s);
-}).listen(3001,()=>console.log('Design DNA running at http://localhost:3001'));
-" > "$DNA_LOG_FILE" 2>&1 &
-    echo "$!" > "$DNA_PID_FILE"
-    sleep 1
-    if kill -0 "$(cat "$DNA_PID_FILE")" 2>/dev/null; then
+    # Install deps if needed
+    if [ ! -d "$SHOWCASE_DIR/node_modules" ]; then
+      (cd "$SHOWCASE_DIR" && npm install --silent) 2>/dev/null
+    fi
+    # Start Vite dev server
+    > "$DNA_LOG_FILE" 2>/dev/null
+    (cd "$SHOWCASE_DIR" && nohup npm run dev > "$DNA_LOG_FILE" 2>&1 &
+    echo "$!" > "$DNA_PID_FILE")
+    sleep 2
+    if [ -f "$DNA_PID_FILE" ] && kill -0 "$(cat "$DNA_PID_FILE" 2>/dev/null)" 2>/dev/null; then
       echo "🟢 Design DNA server started · http://localhost:3001"
     else
       echo "⚠️ Design DNA server failed to start. Check $DNA_LOG_FILE"

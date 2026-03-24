@@ -126,61 +126,15 @@ fi
 ALERTS=""
 [ "$CTX_INT" -gt 80 ] 2>/dev/null && ALERTS=" ⚠️ CTX"
 
-# ── PR link (cached 60s, validated) ──
-PR_STR=""
-if command -v gh &>/dev/null; then
-  BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-  if [ -n "$BRANCH" ]; then
-    BRANCH_SAFE=$(echo "$BRANCH" | tr '/' '-')
-    PR_CACHE="/tmp/apex-pr-cache-${BRANCH_SAFE}.json"
-    PR_DATA=""
-
-    if [ -f "$PR_CACHE" ]; then
-      CACHE_AGE=$(( $(date +%s) - $(stat -f %m "$PR_CACHE" 2>/dev/null || echo "0") ))
-      [ "$CACHE_AGE" -lt 60 ] && PR_DATA=$(cat "$PR_CACHE" 2>/dev/null)
-    fi
-
-    if [ -z "$PR_DATA" ]; then
-      # Try with timeout (coreutils), fall back to bg+kill on macOS
-      if command -v timeout &>/dev/null; then
-        PR_DATA=$(timeout 2 gh pr view --json number,state,url 2>/dev/null)
-      else
-        gh pr view --json number,state,url > "/tmp/apex-pr-fetch-$$.json" 2>/dev/null &
-        GH_PID=$!
-        sleep 2
-        if kill -0 "$GH_PID" 2>/dev/null; then
-          kill "$GH_PID" 2>/dev/null
-          wait "$GH_PID" 2>/dev/null
-        else
-          wait "$GH_PID" 2>/dev/null
-          PR_DATA=$(cat "/tmp/apex-pr-fetch-$$.json" 2>/dev/null)
-        fi
-        rm -f "/tmp/apex-pr-fetch-$$.json"
-      fi
-      if [ -n "$PR_DATA" ]; then
-        echo "$PR_DATA" > "$PR_CACHE"
-      else
-        echo '{"none":true}' > "$PR_CACHE"
-      fi
-    fi
-
-    if [ -n "$PR_DATA" ] && [ "$PR_DATA" != '{"none":true}' ]; then
-      PR_NUM=$(echo "$PR_DATA" | jq -r '.number // empty')
-      PR_STATE=$(echo "$PR_DATA" | jq -r '.state // empty')
-      PR_URL=$(echo "$PR_DATA" | jq -r '.url // empty')
-      # Validate URL: must start with https://github.com/
-      if [ -n "$PR_NUM" ] && echo "$PR_URL" | grep -q '^https://github\.com/' 2>/dev/null; then
-        case "$PR_STATE" in
-          MERGED) PR_ICON="🟣" ;;
-          OPEN)   PR_ICON="🟢" ;;
-          CLOSED) PR_ICON="⚪" ;;
-          *)      PR_ICON="PR" ;;
-        esac
-        PR_STR=" ┃ ${PR_ICON} \e]8;;${PR_URL}\a#${PR_NUM}\e]8;;\a"
-      fi
-    fi
+# ── Version (from VERSION file, cached in var) ──
+VER=""
+for VER_PATH in "$CLAUDE_PROJECT_DIR/VERSION" "$(git rev-parse --show-toplevel 2>/dev/null)/VERSION"; do
+  if [ -f "$VER_PATH" ]; then
+    VER=$(head -1 "$VER_PATH" 2>/dev/null | tr -d '[:space:]')
+    break
   fi
-fi
+done
+VER_STR="${VER:+v${VER} }"
 
 # ── Build context segment ──
 if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
@@ -191,4 +145,4 @@ fi
 
 # ── Output ──
 # Segments: APEX | model | context | lines | duration | alerts | PR
-printf '%b' "⚔️ APEX ┃ ${M} ${PLAN}┃ ${CTX_STR}${LINES_STR} ┃ ${DUR_FMT}${ALERTS}${PR_STR}\n"
+printf '%b' "⚔️ APEX ${VER_STR}┃ ${M} ${PLAN}┃ ${CTX_STR}${LINES_STR} ┃ ${DUR_FMT}${ALERTS}\n"
