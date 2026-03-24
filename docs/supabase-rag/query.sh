@@ -25,7 +25,8 @@ SKILLS_DIR="$PROJECT_DIR/.claude/skills"
 SCRIPTS_DIR="$PROJECT_DIR/.claude/scripts"
 
 SUPABASE_URL="${SUPABASE_URL:-}"
-SUPABASE_PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-}"
+# Prefer publishable key for reads; fall back to secret key (framework tool, not client-facing)
+SUPABASE_PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_SECRET_KEY:-}}"
 [[ -n "$SUPABASE_URL" ]] && SUPABASE_URL="${SUPABASE_URL%/}"
 REST_URL="${SUPABASE_URL}/rest/v1"
 

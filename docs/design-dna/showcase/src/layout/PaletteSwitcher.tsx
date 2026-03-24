@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { usePalette } from "../context/PaletteContext";
-import { PALETTES, PALETTE_NAMES, type PaletteName } from "../data/palettes";
+import { PALETTES, PALETTE_NAMES } from "../data/palettes";
 
 const widgetStyles = `
 .apex-widget{position:fixed;bottom:24px;left:24px;z-index:200;animation:apex-widget-enter .6s cubic-bezier(0.22,1,0.36,1) backwards;animation-delay:.3s}

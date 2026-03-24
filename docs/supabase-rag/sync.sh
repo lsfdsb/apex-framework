@@ -79,7 +79,7 @@ upsert_component() {
 
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
-    -X POST "$REST_URL/components" \
+    -X POST "$REST_URL/components?on_conflict=name,type" \
     -H "apikey: $SUPABASE_SECRET_KEY" \
     -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
     -H "Content-Type: application/json" \
@@ -102,7 +102,7 @@ upsert_ref() {
 
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
-    -X POST "$REST_URL/cross_references" \
+    -X POST "$REST_URL/cross_references?on_conflict=source_name,source_type,target_name,target_type,relationship" \
     -H "apikey: $SUPABASE_SECRET_KEY" \
     -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
     -H "Content-Type: application/json" \

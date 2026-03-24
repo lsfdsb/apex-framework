@@ -41,12 +41,12 @@ function parseChangelog(): ChangelogEntry[] {
     }
   }
 
-  // Match versioned sections: ## [5.14.0] — 2026-03-20 — Title
-  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*[—–-]\s*(\d{4}-\d{2}-\d{2})\s*[—–-]\s*(.+)$/gm;
+  // Match versioned sections: ## [5.14.0] — 2026-03-20 — Title (title is optional)
+  const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*[—–-]\s*(\d{4}-\d{2}-\d{2})(?:\s*[—–-]\s*(.+))?$/gm;
   let match;
   const positions: { version: string; date: string; title: string; start: number }[] = [];
   while ((match = sectionRegex.exec(changelogRaw)) !== null) {
-    positions.push({ version: `v${match[1]}`, date: match[2], title: match[3].trim(), start: match.index + match[0].length });
+    positions.push({ version: `v${match[1]}`, date: match[2], title: (match[3] || "").trim(), start: match.index + match[0].length });
   }
   for (let i = 0; i < positions.length; i++) {
     const end = i + 1 < positions.length ? positions[i + 1].start - 50 : changelogRaw.length;

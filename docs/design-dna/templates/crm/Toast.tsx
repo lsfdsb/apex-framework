@@ -7,7 +7,7 @@ export const useToast = () => useContext(Ctx);
 const COLORS: Record<Variant, string> = { success: "var(--success)", error: "var(--destructive)", warning: "var(--warning)", info: "var(--info)" };
 function ToastCard({ item, onDismiss }: { item: ToastItem; onDismiss: () => void }) {
   const [progress, setProgress] = useState(100);
-  const raf = useRef<number>();
+  const raf = useRef<number>(undefined);
   const start = useRef(Date.now());
   useEffect(() => { const tick = () => { const elapsed = Date.now() - start.current; const pct = Math.max(0, 100 - (elapsed / 4000) * 100); setProgress(pct); if (pct <= 0) { onDismiss(); return } raf.current = requestAnimationFrame(tick) }; raf.current = requestAnimationFrame(tick); return () => { if (raf.current) cancelAnimationFrame(raf.current) } }, [onDismiss]);
   return (

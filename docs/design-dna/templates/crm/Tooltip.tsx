@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 interface TooltipProps { children: React.ReactNode; content: React.ReactNode; position?: "top" | "bottom" | "left" | "right" }
 export default function Tooltip({ children, content, position = "top" }: TooltipProps) {
   const [show, setShow] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>();
+  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
   const enter = () => { timer.current = setTimeout(() => setShow(true), 200) };
   const leave = () => { clearTimeout(timer.current); setShow(false) };
   const pos: React.CSSProperties = position === "top" ? { bottom: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" } : position === "bottom" ? { top: "calc(100% + 8px)", left: "50%", transform: "translateX(-50%)" } : position === "left" ? { right: "calc(100% + 8px)", top: "50%", transform: "translateY(-50%)" } : { left: "calc(100% + 8px)", top: "50%", transform: "translateY(-50%)" };
