@@ -24,6 +24,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **`/verify-api` Skill** — Auto-triggers on external API references (Supabase, Stripe, OpenAI, etc.), WebSearches official docs for current auth patterns and deprecated keys, blocks stale integrations. 7 APIs verified with code templates (#180)
 - **CI/CD Auto-Release** — GitHub Actions `release` job auto-tags and publishes GitHub Releases from VERSION + CHANGELOG on merge to main. Idempotent, stamps CHANGELOG with version+date (#180)
 - **Production Edge Function** — Supabase RAG edge function upgraded from scaffold to 571-line production reference: Deno.serve(), CORS, Bearer auth with constant-time comparison, rate limiting, structured logging, input validation, health check (#180)
+- **Kanban Task Chaining** — Teams skill auto-creates QA verification tasks when builder completes; WIP limits (builder:2, QA:1, writer:1); backpressure blocks builders when review queue full (#180)
+- **Inline CHANGELOG in /commit** — CHANGELOG updates now happen BEFORE the commit (Step 3), not after. Eliminates the #1 recurring failure across 3+ APEX versions (#180)
 
 ### Changed
 - **Context-Aware Agents** — Watcher and QA agents now detect repository type (framework vs project) and adapt commands, output, and validation rules accordingly (#180)

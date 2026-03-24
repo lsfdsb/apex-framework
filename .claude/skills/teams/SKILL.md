@@ -99,15 +99,52 @@ The framework *breathes* when the team operates as a continuous cycle without hu
     └──────────────────────────────────────────────┘
 ```
 
-### How it works:
+### How it works (Kanban Flow):
 
-1. **Builder** creates code → marks task complete → lists ALL created/modified files
-2. **Lead verifies file persistence** → confirms files exist in main project
-3. **Watcher** continuously monitors → detects issues → creates bug tasks
-4. **Builder** claims bug tasks → fixes root cause → notifies QA
-5. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
-6. **Technical Writer** keeps docs in sync throughout
-7. **Lead** makes the ship decision
+**Columns**: `todo` → `in-progress` → `needs-review` → `approved` → `done`
+
+1. **Lead creates tasks** in `todo` with dependencies (addBlockedBy)
+2. **Builder claims** from `todo`, moves to `in-progress`
+3. **Builder completes** → auto-creates QA task in `needs-review` (task chaining)
+4. **QA claims** from `needs-review` → verifies → moves to `approved` or back to `todo`
+5. **Technical Writer** updates CHANGELOG inline (not a separate step — embedded in commit flow)
+6. **Watcher** monitors continuously, creates bug tasks in `todo` when issues detected
+7. **Lead** makes the ship decision when all tasks reach `done`
+
+### Task Chaining (Automatic)
+
+When a builder marks a task complete, the lead MUST auto-create the next pipeline task:
+
+```
+Builder completes "[build] Add auth page"
+  → Lead creates "[qa] Verify auth page" (addBlockedBy: [build-task-id])
+  → QA auto-claims the verification task
+
+QA approves "[qa] Verify auth page"
+  → Task moves to done
+  → If more build tasks remain, loop continues
+```
+
+This eliminates the gap where builders finish but QA never picks up.
+
+### WIP Limits (Enforced by Lead)
+
+| Role | Max In-Progress | Why |
+|------|----------------|-----|
+| Builder | 2 | Prevents builder sprawl — finish before starting new work |
+| QA | 1 | QA must focus — one verification at a time |
+| Writer | 1 | Docs are sequential |
+
+**Before creating a new builder task**: Check TaskList. If 2+ builder tasks are `in_progress`, do NOT create another. Wait for one to complete.
+
+**Backpressure**: If `needs-review` has 2+ unverified tasks, builders MUST stop creating new work and help clear the review queue (fix QA-blocked issues first).
+
+### Auto-Retry
+
+If a builder task fails (BLOCKED by QA):
+1. First failure: Re-assign to same builder with QA feedback
+2. Second failure: Re-assign to a different builder (or lead writes directly)
+3. Track retry count in task metadata: `{ "retries": 1 }`
 
 ### Post-Builder Verification (CRITICAL)
 
