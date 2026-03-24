@@ -10,6 +10,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+- **Bundle Optimization** — Lazy-load HomePage (52KB CHANGELOG) and template sources (200KB+ raw TSX); main chunk reduced from 544KB to 210KB (61% smaller, 65KB gzip)
+
 ## [5.19.0] — 2026-03-24 — Reliability: The Framework Tests Itself
 
 ### Added

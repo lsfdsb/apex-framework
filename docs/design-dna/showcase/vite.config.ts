@@ -17,4 +17,13 @@ export default defineConfig({
     },
     extensions: [".tsx", ".ts", ".jsx", ".js"],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ["react", "react-dom"],
+        },
+      },
+    },
+  },
 });
