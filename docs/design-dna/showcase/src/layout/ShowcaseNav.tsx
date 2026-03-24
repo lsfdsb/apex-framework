@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "../router/Router";
 import { TEMPLATE_ROUTES } from "../data/routes";
 
@@ -33,21 +33,37 @@ const navStyles = `
   border-radius:14px;padding:12px 8px;
   backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
   flex-wrap:wrap;gap:4px;justify-content:center;
-  animation:navSlideIn .25s cubic-bezier(0.22,1,0.36,1)}
+  animation:navSlideIn .25s cubic-bezier(0.22,1,0.36,1);
+  pointer-events:auto}
+.apex-nav-mobile.closing{animation:navSlideOut .2s cubic-bezier(0.22,1,0.36,1) forwards}
 @keyframes navSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes navSlideOut{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-8px)}}
 .apex-nav-mobile .apex-nav-link{font-size:12px;padding:8px 12px}
+.apex-nav-backdrop{display:none;position:fixed;inset:0;z-index:98}
 @media(max-width:640px){
   .apex-nav{padding:6px 10px}
   .apex-nav-inner{height:38px;padding:0 10px}
   .apex-nav-links{display:none}
   .apex-nav-burger{display:block}
-  .apex-nav-mobile.open{display:flex}
+  .apex-nav-mobile.open,.apex-nav-mobile.closing{display:flex}
+  .apex-nav-backdrop.open{display:block}
 }
 `;
 
 export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const closeMobile = useCallback(() => {
+    if (!mobileOpen || closing) return;
+    setClosing(true);
+    setTimeout(() => {
+      setMobileOpen(false);
+      setClosing(false);
+    }, 200);
+  }, [mobileOpen, closing]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -58,8 +74,16 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
 
   // Close mobile menu on route change
   useEffect(() => {
-    setMobileOpen(false);
+    closeMobile();
   }, [activePath]);
+
+  // Escape key closes menu
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeMobile(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [mobileOpen, closeMobile]);
 
   const glassBackground = scrolled
     ? "color-mix(in srgb, var(--bg-elevated) 92%, transparent)"
@@ -119,8 +143,8 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
           </div>
 
           <button
-            className={`apex-nav-burger${mobileOpen ? " open" : ""}`}
-            onClick={() => setMobileOpen(!mobileOpen)}
+            className={`apex-nav-burger${mobileOpen && !closing ? " open" : ""}`}
+            onClick={() => mobileOpen ? closeMobile() : setMobileOpen(true)}
             aria-label="Toggle navigation"
           >
             <span /><span /><span />
@@ -128,8 +152,15 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
         </div>
       </div>
 
+      {/* Backdrop — closes menu on outside tap */}
       <div
-        className={`apex-nav-mobile${mobileOpen ? " open" : ""}`}
+        className={`apex-nav-backdrop${mobileOpen ? " open" : ""}`}
+        onClick={closeMobile}
+      />
+
+      <div
+        ref={menuRef}
+        className={`apex-nav-mobile${mobileOpen ? " open" : ""}${closing ? " closing" : ""}`}
         style={{
           background: "color-mix(in srgb, var(--bg-elevated) 95%, transparent)",
           border: glassBorder,
