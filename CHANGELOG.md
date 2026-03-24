@@ -6,6 +6,42 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **LICENSE** — MIT license for open-source distribution of the APEX Framework (#180)
+- **SECURITY.md** — Vulnerability disclosure process and patch timeline for responsible reporting (#180)
+- **CONTRIBUTING.md** — Contribution guidelines, code standards, and community review process (#180)
+- **.editorconfig** — Cross-IDE formatting standards for consistent development experience (#180)
+- **GitHub Actions CI/CD Pipeline** — 6-step automated validation: script syntax, JSON validation, hook verification, frontmatter parsing, skill inventory, and framework health checks (#180)
+- **Design Tokens Code Export** — Importable TypeScript/JavaScript/CSS token files with 5 color palettes, spacing scale, typography system, shadow definitions, and responsive breakpoints (#180)
+- **Architecture Dependency Graph** — `/architecture` skill outputs complete dependency manifest; `/qa` Phase 0 verifies graph integrity; `/ship` blocks on failures (#180)
+- **MCP Elicitation Gates** — Documentation and .mcp.json.template for structured approval workflows (requires v2.1.76+) (#180)
+- **Framework Manifest** — `.manifest.json` generated automatically at SessionStart with full component map, cross-references, and skill inventory (#180)
+- **Framework Validation Hook** — PostToolUse hook verifies cross-references whenever `.claude/` files are modified (#180)
+- **Stop Gate Hook Enforcement** — Validation gate blocks merges if CHANGELOG.md not updated after framework changes (#180)
+- **Supabase RAG Knowledge Base** — Optional persistent vector database layer with migration, sync, query, and edge function support; modernized to `sb_secret_` and `sb_publishable_` key format (#180)
+- **Agent Memory + Effort Frontmatter** — All 4 agents now include `memory: project` and `effort` fields for persistent context and parallel execution (#180)
+- **CronCreate Guidance** — Watcher agent documents periodic health checks via native CronCreate scheduling mechanism (#180)
+
+### Changed
+- **Context-Aware Agents** — Watcher and QA agents now detect repository type (framework vs project) and adapt commands, output, and validation rules accordingly (#180)
+- **Teams Skill** — Streamlined roster to 4 core agents (Builder, Watcher, QA, Technical Writer) plus Lead; removed references to deprecated agent implementations (#180)
+- **README.md** — Updated agent roster (8→5 agents), removed Observatory section, removed obsolete claude-web guide link (#180)
+- **Output Style** — Replaced false "MANDATORY" claims with honest enforcement docs; added Session Depth guidance and Memory vs Framework taxonomy (#180)
+- **CLAUDE.md Rule #20** — New constitutional rule: "Rules in framework, stories in memory" — behavioral rules go in framework files, historical context goes in memory (#180)
+- **CLAUDE.md Rule #2** — Strengthened API verification requirement: must check for deprecated patterns; official docs take precedence over memory (#180)
+- **Supabase Skill Reference** — Updated from deprecated `anon`/`service_role` JWT keys to modern `sb_publishable_`/`sb_secret_` format (#180)
+- **QA Skill** — Added repository type detection and Phase 0 dependency graph verification before shipping (#180)
+
+### Removed
+- **3 Dead Agent Implementations** — Removed `code-reviewer.md`, `debugger.md`, `design-reviewer.md` (never spawned in practice, functionality migrated to plugins) (#180)
+- **Orphaned Agent Memory Directories** — Cleaned up unused memory folders: `framework-evolver/`, `sentinel/`, `code-reviewer/`, `design-reviewer/` (#180)
+- **claude-web/ Directory** — Removed 17 obsolete custom skill copies and 2 custom instruction files; Claude Code now handles skill discovery natively (#180)
+- **Observatory Section** — Removed from README (dashboard was never built; monitoring via GitHub Actions) (#180)
+- **3 Stale Memory Records** — Removed `batman_session`, `changelog_every_pr`, `agent_teams` (superseded by CLAUDE.md rules and active policies) (#180)
+
+### Fixed
+- **health-check.sh** — Updated agent list reference from dead agents to current roster (Builder, Watcher, QA, Technical Writer) (#180)
+
 ## [5.17.0] — 2026-03-24 — Onboarding Guide + Worktree Safety
 
 About skill rewritten as full onboarding guide, agent isolation defaulted to none (eliminating worktree file loss), Technical Writer perfected with showcase sync awareness.

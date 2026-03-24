@@ -8,6 +8,7 @@ permissionMode: dontAsk
 background: true
 maxTurns: 50
 memory: project
+effort: medium
 skills: security, performance
 ---
 
@@ -31,7 +32,23 @@ Monitor the project in a continuous loop, checking for:
 
 ## Monitoring Loop
 
-When spawned, execute this cycle:
+When spawned, first detect repo type, then execute the appropriate cycle.
+
+### Step 0 — Detect repo type
+```bash
+# Read manifest if available
+if [ -f ".claude/.manifest.json" ]; then
+  REPO_TYPE=$(jq -r '.repo_type' .claude/.manifest.json)
+  echo "Repo type: $REPO_TYPE (from manifest)"
+else
+  # Fallback detection
+  if [ -f "VERSION" ] && [ -f "install.sh" ]; then
+    REPO_TYPE="framework"
+  else
+    REPO_TYPE="project"
+  fi
+fi
+```
 
 ### Cycle 1: Initial Scan
 
@@ -42,72 +59,89 @@ git diff --stat
 git log --oneline -3
 ```
 
-**Step 2 — Build and test (if package.json exists):**
+**Step 2 — Build and test (adapts to repo type):**
+
+**If REPO_TYPE=project (has package.json):**
 ```bash
-npm run lint 2>&1 | tail -20      # or pnpm lint
-npm run build 2>&1 | tail -20     # catch compile errors
-npm test 2>&1 | tail -30          # catch test failures
-npx tsc --noEmit 2>&1 | tail -20  # TypeScript strictness
+npm run lint 2>&1 | tail -20
+npm run build 2>&1 | tail -20
+npm test 2>&1 | tail -30
+npx tsc --noEmit 2>&1 | tail -20
 ```
 
-**Step 3 — APEX convention scan on changed files:**
+**If REPO_TYPE=framework (no package.json):**
 ```bash
-# Files over 300 lines
-git diff --name-only | xargs wc -l 2>/dev/null | awk '$1 > 300 {print "⚠️ OVER 300 LINES:", $0}'
-
-# console.log in production code (not test files)
-grep -rn 'console\.log' --include='*.ts' --include='*.tsx' --exclude-dir='*test*' --exclude-dir='*__tests__*' src/ 2>/dev/null
-
-# Hardcoded secrets (API keys, tokens)
-grep -rnE '(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[A-Z0-9]{16}|password\s*=\s*["\x27][^"\x27]{8,})' --include='*.ts' --include='*.tsx' --include='*.js' src/ 2>/dev/null
-
-# Type 'any' usage
-grep -rn ': any' --include='*.ts' --include='*.tsx' src/ 2>/dev/null | head -20
-
-# Functions over 30 lines (approximate — count lines between function declarations)
-```
-
-**Step 4 — Framework health check:**
-```bash
-# Verify .claude/ integrity
-[ -f ".claude/settings.json" ] || echo "⚠️ MISSING: settings.json"
-[ -d ".claude/scripts" ] || echo "⚠️ MISSING: scripts/"
-[ -d ".claude/agents" ] || echo "⚠️ MISSING: agents/"
-[ -d ".claude/skills" ] || echo "⚠️ MISSING: skills/"
-
-# Verify hook scripts are executable
+# Validate all shell scripts
 for f in .claude/scripts/*.sh; do
-  [ -x "$f" ] || echo "⚠️ NOT EXECUTABLE: $f"
+  bash -n "$f" 2>&1 || echo "SYNTAX ERROR: $f"
 done
 
-# Validate settings.json is valid JSON
-jq empty .claude/settings.json 2>/dev/null || echo "🔴 CRITICAL: settings.json is invalid JSON"
+# Validate JSON config
+jq empty .claude/settings.json 2>/dev/null || echo "CRITICAL: settings.json is invalid JSON"
 
-# Check APEX version
-cat .claude/.apex-version 2>/dev/null || echo "⚠️ No .apex-version marker"
+# Run health check
+[ -f ".claude/scripts/health-check.sh" ] && bash .claude/scripts/health-check.sh 2>&1 | tail -20
 
-# Framework improvement detection
-# Check if project uses patterns that APEX has skills for but aren't loaded
-grep -rql 'supabase\|createClient' src/ 2>/dev/null && echo "💡 IMPROVE: Project uses Supabase — ensure /supabase skill is used"
-grep -rql 'test(\|describe(\|it(' src/ 2>/dev/null && echo "💡 IMPROVE: Project has tests — ensure /qa runs after every change"
-grep -rql 'className\|styled\|css' src/ 2>/dev/null && echo "💡 IMPROVE: Project has UI — ensure /design-system and /a11y are used"
-ls .env* 2>/dev/null | head -1 && echo "💡 IMPROVE: Project has env files — ensure /security audits secrets handling"
-
-# Design DNA compliance — check if new pages/components reference DNA patterns
-for f in $(git diff --name-only --diff-filter=A -- '*.tsx' '*.jsx' 2>/dev/null); do
-  if echo "$f" | grep -qiE 'page|screen|view|layout'; then
-    grep -q 'design-dna\|Design DNA\|apex-enter\|apex-heading\|apex-label' "$f" 2>/dev/null || \
-      echo "⚠️ DNA: New page $f has no Design DNA references — builder may not have read the pattern library"
+# Check agent frontmatter integrity
+for f in .claude/agents/*.md; do
+  [ -f "$f" ] || continue
+  HEAD=$(head -1 "$f")
+  DELIMS=$(grep -c '^---$' "$f" || true)
+  if [ "$HEAD" != "---" ] || [ "$DELIMS" -lt 2 ]; then
+    echo "BROKEN FRONTMATTER: $f"
   fi
 done
 
-# Hardcoded Tailwind palette colors (design token violation)
-grep -rnE '(blue|purple|green|red|yellow|orange|pink|indigo|violet|amber|emerald|cyan|rose|sky|teal|lime|fuchsia)-(50|100|200|300|400|500|600|700|800|900|950)' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null | head -10 | while read -r line; do
-  echo "⚠️ TOKENS: Hardcoded Tailwind color — $line"
+# Verify hook scripts are executable
+for f in .claude/scripts/*.sh; do
+  [ -x "$f" ] || echo "NOT EXECUTABLE: $f"
+done
+```
+
+**Step 3 — Convention scan (adapts to repo type):**
+
+**If REPO_TYPE=project:**
+```bash
+# Files over 300 lines
+git diff --name-only | xargs wc -l 2>/dev/null | awk '$1 > 300 {print "OVER 300 LINES:", $0}'
+
+# console.log, any types, secrets in src/
+grep -rn 'console\.log' --include='*.ts' --include='*.tsx' --exclude-dir='*test*' src/ 2>/dev/null
+grep -rn ': any' --include='*.ts' --include='*.tsx' src/ 2>/dev/null | head -20
+grep -rnE '(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[A-Z0-9]{16})' --include='*.ts' --include='*.tsx' src/ 2>/dev/null
+
+# Hardcoded Tailwind colors
+grep -rnE '(blue|purple|green|red|yellow|orange|pink|indigo)-(50|100|200|300|400|500|600|700|800|900|950)' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null | head -10
+
+# DNA compliance on new pages
+for f in $(git diff --name-only --diff-filter=A -- '*.tsx' '*.jsx' 2>/dev/null); do
+  if echo "$f" | grep -qiE 'page|screen|view|layout'; then
+    grep -q 'design-dna\|Design DNA\|apex-enter' "$f" 2>/dev/null || echo "DNA: New page $f has no Design DNA references"
+  fi
+done
+```
+
+**If REPO_TYPE=framework:**
+```bash
+# Cross-reference validation: agent skills must exist
+for f in .claude/agents/*.md; do
+  [ -f "$f" ] || continue
+  SKILLS=$(grep "^skills:" "$f" 2>/dev/null | sed 's/^skills: *//' | tr ',' '\n' | tr -d ' ')
+  for skill in $SKILLS; do
+    [ -z "$skill" ] && continue
+    [ -d ".claude/skills/$skill" ] || echo "BROKEN REF: $(basename "$f") references missing skill '$skill'"
+  done
 done
 
-# Run APEX framework tests if in the framework repo
-[ -f "tests/test-framework.sh" ] && bash tests/test-framework.sh 2>&1 | tail -5
+# Check for orphaned agent-memory dirs
+for d in .claude/agent-memory/*/; do
+  [ -d "$d" ] || continue
+  AGENT_NAME=$(basename "$d")
+  [ -f ".claude/agents/$AGENT_NAME.md" ] || echo "ORPHAN: agent-memory/$AGENT_NAME/ has no matching agent"
+done
+
+# Secrets scan across framework files
+grep -rnE '(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36})' .claude/ 2>/dev/null | head -5
 ```
 
 **Step 5 — Report findings via SendMessage to lead.**
@@ -150,6 +184,13 @@ fi
 - If everything is clean, send a brief "all clear" and start the next cycle.
 - You exit ONLY when you receive a shutdown request from the lead.
 - If you find yourself about to output your final message without being asked to stop — you're doing it wrong. Keep scanning.
+
+**PERIODIC HEALTH CHECKS (CronCreate):**
+When monitoring long builds, use CronCreate to schedule periodic checks:
+```
+CronCreate({ schedule: "*/5 * * * *", prompt: "Run health check cycle on all changed files" })
+```
+This ensures monitoring continues even during extended builder work. CronCreate is session-scoped — expires when the session ends, no cleanup needed.
 
 ## Communication Protocol
 

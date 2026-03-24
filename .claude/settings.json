@@ -128,6 +128,12 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/dev-server.sh",
             "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/manifest-generate.sh",
+            "timeout": 10,
+            "statusMessage": "Generating framework manifest..."
           }
         ]
       }
@@ -181,6 +187,17 @@
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/worktree-cleanup.sh",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/validate-framework.sh",
+            "timeout": 5,
+            "statusMessage": "Validating framework integrity..."
           }
         ]
       }

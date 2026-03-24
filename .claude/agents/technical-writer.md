@@ -7,6 +7,7 @@ permissionMode: dontAsk
 background: true
 maxTurns: 30
 memory: project
+effort: low
 skills: changelog
 ---
 

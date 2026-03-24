@@ -1,0 +1,158 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    name: Validate Framework
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── Shell script syntax ──────────────────────────────────────────────────
+      - name: Validate shell scripts
+        run: |
+          echo "==> Checking shell script syntax..."
+          failed=0
+          for f in .claude/scripts/*.sh; do
+            if bash -n "$f"; then
+              echo "  OK  $f"
+            else
+              echo "  FAIL $f"
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            echo "One or more shell scripts have syntax errors." >&2
+            exit 1
+          fi
+          echo "All shell scripts passed syntax check."
+
+      # ── JSON validation ──────────────────────────────────────────────────────
+      - name: Validate JSON files
+        run: |
+          echo "==> Validating JSON files..."
+          if ! command -v jq &>/dev/null; then
+            echo "jq not found — installing..." >&2
+            sudo apt-get install -y -q jq
+          fi
+          failed=0
+          for f in .claude/settings.json .claude/settings.local.json; do
+            if [ -f "$f" ]; then
+              if jq empty "$f" 2>/dev/null; then
+                echo "  OK  $f"
+              else
+                echo "  FAIL $f" >&2
+                failed=1
+              fi
+            else
+              echo "  SKIP $f (not present)"
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then
+            echo "One or more JSON files are malformed." >&2
+            exit 1
+          fi
+          echo "All JSON files are valid."
+
+      # ── Hook scripts: presence + shebang ────────────────────────────────────
+      - name: Check hook scripts
+        run: |
+          echo "==> Checking hook scripts..."
+          hooks_dir=".claude/git-hooks"
+          if [ ! -d "$hooks_dir" ]; then
+            echo "No git-hooks directory found — skipping hook checks."
+          else
+            failed=0
+            count=0
+            for f in "$hooks_dir"/*; do
+              [ -f "$f" ] || continue
+              count=$((count + 1))
+              first=$(head -1 "$f")
+              if [[ "$first" == "#!"* ]]; then
+                echo "  OK  $f  ($first)"
+              else
+                echo "  WARN $f — missing shebang line" >&2
+                failed=1
+              fi
+            done
+            echo "Checked $count hook script(s)."
+            if [ "$failed" -eq 1 ]; then
+              echo "One or more hook scripts are missing a shebang line." >&2
+              exit 1
+            fi
+          fi
+
+      # ── Agent frontmatter: YAML delimiters ──────────────────────────────────
+      - name: Verify agent frontmatter
+        run: |
+          echo "==> Verifying agent frontmatter in .claude/agents/..."
+          failed=0
+          count=0
+          for f in .claude/agents/*.md; do
+            [ -f "$f" ] || continue
+            count=$((count + 1))
+            first_line=$(head -1 "$f")
+            # Check that the file starts with --- and has a closing ---
+            delimiter_count=$(grep -c '^---$' "$f" || true)
+            if [[ "$first_line" == "---" ]] && [ "$delimiter_count" -ge 2 ]; then
+              echo "  OK  $f"
+            else
+              echo "  FAIL $f — missing or malformed YAML frontmatter delimiters" >&2
+              failed=1
+            fi
+          done
+          if [ "$count" -eq 0 ]; then
+            echo "No agent files found in .claude/agents/"
+          else
+            echo "Checked $count agent file(s)."
+          fi
+          if [ "$failed" -eq 1 ]; then
+            echo "One or more agent files have invalid frontmatter." >&2
+            exit 1
+          fi
+
+      # ── Inventory report ─────────────────────────────────────────────────────
+      - name: Report framework inventory
+        run: |
+          echo "==> APEX Framework Inventory"
+          echo "----------------------------"
+
+          skill_count=0
+          if [ -d ".claude/skills" ]; then
+            skill_count=$(find .claude/skills -maxdepth 1 -mindepth 1 -type d | wc -l | tr -d ' ')
+          fi
+          echo "  Skills:  $skill_count"
+
+          agent_count=0
+          if [ -d ".claude/agents" ]; then
+            agent_count=$(find .claude/agents -maxdepth 1 -name "*.md" | wc -l | tr -d ' ')
+          fi
+          echo "  Agents:  $agent_count"
+
+          script_count=0
+          if [ -d ".claude/scripts" ]; then
+            script_count=$(find .claude/scripts -maxdepth 1 -name "*.sh" | wc -l | tr -d ' ')
+          fi
+          echo "  Scripts: $script_count"
+
+          echo "----------------------------"
+
+      # ── Health check ────────────────────────────────────────────────────────
+      - name: Run health-check script
+        run: |
+          if [ -f ".claude/scripts/health-check.sh" ]; then
+            echo "==> Running health-check.sh..."
+            bash .claude/scripts/health-check.sh
+          else
+            echo "health-check.sh not found — skipping."
+          fi

@@ -7,6 +7,7 @@ permissionMode: dontAsk
 isolation: none
 maxTurns: 40
 memory: project
+effort: high
 skills: design-system, performance, security
 ---
 

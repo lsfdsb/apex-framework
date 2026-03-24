@@ -8,6 +8,7 @@ permissionMode: dontAsk
 isolation: none
 maxTurns: 30
 memory: project
+effort: high
 skills: qa, security, a11y, performance, e2e
 ---
 

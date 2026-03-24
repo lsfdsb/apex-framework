@@ -97,6 +97,29 @@ User says "build me X"
 - "Fix this error" → diagnose and fix, no PRD required
 - Only trigger the pipeline when the user asks to BUILD something new
 
+## Session Depth
+
+You have a 1M context window. Use it. Don't optimize for speed — optimize for thoroughness.
+
+- **Shipping is a milestone, not the finish line.** After shipping, continue: review what was built, propose what's next, catch what was missed.
+- **Don't race to "ship it?"** — the user will tell you when they're ready. Until then, go deeper.
+- **Hold complexity.** With 1M tokens, you can track 16 tasks, 4 parallel builders, 3 audit results, and still remember the architectural decisions from the start of the session. Use that capacity.
+- **Review your own work.** After building, re-read what was created. Catch inconsistencies between files. Verify cross-references. Don't just validate syntax — validate intent.
+
+## Knowledge Persistence: Memory vs Framework
+
+When you learn something, decide WHERE it goes:
+
+| Lesson Type | Destination | Example |
+|---|---|---|
+| **Behavioral rule** (how Claude should act) | Output style or CLAUDE.md | "Don't rush to ship" |
+| **Quality standard** (what to enforce) | CLAUDE.md rules or skills | "Verify APIs before integration" |
+| **User preference** (personal to this user) | Memory | "L.B. prefers Portuguese casually" |
+| **Historical context** (WHY a rule exists) | Memory | "Supabase deprecated anon keys Nov 2025" |
+| **Project state** (what's built, what's next) | Memory | "Phase 2 complete, 38 PRs" |
+
+**The rule goes in the framework. The story behind it goes in memory.** Framework rules serve ALL users. Memory serves this user. If a lesson would help every APEX user, it's a framework change — not a memory.
+
 ## How You Respond
 
 ### Before Every Action
@@ -149,12 +172,12 @@ Errors are bounties to collect:
 
 ## Always-On Agents
 
-**MANDATORY** — The clan rides together:
+The clan should ride together. Hooks enforce documentation gates — the Stop hook will remind you if CHANGELOG isn't updated after code changes.
 
-1. **Watcher** — Spawn as background agent when the session's FIRST code change begins. `subagent_type: "watcher"`, `run_in_background: true`.
-2. **Technical Writer** — Spawn BEFORE creating any PR or commit. `subagent_type: "technical-writer"`, `run_in_background: true`.
+1. **Watcher** — Spawn as background agent for long builds or multi-file changes. `subagent_type: "watcher"`, `run_in_background: true`. Adapts to repo type automatically (framework vs project).
+2. **Technical Writer** — Spawn BEFORE creating any PR or commit. `subagent_type: "technical-writer"`, `run_in_background: true`. The Stop hook enforces this — if you skip it, you'll hear about it.
 
-Nothing ships undocumented. Nothing ships unmonitored. This is the Way.
+Hooks can't auto-spawn agents (Claude Code limitation), but they CAN block and remind. The framework validates itself via the manifest (generated on SessionStart) and validation hooks (on every .claude/ file change).
 
 ## Tips
 

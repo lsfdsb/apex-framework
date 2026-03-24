@@ -12,10 +12,10 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 ## Quick Start (TL;DR)
 
 ```
-/teams build   → Watcher + Builder + Design Reviewer + QA + Tech Writer
-/teams fix     → Watcher + Debugger + QA + Tech Writer
-/teams review  → Code Reviewer + Design Reviewer + QA + Tech Writer
-/teams full    → All 9 agents (championship roster)
+/teams build   → Watcher + Builder + QA + Tech Writer
+/teams fix     → Watcher + Builder + QA + Tech Writer
+/teams review  → QA + Tech Writer
+/teams full    → All 5 agents (championship roster)
 ```
 
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
@@ -44,10 +44,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | **Lead** | main session | opus | — | Orchestrates, delegates, makes final decisions |
 | **Builder** | builder | sonnet | **none** | Implements features — writes directly to project |
 | **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
-| **Debugger** | debugger | sonnet | **none** | Hunts bugs to root cause, fixes permanently |
 | **QA** | qa | sonnet | none | Runs full quality gate, blocks bad code |
-| **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security |
-| **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
 
 > **Worktree policy (v5.16+):** Default isolation is `none` — agents write directly to the project. Only use `isolation: worktree` when spawning 2+ builders that modify the SAME files in parallel. Worktrees have caused data loss in 6+ sessions. `isolation: none` eliminates this risk entirely.
@@ -58,32 +55,26 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 Best for: New features, refactoring, migrations
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, none) — Implements the feature directly
-- **Design Reviewer** (sonnet, plan) — Reviews UI components as they're built
 - **QA** (sonnet, none) — Tests when Builder finishes
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
 ### `fix` — Bug Fix Team
 Best for: Bug reports, error resolution, production issues
 - **Watcher** (haiku, background) — Reproduces and monitors the issue
-- **Debugger** (sonnet, none) — Root cause analysis and fix
+- **Builder** (sonnet, none) — Root cause analysis and fix
 - **QA** (sonnet, none) — Verifies the fix is definitive
 - **Technical Writer** (haiku, background) — Documents the fix
 
 ### `review` — Review Team
 Best for: PR review, pre-merge checks, code audit
-- **Code Reviewer** (opus, plan) — Deep code review
-- **Design Reviewer** (sonnet, plan) — UI/UX review (if frontend changes)
-- **QA** (sonnet, none) — Runs tests in parallel
+- **QA** (sonnet, none) — Runs full quality gate
 - **Technical Writer** (haiku, background) — Verifies docs are current
 
 ### `full` — Championship Team
 Best for: Major features, end-to-end delivery, critical paths
 - **Watcher** (haiku, background) — Continuous monitoring from first second
-- **Researcher** (haiku, background) — Investigates APIs/docs in parallel
 - **Builder** (sonnet, none) — Implements the feature
-- **Debugger** (sonnet, none) — Fixes issues caught by Watcher
 - **QA** (sonnet, none) — Full quality gate on everything
-- **Code Reviewer** (opus, plan) — Final code review
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README, docs
 
 ## The Breathing Loop — Self-Maintaining Autonomy
@@ -94,15 +85,15 @@ The framework *breathes* when the team operates as a continuous cycle without hu
     ┌──────────────────────────────────────────────┐
     │                                              │
     │   ┌──────────┐    ┌───────────┐              │
-    │   │ WATCHER  │───▶│ DEBUGGER  │              │
+    │   │ WATCHER  │───▶│  BUILDER  │              │
     │   │ (detect) │    │  (fix)    │              │
     │   └──────────┘    └─────┬─────┘              │
     │        ▲                │                    │
     │        │                ▼                    │
-    │   ┌────┴─────┐    ┌───────────┐  ┌────────┐ │
-    │   │  BUILDER │    │    QA     │  │ WRITER │ │
-    │   │ (create) │◀───│ (verify)  │─▶│ (docs) │ │
-    │   └──────────┘    └───────────┘  └────────┘ │
+    │        │           ┌───────────┐  ┌────────┐ │
+    │        └───────────│    QA     │  │ WRITER │ │
+    │                    │ (verify)  │─▶│ (docs) │ │
+    │                    └───────────┘  └────────┘ │
     │                                              │
     │           THE BREATHING LOOP                 │
     └──────────────────────────────────────────────┘
@@ -111,13 +102,12 @@ The framework *breathes* when the team operates as a continuous cycle without hu
 ### How it works:
 
 1. **Builder** creates code → marks task complete → lists ALL created/modified files
-2. **Lead verifies file persistence** → confirms files exist in main project (not just worktree)
-3. **Design Reviewer** reviews any .tsx/.jsx components for design token compliance
-4. **Watcher** continuously monitors → detects issues → creates bug tasks
-5. **Debugger** claims bug tasks → fixes root cause → notifies QA
-6. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
-7. **Code Reviewer** does final review when all QA passes
-8. **Lead** makes the ship decision
+2. **Lead verifies file persistence** → confirms files exist in main project
+3. **Watcher** continuously monitors → detects issues → creates bug tasks
+4. **Builder** claims bug tasks → fixes root cause → notifies QA
+5. **QA** verifies the fix → if APPROVED, marks complete. If BLOCKED, creates new task → loops back
+6. **Technical Writer** keeps docs in sync throughout
+7. **Lead** makes the ship decision
 
 ### Post-Builder Verification (CRITICAL)
 
@@ -365,15 +355,13 @@ User: "Build the authentication flow with OAuth"
  3. Spawn order:
     → watcher (background) — starts monitoring immediately
     → builder (none) — implements the feature directly
-    → debugger (none) — standby, auto-claims any bugs
     → qa (none) — verifies each task as completed
-    → code-reviewer (plan) — final review when QA passes
 
  4. The breathing loop runs:
-    watcher detects type error → creates bug task → debugger fixes it
-    builder completes endpoint → qa verifies → code-reviewer reviews
-    qa finds edge case → creates task → debugger fixes → qa re-verifies
-    all green → code-reviewer approves → lead ships
+    watcher detects error → creates bug task → builder fixes it
+    builder completes endpoint → qa verifies
+    qa finds edge case → creates task → builder fixes → qa re-verifies
+    all green → qa approves → lead ships
 ```
 
 ## Rules
@@ -382,8 +370,8 @@ User: "Build the authentication flow with OAuth"
 2. **Tasks before teammates** — Create the task list, then spawn agents
 3. **One task per agent at a time** — Let agents claim work sequentially
 4. **Default isolation: none** — Agents write directly to project (worktree only for 2+ parallel conflicting builders)
-5. **Auto-handoff** — Builder→QA→Reviewer chain runs without manual triggers
-6. **Debugger auto-claims bugs** — No assignment needed for [bug] tasks
+5. **Auto-handoff** — Builder→QA chain runs without manual triggers
+6. **Builder handles bugs too** — Same agent that builds also fixes issues
 7. **QA blocks ruthlessly** — If it's not ready, it doesn't ship
 8. **No orphans** — Always shutdown teammates and delete team when done
 9. **Right-size the team** — Don't spawn `full` for a bug fix

@@ -67,17 +67,32 @@ fi
 if [ "$WROTE_CODE" = true ] && [ "$TESTS_RAN" = false ] && [ "$EXEMPT" = false ]; then
   echo ""
   echo "┌──────────────────────────────────────────────────────────────┐"
-  echo "│  ⚠️ APEX STOP GATE                                          │"
+  echo "│  APEX STOP GATE                                              │"
   echo "│                                                              │"
   echo "│  Code was written but no tests were run.                     │"
   echo "│  Our rule: no code ships without tests.                      │"
   echo "│                                                              │"
-  echo "│  ➤ Run 'npm run test' or '/qa' before continuing.           │"
-  echo "│  ➤ If tests aren't applicable, mention why explicitly.      │"
-  echo "│                                                              │"
-  echo "│  👶 Grogu says: \"Baba!\" (he wants you to test your code)    │"
+  echo "│  Run 'npm run test' or '/qa' before continuing.              │"
+  echo "│  If tests aren't applicable, mention why explicitly.         │"
   echo "└──────────────────────────────────────────────────────────────┘"
   echo ""
+fi
+
+# Check if .claude/ files were changed but CHANGELOG was not updated
+if [ "$WROTE_CODE" = true ]; then
+  CLAUDE_FILES_CHANGED=$(echo "$WRITTEN_PATHS" | grep -c '\.claude/' 2>/dev/null || echo "0")
+  CHANGELOG_TOUCHED=false
+
+  if echo "$WRITTEN_PATHS" | grep -q "CHANGELOG"; then
+    CHANGELOG_TOUCHED=true
+  fi
+  if echo "$RESPONSE" | grep -qiE '(changelog|technical.writer|tech.writer)'; then
+    CHANGELOG_TOUCHED=true
+  fi
+
+  if [ "$CLAUDE_FILES_CHANGED" -gt 0 ] && [ "$CHANGELOG_TOUCHED" = false ]; then
+    echo '{"systemMessage":"APEX: Framework files were modified but CHANGELOG was not updated. Spawn Technical Writer before committing: Agent({ subagent_type: \"technical-writer\", run_in_background: true, prompt: \"Update CHANGELOG.md for recent framework changes.\" })"}'
+  fi
 fi
 
 exit 0

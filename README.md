@@ -165,7 +165,7 @@ One install. Everything in your project's `.claude/` directory.
 |------|-----|
 | **Code standards** | Auto-enforced when you write code (TypeScript strict, no `any`, ≤30-line functions) |
 | **Security scanning** | Hook blocks hardcoded API keys, SQL injection, `eval()` on every file write |
-| **Design compliance** | Design Reviewer checks token usage, DNA patterns, branding |
+| **Design compliance** | QA checks token usage, DNA patterns, branding |
 | **Library verification** | Auto-checks every `npm install` for CVEs, maintenance, license |
 | **Dangerous command blocking** | `rm -rf`, force push, `DROP TABLE` blocked deterministically |
 | **Commit format** | Conventional commits enforced by git hook (72-char, `type(scope): desc`) |
@@ -173,16 +173,13 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (8 agents)
+### The Championship Roster (5 agents)
 
 | Agent | Model | Role |
 |-------|-------|------|
 | **Lead** (you + Claude) | Opus | Orchestrates everything |
-| **Code Reviewer** | Opus | Security gate — catches what QA misses |
-| **Builder** | Sonnet | Writes production code |
-| **Debugger** | Sonnet | Root cause analysis, definitive fixes |
+| **Builder** | Sonnet | Writes production code and fixes bugs |
 | **QA** | Sonnet | 6-phase quality gate |
-| **Design Reviewer** | Sonnet | UI/UX, design token compliance |
 | **Watcher** | Haiku | Continuous monitoring |
 | **Technical Writer** | Haiku | Documentation, CHANGELOG |
 | **Researcher** | Haiku | API docs, library evaluation |
@@ -369,30 +366,16 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 7 specialized agents — a championship roster. Use `/teams` for parallel work:
+APEX has 4 specialized agents — a championship roster. Use `/teams` for parallel work:
 
 | Agent | Model | Role |
 |-------|-------|------|
 | **watcher** | Haiku | Continuous monitoring — catches errors, security, drift |
-| **builder** | Sonnet | Implements features in isolated worktrees |
-| **debugger** | Sonnet | Root-cause bug fixes — no band-aids |
+| **builder** | Sonnet | Implements features and fixes bugs directly |
 | **qa** | Sonnet | 6-phase quality gate — blocks bad code |
-| **code-reviewer** | Sonnet | Deep code review with severity ratings |
-| **design-reviewer** | Sonnet | UI/UX review against design system |
 | **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
-| **sentinel** | Sonnet | The Dark Knight — `/batman` for full self-test |
 
-Use `/teams` and Claude auto-selects the right roster. Use `/batman` when you need proof everything works.
-
-### The Observatory
-
-Visual framework health dashboard at localhost:3000:
-
-```bash
-node dashboard/server.js
-```
-
-Shows agents, skills, hooks, workflow chain, live test runner, cross-reference matrix, and agent activity — all in a Gotham-themed dark UI. Zero dependencies.
+Use `/teams` and Claude auto-selects the right roster.
 
 ### Design DNA
 
@@ -456,7 +439,6 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 | Guide | Language |
 |-------|----------|
 | [Install Guide](docs/guides/install-guide-en-us.md) | English |
-| [Claude.ai Skills](claude-web/install-skills-guide-en-us.md) | English |
 
 ---
 
@@ -464,10 +446,9 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ### v5.11.0 (2026-03-18) — Agent Teams: The Championship Roster
 
-- **9 championship-grade agents** — Watcher, Builder, Debugger, QA, Code Reviewer, Design Reviewer, Technical Writer, Researcher, Sentinel (Batman)
+- **5 championship-grade agents** — Watcher, Builder, QA, Technical Writer + Lead
 - **`/teams` skill** — orchestrated parallelism with 4 presets: build, fix, review, full
-- **`/batman` (`/self-test`)** — summons the Sentinel for complete framework verification
-- **Breathing Loop** — autonomous Watcher→Debugger→QA→Builder cycle
+- **Breathing Loop** — autonomous Watcher→Builder→QA cycle
 - **559 tests** across 3 suites (structural, hooks, integration)
 - **100% Claude Code docs compliant** — verified against official specs
 
