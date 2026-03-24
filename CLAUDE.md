@@ -31,7 +31,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 12. **Design tokens only** — UI components MUST use project design tokens (CSS variables, semantic classes). Never hardcode Tailwind palette colors (blue-500, purple-600, etc.). Read the design system first.
 13. **Branding sweep** — After any project init or template scaffolding, grep for template branding (ACME, Doppel, "My App", boilerplate names) and replace ALL instances with the actual project name. No template branding ships to production.
 14. **Persona→page alignment** — Every page serves ONE primary persona. Never mix management views (dashboards, KPIs) with operational views (queues, kanban, forms) on the same page unless the PRD explicitly calls for it.
-15. **Verify worktree output** — After any builder agent completes in a worktree, verify files exist in the main project before proceeding. Worktree cleanup can delete files silently.
+15. **Default isolation: none** — Agents write directly to the project. Only use `isolation: worktree` for 2+ parallel builders modifying the SAME files. Worktrees have caused data loss in 6+ sessions — `isolation: none` eliminates this risk.
 16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. The Design Reviewer will BLOCK pages that don't match DNA quality.
 17. **Reuse before create** — Before creating ANY new component, search for existing ones. If a pattern appears on 2+ pages, it MUST be a shared component in `src/components/`. Three similar files doing the same thing = architectural failure.
 18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
@@ -115,9 +115,8 @@ Auto-invoke `/teams` if task touches 3+ files, 2+ concerns, or user says "build/
 
 ### Critical Rules (from real failures)
 
-1. **Verify worktree output** — After builder completes, verify files exist in main project. Don't trust "done" messages.
-2. **Builders MUST commit in worktree** — `git add --all -- ':!node_modules' ':!.next' ':!.cache' && git commit`. File loss has occurred in 6+ sessions.
-3. **Use `git checkout` to merge** — Not `git merge`. Avoids untracked file conflicts.
-4. **Single-builder tasks use `isolation: none`** — Worktrees only for parallel builders on conflicting files.
-5. **Inject DNA into builder prompts** — Include palette, fonts, patterns from `docs/design-dna/`. Generic prompts = generic cold UI.
-6. **Escalation** — Builder fails once: re-spawn with `isolation: none`. Fails twice: Lead writes code directly.
+1. **Default isolation: none (v5.16+)** — All agents write directly to the project. Worktrees caused data loss in 6+ sessions. Only use `isolation: worktree` when 2+ builders modify the SAME files in parallel.
+2. **If worktree is used: commit per file** — `git add --all -- ':!node_modules' ':!.next' ':!.cache' && git commit` after EVERY file created/modified. No commit = files deleted on cleanup.
+3. **Use `git checkout` to merge worktree branches** — Not `git merge`. Avoids untracked file conflicts.
+4. **Inject DNA into builder prompts** — Include palette, fonts, patterns from `docs/design-dna/`. Generic prompts = generic cold UI.
+5. **Escalation** — Builder fails once: re-spawn. Fails twice: Lead writes code directly.

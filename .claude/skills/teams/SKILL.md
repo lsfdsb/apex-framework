@@ -42,47 +42,49 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | Role | Agent | Model | Mode | Purpose |
 |------|-------|-------|------|---------|
 | **Lead** | main session | opus | — | Orchestrates, delegates, makes final decisions |
-| **Builder** | builder | sonnet | worktree | Implements features and writes code |
+| **Builder** | builder | sonnet | **none** | Implements features — writes directly to project |
 | **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
-| **Debugger** | debugger | sonnet | worktree | Hunts bugs to root cause, fixes permanently |
-| **QA** | qa | sonnet | worktree | Runs full quality gate, blocks bad code |
-| **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security — security gate gets best model |
+| **Debugger** | debugger | sonnet | **none** | Hunts bugs to root cause, fixes permanently |
+| **QA** | qa | sonnet | none | Runs full quality gate, blocks bad code |
+| **Code Reviewer** | code-reviewer | opus | plan | Deep code review for quality and security |
 | **Design Reviewer** | design-reviewer | sonnet | plan | UI/UX and accessibility review |
 | **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
+
+> **Worktree policy (v5.16+):** Default isolation is `none` — agents write directly to the project. Only use `isolation: worktree` when spawning 2+ builders that modify the SAME files in parallel. Worktrees have caused data loss in 6+ sessions. `isolation: none` eliminates this risk entirely.
 
 ## Team Presets
 
 ### `build` — Implementation Team
 Best for: New features, refactoring, migrations
 - **Watcher** (haiku, background) — Monitors continuously
-- **Builder** (sonnet, worktree) — Implements the feature
-- **Design Reviewer** (sonnet, plan) — Reviews UI components as they're built (auto-included when task creates .tsx files)
-- **QA** (sonnet, worktree) — Tests when Builder finishes
+- **Builder** (sonnet, none) — Implements the feature directly
+- **Design Reviewer** (sonnet, plan) — Reviews UI components as they're built
+- **QA** (sonnet, none) — Tests when Builder finishes
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
 ### `fix` — Bug Fix Team
 Best for: Bug reports, error resolution, production issues
 - **Watcher** (haiku, background) — Reproduces and monitors the issue
-- **Debugger** (sonnet, worktree) — Root cause analysis and fix
-- **QA** (sonnet, worktree) — Verifies the fix is definitive
+- **Debugger** (sonnet, none) — Root cause analysis and fix
+- **QA** (sonnet, none) — Verifies the fix is definitive
 - **Technical Writer** (haiku, background) — Documents the fix
 
 ### `review` — Review Team
 Best for: PR review, pre-merge checks, code audit
-- **Code Reviewer** (sonnet, worktree) — Deep code review
-- **Design Reviewer** (sonnet) — UI/UX review (if frontend changes)
-- **QA** (sonnet, worktree) — Runs tests in parallel
+- **Code Reviewer** (opus, plan) — Deep code review
+- **Design Reviewer** (sonnet, plan) — UI/UX review (if frontend changes)
+- **QA** (sonnet, none) — Runs tests in parallel
 - **Technical Writer** (haiku, background) — Verifies docs are current
 
 ### `full` — Championship Team
 Best for: Major features, end-to-end delivery, critical paths
 - **Watcher** (haiku, background) — Continuous monitoring from first second
 - **Researcher** (haiku, background) — Investigates APIs/docs in parallel
-- **Builder** (sonnet, worktree) — Implements the feature
-- **Debugger** (sonnet, worktree) — Fixes issues caught by Watcher
-- **QA** (sonnet, worktree) — Full quality gate on everything
-- **Code Reviewer** (sonnet, worktree) — Final code review
-- **Technical Writer** (haiku) — Updates CHANGELOG, README, docs
+- **Builder** (sonnet, none) — Implements the feature
+- **Debugger** (sonnet, none) — Fixes issues caught by Watcher
+- **QA** (sonnet, none) — Full quality gate on everything
+- **Code Reviewer** (opus, plan) — Final code review
+- **Technical Writer** (haiku, background) — Updates CHANGELOG, README, docs
 
 ## The Breathing Loop — Self-Maintaining Autonomy
 
