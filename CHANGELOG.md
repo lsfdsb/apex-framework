@@ -6,6 +6,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.20.0] — 2026-03-24
+
 
 ### Fixed
 - nav jump, merge LMS+E-Book, force scrollbar (6a553e8)
