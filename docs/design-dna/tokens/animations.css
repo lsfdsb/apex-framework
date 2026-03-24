@@ -83,6 +83,105 @@
   pointer-events: none;
 }
 
+/* ═══════════════════════════════════════════════
+   Oscar Push — Micro-interactions & SVG animations
+   v5.20 · L.B. & Claude · São Paulo, 2026
+   ═══════════════════════════════════════════════ */
+
+/* Button ripple — radial expand from click point */
+@keyframes apex-ripple {
+  from { transform: scale(0); opacity: 0.35; }
+  to   { transform: scale(4); opacity: 0; }
+}
+.ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: currentColor;
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  animation: apex-ripple 600ms var(--ease-out) forwards;
+}
+
+/* Input focus glow — expanding ring */
+@keyframes apex-focus-glow {
+  from { box-shadow: 0 0 0 0 var(--accent-glow); }
+  to   { box-shadow: 0 0 0 4px var(--accent-glow); }
+}
+
+/* Badge pop-in — spring overshoot */
+@keyframes apex-pop-in {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.pop-in { animation: apex-pop-in 400ms var(--ease-spring) both; }
+
+/* Form shake — error feedback */
+@keyframes apex-shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(5px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(2px); }
+}
+.shake { animation: apex-shake 400ms ease-in-out; }
+
+/* Checkmark draw — success feedback (SVG stroke animation) */
+@keyframes apex-checkmark {
+  from { stroke-dashoffset: 24; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* SVG path draw — generic stroke reveal */
+@keyframes apex-stroke-draw {
+  from { stroke-dashoffset: var(--path-length, 100); }
+  to   { stroke-dashoffset: 0; }
+}
+.stroke-draw {
+  stroke-dasharray: var(--path-length, 100);
+  animation: apex-stroke-draw 1.2s var(--ease-out) forwards;
+}
+
+/* Pulse ring — notification indicator */
+@keyframes apex-pulse-ring {
+  0%   { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+.pulse-ring::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 2px solid var(--accent);
+  animation: apex-pulse-ring 1.5s var(--ease-out) infinite;
+}
+
+/* Slide in from direction */
+@keyframes apex-slide-up    { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes apex-slide-down  { from { transform: translateY(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes apex-slide-left  { from { transform: translateX(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes apex-slide-right { from { transform: translateX(-16px); opacity: 0; } to { transform: none; opacity: 1; } }
+.slide-up    { animation: apex-slide-up    500ms var(--ease-out) both; }
+.slide-down  { animation: apex-slide-down  500ms var(--ease-out) both; }
+.slide-left  { animation: apex-slide-left  500ms var(--ease-out) both; }
+.slide-right { animation: apex-slide-right 500ms var(--ease-out) both; }
+
+/* Counter roll — number change animation */
+@keyframes apex-counter-roll {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* Accessibility — respect user's motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Smooth transitions on theme change */
 body, section, footer {
   transition: background-color 0.4s, color 0.4s, border-color 0.4s;

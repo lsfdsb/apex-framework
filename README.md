@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.17.0
+# ⚔️ APEX Framework v5.20.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.17.0           ║
+  ║         ⚔️  APEX Framework v5.20.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -49,7 +49,7 @@ cd ~/my-project
 ~/.apex-framework/install.sh
 ```
 
-**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It also installs git hooks that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 16 git hooks across 6 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
 
 ### For additional projects
 
@@ -188,8 +188,8 @@ One install. Everything in your project's `.claude/` directory.
 
 | Layer | Files | What |
 |-------|-------|------|
-| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + animations + foundation |
-| **Starters** | 24 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal) |
+| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 new animation keyframes (ripple, focus-glow, pop-in, shake, checkmark, stroke-draw, pulse-ring, slide-up, slide-down, counter-roll) + prefers-reduced-motion support + foundation |
+| **Starters** | 29 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) — 20 total primitives with enhanced animations |
 | **Templates** | 14 TSX | Landing, SaaS Dashboard, CRM Pipeline, E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase — full pages ready to customize |
 | **Recipes** | 13 MD | One per app type — tells the builder exactly which palette, background, and components to use |
 
@@ -447,7 +447,8 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 - **5 championship-grade agents** — Watcher, Builder, QA, Technical Writer + Lead
 - **`/teams` skill** — orchestrated parallelism with 4 presets: build, fix, review, full
 - **Breathing Loop** — autonomous Watcher→Builder→QA cycle
-- **559 tests** across 3 suites (structural, hooks, integration)
+- **16 production-grade hooks** across 6 groups — complete hook system with performance profiling and E2E coverage
+- **586 tests** across 3 suites (structural: 559, E2E: 27, performance profiler) — 100% hook coverage verified
 - **100% Claude Code docs compliant** — verified against official specs
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.

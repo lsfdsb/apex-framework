@@ -3,6 +3,7 @@
 // 10 slide types: Title, Section, Stats, Content, Quote, Split, Timeline, Team, Pricing, CTA
 
 import React, { useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 function useReveal() {
   useEffect(() => {
@@ -37,7 +38,8 @@ function SlideNum({ n }: { n: number }) {
 export default function PresentationSlide() {
   useReveal();
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+      <DnaBackground pattern="diagonals" animated="spotlight" />
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

@@ -3,6 +3,7 @@
 // DNA palette: bg=#08080a, accent=#636bf0, font-display=Instrument Serif
 
 import React, { useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 // ── Reveal hook (IntersectionObserver) ───────────────────────
 function useReveal() {
@@ -74,8 +75,9 @@ export default function LandingPage() {
   useReveal();
   const s = (vars: React.CSSProperties) => vars;
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
       <style>{dnaStyles}</style>
+      <DnaBackground pattern="constellation" animated="orbs" />
 
       {/* ═══ HERO ═══ */}
       <section style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "160px 32px", position: "relative" }}>

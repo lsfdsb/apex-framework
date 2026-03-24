@@ -4,6 +4,7 @@
 // Body font: Newsreader (serif), UI font: Inter, Display: Instrument Serif
 
 import React, { useState, useEffect, useRef } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 // --- Reveal hook ---
 
@@ -234,7 +235,8 @@ export default function EbookPage() {
   const currentChapter = CHAPTERS.find(c => c.num === activeChapter) ?? CHAPTERS[1];
 
   return (
-    <div className="min-h-screen apex-enter" style={{ color: "var(--text)" }} ref={mainRef}>
+    <div className="min-h-screen apex-enter" style={{ color: "var(--text)", position: "relative" }} ref={mainRef}>
+      <DnaBackground pattern="waves" animated="aurora" />
       {/* Reading progress bar */}
       <div className="fixed top-0 left-0 right-0 z-50" style={{ height: 2, background: "var(--border)" }} aria-hidden="true">
         <div style={{ width: `${scrollProgress}%`, height: "100%", background: "var(--accent)", transition: "width 0.1s" }} />

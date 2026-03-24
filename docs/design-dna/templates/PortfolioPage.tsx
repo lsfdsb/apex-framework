@@ -3,6 +3,7 @@
 // DNA palette: bg=var(--bg), accent=var(--accent), Instrument Serif display, centered hero
 
 import React, { useEffect, FormEvent, useState } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 // No external imports — self-contained showcase template
 
 // ── Reveal hook (IntersectionObserver → .visible) ─────────────
@@ -108,7 +109,8 @@ export default function PortfolioPage() {
   );
 
   return (
-    <div className="apex-enter" style={{ color: "var(--text)" }}>
+    <div className="apex-enter" style={{ color: "var(--text)", position: "relative" }}>
+      <DnaBackground pattern="topo" animated="aurora" />
       <style>{`
         .reveal{opacity:0;transform:translateY(32px) scale(0.98);filter:blur(4px);transition:all 0.9s cubic-bezier(0.22,1,0.36,1)}
         .reveal.visible{opacity:1;transform:none;filter:none}

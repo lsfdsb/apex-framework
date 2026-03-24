@@ -3,6 +3,7 @@
 // DNA palette: bg=#08080a, accent=#636bf0, pipeline stage colors per column
 
 import React, { useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 import DealDrawer from "./crm/DealDrawer";
 import ContactProfile from "./crm/ContactProfile";
 import LeadScoreCards from "./crm/LeadScoreCards";
@@ -94,7 +95,8 @@ function Label({ children }: { children: string }) {
 export default function CRMPipeline() {
   useReveal();
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+      <DnaBackground pattern="circuit" animated="spotlight" />
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

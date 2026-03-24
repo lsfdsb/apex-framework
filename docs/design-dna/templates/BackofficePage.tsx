@@ -3,6 +3,7 @@
 // DNA: bg=#08080a, accent=#636bf0, display=Instrument Serif, mono=JetBrains Mono
 
 import React, { useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 function useReveal() {
   useEffect(() => {
@@ -84,7 +85,8 @@ function AppFrame({ title, children }: { title: string; children: React.ReactNod
 export default function BackofficePage() {
   useReveal();
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+      <DnaBackground pattern="grid" animated="gradient" />
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}

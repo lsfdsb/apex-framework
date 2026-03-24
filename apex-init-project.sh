@@ -45,7 +45,7 @@ INSTALLED_SKILLS=0
 for skill_dir in "$APEX_DIR"/.claude/skills/*/; do
   if [ -d "$skill_dir" ]; then
     skill=$(basename "$skill_dir")
-    cp -r "$skill_dir" .claude/skills/
+    cp -r "$skill_dir" ".claude/skills/$skill"
     INSTALLED_SKILLS=$((INSTALLED_SKILLS + 1))
   fi
 done

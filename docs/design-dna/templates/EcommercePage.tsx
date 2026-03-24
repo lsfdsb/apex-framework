@@ -5,6 +5,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 // No external layout imports — showcase pages are self-contained
 
 // ── useReveal hook ─────────────────────────────────────────────
@@ -123,7 +124,8 @@ export default function EcommercePage() {
         @media (max-width: 768px) { .product-grid-4 { grid-template-columns: repeat(2,1fr) !important; } .detail-split { grid-template-columns: 1fr !important; } .cart-layout { grid-template-columns: 1fr !important; } }
       `}</style>
 
-      <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+      <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
+        <DnaBackground pattern="diamonds" animated="nebula" />
         {/* Hero */}
         <section style={{ textAlign: "center", padding: "160px 32px 80px" }}>
           <div className="hero-svg reveal" style={{ display: "flex", justifyContent: "center", marginBottom: 48 }}>

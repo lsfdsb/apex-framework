@@ -10,14 +10,14 @@ interface DatePickerProps {
   placeholder?: string;
 }
 
-const DAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-const MONTHS = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 function daysInMonth(year: number, month: number) { return new Date(year, month + 1, 0).getDate(); }
 function firstDayOfMonth(year: number, month: number) { return new Date(year, month, 1).getDay(); }
 function fmt(y: number, m: number, d: number) { return `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`; }
 
-export default function DatePicker({ value, onChange, label, placeholder = "Selecionar data..." }: DatePickerProps) {
+export default function DatePicker({ value, onChange, label, placeholder = "Select date..." }: DatePickerProps) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const today = new Date();

@@ -181,12 +181,14 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-changelog.sh",
-            "timeout": 5
+            "timeout": 10,
+            "statusMessage": "Updating changelog..."
           },
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/worktree-cleanup.sh",
-            "timeout": 5
+            "timeout": 10,
+            "statusMessage": "Cleaning worktrees..."
           }
         ]
       },
@@ -202,6 +204,25 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/stop-gate.sh",
+            "timeout": 5,
+            "statusMessage": "Checking quality gates..."
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/dev-monitor.sh",
+            "timeout": 5,
+            "statusMessage": "Checking dev server..."
+          }
+        ]
+      }
+    ],
     "PostToolUseFailure": [
       {
         "matcher": "Bash",
@@ -209,72 +230,25 @@
           {
             "type": "command",
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/handle-failure.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "Stop": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/stop-gate.sh",
-            "timeout": 30
-          },
-          {
-            "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/dev-monitor.sh",
-            "timeout": 10
-          }
-        ]
-      }
-    ],
-    "TaskCompleted": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"systemMessage\":\"📋 Task completed — check TaskList for next available work or handoff.\"}'",
-            "timeout": 2
-          }
-        ]
-      }
-    ],
-    "TeammateIdle": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"suppressOutput\":true}'",
-            "timeout": 2
+            "timeout": 5,
+            "statusMessage": "Diagnosing failure..."
           }
         ]
       }
     ],
     "SessionEnd": [
       {
+        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-learner.sh",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-cleanup.sh",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-cleanup.sh",
-            "timeout": 5
-          }
-        ]
-      }
-    ],
-    "ConfigChange": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "echo '{\"systemMessage\":\"⚔️ APEX: Settings changed. Hooks and permissions reloaded.\"}'",
-            "timeout": 2
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/session-learner.sh",
+            "timeout": 10
           }
         ]
       }

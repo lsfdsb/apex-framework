@@ -13,3 +13,9 @@ export { StatCard } from "./StatCard";
 export { ChartCard } from "./ChartCard";
 export { ThemeToggle } from "./ThemeToggle";
 export { EmptyState } from "./EmptyState";
+/* v5.20 Oscar — micro-interaction primitives */
+export { Toggle } from "./Toggle";
+export { Tooltip } from "./Tooltip";
+export { AnimatedCheckmark } from "./AnimatedCheckmark";
+export { NotificationDot } from "./NotificationDot";
+export { LoadingSpinner } from "./LoadingSpinner";

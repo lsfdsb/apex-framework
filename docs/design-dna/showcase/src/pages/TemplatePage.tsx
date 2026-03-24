@@ -28,6 +28,8 @@ export default function TemplatePage({ component: Component, label, defaultPalet
     initialized.current = false;
     setPalette(defaultPalette);
     initialized.current = true;
+    // Scroll to top on template change to prevent nav layout shift
+    window.scrollTo({ top: 0, behavior: "instant" });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultPalette]);
 

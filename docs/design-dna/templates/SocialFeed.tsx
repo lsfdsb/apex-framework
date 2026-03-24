@@ -4,6 +4,7 @@
 // Self-contained — zero imports from starters/
 
 import React, { useState, useEffect } from "react";
+import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 // --- CSS injected once ---
 
@@ -227,7 +228,8 @@ export default function SocialFeed() {
   useReveal();
 
   return (
-    <div className="sf-root">
+    <div className="sf-root" style={{ position: "relative" }}>
+      <DnaBackground pattern="dots" animated="orbs" />
       <style>{STYLES}</style>
 
       {/* Hero */}

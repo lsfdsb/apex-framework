@@ -59,11 +59,13 @@ if [ -z "$TRANSCRIPT" ] || [ ! -f "$TRANSCRIPT" ]; then
 fi
 
 # Count metrics from transcript using jq for reliable JSONL parsing
-TOOL_ERRORS=$(jq -r 'select(.is_error==true or (.content[]?.text // "" | test("^Error"))) | "x"' "$TRANSCRIPT" 2>/dev/null | wc -l | tr -d ' ')
+TOOL_ERRORS=$(jq -r 'select(.is_error==true or (.content[]?.text // "" | test("^Error"))) | "x"' "$TRANSCRIPT" 2>/dev/null | wc -l | tr -d ' \n')
 [ -z "$TOOL_ERRORS" ] && TOOL_ERRORS=0
 
 # Count ONLY real hook blocks (exit 2 from PreToolUse), not "BLOCKED" in agent docs
-HOOK_BLOCKS=$(jq -r 'select(.is_error==true) | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | grep -c '^BLOCKED:' || echo "0")
+HOOK_BLOCKS=$(jq -r 'select(.is_error==true) | .content[]?.text // empty' "$TRANSCRIPT" 2>/dev/null | grep -c '^BLOCKED:' || true)
+HOOK_BLOCKS=$(echo "$HOOK_BLOCKS" | tr -d ' \n')
+[ -z "$HOOK_BLOCKS" ] && HOOK_BLOCKS=0
 
 USER_MESSAGES=$(grep -c '"role":"user"' "$TRANSCRIPT" 2>/dev/null || echo "0")
 ASSISTANT_MESSAGES=$(grep -c '"role":"assistant"' "$TRANSCRIPT" 2>/dev/null || echo "0")
