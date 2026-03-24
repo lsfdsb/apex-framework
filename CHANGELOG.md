@@ -30,7 +30,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Supabase Query Key Fallback** — query.sh now falls back to secret key when publishable key unavailable (#182)
 - **Changelog Version Parsing** — Showcase app now parses version headings without titles (v5.18.0 was invisible) (#182)
 
-## [5.18.0] — 2026-03-24
+## [5.18.0] — 2026-03-24 — Self-Awareness, Kanban, Supabase RAG
 
 ### Added
 - **Supabase RAG Setup Script** — One-command `setup.sh` validates keys, tests connection, runs migration, syncs manifest, verifies data (#181)
