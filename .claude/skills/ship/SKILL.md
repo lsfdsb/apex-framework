@@ -58,26 +58,33 @@ git push -u origin <branch>
 gh pr create --title "<commit subject>" --body "<summary + test plan>"
 ```
 
-### Step 5: Auto-Review (Code Review Plugin + Technical Writer)
+### Step 5: Docs Consistency Check + Code Review
 
-**MANDATORY** — After PR is created, run both in parallel:
+**MANDATORY** — After PR is created, run these checks:
 
+**5a. Docs consistency (inline — no separate agent needed):**
+```bash
+# VERSION matches README header?
+VERSION=$(cat VERSION 2>/dev/null | tr -d '[:space:]')
+grep -q "$VERSION" README.md 2>/dev/null || echo "README version mismatch"
+
+# CHANGELOG has [Unreleased] entries for this PR?
+grep -q "\[Unreleased\]" CHANGELOG.md && grep -A5 "\[Unreleased\]" CHANGELOG.md | grep -q "###" || echo "CHANGELOG empty"
+
+# About skill reads dynamically from agents/ — no check needed
+
+# Manifest is current?
+CLAUDE_PROJECT_DIR=. bash .claude/scripts/manifest-generate.sh 2>/dev/null
 ```
-# 1. Official Code Review Plugin — multi-agent PR review (posts GitHub comment)
-#    Spawns 5 parallel Sonnet agents: CLAUDE.md compliance, bug scan,
-#    git history context, previous PR comments, code comment compliance.
-#    Confidence-scored (80+ threshold). Posts findings to GitHub.
-Skill("code-review:code-review", args: "[NUMBER]")
 
-# 2. Technical Writer — update docs
-Agent({
-  subagent_type: "technical-writer",
-  run_in_background: true,
-  prompt: "Update CHANGELOG and README for PR #[NUMBER]: [TITLE]. Run gap detection first."
-})
+If README version is stale, update it now. If CHANGELOG is empty, the /commit skill missed Step 3 — add entries now.
+
+**5b. Code Review Plugin:**
+```
+Skill("code-review:code-review", args: "[PR NUMBER]")
 ```
 
-**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for the plugin's verdict.
+**Show the PR URL to the user while review runs.** Don't ask to merge yet.
 
 ### Step 6: Review Gate
 

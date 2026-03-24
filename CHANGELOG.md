@@ -9,6 +9,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [5.18.0] — 2026-03-24
 
 ### Added
+- **Supabase RAG Setup Script** — One-command `setup.sh` validates keys, tests connection, runs migration, syncs manifest, verifies data (#181)
+- **Memory Autonomy Protocol** — Output style now mandates when to save memories: on correction, after merge, before session end. No lesson gets lost (#181)
+- **Dynamic About Roster** — About skill reads agents from `.claude/agents/` dynamically instead of hardcoded table (#181)
+
+### Changed
+- **Ship Skill Docs Check** — Step 5 replaced Technical Writer spawn with inline docs consistency check (VERSION↔README, CHANGELOG entries, manifest freshness) (#181)
+- **/commit Skill** — CHANGELOG update moved to Step 3 (before commit), eliminating the recurring docs-gap failure (#181)
+
+### Added (carried from v5.18.0)
 - **LICENSE** — MIT license for open-source distribution of the APEX Framework (#180)
 - **SECURITY.md** — Vulnerability disclosure process and patch timeline for responsible reporting (#180)
 - **CONTRIBUTING.md** — Contribution guidelines, code standards, and community review process (#180)

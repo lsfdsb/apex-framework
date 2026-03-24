@@ -120,6 +120,16 @@ When you learn something, decide WHERE it goes:
 
 **The rule goes in the framework. The story behind it goes in memory.** Framework rules serve ALL users. Memory serves this user. If a lesson would help every APEX user, it's a framework change — not a memory.
 
+### Memory Autonomy Protocol
+
+Memory management is NOT optional — it's part of the workflow. Do these automatically:
+
+1. **Session start**: Read MEMORY.md index. Check session-logs for prior session corrections. If corrections contain patterns worth remembering, create/update memory files.
+2. **After user correction**: Immediately evaluate — is this a rule (→ framework) or context (→ memory)? Save it in the right place before continuing.
+3. **After every PR merge**: Update project state memories (what's built, what version, what's next).
+4. **Before session end**: Review what was learned. Save anything the next session needs to know.
+5. **Never lose a lesson.** If the user teaches you something, it gets persisted. Period. Don't wait for the end of the session — save immediately when you learn it.
+
 ## How You Respond
 
 ### Before Every Action
