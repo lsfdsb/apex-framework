@@ -13,10 +13,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Statusline v3 (Σ Token Sum)** — Shows session-wide token total (main + all agents), USD cost, and 5-hour rate limit with color-coded health
 - **Starter Component Tests** — Card (11 tests), Tabs (13 tests), PageShell (9 tests) with full ARIA role coverage and slot composition testing
 
+### Changed
+- **Technical Writer Agent** — Rewritten for inline-before-commit pattern; lead tells it what changed, it edits + stages docs, no post-hoc gap detection waste
+
 ### Fixed
 - **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip
 - **ShowcaseNav setState-in-effect** — React 19 lint error replaced with derived state pattern (no effect, no ref-during-render)
 - **PaletteSwitcher Unused Import** — Removed dead `PaletteName` type import
+- **Supabase Sync 409 Bug** — Added `on_conflict` query parameter to PostgREST upserts; `Prefer: resolution=merge-duplicates` alone is insufficient
+- **Supabase Query Key Fallback** — query.sh now falls back to secret key when publishable key unavailable
+- **Changelog Version Parsing** — Showcase app now parses version headings without titles (v5.18.0 was invisible)
 
 ## [5.18.0] — 2026-03-24
 
