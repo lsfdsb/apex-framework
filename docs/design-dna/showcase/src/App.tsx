@@ -1,18 +1,22 @@
-import { Suspense } from "react";
+import { Suspense, lazy, useState, useEffect } from "react";
 import { PaletteProvider } from "./context/PaletteContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
 import { TEMPLATE_ROUTES } from "./data/routes";
-import HomePage from "./pages/HomePage";
 import TemplatePage from "./pages/TemplatePage";
 
-// Raw source imports for each template (always in sync with rendered component)
-const SOURCES: Record<string, string> = {};
-const rawModules = import.meta.glob("../../templates/*.tsx", { query: "?raw", import: "default", eager: true });
-for (const [path, source] of Object.entries(rawModules)) {
-  const name = path.split("/").pop()?.replace(".tsx", "") ?? "";
-  SOURCES[name] = source as string;
+// Lazy-load HomePage (includes 52KB CHANGELOG raw import)
+const HomePage = lazy(() => import("./pages/HomePage"));
+
+// Lazy source imports — only loaded when user clicks "Source" on a template
+const rawModules = import.meta.glob("../../templates/*.tsx", { query: "?raw", import: "default" });
+
+function loadSource(templateName: string): Promise<string> {
+  const key = `../../templates/${templateName}.tsx`;
+  const loader = rawModules[key];
+  if (!loader) return Promise.resolve("");
+  return loader() as Promise<string>;
 }
 
 const loadingStyles = `
@@ -66,6 +70,24 @@ function AnimatedBackground() {
   );
 }
 
+function TemplateWithSource({ route }: { route: (typeof TEMPLATE_ROUTES)[number] }) {
+  const [source, setSource] = useState("");
+  const templateName = getTemplateName(route.path);
+
+  useEffect(() => {
+    loadSource(templateName).then(setSource);
+  }, [templateName]);
+
+  return (
+    <TemplatePage
+      component={route.component}
+      label={route.label}
+      defaultPalette={route.palette}
+      source={source}
+    />
+  );
+}
+
 export default function App() {
   const hash = useHash();
 
@@ -79,22 +101,17 @@ export default function App() {
         <div style={{ height: 56 }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
-          {hash === "/" ? (
-            <HomePage />
-          ) : route ? (
-            <Suspense fallback={<LoadingState />}>
-              <TemplatePage
-                component={route.component}
-                label={route.label}
-                defaultPalette={route.palette}
-                source={SOURCES[getTemplateName(route.path)]}
-              />
-            </Suspense>
-          ) : (
-            <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
-              <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>
-            </div>
-          )}
+          <Suspense fallback={<LoadingState />}>
+            {hash === "/" ? (
+              <HomePage />
+            ) : route ? (
+              <TemplateWithSource route={route} />
+            ) : (
+              <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
+                <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>
+              </div>
+            )}
+          </Suspense>
         </div>
 
         <PaletteSwitcher />
