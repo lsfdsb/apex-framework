@@ -6,19 +6,34 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-## [5.20.0] — 2026-03-24
-
-
-### Fixed
-- nav jump, merge LMS+E-Book, force scrollbar (6a553e8)
-- merge E-Book into LMS, force scrollbar (be465ff)
+## [5.20.0] — 2026-03-24 — Production Readiness: Hooks, Oscar, Tests
 
 ### Added
-- production readiness — hooks, Oscar, tests (20ad5c1)
-- add DnaBackground component + wire all templates (39aac42)
-- add Animations showcase page (069ac2f)
+- **Complete Hook System** — 16 hooks across 6 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd); all 20 scripts wired or confirmed as utilities (#187)
+- **Design DNA Oscar Push** — 10 new animation keyframes (ripple, focus-glow, pop-in, shake, checkmark, stroke-draw, pulse-ring, slides, counter-roll) with `prefers-reduced-motion` support (#187)
+- **5 New Primitives** — Toggle (spring physics), Tooltip (pop-in), AnimatedCheckmark (SVG stroke), NotificationDot (pulse ring), LoadingSpinner (SVG orbit) (#187)
+- **DnaBackground Component** — React-compatible 14 static SVG patterns + 6 animated backgrounds, wired into 11 page templates with personality-matched combos (#187)
+- **Animations Showcase Page** — 10 interactive sections: button ripple, input glow/shake, toggle spring, tooltip positions, animated checkmark, notification dots, spinners, CSS classes, background picker (#187)
+- **E2E Test Suite** — `tests/e2e-framework.sh` with 27 tests covering install → verify → workflow → cleanup (#187)
+- **Performance Profiler** — `tests/perf-hooks.sh` measuring all 16 hooks with budget thresholds (#187)
+
 ### Changed
-- **Bundle Optimization** — Lazy-load HomePage (52KB CHANGELOG) and template sources (200KB+ raw TSX); main chunk reduced from 544KB to 210KB (61% smaller, 65KB gzip) (#185)
+- **Button Enhanced** — Ripple effect on click via DOM span injection (#187)
+- **Input Enhanced** — Focus glow animation + error shake with `prefers-reduced-motion` (#187)
+- **Design System Page Redesigned** — Forms and Layout sections elevated with accent gradient bars, descriptions, and glass cards; genericized from CRM-specific Portuguese to universal English (#187)
+- **LMS + E-Book Merged** — E-Book components (cover, TOC, chapter reader) folded into LMS page (#187)
+- **Bundle Optimization** — Lazy-load HomePage (52KB CHANGELOG) and template sources (200KB+ raw TSX); main chunk stays at 210KB (#185)
+
+### Fixed
+- **CI CHANGELOG Duplication** — `sed` now matches first occurrence only when stamping version sections (#187)
+- **Installer Skills Copy** — `cp -r` was flattening skill directories; now creates proper named subdirectories (#187)
+- **Nav Layout Shift** — Removed scroll-dependent transitions, forced `overflow-y: scroll`, constant glass styles (#187)
+- **session-learner.sh** — Integer comparison error on HOOK_BLOCKS variable (#187)
+- **DatePicker** — Translated from Portuguese to English (#187)
+- **PatternShowcase** — Boosted SVG pattern opacity for dark mode visibility (#187)
+
+### Security
+- **settings.local.json Cleanup** — Removed hardcoded Supabase secret key and 60 accumulated cruft entries that were causing Claude Code to hang (#187)
 
 ## [5.19.0] — 2026-03-24 — Reliability: The Framework Tests Itself
 
