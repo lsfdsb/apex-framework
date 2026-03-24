@@ -2,7 +2,7 @@
 // Visual references: lms.html + ebook.html combined
 // Zero external dependencies
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { DnaBackground } from "../starters/patterns/DnaBackground";
 
 function useReveal() {
@@ -85,9 +85,74 @@ function ProgressRing({ pct, offset, color }: { pct: number; offset: number; col
   );
 }
 
+// ── E-Book Data ──
+const ebookChapters = [
+  { num: "01", title: "The Tyranny of Complexity", page: 7 },
+  { num: "02", title: "Tokens as a Language", page: 21 },
+  { num: "03", title: "Composition Over Inheritance", page: 38 },
+  { num: "04", title: "The Living Documentation", page: 55 },
+  { num: "05", title: "Designing for the Second Decade", page: 72 },
+  { num: "06", title: "Motion with Meaning", page: 88 },
+  { num: "07", title: "Evolution, Not Revolution", page: 104 },
+];
+
+function BookCover() {
+  return (
+    <div style={{ maxWidth: 380, margin: "0 auto" }}>
+      <div style={{ aspectRatio: "3/4", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 48, display: "flex", flexDirection: "column", justifyContent: "flex-end", position: "relative", overflow: "hidden", transition: "all 0.4s cubic-bezier(0.22,1,0.36,1)" }}>
+        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(circle at 30% 20%, var(--accent-glow), transparent 50%)", pointerEvents: "none" }} />
+        <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 12, position: "relative" }}>A Practical Guide</p>
+        <h3 style={{ fontFamily: "var(--font-display)", fontSize: 36, fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 8, position: "relative" }}>Design Systems for <em style={{ fontStyle: "italic", color: "var(--accent)" }}>Humans.</em></h3>
+        <p style={{ fontSize: 14, color: "var(--text-secondary)", position: "relative" }}>Building token architectures that scale across teams, platforms, and time.</p>
+        <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 24, position: "relative" }}>by Lucas Bueno & Claude</p>
+      </div>
+    </div>
+  );
+}
+
+function EbookTOC({ chapters, active, onSelect }: { chapters: typeof ebookChapters; active: string; onSelect: (n: string) => void }) {
+  return (
+    <nav style={{ position: "sticky", top: 96, alignSelf: "start" }}>
+      <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 16 }}>Contents</p>
+      {chapters.map(ch => (
+        <button key={ch.num} onClick={() => onSelect(ch.num)} style={{ width: "100%", textAlign: "left", padding: "14px 0", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "baseline", background: "none", border: "none", borderBottomStyle: "solid", borderBottomWidth: 1, borderBottomColor: "var(--border)", cursor: "pointer", color: active === ch.num ? "var(--accent)" : "var(--text)", transition: "color .2s", fontFamily: "var(--font-body)" }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12 }}>
+            <span style={{ fontSize: 12, minWidth: 32, color: active === ch.num ? "var(--accent)" : "var(--text-muted)" }}>{ch.num}</span>
+            <span style={{ fontSize: 17, letterSpacing: "-0.01em" }}>{ch.title}</span>
+          </div>
+          <span style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 16 }}>{ch.page}</span>
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+function EbookReader({ chapter }: { chapter: typeof ebookChapters[0] }) {
+  return (
+    <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "56px 48px", position: "relative" }}>
+      <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)", marginBottom: 20 }}>Chapter {chapter.num}</p>
+      <h2 style={{ fontFamily: "var(--font-display)", fontSize: 32, fontWeight: 400, letterSpacing: "-0.02em", marginBottom: 32 }}>{chapter.title}</h2>
+      <div style={{ fontFamily: "'Newsreader', Georgia, serif", fontSize: 17, lineHeight: 1.9, color: "var(--text-secondary)" }}>
+        <p style={{ marginBottom: 20 }}>
+          <span style={{ fontFamily: "var(--font-display)", fontSize: 56, float: "left", lineHeight: 1, marginRight: 12, color: "var(--accent)" }}>T</span>
+          he first principle of any lasting system is that it must be understood by the people who maintain it. Complexity that cannot be reasoned about cannot be trusted.
+        </p>
+        <blockquote style={{ borderLeft: "3px solid var(--accent)", paddingLeft: 24, margin: "28px 0", fontStyle: "italic", fontSize: 19, color: "var(--text)", lineHeight: 1.6 }}>"The art of programming is the art of organizing complexity." — Edsger W. Dijkstra</blockquote>
+        <div style={{ background: "var(--bg-surface)", borderRadius: "var(--radius-sm, 8px)", padding: "20px 24px", margin: "24px 0" }}>
+          <p style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)", fontWeight: 500, marginBottom: 6 }}>Key Insight</p>
+          <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)", margin: 0 }}>The best design systems are invisible. Users never notice consistency — they only notice inconsistency.</p>
+        </div>
+        <p style={{ marginBottom: 20, textIndent: "1.5em" }}>Every abstraction has a maintenance cost. When we introduce a layer of indirection, we gain flexibility at the price of indirection. The question is whether the flexibility is worth the cost.</p>
+      </div>
+      <span style={{ position: "absolute", bottom: 24, right: 32, fontSize: 11, color: "var(--text-muted)" }}>{chapter.page}</span>
+    </div>
+  );
+}
+
 export default function LMSDashboard() {
   useReveal();
   const [activeTab, setActiveTab] = useState<"video" | "reading">("video");
+  const [ebookChapter, setEbookChapter] = useState("02");
 
   return (
     <div style={{ color: "var(--text)", fontFamily: "var(--font-body)", position: "relative" }}>
@@ -231,6 +296,28 @@ export default function LMSDashboard() {
             <p style={{ fontSize: 16, fontWeight: 500, margin: "12px 0", position: "relative" }}>Ana Souza</p>
             <div style={{ fontSize: 12, color: "var(--text-muted)", position: "relative" }}>Completed March 15, 2026 · 8 lessons · 3 hours</div>
             <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8, position: "relative" }}>Issued by APEX Academy</div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ E-BOOK: COVER ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 64 }}><SH label="E-Book" title="Long-form reading." sub="Book covers, table of contents, reader view, callouts, sidenotes." /></div>
+          <div className="reveal reveal-delay-1"><BookCover /></div>
+        </div>
+      </section>
+
+      {/* ═══ E-BOOK: READER ═══ */}
+      <section style={{ padding: "0 32px 100px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal" style={{ textAlign: "center", marginBottom: 48 }}>
+            <p style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", marginBottom: 12 }}>E-Book Reader</p>
+            <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 12 }}>Reading that <em style={{ fontStyle: "italic", color: "var(--accent)" }}>flows.</em></h2>
+          </div>
+          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "260px 1fr", gap: 48 }}>
+            <EbookTOC chapters={ebookChapters} active={ebookChapter} onSelect={setEbookChapter} />
+            <EbookReader chapter={ebookChapters.find(c => c.num === ebookChapter) ?? ebookChapters[1]} />
           </div>
         </div>
       </section>
