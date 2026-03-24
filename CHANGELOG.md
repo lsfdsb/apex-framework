@@ -6,6 +6,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **About Onboarding Guide** — Rewrote `/about` as full onboarding guide: pipeline diagram, skills table, agent roster, Design DNA overview, how-to section (#174)
+
+### Changed
+- **Agent Isolation Default** — All agents now use `isolation: none` by default; worktrees only for 2+ parallel builders on conflicting files — eliminates 6+ sessions of file loss (#176)
+- **Technical Writer** — Added README↔VERSION sync check, showcase CHANGELOG awareness (Step 3.5), entry format rules for showcase parsing (#177)
+- **Teams Presets** — Updated all spawn examples and presets to reflect `isolation: none` default (#177)
+
+### Fixed
+- **About Skill Output** — Added verbatim output instruction so `/about` renders the full guide instead of summarizing (#175)
+- **Stale Worktree References** — Cleaned 7 outdated worktree references from about, teams, and spawn examples (#177)
+
 ## [5.16.0] — 2026-03-24 — Auto-Versioning + Pipeline Improvements
 
 Ship pipeline overhaul: official code-review plugin as single gate, auto-versioning after merge, responsive showcase nav, and Vite dev server.
