@@ -57,27 +57,18 @@ git push -u origin <branch>
 gh pr create --title "<commit subject>" --body "<summary + test plan>"
 ```
 
-### Step 5: Auto-Review (Plugin + Agent + Technical Writer)
+### Step 5: Auto-Review (Code Review Plugin + Technical Writer)
 
-**MANDATORY** — After PR is created, run ALL three in parallel:
+**MANDATORY** — After PR is created, run both in parallel:
 
 ```
 # 1. Official Code Review Plugin — multi-agent PR review (posts GitHub comment)
-Skill("code-review:code-review", args: "#[NUMBER]")
+#    Spawns 5 parallel Sonnet agents: CLAUDE.md compliance, bug scan,
+#    git history context, previous PR comments, code comment compliance.
+#    Confidence-scored (80+ threshold). Posts findings to GitHub.
+Skill("code-review:code-review", args: "[NUMBER]")
 
-# 2. APEX Code Reviewer (Opus) — internal security gate
-Agent({
-  subagent_type: "code-reviewer",
-  run_in_background: true,
-  prompt: "Review PR #[NUMBER]: [TITLE]. Run full code review:
-    1. Read every changed file (git diff main..HEAD)
-    2. Check security (auth, injection, secrets, OWASP)
-    3. Check performance (N+1, bundle impact, unnecessary renders)
-    4. Check code quality (naming, complexity, DRY)
-    5. Report: APPROVED or BLOCKED with specific issues."
-})
-
-# 3. Technical Writer — update docs
+# 2. Technical Writer — update docs
 Agent({
   subagent_type: "technical-writer",
   run_in_background: true,
@@ -85,21 +76,15 @@ Agent({
 })
 ```
 
-The official plugin spawns 5 parallel Sonnet agents that check CLAUDE.md compliance, bugs, git history, previous PR comments, and code comments — then posts findings as a GitHub PR comment. The APEX agent runs Opus for deep security/performance analysis internally.
-
-**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for both reviewers' verdicts.
+**Show the PR URL to the user while reviews run.** Don't ask to merge yet — wait for the plugin's verdict.
 
 ### Step 6: Review Gate
 
-Wait for BOTH reviews to complete:
-- **Plugin**: Posts findings as GitHub PR comment (score-filtered, only 80+ confidence issues)
-- **APEX Agent**: Reports APPROVED or BLOCKED internally
+Wait for the plugin to complete:
+- **No issues (score < 80)** → posts "No issues found" comment → proceed to merge
+- **Issues found (score 80+)** → posts findings as GitHub comment → fix, push, re-review
 
-If either finds issues:
-- **BLOCKED** → show the issues, fix them, push again, re-review
-- **Both APPROVED** → proceed to merge
-
-This is the quality gate. Two layers of review — the plugin catches CLAUDE.md violations and historical patterns, the APEX agent catches security and performance issues.
+The plugin is the single review gate. It covers CLAUDE.md compliance (which includes all APEX rules), bugs, git history, and code comments — all confidence-scored to filter false positives.
 
 ### Step 7: Merge (only with user approval)
 

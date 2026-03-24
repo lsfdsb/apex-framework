@@ -1,6 +1,6 @@
 ---
 name: code-reviewer
-description: Expert code review specialist. Reviews code for quality, security, performance, and maintainability. Use after writing or modifying code, or when reviewing PRs. The Scottie Pippen of the team — all-around elite defender.
+description: Expert code review specialist for team builds. Reviews in-progress code for quality, security, performance, and maintainability. Used during /teams workflows — NOT at the ship gate (the official code-review plugin handles that). The Scottie Pippen of the team — all-around elite defender.
 tools: Read, Grep, Glob, Bash, TaskCreate, TaskUpdate, TaskList, SendMessage
 disallowedTools: Write, Edit, MultiEdit
 model: opus
