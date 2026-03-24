@@ -33,9 +33,9 @@ const dnaStyles = `
 .reveal.visible{opacity:1;transform:none;filter:none}
 .reveal-delay-1{transition-delay:.1s}.reveal-delay-2{transition-delay:.2s}.reveal-delay-3{transition-delay:.3s}
 
-/* Glass card */
-.anim-card{background:var(--bg-elevated);border:1px solid var(--border);border-radius:var(--radius,12px);overflow:hidden;transition:all .4s cubic-bezier(0.22,1,0.36,1)}
-.anim-card:hover{border-color:var(--border-hover,var(--border));transform:translateY(-2px)}
+/* Glass card with accent top */
+.anim-card{background:var(--bg-elevated);border-radius:var(--radius,12px);overflow:hidden}
+.anim-card-inner{padding:40px 36px}
 
 /* Ripple */
 .ripple-effect{position:absolute;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.3);pointer-events:none;animation:apex-ripple .5s ease-out forwards}
@@ -199,60 +199,52 @@ export default function AnimationsShowcase() {
             heading="Ripple on tap."
             description="Click any button to trigger the ripple effect. Each variant respects your palette's accent color."
           />
-          <div className="anim-card reveal" style={{ padding: "48px 40px" }}>
-            <div className="anim-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16, alignItems: "center", justifyItems: "center" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                <Button variant="primary" size="md">Primary</Button>
-                <PathBadge path="Button variant=primary" />
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent)" }} />
+            <div className="anim-card-inner">
+              <div className="anim-grid-2" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, alignItems: "center", justifyItems: "center" }}>
+                {(["primary", "ghost", "accent", "cta"] as const).map((v) => (
+                  <div key={v} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+                    <Button variant={v} size="md">{v.charAt(0).toUpperCase() + v.slice(1)}</Button>
+                    <code style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono, monospace)" }}>variant="{v}"</code>
+                  </div>
+                ))}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                <Button variant="ghost" size="md">Ghost</Button>
-                <PathBadge path="Button variant=ghost" />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                <Button variant="accent" size="md">Accent</Button>
-                <PathBadge path="Button variant=accent" />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                <Button variant="cta" size="md">CTA</Button>
-                <PathBadge path="Button variant=cta" />
-              </div>
+              <PathBadge path="primitives/Button" />
             </div>
           </div>
-          <PathBadge path="primitives/Button" />
         </div>
       </section>
 
       {/* ═══ INPUT FOCUS + SHAKE ═══ */}
-      <section style={{ padding: "100px 32px", background: "var(--bg-surface, var(--bg-elevated))" }}>
+      <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <SectionLabel
             label="Input"
             heading="Focus glow. Shake on error."
             description="Click into the first input to see the focus ring glow. Click the button to inject an error and trigger the shake animation."
           />
-          <div className="anim-grid-2 reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-            {/* Normal focus glow */}
-            <div className="anim-card" style={{ padding: 32 }}>
-              <p style={{ fontSize: 13, color: "var(--text-muted, var(--text-secondary))", marginBottom: 16 }}>Focus for glow</p>
-              <Input label="Email address" placeholder="you@example.com" type="email" />
-              <PathBadge path="primitives/Input" />
-            </div>
-
-            {/* Error + shake */}
-            <div className="anim-card" style={{ padding: 32 }}>
-              <p style={{ fontSize: 13, color: "var(--text-muted, var(--text-secondary))", marginBottom: 16 }}>Shake on error</p>
-              <Input
-                key={errorKey}
-                label="Password"
-                placeholder="Enter password"
-                type="password"
-                error={inputError}
-              />
-              <div style={{ marginTop: 16 }}>
-                <Button variant="ghost" size="sm" onClick={triggerShake}>Trigger error</Button>
+          <div className="anim-grid-2 reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div className="anim-card">
+              <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent)" }} />
+              <div className="anim-card-inner">
+                <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 4 }}>Focus glow</p>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20 }}>Click into the field to see the accent ring</p>
+                <Input label="Email address" placeholder="you@example.com" type="email" />
+                <PathBadge path="primitives/Input" />
               </div>
-              <PathBadge path="primitives/Input (error)" />
+            </div>
+            <div className="anim-card">
+              <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent))" }} />
+              <div className="anim-card-inner">
+                <p style={{ fontSize: 13, fontWeight: 600, color: "var(--text)", marginBottom: 4 }}>Shake on error</p>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20 }}>Trigger an error to see the shake animation</p>
+                <Input key={errorKey} label="Password" placeholder="Enter password" type="password" error={inputError} />
+                <div style={{ marginTop: 16 }}>
+                  <Button variant="ghost" size="sm" onClick={triggerShake}>Trigger error</Button>
+                </div>
+                <PathBadge path="primitives/Input (error)" />
+              </div>
             </div>
           </div>
         </div>
@@ -266,40 +258,46 @@ export default function AnimationsShowcase() {
             heading="Smooth switch."
             description="Spring-eased thumb travel. Two sizes, all states."
           />
-          <div className="anim-card reveal" style={{ padding: "40px 40px" }}>
-            <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-              <Toggle checked={toggleDark} onChange={setToggleDark} label="Dark mode" size="md" />
-              <Toggle checked={toggleNotif} onChange={setToggleNotif} label="Notifications" size="md" />
-              <Toggle checked={toggleSave} onChange={setToggleSave} label="Auto-save" size="sm" />
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent 60%)" }} />
+            <div className="anim-card-inner">
+              <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+                <Toggle checked={toggleDark} onChange={setToggleDark} label="Dark mode" size="md" />
+                <Toggle checked={toggleNotif} onChange={setToggleNotif} label="Notifications" size="md" />
+                <Toggle checked={toggleSave} onChange={setToggleSave} label="Auto-save" size="sm" />
+              </div>
+              <PathBadge path="primitives/Toggle" />
             </div>
           </div>
-          <PathBadge path="primitives/Toggle" />
         </div>
       </section>
 
       {/* ═══ TOOLTIP ═══ */}
-      <section style={{ padding: "100px 32px", background: "var(--bg-surface, var(--bg-elevated))" }}>
+      <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <SectionLabel
             label="Tooltip"
             heading="Positioned hints."
             description="Hover each target to reveal the tooltip. Four positions: top, bottom, left, right."
           />
-          <div className="anim-card reveal" style={{ padding: "56px 40px" }}>
-            <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32, justifyItems: "center", alignItems: "center" }}>
-              {(["top", "bottom", "left", "right"] as const).map((pos) => (
-                <div key={pos} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
-                  <Tooltip content={`Tooltip ${pos}`} position={pos}>
-                    <button style={{ padding: "10px 20px", background: "var(--bg-surface, var(--bg))", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", color: "var(--text)", fontSize: 14, cursor: "pointer", transition: "all .2s" }}>
-                      Hover me
-                    </button>
-                  </Tooltip>
-                  <code style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--font-mono, monospace)" }}>position="{pos}"</code>
-                </div>
-              ))}
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
+            <div className="anim-card-inner">
+              <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 32, justifyItems: "center", alignItems: "center" }}>
+                {(["top", "bottom", "left", "right"] as const).map((pos) => (
+                  <div key={pos} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 12 }}>
+                    <Tooltip content={`Tooltip ${pos}`} position={pos}>
+                      <button style={{ padding: "10px 20px", background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", color: "var(--text)", fontSize: 14, cursor: "pointer", transition: "all .2s" }}>
+                        Hover me
+                      </button>
+                    </Tooltip>
+                    <code style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--font-mono, monospace)" }}>position="{pos}"</code>
+                  </div>
+                ))}
+              </div>
+              <PathBadge path="primitives/Tooltip" />
             </div>
           </div>
-          <PathBadge path="primitives/Tooltip" />
         </div>
       </section>
 
@@ -311,50 +309,46 @@ export default function AnimationsShowcase() {
             heading="Stroke-drawn completion."
             description="Circle draws first, then the checkmark strokes in. Re-triggers on every click."
           />
-          <div className="anim-card reveal" style={{ padding: "48px 40px", display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
-            <div style={{ minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              {checkVisible && <AnimatedCheckmark key={checkKey} size={56} />}
-              {!checkVisible && (
-                <div style={{ width: 56, height: 56, borderRadius: "50%", border: "2px dashed var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 20, opacity: 0.3 }}>✓</span>
-                </div>
-              )}
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent 40%, transparent 60%, var(--accent))" }} />
+            <div className="anim-card-inner" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 32 }}>
+              <div style={{ minHeight: 64, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                {checkVisible && <AnimatedCheckmark key={checkKey} size={56} />}
+                {!checkVisible && (
+                  <div style={{ width: 56, height: 56, borderRadius: "50%", border: "2px dashed var(--border)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: 20, opacity: 0.3 }}>✓</span>
+                  </div>
+                )}
+              </div>
+              <Button variant="primary" size="md" onClick={handleComplete}>Complete task</Button>
+              <PathBadge path="primitives/AnimatedCheckmark" />
             </div>
-            <Button variant="primary" size="md" onClick={handleComplete}>Complete task</Button>
           </div>
-          <PathBadge path="primitives/AnimatedCheckmark" />
         </div>
       </section>
 
       {/* ═══ NOTIFICATION DOT ═══ */}
-      <section style={{ padding: "100px 32px", background: "var(--bg-surface, var(--bg-elevated))" }}>
+      <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <SectionLabel
             label="Notification Dot"
             heading="Pulsing presence."
             description="Four variants: plain pulse, small count, overflow count, capped at 99+."
           />
-          <div className="anim-card reveal" style={{ padding: "48px 40px" }}>
-            <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, justifyItems: "center", alignItems: "center" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                <NotificationDot pulse />
-                <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>Pulse only</span>
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent)" }} />
+            <div className="anim-card-inner">
+              <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, justifyItems: "center", alignItems: "center" }}>
+                {[{ count: undefined, label: "Pulse only" }, { count: 3, label: "count=3" }, { count: 42, label: "count=42" }, { count: 142, label: "count=99+" }].map((d) => (
+                  <div key={d.label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+                    <NotificationDot count={d.count} pulse />
+                    <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{d.label}</span>
+                  </div>
+                ))}
               </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                <NotificationDot count={3} pulse />
-                <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>count=3</span>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                <NotificationDot count={42} pulse />
-                <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>count=42</span>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                <NotificationDot count={142} pulse />
-                <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>count=99+</span>
-              </div>
+              <PathBadge path="primitives/NotificationDot" />
             </div>
           </div>
-          <PathBadge path="primitives/NotificationDot" />
         </div>
       </section>
 
@@ -366,22 +360,25 @@ export default function AnimationsShowcase() {
             heading="Four sizes."
             description="Arc spinner with track. Size prop accepts any pixel value — shown here at 16, 24, 32, and 48."
           />
-          <div className="anim-card reveal" style={{ padding: "48px 40px" }}>
-            <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, justifyItems: "center", alignItems: "center" }}>
-              {[16, 24, 32, 48].map((size) => (
-                <div key={size} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-                  <LoadingSpinner size={size} />
-                  <span style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--font-mono, monospace)" }}>{size}px</span>
-                </div>
-              ))}
+          <div className="anim-card reveal">
+            <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent))" }} />
+            <div className="anim-card-inner">
+              <div className="anim-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, justifyItems: "center", alignItems: "center" }}>
+                {[16, 24, 32, 48].map((size) => (
+                  <div key={size} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+                    <LoadingSpinner size={size} />
+                    <span style={{ fontSize: 12, color: "var(--text-secondary)", fontFamily: "var(--font-mono, monospace)" }}>{size}px</span>
+                  </div>
+                ))}
+              </div>
+              <PathBadge path="primitives/LoadingSpinner" />
             </div>
           </div>
-          <PathBadge path="primitives/LoadingSpinner" />
         </div>
       </section>
 
       {/* ═══ CSS ANIMATION CLASSES ═══ */}
-      <section style={{ padding: "100px 32px", background: "var(--bg-surface, var(--bg-elevated))" }}>
+      <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <SectionLabel
             label="CSS Classes"
