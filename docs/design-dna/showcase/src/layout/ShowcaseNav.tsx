@@ -10,8 +10,7 @@ const navStyles = `
 .apex-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:8px 20px;display:flex;justify-content:center}
 .apex-nav.scrolled{padding:8px 20px}
 .apex-nav-inner{display:inline-flex;align-items:center;height:42px;padding:0 16px;
-  border-radius:14px;backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
-  transition:all .4s cubic-bezier(0.22,1,0.36,1)}
+  border-radius:14px;backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6)}
 .apex-nav-links{display:flex;gap:1px;overflow-x:auto;-webkit-overflow-scrolling:touch;
   scrollbar-width:none;mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent);
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 12px,#000 calc(100% - 12px),transparent);
@@ -88,15 +87,9 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, closeMobile]);
 
-  const glassBackground = scrolled
-    ? "color-mix(in srgb, var(--bg-elevated) 92%, transparent)"
-    : "color-mix(in srgb, var(--bg-elevated) 80%, transparent)";
-
+  const glassBackground = "color-mix(in srgb, var(--bg-elevated) 88%, transparent)";
   const glassBorder = "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)";
-
-  const glassShadow = scrolled
-    ? "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)"
-    : "0 2px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.04)";
+  const glassShadow = "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)";
 
   return (
     <>
@@ -108,7 +101,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             background: glassBackground,
             border: glassBorder,
             boxShadow: glassShadow,
-            borderRadius: scrolled ? 12 : 14,
+            borderRadius: 14,
           }}
         >
           <a

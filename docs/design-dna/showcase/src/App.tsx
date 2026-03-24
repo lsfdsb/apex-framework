@@ -27,7 +27,7 @@ const loadingStyles = `
 
 function LoadingState() {
   return (
-    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
       <style>{loadingStyles}</style>
       <div style={{ textAlign: "center", animation: "apex-fade-in 0.6s cubic-bezier(0.22,1,0.36,1)" }}>
         {/* Orbital loader */}
@@ -133,7 +133,6 @@ function getTemplateName(path: string): string {
     "/social": "SocialFeed",
     "/email": "EmailTemplate",
     "/presentation": "PresentationSlide",
-    "/ebook": "EbookPage",
     "/design-system": "DesignSystemPage",
     "/patterns": "PatternShowcase",
   };

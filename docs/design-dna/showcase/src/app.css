@@ -14,6 +14,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  overflow-y: scroll;
   min-height: 100vh;
 }
 body, .glass-card, nav, footer { transition: background-color 0.4s, color 0.4s, border-color 0.4s; }
