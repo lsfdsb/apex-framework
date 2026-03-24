@@ -6,6 +6,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.19.0] — 2026-03-24
+
+## [Unreleased]
+
 ## [5.19.0] — 2026-03-24 — Reliability: The Framework Tests Itself
 
 ### Added
