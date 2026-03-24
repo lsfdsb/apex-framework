@@ -103,14 +103,11 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 ### Agents (your team)
 
-| Agent | Model | Role |
-|-------|-------|------|
-| **Builder** | Sonnet | Implements features and fixes bugs directly |
-| **QA** | Sonnet | Runs full quality gate, blocks bad code |
-| **Technical Writer** | Haiku | CHANGELOG, README, docs in sync |
-| **Watcher** | Haiku | Background monitoring for errors |
+Agents are loaded dynamically from `.claude/agents/`. Current roster:
 
-The **Watcher** and **Technical Writer** run automatically every session. Teams spawn when needed for complex builds.
+!`for f in .claude/agents/*.md; do name=$(grep "^name:" "$f" | sed 's/^name: *//'); model=$(grep "^model:" "$f" | sed 's/^model: *//'); desc=$(grep "^description:" "$f" | head -c 80 | sed 's/^description: *//'); echo "| **$name** | $model | $desc |"; done 2>/dev/null`
+
+The **Watcher** and **Technical Writer** run in background. Teams spawn for complex builds via `/teams`.
 
 ### Design DNA
 
