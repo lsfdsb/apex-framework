@@ -177,7 +177,22 @@ curl -s -X POST "$SUPABASE_URL/rest/v1/rpc/match_components" \
 
 ## Edge Function — Pipeline Gate Server
 
-`edge-function.ts` is a Supabase Edge Function that handles structured approval requests for the three APEX pipeline gates (PRD, Architecture, Ship). It logs each gate event to `session_learnings` for audit purposes.
+`edge-function.ts` is a production-quality Supabase Edge Function that handles structured approval requests for the three APEX pipeline gates (PRD, Architecture, Ship). It serves as a **reference implementation** demonstrating modern Supabase Edge Function patterns.
+
+### What the function demonstrates
+
+| Pattern | Implementation |
+|---|---|
+| Modern entrypoint | `Deno.serve()` — current Supabase standard |
+| CORS preflight | `OPTIONS` handler before all other logic |
+| Authentication | Bearer token via `APEX_SECRET_KEY` with constant-time comparison |
+| Input validation | Schema validation with structured 400 error responses |
+| Error handling | Try/catch everywhere — no unhandled rejections |
+| Rate limiting | In-memory sliding window (replace with Upstash Redis for multi-region) |
+| Structured logging | JSON log entries with `timestamp`, `request_id`, `gate_type`, `decision` |
+| Health check | `GET /` returns `{ status, version, gates }` |
+| Supabase client | Service role client from injected env vars |
+| TypeScript | Full types for all request/response shapes, exhaustive switch guard |
 
 ### Deploy
 
@@ -186,10 +201,32 @@ curl -s -X POST "$SUPABASE_URL/rest/v1/rpc/match_components" \
 supabase functions deploy apex-gates --no-verify-jwt
 ```
 
-### Invoke
+### Configure secrets
+
+```bash
+# Generate a shared secret
+APEX_SECRET=$(openssl rand -base64 32)
+
+# Store it as a Supabase Function Secret (Dashboard → Edge Functions → Manage secrets)
+# Or via CLI:
+supabase secrets set APEX_SECRET_KEY="$APEX_SECRET"
+
+# Save it locally for use in curl / scripts:
+echo "APEX_SECRET_KEY=$APEX_SECRET" >> ~/.zshrc
+```
+
+### Health check
+
+```bash
+curl "https://<project>.supabase.co/functions/v1/apex-gates"
+# → { "status": "ok", "version": "2.0.0", "gates": ["prd", "architecture", "ship"] }
+```
+
+### Invoke a gate
 
 ```bash
 curl -X POST "https://<project>.supabase.co/functions/v1/apex-gates" \
+  -H "Authorization: Bearer $APEX_SECRET_KEY" \
   -H "Content-Type: application/json" \
   -d '{"gate": "prd", "summary": "Build a contact management CRM", "session_id": "abc123"}'
 ```
@@ -200,9 +237,13 @@ Response:
 {
   "gate": "prd",
   "decision": "approve",
-  "notes": "Auto-approved by apex-gates edge function."
+  "notes": "Auto-approved. Replace this handler with MCP Elicitation for human review."
 }
 ```
+
+### Rate limiting
+
+The in-memory rate limiter (20 requests/minute per IP) works for development. In production with multiple Edge Function instances, use [Upstash Redis](https://supabase.com/docs/guides/functions/examples/rate-limiting) — the in-memory Map is not shared across isolates.
 
 The default implementation auto-approves all gates and logs the events. For human-in-the-loop approval with a native Claude Code form, see `docs/mcp-elicitation-gates.md` for the full MCP Elicitation pattern.
 

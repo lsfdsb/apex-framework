@@ -18,7 +18,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 ## Core Rules
 
 1. **PRD before code** — `/prd` before any new app or major feature. Block if missing.
-2. **Verify APIs before integration** — Use WebSearch to read actual API docs before writing integration code. Never design against an API you haven't verified. Check for deprecated patterns (e.g., Supabase deprecated `anon`/`service_role` JWT keys in Nov 2025 — use `sb_publishable_`/`sb_secret_` instead). Official docs > blog posts > memory.
+2. **Verify APIs before integration** — `verify-api` auto-checks every external API before integration. Verifies current auth patterns, SDK versions, and deprecated keys against live official docs. Never design against an API you haven't verified. APIs change — old blog posts and memory are not authoritative.
 3. **Verify before installing** — `verify-lib` auto-checks every dependency.
 4. **QA before shipping** — `/qa` before marking any task complete. QA is a GATE, not optional. No task is "done" without QA verification.
 5. **Security on sensitive code** — `/security` on auth, payments, PII.

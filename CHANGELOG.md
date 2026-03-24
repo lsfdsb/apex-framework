@@ -471,6 +471,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - NEVER Ship list expanded with "Submit" buttons, stack traces, blank pages (cx-review)
 - Cost column removed from statusline (redundant for MAX plan users)
 - audit cleanup — remove redundant skills, fix refs (28422e5)
+- simplify — English only, one output style (9b84b41)
 
 ### Fixed
 - outputStyle uses frontmatter `name` field, not file path (#32)
