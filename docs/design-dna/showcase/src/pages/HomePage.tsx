@@ -15,8 +15,33 @@ interface ChangelogEntry {
 
 function parseChangelog(): ChangelogEntry[] {
   const entries: ChangelogEntry[] = [];
+
+  // Extract bullet items from a section body
+  const extractItems = (body: string): string[] => {
+    const items: string[] = [];
+    for (const line of body.split("\n")) {
+      const bulletMatch = line.match(/^- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
+      if (bulletMatch && items.length < 15) {
+        items.push(`${bulletMatch[1]} — ${bulletMatch[2].trim()}`);
+      }
+    }
+    return items;
+  };
+
+  // Find [Unreleased] section
+  const unreleasedMatch = changelogRaw.match(/^## \[Unreleased\]\s*$/m);
+  if (unreleasedMatch && unreleasedMatch.index !== undefined) {
+    const start = unreleasedMatch.index + unreleasedMatch[0].length;
+    const nextSection = changelogRaw.indexOf("\n## [", start);
+    const body = changelogRaw.slice(start, nextSection > -1 ? nextSection : undefined);
+    const items = extractItems(body);
+    if (items.length > 0) {
+      const today = new Date().toISOString().slice(0, 10);
+      entries.push({ version: "next", date: today, title: "Unreleased", items });
+    }
+  }
+
   // Match versioned sections: ## [5.14.0] — 2026-03-20 — Title
-  // Match: ## [5.14.0] — 2026-03-20 — Title  (supports —, –, and - as separators)
   const sectionRegex = /^## \[(\d+\.\d+\.\d+)\]\s*[—–-]\s*(\d{4}-\d{2}-\d{2})\s*[—–-]\s*(.+)$/gm;
   let match;
   const positions: { version: string; date: string; title: string; start: number }[] = [];
@@ -26,25 +51,11 @@ function parseChangelog(): ChangelogEntry[] {
   for (let i = 0; i < positions.length; i++) {
     const end = i + 1 < positions.length ? positions[i + 1].start - 50 : changelogRaw.length;
     const body = changelogRaw.slice(positions[i].start, end);
-    // Extract bullet items (lines starting with - **...**)
-    const items: string[] = [];
-    for (const line of body.split("\n")) {
-      const bulletMatch = line.match(/^- \*\*(.+?)\*\*\s*[—–-]\s*(.+)/);
-      if (bulletMatch && items.length < 15) {
-        items.push(`${bulletMatch[1]} — ${bulletMatch[2].trim()}`);
-      }
-    }
+    const items = extractItems(body);
     if (items.length > 0) {
       entries.push({ ...positions[i], items });
     }
   }
-  // Sort newest first (by version number descending)
-  entries.sort((a, b) => {
-    const va = a.version.replace("v", "").split(".").map(Number);
-    const vb = b.version.replace("v", "").split(".").map(Number);
-    for (let i = 0; i < 3; i++) { if (vb[i] !== va[i]) return vb[i] - va[i]; }
-    return 0;
-  });
   return entries;
 }
 

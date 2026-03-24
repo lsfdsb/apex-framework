@@ -78,6 +78,13 @@ Then compare: **every merged PR and every significant commit must have a CHANGEL
 - **Separate Added/Changed/Fixed** — don't put fixes under Added
 - **No duplicate entries** — check if the change is already documented before adding
 
+### Versioning rules (CRITICAL):
+- **New changes go under `## [Unreleased]`** — NEVER add entries to a released version section
+- **A released version (e.g. `## [5.15.0] — 2026-03-23`) is FROZEN** — do not modify it
+- **`[Unreleased]` must always exist** at the top of the changelog, above all versioned sections
+- **Version bumps are a separate step** — only the user or the `/changelog` skill decides when to cut a new version. You never rename `[Unreleased]` to a version number.
+- **If `[Unreleased]` section is missing**, create it above the first versioned section
+
 ## Step 3: Update README.md
 
 Check these sections and update if ANY of them are affected by recent changes:
