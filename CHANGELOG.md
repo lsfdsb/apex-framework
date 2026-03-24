@@ -6,6 +6,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+
+### Fixed
+- nav jump, merge LMS+E-Book, force scrollbar (6a553e8)
+- merge E-Book into LMS, force scrollbar (be465ff)
+
+### Added
+- production readiness — hooks, Oscar, tests (20ad5c1)
+- add DnaBackground component + wire all templates (39aac42)
+- add Animations showcase page (069ac2f)
 ### Changed
 - **Bundle Optimization** — Lazy-load HomePage (52KB CHANGELOG) and template sources (200KB+ raw TSX); main chunk reduced from 544KB to 210KB (61% smaller, 65KB gzip) (#185)
 
