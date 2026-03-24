@@ -107,10 +107,10 @@ function Mono({ children }: { children: React.ReactNode }) {
   return <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{children}</span>;
 }
 
-function SearchInputDemo() { const [v, setV] = useState(""); return <SearchInput value={v} onChange={setV} placeholder="Buscar contatos..." /> }
-function ToggleDemo() { const [on, setOn] = useState(true); return <Toggle checked={on} onChange={setOn} label="Notificações por e-mail" description="Receber alertas de novos deals" /> }
-function TextareaDemo() { const [v, setV] = useState(""); return <Textarea value={v} onChange={setV} label="Anotações" placeholder="Adicionar nota sobre o contato..." maxLength={280} /> }
-function ConfirmDialogDemo() { const [open, setOpen] = useState(false); return (<><button onClick={() => setOpen(true)} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--destructive)", background: "rgba(248,113,113,0.08)", color: "var(--destructive)", cursor: "pointer", fontSize: 13 }}>Excluir (dialog)</button><ConfirmDialog open={open} onConfirm={() => setOpen(false)} onCancel={() => setOpen(false)} title="Excluir contato?" description="Esta ação não pode ser desfeita. Todos os dados serão perdidos." confirmText="Excluir" variant="destructive" /></>) }
+function SearchInputDemo() { const [v, setV] = useState(""); return <SearchInput value={v} onChange={setV} placeholder="Search anything..." /> }
+function ToggleDemo() { const [on, setOn] = useState(true); return <Toggle checked={on} onChange={setOn} label="Email notifications" description="Receive alerts for new updates" /> }
+function TextareaDemo() { const [v, setV] = useState(""); return <Textarea value={v} onChange={setV} label="Notes" placeholder="Add a note..." maxLength={280} /> }
+function ConfirmDialogDemo() { const [open, setOpen] = useState(false); return (<><button onClick={() => setOpen(true)} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--destructive)", background: "rgba(248,113,113,0.08)", color: "var(--destructive)", cursor: "pointer", fontSize: 13 }}>Delete (dialog)</button><ConfirmDialog open={open} onConfirm={() => setOpen(false)} onCancel={() => setOpen(false)} title="Delete item?" description="This action cannot be undone. All data will be permanently removed." confirmText="Delete" variant="destructive" /></>) }
 
 export default function DesignSystemPage() {
   useReveal();
@@ -288,15 +288,15 @@ export default function DesignSystemPage() {
       {/* ═══ FORM PRIMITIVES ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Formulários" title="Primitivas de input." sub="Select, toggle, textarea, search, date — os blocos de construção de todo formulário." /></div>
+          <div className="reveal"><SH label="Forms" title="Input primitives." sub="Select, toggle, textarea, search, date — the building blocks of every form." /></div>
           <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 16 }}>
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>Select / Combobox</PLabel>
-              <div style={{ marginTop: 12 }}><Select label="Status" options={[{ value: "lead", label: "Novo Lead" }, { value: "qualified", label: "Qualificado" }, { value: "proposal", label: "Proposta" }, { value: "won", label: "Ganho" }]} placeholder="Selecionar status..." /></div>
+              <div style={{ marginTop: 12 }}><Select label="Status" options={[{ value: "active", label: "Active" }, { value: "pending", label: "Pending" }, { value: "completed", label: "Completed" }, { value: "archived", label: "Archived" }]} placeholder="Select status..." /></div>
             </div>
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>DatePicker</PLabel>
-              <div style={{ marginTop: 12 }}><DatePicker label="Data de follow-up" /></div>
+              <div style={{ marginTop: 12 }}><DatePicker label="Due date" /></div>
             </div>
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
               <PLabel>SearchInput</PLabel>
@@ -318,7 +318,7 @@ export default function DesignSystemPage() {
           <div className="reveal reveal-delay-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginTop: 20 }}>
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
               <PLabel>Tooltip</PLabel>
-              <div style={{ marginTop: 16 }}><Tooltip content="Informação adicional sobre este campo"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Passe o mouse aqui</span></Tooltip></div>
+              <div style={{ marginTop: 16 }}><Tooltip content="Additional info about this field"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Hover me</span></Tooltip></div>
             </div>
             <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
               <PLabel>ConfirmDialog</PLabel>
@@ -341,14 +341,14 @@ export default function DesignSystemPage() {
             <div style={{ position: "relative", height: 80, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)" }}>
               <div style={{ position: "absolute", top: 12, left: 12, right: 12, height: 44, borderRadius: 14, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>CRM</span>
+                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>App</span>
                   <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 3l2 2 2-2" stroke="var(--text-muted)" strokeWidth="1.5" /></svg>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>Dashboard</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <div style={{ width: 140, height: 28, borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6 }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Buscar...</span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Search...</span>
                   </div>
                   <div style={{ width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" /></svg>
@@ -361,10 +361,9 @@ export default function DesignSystemPage() {
             <PLabel>Floating Sidebar</PLabel>
             <div style={{ position: "relative", height: 300, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)", display: "flex" }}>
               <div style={{ position: "absolute", left: 12, top: 12, bottom: 12, width: 56, borderRadius: 16, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px 0", gap: 2 }}>
-                {/* P. logo */}
+                {/* App logo */}
                 <div style={{ marginBottom: 16, textAlign: "center" }}>
-                  <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--text)" }}>P</span>
-                  <span style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)" }}>.</span>
+                  <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--accent)" }}>⚔</span>
                 </div>
                 {[true, false, false, false].map((active, i) => (
                   <div key={i} style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: active ? "var(--accent-glow)" : "transparent", color: active ? "var(--accent)" : "var(--text-muted)" }}>
@@ -377,7 +376,7 @@ export default function DesignSystemPage() {
                   </div>
                 ))}
               </div>
-              <div style={{ marginLeft: 80, padding: 24, display: "flex", alignItems: "center", justifyContent: "center", flex: 1, color: "var(--text-muted)", fontSize: 13 }}>Conteúdo da aplicação</div>
+              <div style={{ marginLeft: 80, padding: 24, display: "flex", alignItems: "center", justifyContent: "center", flex: 1, color: "var(--text-muted)", fontSize: 13 }}>App content</div>
             </div>
           </div>
         </div>
