@@ -289,45 +289,81 @@ export default function DesignSystemPage() {
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><SH label="Forms" title="Input primitives." sub="Select, toggle, textarea, search, date — the building blocks of every form." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginTop: 16 }}>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
-              <PLabel>Select / Combobox</PLabel>
-              <div style={{ marginTop: 12 }}><Select label="Status" options={[{ value: "active", label: "Active" }, { value: "pending", label: "Pending" }, { value: "completed", label: "Completed" }, { value: "archived", label: "Archived" }]} placeholder="Select status..." /></div>
+
+          {/* Primary row: Select + DatePicker with accent top border */}
+          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
+            {[
+              { label: "Select / Combobox", desc: "Searchable dropdown with keyboard navigation", el: <Select label="Status" options={[{ value: "active", label: "Active" }, { value: "pending", label: "Pending" }, { value: "completed", label: "Completed" }, { value: "archived", label: "Archived" }]} placeholder="Select status..." /> },
+              { label: "DatePicker", desc: "Calendar popup with glass morphism overlay", el: <DatePicker label="Due date" /> },
+            ].map((item) => (
+              <div key={item.label} className="ds-form-card" style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden", transition: "all .4s cubic-bezier(0.22,1,0.36,1)" }}>
+                <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent)" }} />
+                <div style={{ padding: "28px 28px 32px" }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>{item.label}</span>
+                    <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
+                  </div>
+                  <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>{item.desc}</p>
+                  {item.el}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Secondary row: Search + Toggle */}
+          <div className="reveal reveal-delay-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
+            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+              <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
+              <div style={{ padding: "28px 28px 32px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>SearchInput</span>
+                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Debounced search with icon and clear button</p>
+                <SearchInputDemo />
+              </div>
             </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
-              <PLabel>DatePicker</PLabel>
-              <div style={{ marginTop: 12 }}><DatePicker label="Due date" /></div>
-            </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
-              <PLabel>SearchInput</PLabel>
-              <div style={{ marginTop: 12 }}><SearchInputDemo /></div>
-            </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
-              <PLabel>Toggle Switch</PLabel>
-              <div style={{ marginTop: 12 }}><ToggleDemo /></div>
+            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+              <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
+              <div style={{ padding: "28px 28px 32px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Toggle Switch</span>
+                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Boolean state with label and description</p>
+                <ToggleDemo />
+              </div>
             </div>
           </div>
 
-          <div className="reveal reveal-delay-2" style={{ marginTop: 20 }}>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px" }}>
-              <PLabel>Textarea</PLabel>
-              <div style={{ marginTop: 12 }}><TextareaDemo /></div>
+          {/* Textarea — full width */}
+          <div className="reveal reveal-delay-3" style={{ marginTop: 16 }}>
+            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+              <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent 40%, transparent 60%, var(--accent))" }} />
+              <div style={{ padding: "28px 28px 32px" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Textarea</span>
+                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
+                </div>
+                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Multi-line input with character counter</p>
+                <TextareaDemo />
+              </div>
             </div>
           </div>
 
-          <div className="reveal reveal-delay-3" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 20, marginTop: 20 }}>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
-              <PLabel>Tooltip</PLabel>
-              <div style={{ marginTop: 16 }}><Tooltip content="Additional info about this field"><span style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default" }}>Hover me</span></Tooltip></div>
-            </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
-              <PLabel>ConfirmDialog</PLabel>
-              <div style={{ marginTop: 16 }}><ConfirmDialogDemo /></div>
-            </div>
-            <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: "28px 28px 32px", textAlign: "center" }}>
-              <PLabel>Toast</PLabel>
-              <div style={{ marginTop: 16 }}><span style={{ fontSize: 12, color: "var(--text-muted)" }}>useToast() hook</span></div>
-            </div>
+          {/* Utility row: Tooltip, Dialog, Toast */}
+          <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 16 }}>
+            {[
+              { label: "Tooltip", desc: "Hover for contextual info", el: <Tooltip content="Additional info about this field"><span style={{ padding: "10px 20px", borderRadius: "var(--radius-sm, 8px)", background: "var(--bg-surface)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default", transition: "all .3s" }}>Hover me</span></Tooltip> },
+              { label: "ConfirmDialog", desc: "Destructive action gate", el: <ConfirmDialogDemo /> },
+              { label: "Toast", desc: "Transient notification", el: <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent)", padding: "6px 14px", borderRadius: 8, background: "var(--accent-glow)" }}>useToast()</span> },
+            ].map((item) => (
+              <div key={item.label} style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", padding: "32px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{item.label}</span>
+                <span style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 12 }}>{item.desc}</span>
+                {item.el}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -336,47 +372,77 @@ export default function DesignSystemPage() {
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><SH label="Layout" title="Headers & Sidebars." sub="Floating glass morphism. The app breathes with the background." /></div>
-          <div className="reveal reveal-delay-1" style={{ marginBottom: 48 }}>
-            <PLabel>Floating Header</PLabel>
-            <div style={{ position: "relative", height: 80, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)" }}>
-              <div style={{ position: "absolute", top: 12, left: 12, right: 12, height: 44, borderRadius: 14, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 16px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>App</span>
-                  <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M2 3l2 2 2-2" stroke="var(--text-muted)" strokeWidth="1.5" /></svg>
+
+          {/* Header demo with gradient background */}
+          <div className="reveal reveal-delay-1" style={{ marginBottom: 32 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Floating Header</span>
+              <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>glassmorphism</span>
+            </div>
+            <div style={{ position: "relative", height: 120, borderRadius: "var(--radius, 12px)", overflow: "hidden", background: "linear-gradient(135deg, var(--bg-surface) 0%, color-mix(in srgb, var(--accent) 8%, var(--bg)) 50%, var(--bg-surface) 100%)" }}>
+              {/* Subtle grid pattern */}
+              <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "repeating-linear-gradient(0deg, var(--text) 0 1px, transparent 1px 48px), repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px 48px)" }} />
+              <div style={{ position: "absolute", top: 16, left: 16, right: 16, height: 48, borderRadius: 14, background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(24px) saturate(1.4)", WebkitBackdropFilter: "blur(24px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", boxShadow: "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--accent)" }}>⚔</span>
+                  <div style={{ width: 1, height: 16, background: "var(--border)" }} />
                   <span style={{ fontSize: 13, fontWeight: 600 }}>Dashboard</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 140, height: 28, borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)", display: "flex", alignItems: "center", padding: "0 10px", gap: 6 }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                    <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Search...</span>
+                  <div style={{ width: 160, height: 32, borderRadius: 10, border: "1px solid var(--border)", display: "flex", alignItems: "center", padding: "0 12px", gap: 8, background: "color-mix(in srgb, var(--bg) 50%, transparent)" }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
+                    <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Search...</span>
                   </div>
-                  <div style={{ width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" /></svg>
+                  <div style={{ width: 32, height: 32, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" /></svg>
                   </div>
+                  <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}>A</div>
                 </div>
               </div>
+              <p style={{ position: "absolute", bottom: 14, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>backdrop-filter: blur(24px) saturate(1.4)</p>
             </div>
           </div>
+
+          {/* Sidebar demo with gradient background */}
           <div className="reveal reveal-delay-2">
-            <PLabel>Floating Sidebar</PLabel>
-            <div style={{ position: "relative", height: 300, borderRadius: "var(--radius, 12px)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--bg-surface)", display: "flex" }}>
-              <div style={{ position: "absolute", left: 12, top: 12, bottom: 12, width: 56, borderRadius: 16, background: "color-mix(in srgb, var(--bg-elevated) 80%, transparent)", backdropFilter: "blur(20px)", border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)", display: "flex", flexDirection: "column", alignItems: "center", padding: "16px 0", gap: 2 }}>
-                {/* App logo */}
-                <div style={{ marginBottom: 16, textAlign: "center" }}>
-                  <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: "-0.03em", color: "var(--accent)" }}>⚔</span>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Floating Sidebar</span>
+              <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>glassmorphism</span>
+            </div>
+            <div style={{ position: "relative", height: 360, borderRadius: "var(--radius, 12px)", overflow: "hidden", background: "linear-gradient(180deg, var(--bg-surface) 0%, color-mix(in srgb, var(--accent) 6%, var(--bg)) 60%, var(--bg-surface) 100%)", display: "flex" }}>
+              {/* Subtle dot pattern */}
+              <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "radial-gradient(var(--text) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
+              <div style={{ position: "absolute", left: 16, top: 16, bottom: 16, width: 64, borderRadius: 18, background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(24px) saturate(1.4)", WebkitBackdropFilter: "blur(24px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", boxShadow: "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0", gap: 4 }}>
+                <div style={{ marginBottom: 20, width: 32, height: 32, borderRadius: 10, background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 16, fontWeight: 700, color: "var(--accent)" }}>⚔</span>
                 </div>
-                {[true, false, false, false].map((active, i) => (
-                  <div key={i} style={{ width: 36, height: 36, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: active ? "var(--accent-glow)" : "transparent", color: active ? "var(--accent)" : "var(--text-muted)" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      {i === 0 && <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>}
-                      {i === 1 && <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /></>}
-                      {i === 2 && <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></>}
-                      {i === 3 && <><circle cx="12" cy="12" r="3" /></>}
-                    </svg>
+                {[
+                  { icon: <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>, active: true, label: "Dashboard" },
+                  { icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /></>, active: false, label: "Users" },
+                  { icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></>, active: false, label: "Billing" },
+                  { icon: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></>, active: false, label: "Settings" },
+                ].map((nav, i) => (
+                  <div key={i} title={nav.label} style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: nav.active ? "var(--accent-glow)" : "transparent", color: nav.active ? "var(--accent)" : "var(--text-muted)", cursor: "default", transition: "all .3s" }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{nav.icon}</svg>
                   </div>
                 ))}
               </div>
-              <div style={{ marginLeft: 80, padding: 24, display: "flex", alignItems: "center", justifyContent: "center", flex: 1, color: "var(--text-muted)", fontSize: 13 }}>App content</div>
+              {/* Content area with mock UI */}
+              <div style={{ marginLeft: 96, padding: 32, flex: 1, display: "flex", flexDirection: "column", gap: 16, position: "relative", zIndex: 1 }}>
+                <div style={{ fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em" }}>Dashboard</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                  {["Revenue", "Users", "Growth"].map((label) => (
+                    <div key={label} style={{ background: "color-mix(in srgb, var(--bg-elevated) 60%, transparent)", border: "1px solid var(--border)", borderRadius: 10, padding: "16px 14px" }}>
+                      <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>{label}</div>
+                      <div style={{ fontSize: 18, fontWeight: 600, color: "var(--text)" }}>{label === "Revenue" ? "$12.4k" : label === "Users" ? "847" : "+24%"}</div>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ flex: 1, background: "color-mix(in srgb, var(--bg-elevated) 40%, transparent)", border: "1px solid var(--border)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Chart area</span>
+                </div>
+              </div>
+              <p style={{ position: "absolute", bottom: 14, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", zIndex: 2 }}>sidebar: 64px · glass · 18px radius</p>
             </div>
           </div>
         </div>
