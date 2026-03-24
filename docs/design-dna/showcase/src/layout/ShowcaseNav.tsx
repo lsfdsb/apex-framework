@@ -23,12 +23,31 @@ const navStyles = `
 .apex-nav-link:hover{color:var(--text);background:rgba(255,255,255,0.06)}
 [data-theme="light"] .apex-nav-link:hover{background:rgba(0,0,0,0.04)}
 .apex-nav-link.active{color:var(--accent);background:var(--accent-glow);font-weight:600}
-@media(max-width:768px){.apex-nav{padding:6px 10px}.apex-nav-inner{height:38px;padding:0 10px}
-  .apex-nav-link{font-size:10px;padding:4px 7px}}
+.apex-nav-burger{display:none;background:none;border:none;cursor:pointer;padding:6px;margin-left:4px;flex-shrink:0}
+.apex-nav-burger span{display:block;width:16px;height:1.5px;background:var(--text-muted);margin:3px 0;
+  transition:all .3s cubic-bezier(0.22,1,0.36,1);border-radius:1px}
+.apex-nav-burger.open span:nth-child(1){transform:rotate(45deg) translate(3px,3px)}
+.apex-nav-burger.open span:nth-child(2){opacity:0}
+.apex-nav-burger.open span:nth-child(3){transform:rotate(-45deg) translate(3px,-3px)}
+.apex-nav-mobile{display:none;position:fixed;top:56px;left:10px;right:10px;z-index:99;
+  border-radius:14px;padding:12px 8px;
+  backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
+  flex-wrap:wrap;gap:4px;justify-content:center;
+  animation:navSlideIn .25s cubic-bezier(0.22,1,0.36,1)}
+@keyframes navSlideIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.apex-nav-mobile .apex-nav-link{font-size:12px;padding:8px 12px}
+@media(max-width:640px){
+  .apex-nav{padding:6px 10px}
+  .apex-nav-inner{height:38px;padding:0 10px}
+  .apex-nav-links{display:none}
+  .apex-nav-burger{display:block}
+  .apex-nav-mobile.open{display:flex}
+}
 `;
 
 export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -37,6 +56,21 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [activePath]);
+
+  const glassBackground = scrolled
+    ? "color-mix(in srgb, var(--bg-elevated) 92%, transparent)"
+    : "color-mix(in srgb, var(--bg-elevated) 80%, transparent)";
+
+  const glassBorder = "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)";
+
+  const glassShadow = scrolled
+    ? "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)"
+    : "0 2px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.04)";
+
   return (
     <>
       <style>{navStyles}</style>
@@ -44,18 +78,14 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
         <div
           className="apex-nav-inner"
           style={{
-            background: scrolled
-              ? "color-mix(in srgb, var(--bg-elevated) 92%, transparent)"
-              : "color-mix(in srgb, var(--bg-elevated) 80%, transparent)",
-            border: "1px solid color-mix(in srgb, var(--text-muted) 15%, transparent)",
-            boxShadow: scrolled
-              ? "0 4px 24px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.04)"
-              : "0 2px 16px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.04)",
+            background: glassBackground,
+            border: glassBorder,
+            boxShadow: glassShadow,
             borderRadius: scrolled ? 12 : 14,
           }}
         >
-          <Link
-            to="/"
+          <a
+            href="#/"
             style={{
               fontFamily: "'Inter', -apple-system, sans-serif",
               fontWeight: 700,
@@ -72,7 +102,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             <span style={{ color: "var(--text-muted)", fontWeight: 300, marginLeft: 4, fontSize: 10, letterSpacing: "0.04em" }}>
               DNA
             </span>
-          </Link>
+          </a>
 
           <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 25%, transparent)", flexShrink: 0, margin: "0 6px" }} />
 
@@ -87,7 +117,34 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
               </Link>
             ))}
           </div>
+
+          <button
+            className={`apex-nav-burger${mobileOpen ? " open" : ""}`}
+            onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label="Toggle navigation"
+          >
+            <span /><span /><span />
+          </button>
         </div>
+      </div>
+
+      <div
+        className={`apex-nav-mobile${mobileOpen ? " open" : ""}`}
+        style={{
+          background: "color-mix(in srgb, var(--bg-elevated) 95%, transparent)",
+          border: glassBorder,
+          boxShadow: "0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04)",
+        }}
+      >
+        {TEMPLATE_ROUTES.map((route) => (
+          <Link
+            key={route.path}
+            to={route.path}
+            className={`apex-nav-link${activePath === route.path ? " active" : ""}`}
+          >
+            {route.label}
+          </Link>
+        ))}
       </div>
     </>
   );
