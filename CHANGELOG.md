@@ -6,23 +6,25 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.19.0] — 2026-03-24 — Reliability: The Framework Tests Itself
+
 ### Added
-- **Showcase Test Infrastructure** — Vitest + React Testing Library with 12 tests covering Router, PaletteContext, and build smoke validation
-- **Showcase ESLint + Prettier** — ESLint 9 flat config with typescript-eslint, react-hooks, react-refresh plugins; Prettier with project conventions
-- **CI Showcase Pipeline** — GitHub Actions now runs typecheck → lint → test → build for the Design DNA React app
-- **Statusline v3 (Σ Token Sum)** — Shows session-wide token total (main + all agents), USD cost, and 5-hour rate limit with color-coded health
-- **Starter Component Tests** — Card (11 tests), Tabs (13 tests), PageShell (9 tests) with full ARIA role coverage and slot composition testing
+- **Showcase Test Infrastructure** — Vitest + React Testing Library with 12 tests covering Router, PaletteContext, and build smoke validation (#182)
+- **Showcase ESLint + Prettier** — ESLint 9 flat config with typescript-eslint, react-hooks, react-refresh plugins; Prettier with project conventions (#182)
+- **CI Showcase Pipeline** — GitHub Actions now runs typecheck → lint → test → build for the Design DNA React app (#182)
+- **Statusline v3 (Σ Token Sum)** — Shows session-wide token total (main + all agents), USD cost, and 5-hour rate limit with color-coded health (#182)
+- **Starter Component Tests** — Card (11 tests), Tabs (13 tests), PageShell (9 tests) with full ARIA role coverage and slot composition testing (#182)
 
 ### Changed
-- **Technical Writer Agent** — Rewritten for inline-before-commit pattern; lead tells it what changed, it edits + stages docs, no post-hoc gap detection waste
+- **Technical Writer Agent** — Stripped CHANGELOG responsibility (owned by /commit + auto-changelog hook); now only owns README, PRD, and docs consistency (#182)
 
 ### Fixed
-- **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip
-- **ShowcaseNav setState-in-effect** — React 19 lint error replaced with derived state pattern (no effect, no ref-during-render)
-- **PaletteSwitcher Unused Import** — Removed dead `PaletteName` type import
-- **Supabase Sync 409 Bug** — Added `on_conflict` query parameter to PostgREST upserts; `Prefer: resolution=merge-duplicates` alone is insufficient
-- **Supabase Query Key Fallback** — query.sh now falls back to secret key when publishable key unavailable
-- **Changelog Version Parsing** — Showcase app now parses version headings without titles (v5.18.0 was invisible)
+- **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip (#182)
+- **ShowcaseNav setState-in-effect** — React 19 lint error replaced with derived state pattern (no effect, no ref-during-render) (#182)
+- **PaletteSwitcher Unused Import** — Removed dead `PaletteName` type import (#182)
+- **Supabase Sync 409 Bug** — Added `on_conflict` query parameter to PostgREST upserts; `Prefer: resolution=merge-duplicates` alone is insufficient (#182)
+- **Supabase Query Key Fallback** — query.sh now falls back to secret key when publishable key unavailable (#182)
+- **Changelog Version Parsing** — Showcase app now parses version headings without titles (v5.18.0 was invisible) (#182)
 
 ## [5.18.0] — 2026-03-24
 
