@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useCallback } from "react";
 
 type ButtonVariant = "primary" | "ghost" | "accent" | "cta";
 type ButtonSize = "sm" | "md" | "lg";
@@ -8,6 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   href?: string;
   as?: React.ElementType;
+  ripple?: boolean;
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -35,10 +36,30 @@ export function Button({
   as: Tag,
   children,
   className = "",
+  ripple = true,
+  onClick,
   ...props
 }: ButtonProps) {
+  const btnRef = useRef<HTMLButtonElement>(null);
+
+  const handleClick = useCallback(
+    (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (ripple && btnRef.current) {
+        const rect = btnRef.current.getBoundingClientRect();
+        const span = document.createElement("span");
+        span.className = "ripple-effect";
+        span.style.left = `${e.clientX - rect.left - 20}px`;
+        span.style.top = `${e.clientY - rect.top - 20}px`;
+        btnRef.current.appendChild(span);
+        span.addEventListener("animationend", () => span.remove());
+      }
+      onClick?.(e);
+    },
+    [ripple, onClick]
+  );
+
   const base = [
-    "inline-flex items-center justify-center gap-2 font-medium rounded-[var(--radius-sm)]",
+    "relative overflow-hidden inline-flex items-center justify-center gap-2 font-medium rounded-[var(--radius-sm)]",
     "transition-all duration-[var(--duration-normal)] ease-[var(--ease-out)]",
     "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]",
     "active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none",
@@ -58,7 +79,7 @@ export function Button({
   }
 
   return (
-    <button className={base} style={variantStyles[variant]} {...props}>
+    <button ref={btnRef} className={base} style={variantStyles[variant]} onClick={handleClick} {...props}>
       {children}
     </button>
   );

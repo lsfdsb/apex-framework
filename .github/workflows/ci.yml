@@ -249,8 +249,8 @@ jobs:
           date_today=$(date -u '+%Y-%m-%d')
           # Replace the [Unreleased] heading with the versioned heading, preserving the section
           sed -i "s|^## \[Unreleased\]|## [${version}] — ${date_today}|" CHANGELOG.md
-          # Prepend a new empty [Unreleased] section above the stamped one
-          sed -i "s|^## \[${version}\]|## [Unreleased]\n\n## [${version}]|" CHANGELOG.md
+          # Prepend a new empty [Unreleased] section above the stamped one (first match only)
+          sed -i "0,/^## \[${version}\]/s|^## \[${version}\]|## [Unreleased]\n\n## [${version}]|" CHANGELOG.md
 
       - name: Commit CHANGELOG update
         if: steps.check.outputs.skip == 'false'
