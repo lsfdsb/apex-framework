@@ -31,6 +31,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **CLAUDE.md Rule #2** — Strengthened API verification requirement: must check for deprecated patterns; official docs take precedence over memory (#180)
 - **Supabase Skill Reference** — Updated from deprecated `anon`/`service_role` JWT keys to modern `sb_publishable_`/`sb_secret_` format (#180)
 - **QA Skill** — Added repository type detection and Phase 0 dependency graph verification before shipping (#180)
+- framework cleanup, self-awareness, Supabase RAG (#180) (53928da)
 
 ### Removed
 - **3 Dead Agent Implementations** — Removed `code-reviewer.md`, `debugger.md`, `design-reviewer.md` (never spawned in practice, functionality migrated to plugins) (#180)
