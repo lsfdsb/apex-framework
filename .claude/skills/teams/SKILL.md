@@ -146,12 +146,23 @@ git worktree prune
 rm -rf .claude/worktrees/agent-*
 ```
 
+### Branch Management — Lead Only
+
+**Builders NEVER create branches.** With `isolation: none`, the builder writes directly to whatever branch the lead has checked out. Branch creation, switching, and merging are the lead's responsibility.
+
+If a builder creates a branch anyway (bug or bad prompt), the lead must:
+1. `git checkout <builder-branch> -- <files>` to pull the files
+2. `git branch -D <builder-branch>` to clean up
+3. Commit on the correct branch
+
+This prevents the cherry-pick-on-dirty-tree problem that occurs when builders create orphan branches.
+
 ### Key principle: No human intervention needed in the loop
 
-- Watcher doesn't wait for someone to ask — it monitors continuously
-- Debugger auto-claims bugs from the task list — no assignment needed
-- QA auto-verifies when Debugger reports "fix ready" — no manual /qa
-- If QA rejects, a new task is created and Debugger picks it up automatically
+- Watcher monitors continuously — no assignment needed
+- Builder auto-claims bugs from the task list
+- QA auto-verifies when Builder reports "fix ready" — no manual /qa
+- If QA rejects, a new task is created and Builder picks it up automatically
 - The loop keeps breathing until everything is green
 
 ## Scan Responsibility Matrix (No Duplication)
