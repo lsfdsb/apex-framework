@@ -2,6 +2,55 @@
 
 > **IMPORTANT**: This file contains token sets and CSS patterns. For **live visual references** of complete page layouts, read the matching page from `docs/design-dna/` — see the routing table in `SKILL.md`. The Design DNA is the authoritative visual quality bar for all APEX projects.
 
+## Design Principles (MANDATORY)
+
+Before writing ANY UI code, read `docs/design-dna/principles.md` — the Taste Bible. It codifies 10 design principles that separate professional UI from generic AI output. Key rules:
+- 40% whitespace minimum per card/section
+- Max 3-4 font sizes per viewport
+- Accent color in max 3-5 elements per viewport
+- Max 2 simultaneous animations per viewport
+- Match information density to app type (CRM: 60-70%, Landing: 30-40%)
+- Empty states are marketing opportunities, not error messages
+- Max 3 border-radius values across the entire app
+- Dark + light mode designed simultaneously, never sequentially
+
+**If your output violates any principle, it will be blocked at design review.**
+
+## Icon Strategy
+
+**Standard**: [Lucide React](https://lucide.dev/) — MIT licensed, tree-shakeable, 1000+ icons, consistent 24x24 grid.
+
+**Installation**: `npm install lucide-react`
+
+**Usage pattern**:
+```tsx
+import { Users, ChevronRight, AlertCircle } from 'lucide-react';
+
+// Inline (badges, table cells)
+<Users className="w-4 h-4 text-muted-foreground" />
+
+// Buttons & navigation
+<ChevronRight className="w-5 h-5" />
+
+// Section headers & empty states
+<AlertCircle className="w-8 h-8 text-warning" />
+```
+
+**Size scale**:
+| Context | Size | Tailwind |
+|---------|------|----------|
+| Inline / badges | 16px | `w-4 h-4` |
+| Buttons / nav items | 20px | `w-5 h-5` |
+| Section headers | 24px | `w-6 h-6` |
+| Empty states / heroes | 32-48px | `w-8 h-8` to `w-12 h-12` |
+
+**Rules**:
+- Never use emoji as icons (inconsistent rendering across platforms)
+- Always inherit color from parent text (`className` only, no `color` prop)
+- Always include `aria-hidden="true"` on decorative icons
+- Always include `aria-label` on icon-only buttons
+- Prefer specific icons over generic ones (e.g., `FileText` not `File` for documents)
+
 ## Font Pairing Recommendations
 
 Choose ONE pairing per project. Never repeat across projects.

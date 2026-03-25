@@ -107,8 +107,27 @@ SCENARIO: Setup → Action → Expected Result
 
 - Images optimized and lazy-loaded?
 - No unnecessary re-renders?
-- Bundle impact reasonable?
 - API calls deduplicated/cached?
+
+**Bundle Size Gate** — BLOCKING check:
+```bash
+# Build and check output size
+npm run build 2>&1
+# Check main bundle size (gzip estimate)
+du -sh dist/assets/*.js 2>/dev/null | sort -rh | head -5
+```
+- Main JS bundle must be < 250KB uncompressed (~80KB gzip)
+- If larger: check for missing code splitting (lazy routes), unnecessary dependencies, or barrel imports pulling entire libraries
+- Each route chunk should be < 100KB uncompressed
+- CSS bundle should be < 50KB uncompressed
+- Flag any single dependency that contributes > 50KB to the bundle
+
+**Component Duplication Check**:
+```bash
+# Find potentially duplicated components
+grep -rn "export function\|export default function" src/components/ 2>/dev/null | awk -F'[ (]' '{print $NF}' | sort | uniq -d
+```
+- If duplicate component names exist across different directories, flag as WARNING
 
 ## Phase 6: Deployment Readiness (when deploying)
 

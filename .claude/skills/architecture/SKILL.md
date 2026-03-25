@@ -45,7 +45,21 @@ You are designing: $ARGUMENTS
 3. Design service abstraction layer (never call external APIs directly from components)
 4. Plan for mock/test mode that doesn't hit real APIs
 
-**Component Audit** — REQUIRED before any build starts:
+**Component Audit** — REQUIRED before any build starts.
+
+Before designing the component tree, **search the existing codebase** for reusable components:
+```bash
+# Search existing components
+grep -r "export.*function\|export default" src/components/ 2>/dev/null | head -30
+# Search DNA starters for promotable components
+ls docs/design-dna/starters/primitives/ docs/design-dna/starters/patterns/ docs/design-dna/starters/layout/ 2>/dev/null
+# Search for potential duplicates
+grep -r "export function" src/components/ 2>/dev/null | awk -F: '{print $2}' | sort
+```
+
+For each component in the tree, mark it as: **[exists]** (reuse as-is), **[extend]** (add props/variants), **[promote]** (copy from DNA starter and adapt), or **[new]** (build from scratch). The goal is to minimize [new] — every new component is a maintenance burden.
+
+Component tree format:
 ```markdown
 ## Component Tree
 ### Shared Components (used by 2+ pages)
