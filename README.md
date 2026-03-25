@@ -49,7 +49,7 @@ cd ~/my-project
 ~/.apex-framework/install.sh
 ```
 
-**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 14 hooks across 12 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd, TaskCompleted, TeammateIdle, ConfigChange, SubagentStart, PreCompact, PostCompact) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 15 hooks across 12 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd, TaskCompleted, TeammateIdle, ConfigChange, SubagentStart, PreCompact, PostCompact) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
 
 ### For additional projects
 
@@ -365,14 +365,15 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 4 specialized agents — a championship roster. Use `/teams` for parallel work:
+APEX has 5 specialized agents — a championship roster. Use `/teams` for parallel work:
 
-| Agent | Model | Role |
-|-------|-------|------|
-| **watcher** | Haiku | Continuous monitoring — catches errors, security, drift |
-| **builder** | Sonnet | Implements features and fixes bugs directly |
-| **qa** | Sonnet | 7-phase quality gate — blocks bad code |
-| **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
+| Agent | Model | Phase | Role |
+|-------|-------|-------|------|
+| **project-manager** | Sonnet | 3 (Decompose) | Apple EPM task decomposition — DRI assignments |
+| **builder** | Sonnet | 5 (Build) | Implements features, verifies APIs, follows DNA |
+| **watcher** | Haiku | 5 (Build) | Continuous monitoring — catches errors, security, drift |
+| **qa** | Sonnet | 6 (Quality) | 7-phase quality gate — blocks bad code |
+| **technical-writer** | Haiku | 7 (Ship) | Keeps CHANGELOG, README, docs in sync |
 
 Use `/teams` and Claude auto-selects the right roster.
 
