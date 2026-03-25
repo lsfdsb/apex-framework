@@ -17,19 +17,22 @@ const DEFAULT_SESSION: SessionState = {
 /* ── CountUp ──────────────────────────────────────────────────────────────── */
 
 function CountUp({ target, duration = 1200 }: { target: number; duration?: number }) {
-  const [value, setValue] = useState(0);
+  const prefersReducedMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [value, setValue] = useState(prefersReducedMotion ? target : 0);
   useEffect(() => {
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (prefersReducedMotion) { setValue(target); return; }
+    if (prefersReducedMotion) return;
+    let cancelled = false;
     const start = performance.now();
     const tick = (now: number) => {
+      if (cancelled) return;
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setValue(Math.round(eased * target));
       if (progress < 1) requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
-  }, [target, duration]);
+    return () => { cancelled = true; };
+  }, [target, duration, prefersReducedMotion]);
   return <>{value}</>;
 }
 

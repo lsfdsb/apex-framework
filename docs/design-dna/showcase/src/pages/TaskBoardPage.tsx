@@ -260,12 +260,13 @@ export default function TaskBoardPage() {
 
   const [phase, setPhase] = useState<PhaseFilterValue>("all");
   const [activeColumn, setActiveColumn] = useState<TaskColumn>("backlog");
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 767px)").matches : false
+  );
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    setIsMobile(mq.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
   }, []);
