@@ -108,6 +108,23 @@ for f in .claude/scripts/*.sh; do [ -x "$f" ] || echo "⚠️ NOT EXECUTABLE: $f
 bash -n .claude/scripts/*.sh 2>&1 || echo "SHELL SYNTAX ERRORS FOUND"
 ```
 
+## Phase 7: Regression Detection
+
+Before approving, check if any changes invalidate prior phase work:
+
+```bash
+# Run the regression detector
+bash .claude/scripts/detect-phase-regression.sh
+```
+
+If output says "REGRESSION DETECTED":
+1. Document which phases need re-verification in your QA report
+2. Create a `[regression]` task for each affected phase
+3. Do NOT approve until regressions are resolved
+4. Shared component changes (blast radius HIGH) require re-testing ALL dependent tasks
+
+If output says "CLEAN": proceed to verdict.
+
 ## Quality Gate Checklist
 
 ```
