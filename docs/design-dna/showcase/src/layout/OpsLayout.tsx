@@ -62,7 +62,7 @@ const opsStyles = `
 export function OpsLayout({ children }: { children: ReactNode }) {
   const hash = useHash();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
 
   // Close mobile sidebar on route change
   const [prevHash, setPrevHash] = useState(hash);

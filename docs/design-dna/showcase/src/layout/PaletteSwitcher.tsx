@@ -3,13 +3,13 @@ import { usePalette } from "../context/PaletteContext";
 import { PALETTES, PALETTE_NAMES } from "../data/palettes";
 
 const widgetStyles = `
-.apex-widget{position:fixed;bottom:24px;left:24px;z-index:200;animation:apex-widget-enter .6s cubic-bezier(0.22,1,0.36,1) backwards;animation-delay:.3s}
+.apex-widget{position:fixed;top:68px;right:24px;z-index:200;animation:apex-widget-enter .6s cubic-bezier(0.22,1,0.36,1) backwards;animation-delay:.3s}
 @keyframes apex-widget-enter{from{opacity:0;transform:translateY(12px) scale(0.9)}}
 .apex-widget-toggle{width:40px;height:40px;border-radius:50%;background:var(--bg-elevated);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary);transition:all .4s cubic-bezier(0.22,1,0.36,1);backdrop-filter:blur(12px);box-shadow:0 4px 16px rgba(0,0,0,0.15)}
 .apex-widget-toggle:hover{border-color:var(--accent);color:var(--accent);transform:scale(1.1) rotate(90deg);box-shadow:0 0 20px var(--accent-glow)}
 .apex-widget-toggle:active{transform:scale(0.95)}
 .apex-widget.open .apex-widget-toggle{border-color:var(--accent);color:var(--accent);transform:rotate(180deg)}
-.apex-widget-panel{position:absolute;bottom:52px;left:0;background:var(--bg-elevated);border:1px solid var(--border);border-radius:16px;padding:16px;min-width:230px;backdrop-filter:blur(16px);box-shadow:0 12px 48px rgba(0,0,0,0.25);opacity:0;transform:translateY(10px) scale(0.92);pointer-events:none;transition:all .45s cubic-bezier(0.22,1,0.36,1)}
+.apex-widget-panel{position:absolute;top:52px;right:0;background:var(--bg-elevated);border:1px solid var(--border);border-radius:16px;padding:16px;min-width:230px;backdrop-filter:blur(16px);box-shadow:0 12px 48px rgba(0,0,0,0.25);opacity:0;transform:translateY(10px) scale(0.92);pointer-events:none;transition:all .45s cubic-bezier(0.22,1,0.36,1)}
 .apex-widget.open .apex-widget-panel{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
 .apex-widget-label{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);font-weight:500;margin-bottom:8px}
 .apex-widget-divider{height:1px;background:var(--border);margin:12px 0}
