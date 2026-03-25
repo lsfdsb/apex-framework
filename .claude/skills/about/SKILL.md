@@ -38,7 +38,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 21 skills (+1 internal) · 4 agents · 22 scripts · 7 rules · 20 hooks
+**Stats**: 21 skills (+1 internal) · 4 agents · 21 scripts · 7 rules · 19 hooks
 
 ---
 
@@ -108,7 +108,7 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 |-------|-------|------|
 | **Builder** | Sonnet | Full-capability implementation agent for parallel coding wor... |
 | **QA** | Sonnet | Quality assurance agent that runs comprehensive tests, valid... |
-| **Technical Writer** | Haiku | Documentation specialist that keeps README, PRD status, and ... |
+| **Technical Writer** | Haiku | Documentation specialist that keeps README, CHANGELOG, PRD s... |
 | **Watcher** | Haiku | Continuous monitoring agent that watches for errors, test fa... |
 
 Watcher and Technical Writer run in background. Teams spawn for complex builds via `/teams`.

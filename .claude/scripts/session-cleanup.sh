@@ -38,6 +38,19 @@ if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null
   git worktree prune 2>/dev/null
 fi
 
+# ── Rotate session logs (keep last 10) ──
+SESSION_LOG_DIR="$PROJECT_DIR/.claude/session-logs"
+if [ -d "$SESSION_LOG_DIR" ]; then
+  LOG_COUNT=$(find "$SESSION_LOG_DIR" -name 'session-*.md' -type f 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$LOG_COUNT" -gt 10 ]; then
+    # Delete oldest logs, keeping the 10 most recent by modification time
+    find "$SESSION_LOG_DIR" -name 'session-*.md' -type f -print0 2>/dev/null \
+      | xargs -0 ls -t 2>/dev/null \
+      | tail -n +"11" \
+      | xargs rm -f 2>/dev/null
+  fi
+fi
+
 # ── Clean up temporary files ──
 rm -f "$PROJECT_DIR/.claude/.dev-monitor-cursor" 2>/dev/null
 rm -f "$PROJECT_DIR/.claude/.apex-state.json" 2>/dev/null

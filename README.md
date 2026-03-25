@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.21.0
+# ⚔️ APEX Framework v5.22.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.21.0           ║
+  ║         ⚔️  APEX Framework v5.22.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -172,11 +172,12 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (4 agents + Lead)
+### The Championship Roster (5 agents + Lead)
 
 | Agent | Model | Role |
 |-------|-------|------|
 | **Lead** (you + Claude) | Opus | Orchestrates everything — not a spawned agent |
+| **Project Manager** | Sonnet | Decomposes PRD+Architecture into phased task board |
 | **Builder** | Sonnet | Writes production code and fixes bugs |
 | **QA** | Sonnet | 7-phase quality gate |
 | **Watcher** | Haiku | Continuous monitoring |
@@ -233,7 +234,7 @@ Layer 3: Hook scripts (runtime enforcement)
 | Tier | Model | Agents | Why |
 |------|-------|--------|-----|
 | **Decision** | Opus | Lead | Best reasoning for orchestration and architectural decisions. |
-| **Build + Analyze** | Sonnet | Builder, QA | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
+| **Build + Analyze** | Sonnet | Builder, QA, PM | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
 | **Monitor + Document** | Haiku | Watcher, Technical Writer | Fast, cheap, excellent for reading/monitoring/docs tasks. |
 
 ---
@@ -443,7 +444,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### Latest — v5.21.0+ (2026-03-24)
+### Latest — v5.22.0+ (2026-03-24)
 
 - **Safe Hook Processes** — PIDs verified before kill, fully detached dev servers, Rule #21 (#190)
 - **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)

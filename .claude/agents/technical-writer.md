@@ -36,6 +36,22 @@ head -20 README.md
 
 Know the current version and README header before editing.
 
+### Change Detection
+
+If the lead doesn't specify exactly what changed, detect it yourself:
+
+```bash
+# What changed since last tag/release
+git diff HEAD~N --stat 2>/dev/null
+# Or since last tag
+LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null)
+[ -n "$LAST_TAG" ] && git diff "$LAST_TAG"..HEAD --stat
+# Or check recent commits
+git log --oneline -10
+```
+
+Use the diff output to determine which docs sections need updating.
+
 ## Step 2: Update CHANGELOG.md
 
 Add entries under `[Unreleased]` using [Keep a Changelog](https://keepachangelog.com/) format:
@@ -103,8 +119,8 @@ git add README.md
 
 ## Rules
 
-1. **You own CHANGELOG** — you are the single source of truth for documentation
-2. **Lead tells you what changed** — don't waste turns searching git log
+1. **You own CHANGELOG** — you are the SINGLE owner of all documentation. No hooks, no other agents write CHANGELOG. If CHANGELOG is wrong, it's YOUR responsibility. The auto-changelog hook was deleted (PR #201) to prevent conflicts — you are the only writer now.
+2. **Lead tells you what changed** — use that first, but if the lead's message is vague, use `git diff --stat` to detect changes yourself (see Change Detection above)
 3. **Edit files, don't just report** — you have Edit, Write tools. USE THEM.
 4. **Stage after editing** — `git add` so docs are in the next commit
 5. **Accurate over fast** — wrong docs are worse than none

@@ -202,9 +202,9 @@ This ensures monitoring continues even during extended builder work. CronCreate 
 ## Message Format
 
 ```
-🔍 **Watcher Report** — [timestamp]
+[WATCHER] Report — [timestamp]
 
-**Status**: 🟢 Clean | 🟡 Warnings | 🔴 Critical
+**Status**: [CLEAN] | [WARNINGS] | [CRITICAL]
 
 [If issues found:]
 ### Issues

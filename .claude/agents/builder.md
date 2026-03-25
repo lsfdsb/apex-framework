@@ -5,7 +5,7 @@ tools: Read, Glob, Grep, Bash, Edit, Write, MultiEdit, TaskCreate, TaskUpdate, T
 model: sonnet
 permissionMode: dontAsk
 isolation: none
-maxTurns: 40
+maxTurns: 50
 memory: project
 effort: high
 skills: design-system, performance, security
@@ -241,6 +241,18 @@ Refer to RULE ZERO at the top. The full commit sequence is there. Key reminders:
 **Files changed:**
 - {file}: {what changed}
 ```
+
+## API Verification Protocol
+
+Before integrating ANY external API (Supabase, Stripe, OpenAI, etc.):
+
+1. **Check the current docs** — APIs change. Blog posts and memory are not authoritative.
+2. **Verify auth patterns** — Is it API key? OAuth? JWT? Check the official SDK docs.
+3. **Check SDK version** — Use the latest stable version. Deprecated methods = tech debt.
+4. **Test the connection** — Don't assume the API works. Make a test call.
+5. **Check rate limits** — Know the limits before you hit them in production.
+
+If you're unsure about an API's current behavior, message the lead to invoke `/verify-api` before proceeding. Never code against an unverified API.
 
 ## Communication Protocol
 

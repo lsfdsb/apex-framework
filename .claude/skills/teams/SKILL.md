@@ -12,10 +12,10 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 ## Quick Start (TL;DR)
 
 ```
-/teams build   → Watcher + Builder + QA + Tech Writer
+/teams build   → PM + Watcher + Builder + QA + Tech Writer
 /teams fix     → Watcher + Builder + QA + Tech Writer
 /teams review  → QA + Tech Writer
-/teams full    → All 4 agents (championship roster)
+/teams full    → All 5 agents (championship roster)
 ```
 
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:
@@ -42,6 +42,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 | Role | Agent | Model | Mode | Purpose |
 |------|-------|-------|------|---------|
 | **Lead** | main session | opus | — | Orchestrates, delegates, makes final decisions |
+| **PM** | project-manager | sonnet | none | Decomposes PRD+Arch into phased task board |
 | **Builder** | builder | sonnet | **none** | Implements features — writes directly to project |
 | **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
 | **QA** | qa | sonnet | none | Runs full quality gate, blocks bad code |
@@ -53,6 +54,7 @@ Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 
 ### `build` — Implementation Team
 Best for: New features, refactoring, migrations
+- **PM** (sonnet, none) — Decomposes PRD+Arch into phased task board
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, none) — Implements the feature directly
 - **QA** (sonnet, none) — Tests when Builder finishes
@@ -72,6 +74,7 @@ Best for: PR review, pre-merge checks, code audit
 
 ### `full` — Championship Team
 Best for: Major features, end-to-end delivery, critical paths
+- **PM** (sonnet, none) — Decomposes PRD+Arch into phased task board
 - **Watcher** (haiku, background) — Continuous monitoring from first second
 - **Builder** (sonnet, none) — Implements the feature
 - **QA** (sonnet, none) — Full quality gate on everything
