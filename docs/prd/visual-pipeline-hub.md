@@ -787,7 +787,30 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 
 ---
 
-## 13. The Standard
+## 13. Implementation Notes
+
+**Last Updated**: 2026-03-25
+
+### Completed Infrastructure (Phase 4: Ops Core)
+- ✅ **Output Style 7-State Machine** — Executable Pipeline Engine with explicit state transitions and automatic phase progression on approval (PR #204)
+- ✅ **Pipeline Phase Metadata** — All 5 core agents declare Pipeline Phase explicitly for orchestration awareness (PR #204)
+- ✅ **Design DNA React-First Consolidation** — React templates established as single source of truth; HTML templates deprecated (PR #204)
+- ✅ **HUB Projects Page 7-Phase Timeline** — Horizontal timeline visualization matching real APEX workflow with gate indicators (PR #204)
+- ✅ **HUB Team Kanban per SubProject** — Team-level task orchestration boards per subproject with Design Review → Build → Quality → Security workflow (PR #204)
+- ✅ **Visual Pipeline HUB Core** — All 9 pages (Home, Pipeline, Tasks, Agents, Quality, Projects, Changelog, About, Settings) shipped at production quality (PR #203, v5.22.0)
+
+### In Progress (Phase 5: Teaching Layer)
+- Teaching tooltips infrastructure exists; comprehensive coverage in progress
+- Agent Thought Stream visualization (Phase 6, Quality phase)
+- Concept links and interactive learning elements (next iteration)
+
+### Deferred (Phase 6-7: Advanced Features)
+- Live multi-agent Thought Stream with agent decision narration (higher complexity, post-teaching layer)
+- Agent history timeline and reasoning audit trail (depends on agent telemetry hooks)
+
+---
+
+## 14. The Standard
 
 Before this ships, every team member asks:
 

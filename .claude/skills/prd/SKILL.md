@@ -182,3 +182,12 @@ The lead MUST verify API docs via WebSearch for each item before any builder tou
 
 ### Step 7: Summary
 Return a brief summary of key decisions, open questions, research items needed, and the persona→page mapping for user review.
+
+### Step 8: Phase Transition
+After presenting the PRD, ask the user: "Approve this contract?"
+
+When the user approves, the Lead agent MUST immediately proceed to Phase 2 (Architect) by invoking the `/architecture` skill. Do NOT wait for the user to ask — the pipeline is autonomous. Announce:
+```
+⚔️ Phase 2: Architecture — "I have spoken."
+```
+Then invoke `/architecture` with the PRD as context.

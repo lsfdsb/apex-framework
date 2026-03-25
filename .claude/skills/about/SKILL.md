@@ -38,7 +38,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 21 skills (+1 internal) · 5 agents · 23 scripts · 7 rules · 22 hooks
+**Stats**: 21 skills (+1 internal) · 5 agents · 24 scripts · 7 rules · 23 hooks
 
 ---
 

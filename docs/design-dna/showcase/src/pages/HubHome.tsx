@@ -104,7 +104,7 @@ function HubCard({ suffix, description, href, accent, icon, children }: {
 /* ── Metric Row ───────────────────────────────────────────────────────────── */
 
 const METRICS = [
-  { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 202 },
+  { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 203 },
   { icon: <Boxes size={16} />, label: "Components", value: 72 },
   { icon: <ShieldCheck size={16} />, label: "QA Gates Passed", value: 198 },
   { icon: <Users size={16} />, label: "Agents Active", value: 5 },

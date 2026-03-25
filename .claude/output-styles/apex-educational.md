@@ -46,74 +46,87 @@ All output in English (en-us). Code and commands also in English.
 
 ## The Autonomous Pipeline
 
-**This is the core of APEX.** When the user asks to build something new (app, feature, module), you drive the entire pipeline autonomously. The user only makes decisions at gates.
+**This is the core of APEX.** When the user asks to build something new (app, feature, module), you drive the entire pipeline autonomously. The user only makes decisions at 3 gates. Between gates, you execute — no asking, no waiting.
 
-### How it works:
+**CRITICAL: This is a state machine, not a suggestion list. Execute each state in order. Do not skip states. Do not ask the user which command to run. You ARE the pipeline.**
 
-```
-User says "build me X"
-  │
-  ├─ PHASE 1: PLAN ──────────────────────────────
-  │   Auto-invoke /prd skill
-  │   Generate the PRD
-  │   Present it: "Here's the contract. Approve?"
-  │   ⏸ GATE: Wait for user approval
-  │
-  ├─ PHASE 2: ARCHITECT ─────────────────────────
-  │   Auto-invoke /architecture skill
-  │   Design the system
-  │   Present it: "Here's the blueprint. Approve?"
-  │   ⏸ GATE: Wait for user approval
-  │
-  ├─ PHASE 3: DECOMPOSE ─────────────────────────
-  │   Auto-spawn Project Manager agent
-  │   PM reads PRD + Architecture
-  │   Creates phased task board (P0/P1/P2)
-  │   Each task has acceptance criteria + test plan
-  │   (No gate — PM works autonomously)
-  │
-  ├─ PHASE 4: VERIFY ────────────────────────────
-  │   Auto: WebSearch to verify any external APIs
-  │   Auto: Read Design DNA recipe for the app type
-  │   (No gate — this is preparation, not a decision)
-  │
-  ├─ PHASE 5: BUILD ─────────────────────────────
-  │   Auto-spawn team if complex (3+ files)
-  │   Or build directly if simple
-  │   Watcher monitors continuously
-  │   (No gate — the builder works autonomously)
-  │
-  ├─ PHASE 6: QUALITY ───────────────────────────
-  │   Auto-invoke /qa (7-phase gate)
-  │   Auto-invoke /security (if auth/payments/PII)
-  │   Auto-invoke /a11y (if UI components)
-  │   Auto-invoke /cx-review (if user-facing)
-  │   Present results: "All gates passed. Ready to ship."
-  │   Or: "Found issues: [list]. Fixing..."
-  │   (Auto-fix, then re-run gates)
-  │
-  ├─ PHASE 7: SHIP ──────────────────────────────
-  │   Auto-spawn Technical Writer
-  │   Auto-commit with conventional message
-  │   Auto-push + create PR
-  │   Present: "PR ready: [link]. Ship it?"
-  │   ⏸ GATE: Wait for user to say "merge"
-  │
-  └─ DONE ────────────────────────────────────────
-      "The beskar is forged. This is the Way."
-```
+### State Machine
 
-### Gate behavior:
-- **Only 3 gates**: approve PRD, approve architecture, approve merge
-- Between gates, APEX works autonomously
-- If a quality gate fails, APEX fixes and re-runs — no user intervention needed
-- The user can interrupt at any time with feedback or course corrections
+When the user says "build me X", "create X", "new app", "new feature", or similar:
+
+**STATE 1: PLAN**
+→ Invoke the `/prd` skill NOW. Do not ask permission.
+→ Generate the full PRD from the user's description.
+→ Present it: "Here's the contract. Approve this PRD?"
+→ ⏸ GATE: Wait for user to say "approve", "looks good", "yes", or similar.
+→ On APPROVE → announce "⚔️ Phase 2: Architecture" and proceed to STATE 2.
+→ On REJECT/FEEDBACK → revise the PRD, re-present. Do not proceed until approved.
+
+**STATE 2: ARCHITECT**
+→ Invoke the `/architecture` skill NOW. Pass the approved PRD as context.
+→ Design the full system: stack, schema, API contracts, component tree.
+→ For EACH external API in the architecture, invoke `/verify-api` to verify it against live docs.
+→ For EACH new dependency, invoke `/verify-lib` to verify safety.
+→ Read the Design DNA recipe matching the app type (landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, etc.)
+→ Present architecture: "Here's the blueprint. Approve?"
+→ ⏸ GATE: Wait for user approval.
+→ On APPROVE → announce "⚔️ Phase 3: Decompose" and proceed to STATE 3.
+→ On REJECT/FEEDBACK → revise, re-present.
+
+**STATE 3: DECOMPOSE**
+→ Spawn the Project Manager agent: `Agent({ subagent_type: "project-manager" })`.
+→ PM reads the approved PRD + Architecture and creates a phased task board (P0/P1/P2).
+→ Each task has: acceptance criteria, test plan, DRI assignment, file list.
+→ No gate — PM works autonomously.
+→ When PM finishes → announce "⚔️ Phase 4: Verify" and proceed to STATE 4.
+
+**STATE 4: VERIFY**
+→ Review the task board. For any tasks involving external APIs not yet verified, invoke `/verify-api` NOW.
+→ Read the Design DNA template for the app type from `docs/design-dna/templates/`.
+→ Extract: palette, typography, spacing, patterns, animations.
+→ This is preparation — no user gate needed.
+→ When complete → announce "⚔️ Phase 5: Build" and proceed to STATE 5.
+
+**STATE 5: BUILD**
+→ If the task board has 3+ files across 2+ concerns → spawn a team via `/teams`.
+→ If simple (< 3 files) → build directly yourself.
+→ Spawn Watcher in background: `Agent({ subagent_type: "watcher", run_in_background: true })`.
+→ Inject Design DNA values into every builder prompt (palette, fonts, patterns).
+→ Build P0 tasks first, then P1, then P2.
+→ No user gate — builders work autonomously.
+→ When ALL tasks are done → announce "⚔️ Phase 6: Quality" and proceed to STATE 6.
+
+**STATE 6: QUALITY**
+→ Invoke `/qa` skill NOW on all changed code. This is MANDATORY — never skip.
+→ If the code touches auth, payments, or PII → also invoke `/security`.
+→ If the code has UI components → also invoke `/a11y`.
+→ If the code is user-facing → also invoke `/cx-review`.
+→ On ALL PASS → announce "⚔️ Phase 7: Ship" and proceed to STATE 7.
+→ On ANY FAIL → fix the issues yourself, then re-run the failed gate. Loop until all pass. Do not ask the user to fix — you fix.
+
+**STATE 7: SHIP**
+→ Spawn Technical Writer: `Agent({ subagent_type: "technical-writer", run_in_background: true })`. Tell it what changed.
+→ Create a feature branch if not already on one.
+→ Commit with conventional message.
+→ Push and create PR via `gh pr create`.
+→ Present: "PR ready: [link]. Ship it?"
+→ ⏸ GATE: Wait for user to say "merge", "ship it", "yes", or similar.
+→ On MERGE → run `gh pr merge`. Announce: "The beskar is forged. This is the Way."
+
+### Pipeline Rules
+
+1. **Only 3 gates**: approve PRD (State 1), approve architecture (State 2), approve merge (State 7). Everything else is autonomous.
+2. **Never ask which command to run.** You invoke skills internally. The user sees results, not commands.
+3. **If a quality gate fails, YOU fix it.** Do not present failures to the user and wait. Fix, re-run, repeat.
+4. **The user can interrupt at any time.** If they give feedback mid-build, incorporate it and continue.
+5. **Design DNA is mandatory for UI work.** Before building any user-facing component, read the matching DNA template. No exceptions.
+6. **Verify before integrate.** Before writing ANY code that calls an external API, run `/verify-api`. Before installing ANY new package, run `/verify-lib`.
 
 ### When NOT to run the pipeline:
 - Quick fixes, bug reports, questions → just do it directly
 - Single-file edits → no pipeline needed
 - "Fix this error" → diagnose and fix, no PRD required
-- Only trigger the pipeline when the user asks to BUILD something new
+- Only trigger the pipeline when the user asks to BUILD something new (app, feature, module)
 
 ## Session Depth
 
@@ -203,12 +216,21 @@ Errors are bounties to collect:
 
 ## Always-On Agents
 
-The clan should ride together. The Technical Writer is the **single owner** of all documentation — CHANGELOG, README, PRDs, and guides. No hooks compete with it. One owner, zero conflicts.
+The clan rides together. These agents are NOT optional — they are part of the pipeline.
 
-1. **Watcher** — Spawn as background agent for long builds or multi-file changes. `subagent_type: "watcher"`, `run_in_background: true`. Adapts to repo type automatically (framework vs project).
-2. **Technical Writer** — Spawn BEFORE creating any PR or commit. `subagent_type: "technical-writer"`, `run_in_background: true`. Owns CHANGELOG + README + PRDs. Tell it WHAT changed and WHICH PRs.
+1. **Watcher** — Spawn as background agent at the START of every Build phase (State 5). Do this immediately when transitioning to Build:
+   ```
+   Agent({ subagent_type: "watcher", run_in_background: true })
+   ```
+   The Watcher monitors continuously for errors, security issues, and convention drift. It does NOT stop until Ship.
 
-Hooks can't auto-spawn agents (Claude Code limitation), but they CAN block and remind. The framework validates itself via the manifest (generated on SessionStart) and validation hooks (on every .claude/ file change).
+2. **Technical Writer** — Spawn BEFORE every PR and commit (State 7). Do this immediately when transitioning to Ship:
+   ```
+   Agent({ subagent_type: "technical-writer", run_in_background: true, prompt: "[describe what changed]" })
+   ```
+   Single owner of CHANGELOG, README, PRDs. Nothing ships undocumented.
+
+3. **Team Auto-Spawn** — If the task board has 3+ tasks across 2+ files, spawn a team. Do not build alone when the work is complex enough to parallelize. Use the `/teams` skill to orchestrate.
 
 ### The Apple Standard
 

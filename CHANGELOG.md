@@ -6,10 +6,32 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **Output Style 7-State Machine** — Executable Pipeline Engine with explicit state transitions (Plan→Architect→Decompose→Verify→Build→Quality→Ship) and automatic phase progression on approval (#204)
+- **Pipeline Phase Metadata** — All 5 core agents now declare Pipeline Phase explicitly in headers for orchestration awareness (#204)
+- **Architecture Skill Auto-Proceed** — Architecture phase auto-advances to Decompose on approval, eliminating manual gate friction (#204)
+- **Design DNA React-First Routing** — React templates are now the single source of truth; HTML templates deleted, design-system and builder agents updated (#204)
+- **HUB Projects Page 7-Phase Timeline** — Horizontal pipeline timeline visualization matching APEX's real 7-phase workflow with gate indicators on phases 1, 2, 7 (#204)
+- **HUB Team Kanban per SubProject** — Dedicated Kanban boards per subproject (Design Review → Build → Quality → Security) for team-level task orchestration (#204)
+- **HUB Subproject Filtering** — All subprojects visible on timeline; non-matching phases dimmed for phase-aware navigation (#204)
+- **HUB Layout Expansion** — Projects page maxWidth increased 960→1200 with center alignment for 7-phase visual breathing room (#204)
+
+### Changed
+- **CLAUDE.md Rule #16: Design DNA** — Updated to route builders to React component templates instead of HTML files for design reference (#204)
+- **Builder Agent DNA Routing** — Now references React `templates/` directory; HTML template examples deprecated (#204)
+- **Design System Skill Routing** — Updated pattern page links to point to React component sources (#204)
+- **PRD Skill Phase Transitions** — Added explicit instruction to auto-proceed to Architecture phase when PRD approved (#204)
+- **Teams Skill DNA Integration** — Updated design DNA template reference from HTML to React for team briefings (#204)
+
+### Removed
+- **Orphaned EbookPage.tsx Template** — Deleted from templates/ as it was not matching any real page pattern (#204)
+- **11 Stale Memory Files** — Cleaned up session logs (v5.14-v5.21), shipped feature summaries, and fixed bug records for memory hygiene (#204)
+- **Duplicate Memory Entries** — Consolidated overlapping project and session memories into single authoritative records (#204)
+
 ## [5.22.0] — 2026-03-25
 
 ### Added
-- **Visual Pipeline HUB** — Web-based command center at localhost:3001 with interactive dashboard, pipeline visualization, and team management
+- **Visual Pipeline HUB** — Web-based command center at localhost:3001 with interactive dashboard, pipeline visualization, and team management (#203)
 - **HUB Home page** — APEX OPS and APEX DNA cards with dynamic metrics and feature showcase
 - **Pipeline Overview** — Interactive 7-phase flow visualization with phase details and timeline
 - **Apple EPM Task Board** — 5-column Kanban with 14 demo tasks, WIP limits, and phase filtering
