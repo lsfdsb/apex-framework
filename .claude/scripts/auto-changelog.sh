@@ -49,6 +49,11 @@ if grep -qF "(${SHORT_HASH})" "$CHANGELOG" 2>/dev/null; then
   exit 0
 fi
 
+# Skip meta-docs: commits about CHANGELOG/README are self-referential
+if echo "$SUBJECT" | grep -qiE 'changelog|readme'; then
+  exit 0
+fi
+
 # Extract conventional commit type
 TYPE=$(echo "$SUBJECT" | sed -n 's/^\([a-z]*\).*/\1/p')
 
