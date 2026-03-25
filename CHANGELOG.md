@@ -6,6 +6,26 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.21.0] — 2026-03-25 — Quality Gates & Safe Processes
+
+### Added
+- **Design Principles (Taste Bible)** — 10 codified rules in `docs/design-dna/principles.md` preventing generic AI output: whitespace ratios, typography hierarchy, color discipline, motion budget, information density, empty state quality, consistent radius, persona alignment, loading states, dark mode parity (#191)
+- **Prettier Config** — `.prettierrc` + `.prettierignore` for consistent formatting across all APEX projects (#191)
+- **Icon Strategy** — Lucide React as standard icon library with sizing scale and usage rules (#191)
+- **QA Phase 5 Enhanced** — Bundle size gate (250KB limit) + component duplication check (#191)
+- **New Hook Events** — TaskCompleted, TeammateIdle, ConfigChange hooks in settings.json (#190)
+
+### Changed
+- **Builder Agent Enhanced** — Mandatory `principles.md` read before UI work, component search before create, expanded pre-completion checklist (#191)
+- **Architecture Skill** — Explicit component audit with `[exists/extend/promote/new]` classification (#191)
+- **Component Source-of-Truth Rule** — `src/components/` is truth after promotion; starters are scaffolding only (#191)
+
+### Fixed
+- **Safe Hook Process Management** — session-cleanup now verifies PIDs are actual node/vite processes before killing; prevents disrupting Claude Code's process group (#190)
+- **Dev Server Detach** — Background processes fully detached with `< /dev/null` so hook stdin pipe closes cleanly (#190)
+- **Hook Health-Check** — Added `# safe-kill` annotation support for self-spawned subprocesses (#190)
+- **CLAUDE.md Rule #21** — Codified safe hook process patterns: `nohup cmd > log 2>&1 < /dev/null &` and `ps -o comm=` verification before kill (#190)
+
 ## [5.20.0] — 2026-03-24 — Production Readiness: Hooks, Oscar, Tests
 
 ### Added

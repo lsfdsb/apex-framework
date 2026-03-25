@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.20.0
+# ⚔️ APEX Framework v5.21.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.20.0           ║
+  ║         ⚔️  APEX Framework v5.21.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -442,14 +442,15 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### v5.11.0 (2026-03-18) — Agent Teams: The Championship Roster
+### Latest — v5.21.0+ (2026-03-25)
 
-- **5 championship-grade agents** — Watcher, Builder, QA, Technical Writer + Lead
-- **`/teams` skill** — orchestrated parallelism with 4 presets: build, fix, review, full
-- **Breathing Loop** — autonomous Watcher→Builder→QA cycle
-- **16 production-grade hooks** across 6 groups — complete hook system with performance profiling and E2E coverage
-- **586 tests** across 3 suites (structural: 559, E2E: 27, performance profiler) — 100% hook coverage verified
-- **100% Claude Code docs compliant** — verified against official specs
+- **Safe Hook Processes** — PIDs verified before kill, fully detached dev servers, Rule #21 (#190)
+- **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)
+- **Prettier + Icons** — `.prettierrc` config, Lucide React as standard icon library (#191)
+- **Enhanced Gates** — QA bundle size limit, component duplication check, architecture audit tags (#191)
+- **Production Hooks** — 16 hooks across 6 groups + TaskCompleted, TeammateIdle, ConfigChange events (#187, #190)
+- **Design DNA Oscar** — 10 animation keyframes, 5 new primitives, DnaBackground component (#187)
+- **E2E + Performance Tests** — 27 framework tests + hook performance profiler (#187)
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
