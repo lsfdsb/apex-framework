@@ -5,6 +5,7 @@ import { AGENT_ROSTER } from "../data/hub-data";
 import { useApexState } from "../hooks/useApexState";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import type { AgentState } from "../data/hub-types";
+import { SectionHeader } from "@starters/primitives/SectionHeader";
 
 const DEFAULT_AGENT_STATE: AgentState = { agents: [] };
 
@@ -19,58 +20,6 @@ function SectionDivider() {
         margin: "56px 0",
       }}
     />
-  );
-}
-
-/* ── Section Header ──────────────────────────────────────────────────────── */
-
-interface SectionHeaderProps {
-  eyebrow: string;
-  title: string;
-  subtitle?: string;
-}
-
-function SectionHeader({ eyebrow, title, subtitle }: SectionHeaderProps) {
-  return (
-    <div style={{ marginBottom: 32 }}>
-      <div
-        style={{
-          fontSize: 11,
-          fontWeight: 600,
-          color: "var(--accent)",
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          marginBottom: 10,
-        }}
-      >
-        {eyebrow}
-      </div>
-      <h2
-        style={{
-          fontSize: "clamp(24px, 3vw, 32px)",
-          fontWeight: 700,
-          color: "var(--text)",
-          letterSpacing: "-0.02em",
-          lineHeight: 1.15,
-          marginBottom: subtitle ? 12 : 0,
-          fontFamily: "'Inter', -apple-system, sans-serif",
-        }}
-      >
-        {title}
-      </h2>
-      {subtitle && (
-        <p
-          style={{
-            fontSize: 15,
-            color: "var(--text-secondary)",
-            lineHeight: 1.6,
-            maxWidth: 620,
-          }}
-        >
-          {subtitle}
-        </p>
-      )}
-    </div>
   );
 }
 
@@ -161,7 +110,7 @@ export default function AgentsPage() {
 
       {/* ── Breathing Loop ── */}
       <SectionHeader
-        eyebrow="Coordination Pattern"
+        label="Coordination Pattern"
         title="The Breathing Loop"
         subtitle="The framework breathes when the team operates as a continuous cycle without human intervention."
       />
@@ -174,7 +123,7 @@ export default function AgentsPage() {
 
       {/* ── Responsibility Matrix ── */}
       <SectionHeader
-        eyebrow="Ownership Model"
+        label="Ownership Model"
         title="Scan Responsibility Matrix"
         subtitle="Every concern has exactly one primary owner. Overlap causes conflicts; gaps cause failures."
       />

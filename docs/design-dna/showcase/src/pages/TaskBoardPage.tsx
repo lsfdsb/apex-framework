@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link, useHashParams } from "../router/Router";
 import { PhaseFilter } from "../components/tasks/PhaseFilter";
 import type { PhaseFilterValue } from "../components/tasks/PhaseFilter";
 import { WipIndicator } from "../components/tasks/WipIndicator";
@@ -7,6 +8,16 @@ import { MOCK_TASK_BOARD } from "../data/hub-mock";
 import { useApexState } from "../hooks/useApexState";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import type { TaskColumn, TaskItem, TaskBoardState } from "../data/hub-types";
+
+const SUB_PROJECT_NAMES: Record<string, string> = {
+  "visual-hub": "Visual Pipeline HUB",
+  "v522-apple": "v5.22 — The Apple Release",
+  "v521-quality": "v5.21 — Quality Gates",
+  "v520-production": "v5.20 — Production Readiness",
+  "dna-showcase": "Design DNA Showcase",
+  "perf-bundle": "Bundle Optimization",
+  "supabase-rag": "Supabase RAG Pipeline",
+};
 
 // ── Column config ─────────────────────────────────────────────────────────────
 
@@ -238,9 +249,11 @@ export default function TaskBoardPage() {
     "tasks.json",
     MOCK_TASK_BOARD
   );
+  const hashParams = useHashParams();
 
   // When live, use live board data; otherwise fall back to mock
   const { projectName, tasks, meta } = isLive ? liveBoard : MOCK_TASK_BOARD;
+  const subProjectName = hashParams.project ? SUB_PROJECT_NAMES[hashParams.project] ?? null : null;
 
   const [phase, setPhase] = useState<PhaseFilterValue>("all");
   const [activeColumn, setActiveColumn] = useState<TaskColumn>("backlog");
@@ -299,6 +312,13 @@ export default function TaskBoardPage() {
           </div>
           <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
         </div>
+        {subProjectName && (
+          <div style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 4 }}>
+            <Link to="/projects" style={{ color: "var(--accent)", textDecoration: "none" }}>APEX Framework</Link>
+            <span style={{ margin: "0 6px", opacity: 0.5 }}>/</span>
+            <span style={{ color: "var(--text-secondary)" }}>{subProjectName}</span>
+          </div>
+        )}
         <h1
           style={{
             fontSize: "clamp(26px, 4vw, 36px)",

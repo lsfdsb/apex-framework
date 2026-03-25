@@ -93,9 +93,12 @@ function TemplateWithSource({ route }: { route: RouteEntry }) {
 export default function App() {
   const hash = useHash();
 
-  const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hash);
-  const opsRoute = OPS_ROUTES.find((r) => r.path === hash);
-  const navRoute = NAV_ROUTES.find((r) => r.path === hash);
+  // Strip query params for route matching — params are consumed by page components
+  const hashPath = hash.split("?")[0];
+
+  const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hashPath);
+  const opsRoute = OPS_ROUTES.find((r) => r.path === hashPath);
+  const navRoute = NAV_ROUTES.find((r) => r.path === hashPath);
 
   // OPS routes get the sidebar layout — it's a full app
   const isOps = !!opsRoute;
@@ -104,7 +107,7 @@ export default function App() {
     <PaletteProvider>
       <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <AnimatedBackground />
-        <ShowcaseNav activePath={hash} />
+        <ShowcaseNav activePath={hashPath} />
         <div style={{ height: 56 }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
