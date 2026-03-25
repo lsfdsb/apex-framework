@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       # ── Shell script syntax ──────────────────────────────────────────────────
       - name: Validate shell scripts
@@ -123,9 +123,9 @@ jobs:
 
       # ── Showcase app: build + test ──────────────────────────────────────────
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: docs/design-dna/showcase/package-lock.json
 
@@ -200,7 +200,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # Full history so we can push the CHANGELOG commit back
           fetch-depth: 0
