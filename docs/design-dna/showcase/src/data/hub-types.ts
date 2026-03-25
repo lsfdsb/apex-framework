@@ -44,6 +44,11 @@ export interface AcceptanceCriterion {
   met: boolean;
 }
 
+export interface ReviewGate {
+  name: string;
+  status: "pending" | "passed" | "failed";
+}
+
 export interface TaskItem {
   id: string;
   title: string;
@@ -57,6 +62,7 @@ export interface TaskItem {
   blocks: string[];
   createdAt: string;
   updatedAt: string;
+  reviewGates?: ReviewGate[];
 }
 
 export interface TaskBoardMeta {

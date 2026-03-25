@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { TaskItem, TaskPhase, TaskDRI, TaskColumn } from "../../data/hub-types";
+import type { TaskItem, TaskPhase, TaskDRI, TaskColumn, ReviewGate } from "../../data/hub-types";
 import { TaskDetail } from "./TaskDetail";
 
 // ── Phase badge colors ───────────────────────────────────────────────────────
@@ -93,7 +93,8 @@ export function TaskCard({ task }: TaskCardProps) {
   const metCount = task.acceptanceCriteria.filter((c) => c.met).length;
   const total = task.acceptanceCriteria.length;
   const progressPct = total > 0 ? (metCount / total) * 100 : 0;
-  const isInProgress = task.column === "in-progress" as TaskColumn;
+  const isInProgress = task.column === ("in-progress" as TaskColumn);
+  const isInReview = task.column === ("review" as TaskColumn);
 
   const cardStyle: React.CSSProperties = {
     background: "var(--bg-elevated)",
@@ -209,6 +210,46 @@ export function TaskCard({ task }: TaskCardProps) {
                 aria-label={`${metCount} of ${total} criteria met`}
               />
             </div>
+          </div>
+        )}
+
+        {/* Review gates — shown only when in review column */}
+        {isInReview && task.reviewGates && task.reviewGates.length > 0 && (
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {task.reviewGates.map((gate: ReviewGate) => (
+              <span
+                key={gate.name}
+                style={{
+                  fontSize: 9,
+                  fontWeight: 600,
+                  padding: "2px 6px",
+                  borderRadius: 4,
+                  background:
+                    gate.status === "passed"
+                      ? "color-mix(in srgb, var(--success) 12%, transparent)"
+                      : gate.status === "failed"
+                      ? "color-mix(in srgb, var(--destructive) 12%, transparent)"
+                      : "color-mix(in srgb, var(--text-muted) 10%, transparent)",
+                  color:
+                    gate.status === "passed"
+                      ? "var(--success)"
+                      : gate.status === "failed"
+                      ? "var(--destructive)"
+                      : "var(--text-muted)",
+                  border: `1px solid ${
+                    gate.status === "passed"
+                      ? "color-mix(in srgb, var(--success) 25%, transparent)"
+                      : gate.status === "failed"
+                      ? "color-mix(in srgb, var(--destructive) 25%, transparent)"
+                      : "color-mix(in srgb, var(--text-muted) 15%, transparent)"
+                  }`,
+                  letterSpacing: "0.04em",
+                }}
+                title={`${gate.name}: ${gate.status}`}
+              >
+                {gate.name}
+              </span>
+            ))}
           </div>
         )}
 

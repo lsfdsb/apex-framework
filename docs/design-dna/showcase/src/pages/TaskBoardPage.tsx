@@ -127,6 +127,7 @@ function KanbanColumn({
         accent={column.accent}
       />
       <div
+        className="kanban-col"
         style={{
           flex: 1,
           display: "flex",
@@ -134,6 +135,8 @@ function KanbanColumn({
           gap: 8,
           padding: 12,
           minHeight: 160,
+          maxHeight: "calc(100vh - 280px)",
+          overflowY: "auto",
         }}
       >
         {tasks.length === 0 ? (
@@ -251,8 +254,9 @@ export default function TaskBoardPage() {
   );
   const hashParams = useHashParams();
 
-  // When live, use live board data; otherwise fall back to mock
-  const { projectName, tasks, meta } = isLive ? liveBoard : MOCK_TASK_BOARD;
+  // Use live data when available AND has tasks; otherwise fall back to mock
+  const useLive = isLive && liveBoard.tasks.length > 0;
+  const { projectName, tasks, meta } = useLive ? liveBoard : MOCK_TASK_BOARD;
   const subProjectName = hashParams.project ? SUB_PROJECT_NAMES[hashParams.project] ?? null : null;
 
   const [phase, setPhase] = useState<PhaseFilterValue>("all");
@@ -403,6 +407,17 @@ export default function TaskBoardPage() {
 
       {/* ── CSS animations ── */}
       <style>{`
+        .kanban-col {
+          scrollbar-width: thin;
+          scrollbar-color: var(--border) transparent;
+        }
+        .kanban-col::-webkit-scrollbar {
+          width: 4px;
+        }
+        .kanban-col::-webkit-scrollbar-thumb {
+          background: var(--border);
+          border-radius: 2px;
+        }
         @keyframes taskCardSlideUp {
           from {
             opacity: 0;
