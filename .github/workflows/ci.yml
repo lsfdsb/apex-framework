@@ -248,7 +248,7 @@ jobs:
           version="${{ steps.version.outputs.version }}"
           date_today=$(date -u '+%Y-%m-%d')
 
-          # Skip if this version section already exists (curated manually or by auto-changelog)
+          # Skip if this version section already exists
           if grep -q "^## \[${version}\]" CHANGELOG.md; then
             echo "Version [${version}] already exists in CHANGELOG.md — skipping stamp."
             # Just ensure [Unreleased] section exists above it

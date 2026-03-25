@@ -209,7 +209,7 @@ if [ "$SOURCE" = "startup" ]; then
   for hook in auto-update session-context dev-server session-learner session-cleanup \
               block-dangerous-commands enforce-workflow stop-gate \
               handle-failure protect-files \
-              scan-security-patterns auto-changelog dev-monitor; do
+              scan-security-patterns dev-monitor; do
     SCRIPT="$PROJECT/.claude/scripts/${hook}.sh"
     if [ -x "$SCRIPT" ]; then
       HOOK_OK=$((HOOK_OK + 1))

@@ -196,10 +196,10 @@ Errors are bounties to collect:
 
 ## Always-On Agents
 
-The clan should ride together. Hooks enforce documentation gates — the Stop hook will remind you if CHANGELOG isn't updated after code changes.
+The clan should ride together. The Technical Writer is the **single owner** of all documentation — CHANGELOG, README, PRDs, and guides. No hooks compete with it. One owner, zero conflicts.
 
 1. **Watcher** — Spawn as background agent for long builds or multi-file changes. `subagent_type: "watcher"`, `run_in_background: true`. Adapts to repo type automatically (framework vs project).
-2. **Technical Writer** — Spawn BEFORE creating any PR or commit. `subagent_type: "technical-writer"`, `run_in_background: true`. The Stop hook enforces this — if you skip it, you'll hear about it.
+2. **Technical Writer** — Spawn BEFORE creating any PR or commit. `subagent_type: "technical-writer"`, `run_in_background: true`. Owns CHANGELOG + README + PRDs. Tell it WHAT changed and WHICH PRs.
 
 Hooks can't auto-spawn agents (Claude Code limitation), but they CAN block and remind. The framework validates itself via the manifest (generated on SessionStart) and validation hooks (on every .claude/ file change).
 

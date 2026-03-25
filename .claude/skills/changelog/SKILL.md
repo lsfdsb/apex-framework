@@ -7,7 +7,7 @@ allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 
 # Changelog & Documentation Keeper
 
-> **NOTE:** The auto-changelog hook captures commits made during Claude sessions. GitHub squash merges happen server-side and don't trigger hooks. After merging a PR, run `/changelog` to sync the CHANGELOG with merged commits.
+> **NOTE:** The Technical Writer agent is the single owner of CHANGELOG.md. This skill is the manual fallback for when you need to update the changelog directly (e.g., after merging a PR from the GitHub UI).
 
 ## Current Context
 
