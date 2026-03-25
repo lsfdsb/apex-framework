@@ -6,9 +6,20 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added
+- **Apple-Grade Quality Standard** — QA Phase 7, QUALITY-STANDARD.md, CLAUDE.md rules 22-23, Apple Standard checklist in output style (#194)
+- **Shell Hardening** — `set -uo pipefail` on all 22 scripts, critical hooks exit 1 on missing jq, stdin drain on SessionEnd hooks (#194)
+- **SVG Patterns Recipe** — `docs/design-dna/recipes/patterns.md` completes all 13 Design DNA recipes (#194)
 
 ### Fixed
-- dynamic about skill + Opus 4.6 1M detection (437ecc0)
+- **Statusline** — `claude-opus-4-6` correctly maps to 1M context window (#193)
+- **About Skill** — Dynamic generation via `generate-about.sh` on SessionStart (#193)
+- **VERSION** — Bumped to 5.21.0 (was stale at 5.20.0) (#193)
+- **Ship Skill** — Removed dead `/code-review` reference (#194)
+- **CHANGELOG** — Duplicate [5.11.0] entry resolved (#194)
+- **Settings** — Path case fix, sandbox double-slash fix (#194)
+- **Supabase Keys** — Clarified as REMOVED, not deprecated (#194)
+
 ## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
 ### Added
