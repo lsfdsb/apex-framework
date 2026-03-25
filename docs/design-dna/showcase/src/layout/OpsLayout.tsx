@@ -1,9 +1,10 @@
 import { type ReactNode, useState, useEffect } from "react";
 import { useHash } from "../router/Router";
 import { OPS_ROUTES } from "../data/routes";
-import { Workflow, ListTodo, Users, ShieldCheck, Menu, X, ChevronsLeft, ChevronsRight } from "lucide-react";
+import { FolderOpen, Workflow, ListTodo, Users, ShieldCheck, Menu, X, ChevronsLeft, ChevronsRight } from "lucide-react";
 
 const SIDEBAR_ICONS: Record<string, ReactNode> = {
+  "/projects": <FolderOpen size={18} />,
   "/pipeline": <Workflow size={18} />,
   "/tasks": <ListTodo size={18} />,
   "/agents": <Users size={18} />,

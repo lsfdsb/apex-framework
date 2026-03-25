@@ -123,7 +123,7 @@ export default function HubHome() {
         <HubCard
           suffix="OPS"
           description="The 7-phase autonomous pipeline that turns ideas into production code. See agents work, tasks move, and quality gates execute."
-          href="/pipeline"
+          href="/projects"
           accent="var(--accent)"
           icon={<Workflow size={20} />}
         >
