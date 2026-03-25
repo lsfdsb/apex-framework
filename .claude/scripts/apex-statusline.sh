@@ -61,8 +61,8 @@ echo "$MODEL_ID" | grep -qi "opusplan" 2>/dev/null && M="opus→sonnet"
 # ── Context size correction for known model limits ──
 EXPECTED_CTX=0
 case "$MODEL_ID" in
-  *opus*[1][mM]*) EXPECTED_CTX=1000000 ;;
-  *opus-4*)       EXPECTED_CTX=200000 ;;
+  *opus-4-6*)     EXPECTED_CTX=1000000 ;;
+  *opus-4-2*)     EXPECTED_CTX=200000 ;;
   *sonnet-4*)     EXPECTED_CTX=200000 ;;
   *haiku*)        EXPECTED_CTX=200000 ;;
 esac
