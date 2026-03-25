@@ -8,7 +8,7 @@ interface AgentCardProps {
 
 // Model badge color map
 const MODEL_BADGE: Record<string, { label: string; bg: string; color: string }> = {
-  opus:   { label: "Opus",   bg: "rgba(212,175,55,0.15)", color: "#d4af37" },
+  opus:   { label: "Opus",   bg: "rgba(212,175,55,0.15)", color: "var(--warning)" },
   sonnet: { label: "Sonnet", bg: "var(--accent-glow)",    color: "var(--accent)" },
   haiku:  { label: "Haiku",  bg: "var(--bg-surface)",     color: "var(--text-muted)" },
 };
@@ -125,7 +125,7 @@ export function AgentCard({ agent, status = "idle" }: AgentCardProps) {
             border: `1px solid ${badge.color}`,
             whiteSpace: "nowrap",
             flexShrink: 0,
-            opacity: badge.color === "#d4af37" ? 1 : 0.85,
+            opacity: badge.color === "var(--warning)" ? 1 : 0.85,
           }}
         >
           {badge.label}

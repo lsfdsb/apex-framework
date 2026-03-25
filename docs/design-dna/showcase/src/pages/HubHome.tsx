@@ -19,6 +19,8 @@ const DEFAULT_SESSION: SessionState = {
 function CountUp({ target, duration = 1200 }: { target: number; duration?: number }) {
   const [value, setValue] = useState(0);
   useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) { setValue(target); return; }
     const start = performance.now();
     const tick = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
@@ -222,7 +224,7 @@ export default function HubHome() {
             padding: "20px 16px",
             textAlign: "center",
           }}>
-            <div style={{ display: "flex", justifyContent: "center", color: "var(--accent)", marginBottom: 8 }}>
+            <div aria-hidden="true" style={{ display: "flex", justifyContent: "center", color: "var(--accent)", marginBottom: 8 }}>
               {m.icon}
             </div>
             <div style={{ fontSize: 24, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", fontFamily: "var(--font-body)" }}>

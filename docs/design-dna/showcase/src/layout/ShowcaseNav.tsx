@@ -238,7 +238,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
                 background: "var(--accent)",
                 border: "none",
                 cursor: "pointer",
-                color: "#fff",
+                color: "var(--bg)",
                 fontWeight: 600,
                 borderRadius: 8,
                 padding: "5px 14px",

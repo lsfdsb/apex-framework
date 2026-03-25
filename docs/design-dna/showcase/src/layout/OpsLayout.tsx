@@ -106,6 +106,7 @@ export function OpsLayout({ children }: { children: ReactNode }) {
               key={route.path}
               href={`#${route.path}`}
               className={`ops-sidebar-item${hash === route.path ? " active" : ""}`}
+              aria-current={hash === route.path ? "page" : undefined}
             >
               {SIDEBAR_ICONS[route.path]}
               <span>{route.label}</span>

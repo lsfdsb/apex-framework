@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "../router/Router";
-import { FolderOpen, Plus, Clock, GitBranch, CheckCircle2, AlertCircle, Search, ChevronRight, Layers } from "lucide-react";
+import { FolderOpen, Plus, Clock, GitBranch, CheckCircle2, AlertCircle, Search, ChevronRight, Layers, GitPullRequest, Check } from "lucide-react";
 
 /* ── Data Types ───────────────────────────────────────────────────────────── */
 
@@ -12,6 +12,8 @@ interface SubProject {
   description: string;
   branch: string;
   pr?: string;
+  prStatus?: "merged" | "open" | "closed";
+  prUrl?: string;
   lastActive: string;
   status: SubProjectStatus;
   phase: number;
@@ -53,6 +55,8 @@ const PROJECTS: Project[] = [
         description: "PM agent, 7-phase pipeline, Bueno rebrand, CI fixes, Node.js 22 LTS.",
         branch: "feat/v522-apple-audit",
         pr: "#202",
+        prStatus: "merged",
+        prUrl: "https://github.com/lsfdsb/apex-framework/pull/202",
         lastActive: "Today",
         status: "shipped",
         phase: 7,
@@ -65,6 +69,8 @@ const PROJECTS: Project[] = [
         description: "81 Apple-audit fixes, dynamic counts, portable shell, batch-reads rule.",
         branch: "feat/apple-grade-audit-fixes",
         pr: "#194",
+        prStatus: "merged",
+        prUrl: "https://github.com/lsfdsb/apex-framework/pull/194",
         lastActive: "Mar 24",
         status: "shipped",
         phase: 7,
@@ -77,6 +83,8 @@ const PROJECTS: Project[] = [
         description: "41 files: hooks complete, Oscar animations, DnaBackground, E2E tests.",
         branch: "feat/v5.20-production-readiness",
         pr: "#187",
+        prStatus: "merged",
+        prUrl: "https://github.com/lsfdsb/apex-framework/pull/187",
         lastActive: "Mar 23",
         status: "shipped",
         phase: 7,
@@ -89,6 +97,8 @@ const PROJECTS: Project[] = [
         description: "14 premium UI templates, 33 starters, 39 components — the visual quality bar.",
         branch: "main",
         pr: "#187",
+        prStatus: "merged",
+        prUrl: "https://github.com/lsfdsb/apex-framework/pull/187",
         lastActive: "Mar 23",
         status: "shipped",
         phase: 7,
@@ -101,6 +111,8 @@ const PROJECTS: Project[] = [
         description: "544KB → 210KB (61% smaller). Lazy loading, code splitting, tree shaking.",
         branch: "perf/bundle-optimization",
         pr: "#185",
+        prStatus: "merged",
+        prUrl: "https://github.com/lsfdsb/apex-framework/pull/185",
         lastActive: "Mar 22",
         status: "shipped",
         phase: 7,
@@ -162,9 +174,9 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
       >
         {/* Header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-          <h4 style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", fontFamily: "var(--font-body)", letterSpacing: "-0.01em" }}>
+          <h3 style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", fontFamily: "var(--font-body)", letterSpacing: "-0.01em" }}>
             {sub.name}
-          </h4>
+          </h3>
           <div style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 11, color: status.color, fontWeight: 600, flexShrink: 0 }}>
             <StatusIcon size={12} />
             {status.label}
@@ -180,16 +192,47 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
           <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
             <GitBranch size={11} /> {sub.branch}
           </span>
-          {sub.pr && (
+          {sub.pr && sub.prUrl ? (
+            <a
+              href={sub.prUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                background: sub.prStatus === "merged"
+                  ? "color-mix(in srgb, var(--success) 12%, transparent)"
+                  : sub.prStatus === "open"
+                  ? "color-mix(in srgb, var(--accent) 12%, transparent)"
+                  : "color-mix(in srgb, var(--text-muted) 12%, transparent)",
+                color: sub.prStatus === "merged"
+                  ? "var(--success)"
+                  : sub.prStatus === "open"
+                  ? "var(--accent)"
+                  : "var(--text-muted)",
+                fontWeight: 600,
+                padding: "2px 8px", borderRadius: 6, fontSize: 10,
+                textDecoration: "none",
+                transition: "opacity 0.2s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.75"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
+            >
+              <GitPullRequest size={10} />
+              PR {sub.pr}
+              {sub.prStatus === "merged" && <Check size={8} />}
+            </a>
+          ) : sub.pr ? (
             <span style={{
-              display: "flex", alignItems: "center", gap: 3,
+              display: "inline-flex", alignItems: "center", gap: 3,
               background: "color-mix(in srgb, var(--accent) 12%, transparent)",
               color: "var(--accent)", fontWeight: 600,
-              padding: "1px 7px", borderRadius: 6, fontSize: 10,
+              padding: "2px 8px", borderRadius: 6, fontSize: 10,
             }}>
+              <GitPullRequest size={10} />
               PR {sub.pr}
             </span>
-          )}
+          ) : null}
           <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
             <Clock size={11} /> {sub.lastActive}
           </span>
@@ -240,6 +283,11 @@ function ProjectSection({ project }: { project: Project }) {
           <span><strong style={{ color: "var(--text-secondary)" }}>{project.subProjects.length}</strong> sub-projects</span>
           <span><strong style={{ color: "var(--accent)" }}>{activeCount}</strong> active</span>
           <span><strong style={{ color: "var(--text-secondary)" }}>{doneTasks}/{totalTasks}</strong> tasks</span>
+          <span>
+            <strong style={{ color: "var(--success)" }}>
+              {project.subProjects.filter(s => s.prStatus === "merged").length}
+            </strong> PRs merged
+          </span>
         </div>
       </div>
 

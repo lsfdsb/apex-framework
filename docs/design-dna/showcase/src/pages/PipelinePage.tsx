@@ -228,7 +228,7 @@ export default function PipelinePage() {
         style={{
           padding: "36px 32px",
           background: "var(--bg-elevated)",
-          border: `1px solid ${simComplete ? "var(--success, #22c55e)" : "var(--border)"}`,
+          border: `1px solid ${simComplete ? "var(--success)" : "var(--border)"}`,
           borderRadius: 16,
           textAlign: "center",
           transition: "border-color 0.4s ease",
@@ -245,7 +245,7 @@ export default function PipelinePage() {
             left: 0,
             right: 0,
             height: 3,
-            background: simComplete ? "var(--success, #22c55e)" : "var(--accent)",
+            background: simComplete ? "var(--success)" : "var(--accent)",
             borderRadius: "16px 16px 0 0",
             transition: "background 0.4s ease",
           }}
@@ -257,7 +257,7 @@ export default function PipelinePage() {
             fontWeight: 600,
             letterSpacing: "0.12em",
             textTransform: "uppercase" as const,
-            color: simComplete ? "var(--success, #22c55e)" : "var(--accent)",
+            color: simComplete ? "var(--success)" : "var(--accent)",
             marginBottom: 8,
             transition: "color 0.4s ease",
           }}
