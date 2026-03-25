@@ -15,6 +15,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **HUB Team Kanban per SubProject** — Dedicated Kanban boards per subproject (Design Review → Build → Quality → Security) for team-level task orchestration (#204)
 - **HUB Subproject Filtering** — All subprojects visible on timeline; non-matching phases dimmed for phase-aware navigation (#204)
 - **HUB Layout Expansion** — Projects page maxWidth increased 960→1200 with center alignment for 7-phase visual breathing room (#204)
+- **Phase Team Roster Visualization** — ProjectsPage now displays agent badges on all 7 phases (always visible) and skills when phase is selected; each phase shows full team roster: Plan (Lead, /prd), Architect (Lead, /architecture, /verify-api), Decompose (PM, /teams), Verify (Lead+Builder, /verify-api, /verify-lib), Build (Builder+Watcher, /teams, /design-system), Quality (QA, /qa, /security, /a11y, /cx-review), Ship (Tech Writer+Lead, /ship, /changelog)
 
 ### Changed
 - **CLAUDE.md Rule #16: Design DNA** — Updated to route builders to React component templates instead of HTML files for design reference (#204)

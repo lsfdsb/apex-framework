@@ -45,13 +45,13 @@ interface PullRequest {
 /* ── The 7 APEX Pipeline Phases ───────────────────────────────────────────── */
 
 const PIPELINE_PHASES = [
-  { id: 1, name: "Plan",      icon: ClipboardList, isGate: true,  description: "PRD from user description" },
-  { id: 2, name: "Architect", icon: Building,      isGate: true,  description: "System design + stack" },
-  { id: 3, name: "Decompose", icon: Kanban,        isGate: false, description: "PM breaks into tasks" },
-  { id: 4, name: "Verify",    icon: SearchCheck,   isGate: false, description: "APIs + libs verified" },
-  { id: 5, name: "Build",     icon: Hammer,        isGate: false, description: "Builders implement" },
-  { id: 6, name: "Quality",   icon: ShieldCheck,   isGate: false, description: "7-phase QA gate" },
-  { id: 7, name: "Ship",      icon: Rocket,        isGate: true,  description: "PR + merge approval" },
+  { id: 1, name: "Plan",      icon: ClipboardList, isGate: true,  description: "PRD from user description",            agents: ["Lead"],                    skills: ["/prd"] },
+  { id: 2, name: "Architect", icon: Building,      isGate: true,  description: "System design + stack",                agents: ["Lead"],                    skills: ["/architecture", "/verify-api"] },
+  { id: 3, name: "Decompose", icon: Kanban,        isGate: false, description: "PM breaks into tasks",                 agents: ["PM"],                      skills: ["/teams"] },
+  { id: 4, name: "Verify",    icon: SearchCheck,   isGate: false, description: "APIs + libs verified",                 agents: ["Lead", "Builder"],         skills: ["/verify-api", "/verify-lib"] },
+  { id: 5, name: "Build",     icon: Hammer,        isGate: false, description: "Builders implement",                   agents: ["Builder", "Watcher"],      skills: ["/teams", "/design-system"] },
+  { id: 6, name: "Quality",   icon: ShieldCheck,   isGate: false, description: "7-phase QA gate",                      agents: ["QA"],                      skills: ["/qa", "/security", "/a11y", "/cx-review"] },
+  { id: 7, name: "Ship",      icon: Rocket,        isGate: true,  description: "PR + merge approval",                  agents: ["Tech Writer", "Lead"],     skills: ["/ship", "/changelog"] },
 ] as const;
 
 /* ── Team Stages (Kanban Columns) ─────────────────────────────────────────── */
@@ -251,7 +251,7 @@ function PipelineNode({ phase, isLast, isSelected, subCount, completedCount, onC
           )}
         </div>
 
-        {/* Label */}
+        {/* Label + Team */}
         <div style={{ textAlign: "center" }}>
           <div style={{
             fontSize: isSelected ? 12 : 10,
@@ -262,8 +262,47 @@ function PipelineNode({ phase, isLast, isSelected, subCount, completedCount, onC
           }}>
             {phase.name}
           </div>
+
+          {/* Agents for this phase */}
+          <div style={{
+            display: "flex", gap: 3, justifyContent: "center", marginTop: 3, flexWrap: "wrap",
+          }}>
+            {phase.agents.map((agent) => (
+              <span key={agent} style={{
+                fontSize: 8, fontWeight: 600, padding: "1px 5px", borderRadius: 8,
+                background: isSelected
+                  ? "color-mix(in srgb, var(--accent) 15%, transparent)"
+                  : "color-mix(in srgb, var(--text-muted) 8%, transparent)",
+                color: isSelected ? "var(--accent)" : "var(--text-muted)",
+                letterSpacing: "0.02em",
+                transition: "all 0.3s",
+              }}>
+                {agent}
+              </span>
+            ))}
+          </div>
+
+          {/* Skills — only when selected */}
+          {isSelected && (
+            <div style={{
+              display: "flex", gap: 2, justifyContent: "center", marginTop: 3, flexWrap: "wrap",
+            }}>
+              {phase.skills.map((skill) => (
+                <span key={skill} style={{
+                  fontSize: 7, fontWeight: 500, padding: "1px 4px", borderRadius: 4,
+                  background: "var(--bg-surface, var(--bg))",
+                  color: "var(--text-muted)",
+                  border: "1px solid var(--border)",
+                  fontFamily: "var(--font-mono, monospace)",
+                }}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          )}
+
           {hasWork && (
-            <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 1 }}>
+            <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2 }}>
               {completedCount}/{subCount}
             </div>
           )}
