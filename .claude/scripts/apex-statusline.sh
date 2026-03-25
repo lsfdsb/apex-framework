@@ -18,6 +18,8 @@
 #   .cost.total_lines_added / .cost.total_lines_removed
 #   .rate_limits.five_hour.used_percentage
 
+set -euo pipefail
+
 export LC_NUMERIC=C
 
 if ! command -v jq &> /dev/null; then

@@ -8,6 +8,8 @@
 # For hooks whose stdout goes to Claude's context (SessionStart, Stop, etc.),
 # do NOT use colors — use Unicode/emoji instead.
 
+set -euo pipefail
+
 # ── Detect color support ──
 APEX_COLORS=false
 if [ -t 1 ] || [ "${FORCE_COLOR:-}" = "1" ]; then

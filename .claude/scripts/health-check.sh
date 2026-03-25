@@ -8,6 +8,8 @@
 #
 # by L.B. & Claude · São Paulo, 2026
 
+set -euo pipefail
+
 # ── Find project root ──
 if [ -n "${CLAUDE_PROJECT_DIR:-}" ]; then
   PROJECT_DIR="$CLAUDE_PROJECT_DIR"

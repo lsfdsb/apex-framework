@@ -128,6 +128,12 @@ Fill every row with the actual packages, APIs, env vars, tables, and internal im
 
 5. **Return summary** of architecture decisions, the persona→page map, component tree, and any trade-offs for user review. Explicitly list any integrations that still need API verification via WebSearch.
 
+**Persona→Page Gate** — Before presenting the summary, scan every row in the Page→Persona Map:
+- If ANY page has no primary persona assigned → **BLOCK**: ask the user to assign a primary persona to that page before proceeding.
+- If two or more personas share the same page without explicit justification in the PRD → **BLOCK**: ask the user to either split the page into two views or point to the PRD section that justifies the shared view.
+
+Do not proceed to implementation until the persona→page map is complete and conflict-free.
+
 ## Production Observability
 
 Every app must ship with error tracking on day one. If it breaks in prod and nobody knows, it's not production-ready.

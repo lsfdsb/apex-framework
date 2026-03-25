@@ -116,9 +116,11 @@ These patterns were verified against official documentation. The "last verified"
 - Client (browser-safe): `sb_publishable_[...]` — used as `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - Server (secret): `sb_secret_[...]` — used as `SUPABASE_SECRET_KEY`, never in client code
 
-**Deprecated — DO NOT USE**:
-- `anon` JWT key (deprecated Nov 2025) — previously `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `service_role` JWT key (deprecated Nov 2025) — previously `SUPABASE_SERVICE_ROLE_KEY`
+**REMOVED (Nov 2025) — DO NOT USE**:
+- `anon` JWT key (REMOVED Nov 2025) — previously `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `service_role` JWT key (REMOVED Nov 2025) — previously `SUPABASE_SERVICE_ROLE_KEY`
+
+These keys are no longer accepted by Supabase. Migration to `sb_publishable_`/`sb_secret_` is mandatory.
 
 **Current initialization pattern**:
 ```typescript

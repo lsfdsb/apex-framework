@@ -4,6 +4,8 @@
 # Injects findings into Claude's context so issues get addressed proactively.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 if [ -z "${CLAUDE_PROJECT_DIR:-}" ]; then
   # No project dir — dev monitor not applicable
   exit 0

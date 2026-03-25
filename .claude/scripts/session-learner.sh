@@ -8,12 +8,15 @@
 #
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
+# Drain stdin — large tool payloads on stdin can accumulate and delay shutdown
+INPUT=$(cat 2>/dev/null || true)
+
 if ! command -v jq &> /dev/null; then
   echo '{"systemMessage":"⚠️ APEX: jq not installed — session learning DISABLED. Install: brew install jq"}'
   exit 0
 fi
-
-INPUT=$(cat)
 # CLAUDE_SESSION_ID env var doesn't exist — extract from hook JSON payload
 SESSION_ID=$(echo "$INPUT" | jq -r '.session_id // empty' 2>/dev/null)
 if [ -z "$SESSION_ID" ]; then

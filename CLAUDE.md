@@ -38,6 +38,8 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable.
 20. **Rules in framework, stories in memory** — When you learn a lesson, the behavioral rule goes in the framework (CLAUDE.md, output style, skills, agents). The historical context (WHY) goes in memory. Framework rules serve all users. Memory serves this user. If every APEX user would benefit, it's a framework change.
 21. **Safe hook processes** — Hook scripts that spawn background processes MUST use `nohup cmd > log 2>&1 < /dev/null &`. The `< /dev/null` detaches stdin so the child doesn't inherit Claude Code's pipe. Never kill PIDs from hook scripts without first verifying via `ps -o comm=` that the target is the expected process (node/vite/npm), not a bash hook script in Claude's process group. Killing the wrong PID can silently prevent Claude Code from responding.
+22. **Graceful degradation is not optional** — Every hook, script, and agent MUST handle missing dependencies explicitly. If `jq` is missing, say so loudly. If a network call fails, fall back gracefully. Silent failures are bugs. Apple ships things that work on every device — our framework works on every machine.
+23. **The last 10% is the other 90%** — Polish matters. Truncated text, misaligned tables, stale version numbers, dead references — these are not nitpicks, they are quality failures. Before shipping, re-read what was built. Verify cross-references. Check version consistency. The difference between good and great is the details nobody notices until they are wrong.
 
 ## Code Standards
 

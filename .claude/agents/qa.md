@@ -135,9 +135,10 @@ for f in .claude/scripts/*.sh; do [ -x "$f" ] || echo "⚠️ NOT EXECUTABLE: $f
 Run this on ALL .tsx/.jsx files:
 ```bash
 # Find hardcoded Tailwind palette colors (VIOLATIONS)
-grep -rnE '(bg|text|border|ring|from|to|via)-(red|blue|green|yellow|purple|pink|indigo|orange|amber|emerald|teal|cyan|violet|fuchsia|rose|lime|sky|slate|gray|zinc|neutral|stone)-[0-9]{2,3}' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null
+# Catches: bg-red-500, text-blue-200, border-purple-600, and opacity variants like bg-red-200/50
+grep -rnE '(bg|text|border|ring|from|to|via)-(red|blue|green|yellow|purple|pink|indigo|orange|amber|emerald|teal|cyan|violet|fuchsia|rose|lime|sky|slate|gray|zinc|neutral|stone)-[0-9]{2,3}(/[0-9]{1,3})?' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null
 ```
-Any matches = BLOCK. Components must use semantic tokens (primary, accent, muted, destructive, etc.).
+Any matches = BLOCK. Components must use semantic tokens (primary, accent, muted, destructive, etc.). This includes opacity-modified palette colors like `red-200/50`.
 
 ## Branding Scan
 

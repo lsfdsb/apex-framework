@@ -12,6 +12,8 @@
 # - Files outside src/app/ and src/components/
 # - When docs/prd/ has at least one PRD file
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 # jq is required to parse hook input
 if ! command -v jq &> /dev/null; then
   echo '{"systemMessage":"⚠️ APEX: jq not installed — PRD enforcement DISABLED. Install: brew install jq"}'

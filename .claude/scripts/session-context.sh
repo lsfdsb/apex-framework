@@ -2,6 +2,9 @@
 # session-context.sh — APEX Framework SessionStart Hook
 # by L.B. & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
+
+set -euo pipefail
+
 if ! command -v jq &> /dev/null; then
   echo "⚠️ APEX: jq not installed — session context limited. Install: https://jqlang.github.io/jq/download/"
   exit 0

@@ -6,6 +6,8 @@
 # Exit 0 = allow. Stdout is added to Claude's context as a reminder.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 # jq is required to parse the transcript
 if ! command -v jq &> /dev/null; then
   echo '{"systemMessage":"⚠️ APEX: jq not installed — test enforcement DISABLED. Install: brew install jq"}'

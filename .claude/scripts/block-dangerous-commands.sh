@@ -4,9 +4,11 @@
 # Uses official hookSpecificOutput JSON format per Claude Code docs.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX Safety: jq not installed — dangerous command blocking disabled. Install: https://jqlang.github.io/jq/download/"
-  exit 0
+  echo '{"systemMessage":"⚠️ APEX Safety: jq not installed — dangerous command blocking DISABLED. Install: brew install jq"}'
+  exit 1
 fi
 
 INPUT=$(cat)

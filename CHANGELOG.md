@@ -6,7 +6,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-## [5.21.0] — 2026-03-25 — Quality Gates & Safe Processes
+
+### Fixed
+- dynamic about skill + Opus 4.6 1M detection (437ecc0)
+## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
 ### Added
 - **Design Principles (Taste Bible)** — 10 codified rules in `docs/design-dna/principles.md` preventing generic AI output: whitespace ratios, typography hierarchy, color discipline, motion budget, information density, empty state quality, consistent radius, persona alignment, loading states, dark mode parity (#191)
@@ -454,7 +457,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - `log-subagent.sh` — dead code (was empty)
 - `pre-compact.sh` / `post-compact.sh` — redundant with native compaction + auto-memory
 
-## [5.11.0] — 2026-03-18 — Agent Teams: The Championship Roster
+## [5.10.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
 ### Added
 - **6 new agents**: watcher, builder, debugger, qa, technical-writer, sentinel (Batman)
@@ -485,7 +488,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 ### Fixed
 - Statusline locale bug — numbers showed `0,0K` on pt-BR locale, now `0.0K`
 
-## [5.10.0] — 2026-03-18 — Update Skill, Pre-Commit Fix, Agent Teams Prep
+## [5.9.2] — 2026-03-18 — Update Skill, Pre-Commit Fix, Agent Teams Prep
 
 ### Added
 - `/update` skill — manual framework update from within any Claude session (#49)

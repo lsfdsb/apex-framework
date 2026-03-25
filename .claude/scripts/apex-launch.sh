@@ -1,5 +1,8 @@
 #!/bin/bash
 # APEX launcher — clean startup before Claude Code
+
+set -euo pipefail
+
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/apex-colors.sh" 2>/dev/null
 

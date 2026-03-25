@@ -79,20 +79,22 @@ CLAUDE_PROJECT_DIR=. bash .claude/scripts/manifest-generate.sh 2>/dev/null
 
 If README version is stale, update it now. If CHANGELOG is empty, the /commit skill missed Step 3 — add entries now.
 
-**5b. Code Review Plugin:**
-```
-Skill("code-review:code-review", args: "[PR NUMBER]")
-```
+**5b. Code Review:**
 
-**Show the PR URL to the user while review runs.** Don't ask to merge yet.
+Code review happens through two channels — no separate code-review skill is needed:
+
+1. **QA agent review** — If a QA agent is active in the team, message it with the PR number. It will run the full 6-phase quality gate and report APPROVED / BLOCKED.
+2. **GitHub native PR review** — Show the PR URL to the user and ask them to review it in GitHub. GitHub's native review tools (diff, comments, approval) are the primary review mechanism.
+
+**Show the PR URL to the user.** Don't ask to merge yet.
 
 ### Step 6: Review Gate
 
-Wait for the plugin to complete:
-- **No issues (score < 80)** → posts "No issues found" comment → proceed to merge
-- **Issues found (score 80+)** → posts findings as GitHub comment → fix, push, re-review
+Wait for review to complete:
+- **QA APPROVED + user approves** → proceed to merge
+- **QA BLOCKED or reviewer requests changes** → fix, push, re-review
 
-The plugin is the single review gate. It covers CLAUDE.md compliance (which includes all APEX rules), bugs, git history, and code comments — all confidence-scored to filter false positives.
+The QA agent covers APEX convention compliance, security, type safety, and test coverage. GitHub native review covers product logic and business correctness.
 
 ### Step 7: Merge (only with user approval)
 

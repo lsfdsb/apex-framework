@@ -13,6 +13,8 @@
 # Exit: 0 if clean, 1 if any warnings or errors found
 # by L.B. & Claude · São Paulo, 2026
 
+set -euo pipefail
+
 # ── Locate scripts dir ──
 if [ -n "${CLAUDE_PROJECT_DIR:-}" ]; then
   PROJECT_DIR="$CLAUDE_PROJECT_DIR"

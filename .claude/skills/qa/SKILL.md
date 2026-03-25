@@ -139,6 +139,58 @@ Only run this phase if deploying (`/qa deploy` or `/qa production`):
 - Feature flags available for risky changes?
 - SSL valid? CORS configured? Security headers set?
 
+## Phase 7: Apple-Grade Polish
+
+Run these checks on every PR, regardless of type. These catch quality failures that pass all other gates:
+
+**Version consistency** — all version surfaces must agree:
+```bash
+# Extract version from each surface and compare
+cat VERSION 2>/dev/null
+grep -m1 "^## \[" CHANGELOG.md 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'
+grep -m1 '"version"' package.json 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'
+grep -m1 'v[0-9]' README.md 2>/dev/null | grep -oE '[0-9]+\.[0-9]+\.[0-9]+'
+```
+Mismatch across VERSION, README, CHANGELOG, or package.json = WARNING (BLOCKING if this is a release PR).
+
+**Dead reference scan** — grep for names that no longer exist:
+```bash
+# Agent names referenced in docs but not present as agent files
+grep -rn "subagent_type:" .claude/ 2>/dev/null | grep -oE '"[^"]+"' | sort -u
+ls .claude/agents/ 2>/dev/null
+
+# Skill names referenced in agent frontmatter but not present as skill dirs
+grep -rn "^skills:" .claude/agents/ 2>/dev/null
+ls .claude/skills/ 2>/dev/null
+
+# File paths referenced in docs that don't exist
+grep -rnoE '`[^`]+\.(md|sh|ts|json)`' docs/ .claude/ 2>/dev/null | \
+  grep -oE '[^`]+\.(md|sh|ts|json)' | while read f; do [ -f "$f" ] || echo "DEAD: $f"; done
+```
+Any dead reference = WARNING.
+
+**Truncation check** — no strings cut off mid-word in generated or static content:
+```bash
+# Look for lines that end suspiciously (common truncation patterns)
+grep -rn '\.\.\.$\|…$' docs/ .claude/ 2>/dev/null | grep -v "CHANGELOG\|\.min\." | head -10
+```
+Review any matches — legitimate ellipsis is fine, truncated sentences are not.
+
+**Cross-file count consistency** — hardcoded numbers must match reality:
+```bash
+# Count agents and verify any hardcoded "N agents" claims
+agent_count=$(ls .claude/agents/*.md 2>/dev/null | wc -l | tr -d ' ')
+skill_count=$(ls -d .claude/skills/*/ 2>/dev/null | wc -l | tr -d ' ')
+echo "Agents: $agent_count  Skills: $skill_count"
+grep -rn "[0-9]* agent\|[0-9]* skill" docs/ README.md 2>/dev/null | head -10
+```
+Any count claim that differs from the actual file count = WARNING.
+
+**First-try usability** — verify the critical path works without tribal knowledge:
+- Does `README.md` describe installation completely from scratch?
+- Are all commands in docs runnable without undocumented prerequisites?
+- Does every error message in scripts tell the user what to do next?
+
 ## Output
 
 ```markdown
@@ -149,6 +201,12 @@ Only run this phase if deploying (`/qa deploy` or `/qa production`):
 - Packages: [count] verified / [count] missing
 - Env vars: [count] verified / [count] missing
 - Internal deps: [count] verified / [count] missing
+
+### Phase 7: Apple-Grade Polish
+- Version consistency: [all match / mismatch: list surfaces]
+- Dead references: [none / list dead paths]
+- Truncation: [clean / list suspicious lines]
+- Count consistency: [verified / list mismatches]
 
 ### 🔴 Critical (must fix)
 - [Issue] → [Fix]

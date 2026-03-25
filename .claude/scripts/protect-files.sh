@@ -1,10 +1,13 @@
 #!/bin/bash
-# Requires jq — warn and allow if missing (hooks should not silently degrade)
-if ! command -v jq &> /dev/null; then
-  echo "⚠️ APEX: jq not installed — file protection disabled. Install: https://jqlang.github.io/jq/download/" >&2
-  exit 0
-fi
 # protect-files.sh — PreToolUse hook
+# Requires jq — blocks if missing (file protection must be enforced)
+
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
+if ! command -v jq &> /dev/null; then
+  echo '{"systemMessage":"⚠️ APEX: jq not installed — file protection DISABLED. Install: brew install jq"}' >&2
+  exit 1
+fi
 # Blocks edits to protected files using the official JSON deny format.
 
 deny() {

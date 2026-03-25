@@ -4,7 +4,7 @@
 
 These 10 principles are **mandatory reading** for every builder agent before writing any user-facing code. They are the difference between "AI made this" and "a designer made this." Patterns tell you WHAT to build. Principles tell you WHY it looks that way.
 
-**Rule**: If your output violates any of these principles, it will be blocked at design review. No exceptions.
+**Rule**: If your output violates any of these principles, it will be blocked at QA agent design validation. No exceptions.
 
 ---
 

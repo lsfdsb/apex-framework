@@ -6,9 +6,11 @@
 # This is a deterministic security gate — catches secrets BEFORE they enter the codebase.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 if ! command -v jq &> /dev/null; then
   echo '{"systemMessage":"⚠️ APEX: jq not installed — security scanning DISABLED. Install: brew install jq"}'
-  exit 0
+  exit 1
 fi
 
 INPUT=$(cat)
