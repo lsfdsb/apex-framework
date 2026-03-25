@@ -4,9 +4,10 @@ import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
 import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, type RouteEntry } from "./data/routes";
+import { OpsLayout } from "./layout/OpsLayout";
 import TemplatePage from "./pages/TemplatePage";
 
-// Lazy-load HubHome and HomePage (HomePage includes 52KB CHANGELOG raw import)
+// Lazy-load pages
 const HubHome = lazy(() => import("./pages/HubHome"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 
@@ -93,7 +94,11 @@ export default function App() {
   const hash = useHash();
 
   const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hash);
-  const hubRoute = OPS_ROUTES.find((r) => r.path === hash) || NAV_ROUTES.find((r) => r.path === hash);
+  const opsRoute = OPS_ROUTES.find((r) => r.path === hash);
+  const navRoute = NAV_ROUTES.find((r) => r.path === hash);
+
+  // OPS routes get the sidebar layout — it's a full app
+  const isOps = !!opsRoute;
 
   return (
     <PaletteProvider>
@@ -104,12 +109,16 @@ export default function App() {
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <Suspense fallback={<LoadingState />}>
-            {hash === "/" ? (
+            {isOps && opsRoute ? (
+              <OpsLayout>
+                <opsRoute.component />
+              </OpsLayout>
+            ) : hash === "/" ? (
               <HubHome />
             ) : hash === "/dna" ? (
               <HomePage />
-            ) : hubRoute ? (
-              <TemplateWithSource route={hubRoute} />
+            ) : navRoute ? (
+              <navRoute.component />
             ) : templateRoute ? (
               <TemplateWithSource route={templateRoute} />
             ) : (
