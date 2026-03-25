@@ -13,6 +13,8 @@ paths:
 - No inline styles. Use Tailwind utilities or CSS modules.
 - **Design tokens only** — NEVER hardcode Tailwind palette colors. Use semantic tokens (`primary`, `accent`, `muted`, `destructive`). Read `tailwind.config.ts` or `globals.css` first.
 - **Reuse before create** — Before creating any component, check existing ones: `grep -r "export.*function\|export default" src/components/`. Three similar components = refactor into one with variants via props.
+- **Source of truth** — `src/components/` is the single source of truth for all components. `docs/design-dna/starters/` are scaffolding templates for initial promotion ONLY — once a component is promoted to `src/components/`, the starter copy is dead. Never reference, import from, or sync with starters after promotion. If a starter and a src component diverge, the src version wins.
+- **Icons** — Use Lucide React (`lucide-react`) as the standard icon library. Never use emoji as icons. Always use semantic sizing: `w-4 h-4` (inline/badge), `w-5 h-5` (buttons/nav), `w-6 h-6` (section headers), `w-8 h-8` to `w-12 h-12` (empty states/heroes). Always inherit text color via `className` — never hardcode icon colors.
 - **Co-locate** — Component file, test file, and styles in the same directory.
 - Memoize only when measured. Premature React.memo hurts readability.
 - Extract custom hooks for reusable logic. Name them `useXxx`.

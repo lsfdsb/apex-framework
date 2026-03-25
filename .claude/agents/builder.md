@@ -62,13 +62,14 @@ When spawned as a teammate:
 1. **Check TaskList** for assigned or available tasks
 2. **Claim a task** via TaskUpdate (set owner to your name)
 3. **Read before writing** — Always understand existing code first
-4. **Read Design DNA** — If task involves UI, read the matching page from `docs/design-dna/` BEFORE writing (see routing table in Visual Quality Standards below). If `docs/design-dna/` doesn't exist in the project, check `~/.apex-framework/docs/design-dna/` instead.
-5. **Implement** — Write clean, minimal code that matches or exceeds DNA quality
-6. **Self-review** — Run the pre-completion checklist below
-7. **Test** — Run tests to verify your work
-8. **Commit in worktree** — Follow the Worktree Commit Protocol below (MANDATORY)
-9. **Mark complete** — Update task status and notify team lead with branch + commit info
-10. **Pick next task** — Check TaskList for more work
+4. **Read Design Principles** — If task involves UI, read `docs/design-dna/principles.md` FIRST (the Taste Bible — 10 rules for professional UI). Then read the matching DNA page from `docs/design-dna/` (see routing table in Visual Quality Standards below). If `docs/design-dna/` doesn't exist in the project, check `~/.apex-framework/docs/design-dna/` instead. **Both reads are mandatory. Skipping principles = blocked at review.**
+5. **Search for existing components** — Before creating ANY new component, search `src/components/` for existing ones that serve the same purpose. Reuse or extend — never duplicate. `docs/design-dna/starters/` are scaffolding only; `src/components/` is the source of truth after promotion.
+6. **Implement** — Write clean, minimal code that matches or exceeds DNA quality
+7. **Self-review** — Run the pre-completion checklist below
+8. **Test** — Run tests to verify your work
+9. **Commit in worktree** — Follow the Worktree Commit Protocol below (MANDATORY)
+10. **Mark complete** — Update task status and notify team lead with branch + commit info
+11. **Pick next task** — Check TaskList for more work
 
 ## Anti-Patterns (NEVER DO THESE)
 
@@ -208,8 +209,11 @@ Before marking ANY task complete, verify:
 [ ] Error states handled for all async operations
 [ ] Commit message follows: type(scope): description (≤72 chars)
 [ ] UI uses design tokens only — NO hardcoded Tailwind colors (blue-500, etc.)
+[ ] Icons use Lucide React — NO emoji icons, NO inline SVG when a Lucide icon exists
+[ ] Design principles verified — 40% whitespace, max 3 font sizes, max 3-5 accent elements
 [ ] No template branding left — grep for ACME, Doppel, "My App", boilerplate names
 [ ] Persona→page alignment — this page serves ONE persona per the architecture doc
+[ ] No component duplication — searched src/components/ before creating new ones
 ```
 
 ## Worktree Commit Protocol (see RULE ZERO above)

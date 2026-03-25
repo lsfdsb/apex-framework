@@ -201,6 +201,17 @@ if [ -d "$APEX_DIR/docs/design-dna" ]; then
   echo "   Preview: node -e \"require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)\""
 fi
 
+# ── Prettier config ──
+if [ -f "$APEX_DIR/.prettierrc" ]; then
+  cp "$APEX_DIR/.prettierrc" . 2>/dev/null || true
+  cp "$APEX_DIR/.prettierignore" . 2>/dev/null || true
+fi
+
+# ── Design Principles (taste bible) ──
+if [ -f "$APEX_DIR/docs/design-dna/principles.md" ]; then
+  cp "$APEX_DIR/docs/design-dna/principles.md" docs/design-dna/ 2>/dev/null || true
+fi
+
 # ── Docs directories ──
 mkdir -p docs/prd docs/architecture docs/research docs/reviews
 
