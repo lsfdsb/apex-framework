@@ -6,6 +6,7 @@ interface BadgeProps {
   children: React.ReactNode;
   variant?: BadgeVariant;
   size?: "sm" | "md";
+  style?: React.CSSProperties;
 }
 
 const variantStyles: Record<BadgeVariant, { bg: string; color: string }> = {
@@ -17,15 +18,15 @@ const variantStyles: Record<BadgeVariant, { bg: string; color: string }> = {
   accent: { bg: "var(--accent-glow)", color: "var(--accent)" },
 };
 
-export function Badge({ children, variant = "default", size = "sm" }: BadgeProps) {
-  const style = variantStyles[variant];
+export function Badge({ children, variant = "default", size = "sm", style: styleProp }: BadgeProps) {
+  const variantStyle = variantStyles[variant];
   return (
     <span
       className={`
         inline-flex items-center font-medium rounded-full
         ${size === "sm" ? "text-[10px] px-2 py-0.5" : "text-[11px] px-2.5 py-1"}
       `}
-      style={{ background: style.bg, color: style.color }}
+      style={{ background: variantStyle.bg, color: variantStyle.color, ...styleProp }}
     >
       {children}
     </span>

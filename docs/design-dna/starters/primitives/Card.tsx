@@ -4,12 +4,13 @@ interface CardProps {
   children: React.ReactNode;
   hover?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   as?: "div" | "article" | "a";
   href?: string;
   onClick?: () => void;
 }
 
-export function Card({ children, hover = true, className = "", as: Tag = "div", href, onClick }: CardProps) {
+export function Card({ children, hover = true, className = "", style, as: Tag = "div", href, onClick }: CardProps) {
   const props = {
     className: `
       rounded-[var(--radius)] border overflow-hidden
@@ -20,6 +21,7 @@ export function Card({ children, hover = true, className = "", as: Tag = "div", 
     style: {
       background: "var(--bg-elevated)",
       borderColor: "var(--border)",
+      ...style,
     },
     ...(href ? { href } : {}),
     ...(onClick ? { onClick, role: "button" as const, tabIndex: 0 } : {}),
@@ -31,6 +33,7 @@ export function Card({ children, hover = true, className = "", as: Tag = "div", 
 interface SlotProps {
   children: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 Card.Thumbnail = function Thumbnail({ children, className = "" }: SlotProps) {
@@ -46,13 +49,13 @@ Card.Thumbnail = function Thumbnail({ children, className = "" }: SlotProps) {
   );
 };
 
-Card.Body = function Body({ children, className = "" }: SlotProps) {
-  return <div className={`p-[var(--card-padding,16px)] ${className}`}>{children}</div>;
+Card.Body = function Body({ children, className = "", style }: SlotProps) {
+  return <div className={`p-[var(--card-padding,16px)] ${className}`} style={style}>{children}</div>;
 };
 
-Card.Footer = function Footer({ children, className = "" }: SlotProps) {
+Card.Footer = function Footer({ children, className = "", style }: SlotProps) {
   return (
-    <div className={`px-[var(--card-padding,16px)] pb-[var(--card-padding,16px)] pt-0 ${className}`}>
+    <div className={`px-[var(--card-padding,16px)] pb-[var(--card-padding,16px)] pt-0 ${className}`} style={style}>
       {children}
     </div>
   );

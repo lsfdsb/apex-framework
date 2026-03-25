@@ -254,7 +254,7 @@ function PhaseCard({ phase, index }: { phase: (typeof PIPELINE_PHASES)[number]; 
 
 export default function AboutPage() {
   return (
-    <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+    <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px", minHeight: "calc(100vh - 120px)" }}>
 
       {/* ── Section 1: Hero ── */}
       <div style={{ marginBottom: 48 }}>

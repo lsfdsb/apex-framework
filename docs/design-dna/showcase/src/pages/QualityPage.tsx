@@ -34,6 +34,7 @@ export default function QualityPage() {
         maxWidth: 800,
         margin: "0 auto",
         padding: "48px 24px 80px",
+        minHeight: "calc(100vh - 120px)",
       }}
     >
       {/* ── Page header ── */}

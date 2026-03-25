@@ -346,7 +346,7 @@ export default function ProjectsPage() {
   );
 
   return (
-    <div style={{ maxWidth: 960 }}>
+    <div style={{ maxWidth: 960, minHeight: "calc(100vh - 120px)" }}>
       {/* Header */}
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
         <div>

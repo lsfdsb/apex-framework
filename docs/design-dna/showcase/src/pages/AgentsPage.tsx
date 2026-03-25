@@ -91,7 +91,7 @@ export default function AgentsPage() {
   }
 
   return (
-    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px" }}>
+    <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px", minHeight: "calc(100vh - 120px)" }}>
 
       {/* ── Hero ── */}
       <div style={{ marginBottom: 48 }}>

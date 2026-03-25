@@ -53,7 +53,7 @@ const TYPE_STYLES: Record<string, { bg: string; label: string }> = {
 
 export default function ChangelogPage() {
   return (
-    <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
+    <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px", minHeight: "calc(100vh - 120px)" }}>
       {/* Header */}
       <div style={{ marginBottom: 48 }}>
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>

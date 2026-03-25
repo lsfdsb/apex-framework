@@ -37,7 +37,7 @@ const opsStyles = `
   cursor:pointer;color:var(--text-muted);padding:6px;border-radius:8px;transition:all .2s;margin-top:auto}
 .ops-collapse-btn:hover{color:var(--text);background:var(--bg-elevated)}
 .ops-sidebar-footer{padding:8px 12px 4px;border-top:1px solid var(--border);white-space:nowrap;overflow:hidden}
-.ops-content{padding:32px 40px 80px;overflow-y:auto;min-height:0}
+.ops-content{padding:32px 40px 32px;overflow-y:auto;min-height:calc(100vh - 56px)}
 .ops-mobile-toggle{display:none;position:fixed;bottom:20px;right:20px;z-index:90;width:44px;height:44px;
   border-radius:12px;background:var(--accent);color:#fff;border:none;cursor:pointer;
   box-shadow:0 4px 20px rgba(0,0,0,0.3);align-items:center;justify-content:center}
@@ -52,7 +52,7 @@ const opsStyles = `
   .ops-sidebar.collapsed.open .ops-sidebar-item{justify-content:flex-start;padding:9px 12px}
   .ops-mobile-toggle{display:flex}
   .ops-mobile-overlay.open{display:block}
-  .ops-content{padding:24px 16px 80px}
+  .ops-content{padding:24px 16px 32px}
   .ops-collapse-btn{display:none}
 }
 `;

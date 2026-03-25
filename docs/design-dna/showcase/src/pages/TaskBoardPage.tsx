@@ -135,7 +135,6 @@ function KanbanColumn({
           gap: 8,
           padding: 12,
           minHeight: 160,
-          maxHeight: "calc(100vh - 280px)",
           overflowY: "auto",
         }}
       >
@@ -294,13 +293,17 @@ export default function TaskBoardPage() {
   return (
     <div
       style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "calc(100vh - 56px)",
         maxWidth: 1400,
         margin: "0 auto",
-        padding: "40px 24px 80px",
+        padding: "40px 24px 24px",
+        boxSizing: "border-box",
       }}
     >
       {/* ── Page header ── */}
-      <div style={{ marginBottom: 28 }}>
+      <div style={{ marginBottom: 28, flexShrink: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
           <div
             style={{
@@ -351,6 +354,7 @@ export default function TaskBoardPage() {
           flexWrap: "wrap",
           gap: 12,
           marginBottom: 24,
+          flexShrink: 0,
         }}
       >
         <PhaseFilter value={phase} onChange={setPhase} counts={phaseCounts} />
@@ -368,7 +372,7 @@ export default function TaskBoardPage() {
 
       {/* ── Mobile column tabs ── */}
       {isMobile && (
-        <div style={{ marginBottom: 16 }}>
+        <div style={{ marginBottom: 16, flexShrink: 0 }}>
           <MobileColumnTabs
             activeColumn={activeColumn}
             onChange={setActiveColumn}
@@ -380,7 +384,7 @@ export default function TaskBoardPage() {
       {/* ── Board ── */}
       {isMobile ? (
         /* Mobile: single column view */
-        <div>
+        <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
           {COLUMNS.filter((col) => col.id === activeColumn).map((col) => (
             <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} filterKey={phase} />
           ))}
@@ -391,6 +395,8 @@ export default function TaskBoardPage() {
           role="region"
           aria-label="Kanban board"
           style={{
+            flex: 1,
+            minHeight: 0,
             display: "flex",
             gap: 16,
             overflowX: "auto",

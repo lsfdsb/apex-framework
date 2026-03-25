@@ -6,10 +6,11 @@ interface StatCardProps {
   delta?: number;
   icon?: React.ReactNode;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 /** Dashboard stat card with optional trend delta and icon. */
-export function StatCard({ label, value, delta, icon, className = "" }: StatCardProps) {
+export function StatCard({ label, value, delta, icon, className = "", style }: StatCardProps) {
   const deltaColor =
     delta === undefined
       ? undefined
@@ -27,7 +28,7 @@ export function StatCard({ label, value, delta, icon, className = "" }: StatCard
         hover:border-[var(--border-hover)] hover:-translate-y-0.5
         ${className}
       `.trim()}
-      style={{ background: "var(--bg-elevated)", borderColor: "var(--border)" }}
+      style={{ background: "var(--bg-elevated)", borderColor: "var(--border)", ...style }}
     >
       <div className="flex items-start justify-between gap-3">
         <p
