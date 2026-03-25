@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import type { PipelinePhaseDefinition } from "../../data/hub-types";
 import { LucideIcon } from "../hub/LucideIcon";
 
@@ -6,6 +7,12 @@ interface PhaseNodeProps {
   isActive: boolean;
   isExpanded: boolean;
   onClick: () => void;
+  /** Simulation: this phase has completed */
+  isSimComplete?: boolean;
+  /** Simulation: this gate phase is paused for visual effect */
+  isSimGatePause?: boolean;
+  /** Simulation: final phase completed successfully — glow effect */
+  isSuccessGlow?: boolean;
 }
 
 // Lock icon SVG — used for gate phases
@@ -28,14 +35,32 @@ function LockIcon() {
   );
 }
 
-export function PhaseNode({ phase, isActive, isExpanded, onClick }: PhaseNodeProps) {
-  const borderColor = phase.isGate
+export function PhaseNode({
+  phase,
+  isActive,
+  isExpanded,
+  onClick,
+  isSimComplete = false,
+  isSimGatePause = false,
+  isSuccessGlow = false,
+}: PhaseNodeProps) {
+  const borderColor = isSimComplete
+    ? "var(--success, #22c55e)"
+    : isSimGatePause
+    ? "var(--warning, #f59e0b)"
+    : phase.isGate
     ? "var(--accent)"
     : isActive
     ? "var(--border-hover)"
     : "var(--border)";
 
-  const boxShadow = isActive
+  const boxShadow = isSuccessGlow
+    ? "0 0 0 2px var(--success, #22c55e), 0 0 32px rgba(34,197,94,0.35), 0 8px 32px rgba(0,0,0,0.3)"
+    : isSimGatePause
+    ? "0 0 0 2px var(--warning, #f59e0b), 0 0 24px rgba(245,158,11,0.3), 0 8px 32px rgba(0,0,0,0.3)"
+    : isSimComplete
+    ? "0 0 0 1px var(--success, #22c55e), 0 2px 12px rgba(0,0,0,0.2)"
+    : isActive
     ? "0 0 0 1px var(--accent), 0 0 24px var(--accent-glow), 0 8px 32px rgba(0,0,0,0.3)"
     : isExpanded
     ? "0 0 0 1px var(--border-hover), 0 4px 16px rgba(0,0,0,0.2)"
@@ -66,8 +91,51 @@ export function PhaseNode({ phase, isActive, isExpanded, onClick }: PhaseNodePro
         color: "var(--text)",
       }}
     >
-      {/* Gate badge */}
-      {phase.isGate && (
+      {/* Sim-complete badge — overrides gate badge during simulation */}
+      {isSimComplete ? (
+        <span
+          aria-label="Phase complete"
+          style={{
+            position: "absolute",
+            top: -8,
+            right: -8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 20,
+            height: 20,
+            borderRadius: "50%",
+            background: "var(--success, #22c55e)",
+            color: "#fff",
+            lineHeight: 1,
+          }}
+        >
+          <Check size={12} strokeWidth={3} aria-hidden="true" />
+        </span>
+      ) : isSimGatePause ? (
+        /* Gate-pause badge */
+        <span
+          aria-label="Gate — awaiting approval"
+          style={{
+            position: "absolute",
+            top: -8,
+            right: -8,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 20,
+            height: 20,
+            borderRadius: "50%",
+            background: "var(--warning, #f59e0b)",
+            color: "#fff",
+            lineHeight: 1,
+            animation: "gatePulse 1s ease-in-out infinite alternate",
+          }}
+        >
+          <LockIcon />
+        </span>
+      ) : phase.isGate ? (
+        /* Normal gate badge */
         <span
           style={{
             position: "absolute",
@@ -88,7 +156,7 @@ export function PhaseNode({ phase, isActive, isExpanded, onClick }: PhaseNodePro
         >
           <LockIcon />
         </span>
-      )}
+      ) : null}
 
       {/* Phase icon */}
       <span
@@ -97,8 +165,21 @@ export function PhaseNode({ phase, isActive, isExpanded, onClick }: PhaseNodePro
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          filter: isActive ? "drop-shadow(0 0 8px var(--accent))" : "none",
+          filter: isSuccessGlow
+            ? "drop-shadow(0 0 10px #22c55e)"
+            : isSimGatePause
+            ? "drop-shadow(0 0 8px #f59e0b)"
+            : isSimComplete
+            ? "drop-shadow(0 0 4px #22c55e)"
+            : isActive
+            ? "drop-shadow(0 0 8px var(--accent))"
+            : "none",
           transition: "filter 0.3s ease",
+          color: isSimComplete
+            ? "var(--success, #22c55e)"
+            : isSimGatePause
+            ? "var(--warning, #f59e0b)"
+            : "inherit",
         }}
         aria-hidden="true"
       >

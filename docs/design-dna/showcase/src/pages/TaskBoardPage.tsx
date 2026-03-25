@@ -4,7 +4,9 @@ import type { PhaseFilterValue } from "../components/tasks/PhaseFilter";
 import { WipIndicator } from "../components/tasks/WipIndicator";
 import { TaskCard } from "../components/tasks/TaskCard";
 import { MOCK_TASK_BOARD } from "../data/hub-mock";
-import type { TaskColumn, TaskItem } from "../data/hub-types";
+import { useApexState } from "../hooks/useApexState";
+import { LiveBadge } from "../components/hub/LiveBadge";
+import type { TaskColumn, TaskItem, TaskBoardState } from "../data/hub-types";
 
 // ── Column config ─────────────────────────────────────────────────────────────
 
@@ -88,9 +90,11 @@ function ColumnHeader({
 function KanbanColumn({
   column,
   tasks,
+  filterKey,
 }: {
   column: (typeof COLUMNS)[number];
   tasks: TaskItem[];
+  filterKey: string;
 }) {
   return (
     <div
@@ -137,7 +141,15 @@ function KanbanColumn({
             No tasks
           </div>
         ) : (
-          tasks.map((task) => <TaskCard key={task.id} task={task} />)
+          tasks.map((task, i) => (
+            <div
+              key={`${filterKey}-${task.id}`}
+              className="task-card-enter"
+              style={{ animationDelay: `${i * 30}ms` }}
+            >
+              <TaskCard task={task} />
+            </div>
+          ))
         )}
       </div>
     </div>
@@ -219,142 +231,16 @@ function MobileColumnTabs({
   );
 }
 
-// ── Teaching section ──────────────────────────────────────────────────────────
-
-function TeachingSection() {
-  const items = [
-    {
-      term: "DRI (Directly Responsible Individual)",
-      body: "Every task has exactly one owner. The DRI is accountable for delivery — not a committee. If something ships late, it's clear who owns it. Apple popularised this model; APEX applies it to every task.",
-    },
-    {
-      term: "Phases (P0 / P1 / P2)",
-      body: "P0 = must ship (blocks the release). P1 = should ship (high value, fits the sprint). P2 = polish (nice to have, deferred if time is tight). Every task is assigned a phase at creation so the team always knows what to cut under pressure.",
-    },
-    {
-      term: "WIP Limits",
-      body: "Work In Progress limits prevent context-switching overhead. In‑progress is capped at 2 — if you want to pick up task 3, finish one first. Review is capped at 1, keeping feedback cycles tight. When the indicator turns red, the column is over limit.",
-    },
-    {
-      term: "Acceptance Criteria",
-      body: "Each task carries a checklist of concrete, testable criteria. Done means all criteria are met — not 'mostly done' or 'just needs polish'. The progress bar on each card shows how many criteria are satisfied.",
-    },
-  ];
-
-  return (
-    <section
-      aria-labelledby="apple-epm-heading"
-      style={{
-        marginTop: 48,
-        padding: "32px 32px 36px",
-        background: "var(--bg-elevated)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius)",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Top accent bar */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: "var(--accent)",
-          borderRadius: "var(--radius) var(--radius) 0 0",
-        }}
-        aria-hidden="true"
-      />
-
-      <div
-        style={{
-          fontSize: 11,
-          fontWeight: 700,
-          letterSpacing: "0.1em",
-          textTransform: "uppercase",
-          color: "var(--accent)",
-          marginBottom: 8,
-        }}
-      >
-        Methodology
-      </div>
-      <h2
-        id="apple-epm-heading"
-        style={{
-          fontSize: 22,
-          fontWeight: 700,
-          color: "var(--text)",
-          letterSpacing: "-0.02em",
-          marginBottom: 6,
-          fontFamily: "'Inter', -apple-system, sans-serif",
-        }}
-      >
-        Apple EPM — Engineering Project Management
-      </h2>
-      <p
-        style={{
-          fontSize: 14,
-          color: "var(--text-secondary)",
-          lineHeight: 1.6,
-          marginBottom: 28,
-          maxWidth: 640,
-        }}
-      >
-        The methodology behind this board. Four principles that keep the build
-        moving without letting quality slip.
-      </p>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-          gap: 20,
-        }}
-      >
-        {items.map(({ term, body }) => (
-          <div
-            key={term}
-            style={{
-              padding: "18px 20px",
-              background: "var(--bg)",
-              border: "1px solid var(--border)",
-              borderRadius: "var(--radius-sm)",
-            }}
-          >
-            <div
-              style={{
-                fontSize: 13,
-                fontWeight: 700,
-                color: "var(--text)",
-                marginBottom: 8,
-                lineHeight: 1.3,
-              }}
-            >
-              {term}
-            </div>
-            <p
-              style={{
-                fontSize: 13,
-                color: "var(--text-secondary)",
-                lineHeight: 1.6,
-                margin: 0,
-              }}
-            >
-              {body}
-            </p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 // ── TaskBoardPage ─────────────────────────────────────────────────────────────
 
 export default function TaskBoardPage() {
-  const { projectName, tasks, meta } = MOCK_TASK_BOARD;
+  const { data: liveBoard, isLive, lastUpdated } = useApexState<TaskBoardState>(
+    "tasks.json",
+    MOCK_TASK_BOARD
+  );
+
+  // When live, use live board data; otherwise fall back to mock
+  const { projectName, tasks, meta } = isLive ? liveBoard : MOCK_TASK_BOARD;
 
   const [phase, setPhase] = useState<PhaseFilterValue>("all");
   const [activeColumn, setActiveColumn] = useState<TaskColumn>("backlog");
@@ -398,17 +284,20 @@ export default function TaskBoardPage() {
     >
       {/* ── Page header ── */}
       <div style={{ marginBottom: 28 }}>
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            color: "var(--accent)",
-            marginBottom: 6,
-          }}
-        >
-          Apple EPM Kanban
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6 }}>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              color: "var(--accent)",
+              flex: 1,
+            }}
+          >
+            Apple EPM Kanban
+          </div>
+          <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
         </div>
         <h1
           style={{
@@ -469,7 +358,7 @@ export default function TaskBoardPage() {
         /* Mobile: single column view */
         <div>
           {COLUMNS.filter((col) => col.id === activeColumn).map((col) => (
-            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} />
+            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} filterKey={phase} />
           ))}
         </div>
       ) : (
@@ -487,13 +376,36 @@ export default function TaskBoardPage() {
           }}
         >
           {COLUMNS.map((col) => (
-            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} />
+            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} filterKey={phase} />
           ))}
         </div>
       )}
 
-      {/* ── Teaching section ── */}
-      <TeachingSection />
+      {/* ── CSS animations ── */}
+      <style>{`
+        @keyframes taskCardSlideUp {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes taskCardFadeIn {
+          from { opacity: 0; }
+          to   { opacity: 1; }
+        }
+        .task-card-enter {
+          animation: taskCardSlideUp 200ms cubic-bezier(0.22,1,0.36,1) both;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .task-card-enter {
+            animation: taskCardFadeIn 150ms ease both;
+          }
+        }
+      `}</style>
     </div>
   );
 }

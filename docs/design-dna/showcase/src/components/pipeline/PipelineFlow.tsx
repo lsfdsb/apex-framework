@@ -3,13 +3,20 @@ import { PIPELINE_PHASES } from "../../data/hub-data";
 import { PhaseNode } from "./PhaseNode";
 import { PhaseDetail } from "./PhaseDetail";
 
-interface PipelineFlowProps {
+export type SimPhaseStatus = "idle" | "active" | "gate-pause" | "complete";
+
+export interface PipelineFlowProps {
   /** Currently active phase (1-7) from live session, or null in demo mode */
   activePhase?: number | null;
+  /** Simulation: per-phase status map (phase id → status) */
+  simStatus?: Record<number, SimPhaseStatus>;
 }
 
 // Dashed connector between phase nodes
-function Connector({ isDesktop }: { isDesktop: boolean }) {
+function Connector({ isDesktop, isComplete }: { isDesktop: boolean; isComplete?: boolean }) {
+  const opacity = isComplete ? 0.9 : 0.35;
+  const style = isComplete ? "solid" : "dashed";
+
   if (isDesktop) {
     return (
       <div
@@ -17,10 +24,11 @@ function Connector({ isDesktop }: { isDesktop: boolean }) {
         style={{
           flex: "0 0 24px",
           height: 1,
-          borderTop: "2px dashed var(--accent)",
-          opacity: 0.35,
+          borderTop: `2px ${style} var(--accent)`,
+          opacity,
           alignSelf: "center",
           marginTop: -16, // align with icon center
+          transition: "opacity 0.3s ease, border-top-style 0.3s ease",
         }}
       />
     );
@@ -31,15 +39,16 @@ function Connector({ isDesktop }: { isDesktop: boolean }) {
       style={{
         width: 1,
         height: 20,
-        borderLeft: "2px dashed var(--accent)",
-        opacity: 0.35,
+        borderLeft: `2px ${style} var(--accent)`,
+        opacity,
         margin: "0 auto",
+        transition: "opacity 0.3s ease, border-left-style 0.3s ease",
       }}
     />
   );
 }
 
-export function PipelineFlow({ activePhase = null }: PipelineFlowProps) {
+export function PipelineFlow({ activePhase = null, simStatus = {} }: PipelineFlowProps) {
   const [expandedPhase, setExpandedPhase] = useState<number | null>(null);
   const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 768);
   const detailRef = useRef<HTMLDivElement>(null);
@@ -92,29 +101,39 @@ export function PipelineFlow({ activePhase = null }: PipelineFlowProps) {
           paddingBottom: isDesktop ? 8 : 0,
         }}
       >
-        {PIPELINE_PHASES.map((phase, index) => (
-          <div
-            key={phase.id}
-            role="listitem"
-            style={{
-              display: "flex",
-              flexDirection: isDesktop ? "row" : "column",
-              alignItems: isDesktop ? "flex-start" : "stretch",
-              flex: isDesktop ? "1 1 0" : "none",
-              minWidth: isDesktop ? 0 : "auto",
-            }}
-          >
-            <PhaseNode
-              phase={phase}
-              isActive={activePhase === phase.id}
-              isExpanded={expandedPhase === phase.id}
-              onClick={() => handlePhaseClick(phase.id)}
-            />
-            {index < PIPELINE_PHASES.length - 1 && (
-              <Connector isDesktop={isDesktop} />
-            )}
-          </div>
-        ))}
+        {PIPELINE_PHASES.map((phase, index) => {
+          const phaseSim = simStatus[phase.id] ?? "idle";
+          const isSimActive = phaseSim === "active" || phaseSim === "gate-pause";
+          const isSimComplete = phaseSim === "complete";
+          const isLastPhase = phase.id === 7;
+
+          return (
+            <div
+              key={phase.id}
+              role="listitem"
+              style={{
+                display: "flex",
+                flexDirection: isDesktop ? "row" : "column",
+                alignItems: isDesktop ? "flex-start" : "stretch",
+                flex: isDesktop ? "1 1 0" : "none",
+                minWidth: isDesktop ? 0 : "auto",
+              }}
+            >
+              <PhaseNode
+                phase={phase}
+                isActive={activePhase === phase.id || isSimActive}
+                isExpanded={expandedPhase === phase.id}
+                isSimComplete={isSimComplete}
+                isSimGatePause={phaseSim === "gate-pause"}
+                isSuccessGlow={isSimComplete && isLastPhase}
+                onClick={() => handlePhaseClick(phase.id)}
+              />
+              {index < PIPELINE_PHASES.length - 1 && (
+                <Connector isDesktop={isDesktop} isComplete={isSimComplete} />
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Phase detail panel */}
@@ -144,6 +163,16 @@ export function PipelineFlow({ activePhase = null }: PipelineFlowProps) {
         @keyframes phaseDetailIn {
           from { opacity: 0; transform: translateY(8px); }
           to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes gatePulse {
+          from { opacity: 0.7; transform: scale(1); }
+          to   { opacity: 1; transform: scale(1.15); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          @keyframes gatePulse {
+            from { opacity: 1; }
+            to   { opacity: 1; }
+          }
         }
       `}</style>
     </div>

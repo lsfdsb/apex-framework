@@ -1,6 +1,18 @@
 import { useState, useEffect } from "react";
 import { Link } from "../router/Router";
 import { Workflow, Palette, GitPullRequest, Boxes, ShieldCheck, Users, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
+import { useApexState } from "../hooks/useApexState";
+import { LiveBadge } from "../components/hub/LiveBadge";
+import type { SessionState } from "../data/hub-types";
+
+const DEFAULT_SESSION: SessionState = {
+  active: false,
+  startedAt: "",
+  branch: "",
+  model: "",
+  contextUsed: 0,
+  contextMax: 200000,
+};
 
 /* ── CountUp ──────────────────────────────────────────────────────────────── */
 
@@ -97,11 +109,18 @@ const METRICS = [
 /* ── Main Page ────────────────────────────────────────────────────────────── */
 
 export default function HubHome() {
+  const { data: session, isLive, lastUpdated } = useApexState<SessionState>("session.json", DEFAULT_SESSION);
+
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px" }}>
 
       {/* ── Hero ── */}
       <div style={{ textAlign: "center", marginBottom: 56 }}>
+        {/* Live / Demo badge */}
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 14 }}>
+          <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
+        </div>
+
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>
           Agent-Powered EXcellence
         </div>
@@ -116,6 +135,34 @@ export default function HubHome() {
         <p style={{ fontSize: 16, color: "var(--text-secondary)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7, fontFamily: "var(--font-body)" }}>
           Watch AI build software the right way. 7 phases. 5 agents. Quality gates that never sleep.
         </p>
+
+        {/* Live session info bar — only shown when connected */}
+        {isLive && session.branch && (
+          <div style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 16,
+            marginTop: 20,
+            padding: "8px 16px",
+            background: "var(--bg-elevated)",
+            border: "1px solid var(--success)",
+            borderRadius: 8,
+            fontSize: 12,
+            color: "var(--text-secondary)",
+          }}>
+            <span style={{ color: "var(--success)", fontWeight: 600 }}>Connected session</span>
+            {session.branch && (
+              <span>
+                Branch: <code style={{ color: "var(--text)", fontFamily: "monospace" }}>{session.branch}</code>
+              </span>
+            )}
+            {session.model && (
+              <span>
+                Model: <code style={{ color: "var(--text)", fontFamily: "monospace" }}>{session.model}</code>
+              </span>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ── Cards (equal height with flex) ── */}

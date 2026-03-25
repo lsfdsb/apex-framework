@@ -2,6 +2,11 @@ import { AgentCard } from "../components/agents/AgentCard";
 import { BreathingLoop } from "../components/agents/BreathingLoop";
 import { ResponsibilityMatrix } from "../components/agents/ResponsibilityMatrix";
 import { AGENT_ROSTER } from "../data/hub-data";
+import { useApexState } from "../hooks/useApexState";
+import { LiveBadge } from "../components/hub/LiveBadge";
+import type { AgentState } from "../data/hub-types";
+
+const DEFAULT_AGENT_STATE: AgentState = { agents: [] };
 
 /* ── Section Divider ─────────────────────────────────────────────────────── */
 
@@ -69,78 +74,41 @@ function SectionHeader({ eyebrow, title, subtitle }: SectionHeaderProps) {
   );
 }
 
-/* ── Teaching Section ────────────────────────────────────────────────────── */
-
-interface TeachingPointProps {
-  icon: string;
-  heading: string;
-  body: string;
-}
-
-function TeachingPoint({ icon, heading, body }: TeachingPointProps) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        gap: 16,
-        padding: "20px 24px",
-        background: "var(--bg-elevated)",
-        border: "1px solid var(--border)",
-        borderRadius: 12,
-      }}
-    >
-      <span
-        style={{ fontSize: 24, lineHeight: 1, flexShrink: 0, marginTop: 2 }}
-        role="img"
-        aria-hidden="true"
-      >
-        {icon}
-      </span>
-      <div>
-        <div
-          style={{
-            fontSize: 14,
-            fontWeight: 600,
-            color: "var(--text)",
-            marginBottom: 6,
-          }}
-        >
-          {heading}
-        </div>
-        <p
-          style={{
-            fontSize: 13,
-            color: "var(--text-secondary)",
-            lineHeight: 1.6,
-            margin: 0,
-          }}
-        >
-          {body}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 /* ── Main Page ───────────────────────────────────────────────────────────── */
 
 export default function AgentsPage() {
+  const { data: agentState, isLive, lastUpdated } = useApexState<AgentState>(
+    "agents.json",
+    DEFAULT_AGENT_STATE
+  );
+
+  // Build a lookup: agent name → live status (for card highlighting)
+  const liveStatusMap: Record<string, "idle" | "active"> = {};
+  if (isLive) {
+    for (const instance of agentState.agents) {
+      liveStatusMap[instance.name] = instance.status === "active" ? "active" : "idle";
+    }
+  }
+
   return (
     <div style={{ maxWidth: 1000, margin: "0 auto", padding: "48px 24px 80px" }}>
 
       {/* ── Hero ── */}
       <div style={{ marginBottom: 48 }}>
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 600,
-            color: "var(--accent)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
-          Agent Architecture
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              color: "var(--accent)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              flex: 1,
+            }}
+          >
+            Agent Architecture
+          </div>
+          <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
         </div>
         <h1
           style={{
@@ -181,7 +149,10 @@ export default function AgentsPage() {
       >
         {AGENT_ROSTER.map((agent) => (
           <div key={agent.name} role="listitem">
-            <AgentCard agent={agent} />
+            <AgentCard
+              agent={agent}
+              status={isLive ? (liveStatusMap[agent.name] ?? "idle") : "idle"}
+            />
           </div>
         ))}
       </div>
@@ -209,48 +180,6 @@ export default function AgentsPage() {
       />
 
       <ResponsibilityMatrix />
-
-      <SectionDivider />
-
-      {/* ── Teaching: Why Multi-Agent? ── */}
-      <SectionHeader
-        eyebrow="The Philosophy"
-        title="Why multi-agent?"
-        subtitle="Specialization beats generalism. One elite agent per concern outperforms one generalist handling everything."
-      />
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
-        <TeachingPoint
-          icon="🎯"
-          heading="Focused context windows"
-          body="Each agent loads only what it needs. The Builder carries architecture context. The QA agent loads the quality checklist. Smaller, focused context = better decisions."
-        />
-        <TeachingPoint
-          icon="⚡"
-          heading="Parallel execution"
-          body="The Watcher monitors in the background while the Builder writes code. QA runs as soon as a task lands in review. No waiting — continuous progress."
-        />
-        <TeachingPoint
-          icon="🛡️"
-          heading="Clear accountability"
-          body="Every concern has one primary owner. When CHANGELOG has a bug, it's the Technical Writer's scope. When a security flaw ships, it's QA's gate that failed. No ambiguity."
-        />
-        <TeachingPoint
-          icon="🔄"
-          heading="The Breathing Loop"
-          body="Watcher detects, Builder fixes, QA verifies, Writer documents. The loop runs continuously without human intervention — until the user approves the ship."
-        />
-        <TeachingPoint
-          icon="📐"
-          heading="Right model for the job"
-          body="Opus for decisions that need deep reasoning — architecture and final review. Sonnet for heavy lifting — building and quality. Haiku for high-frequency monitoring — fast and cheap."
-        />
-        <TeachingPoint
-          icon="🏆"
-          heading="Compounding quality"
-          body="Each agent catches what the previous missed. The Builder writes; the Watcher catches type errors; QA verifies zero remain; the Writer confirms the docs match reality. Defense in depth."
-        />
-      </div>
 
     </div>
   );

@@ -2,11 +2,32 @@ import { QA_GATES, ADDITIONAL_GATES } from "../data/hub-quality";
 import { GatePhase } from "../components/quality/GatePhase";
 import { AdditionalGatePill } from "../components/quality/AdditionalGatePill";
 import { QualityScore } from "../components/quality/QualityScore";
+import { useApexState } from "../hooks/useApexState";
+import { LiveBadge } from "../components/hub/LiveBadge";
+import type { QualityState } from "../data/hub-types";
+
+const DEFAULT_QUALITY: QualityState = {
+  score: 94,
+  phases: [],
+  additionalGates: {
+    security: "pending",
+    accessibility: "pending",
+    cxReview: "pending",
+  },
+};
 
 // ── Quality Page ───────────────────────────────────────────────────────────────
 // The 7-Phase QA gate — educates users on every quality check APEX runs.
 
 export default function QualityPage() {
+  const { data: qualityState, isLive, lastUpdated } = useApexState<QualityState>(
+    "quality.json",
+    DEFAULT_QUALITY
+  );
+
+  // Use live score when connected, otherwise the default demo score
+  const displayScore = isLive ? qualityState.score : DEFAULT_QUALITY.score;
+
   return (
     <div
       style={{
@@ -17,17 +38,20 @@ export default function QualityPage() {
     >
       {/* ── Page header ── */}
       <div style={{ marginBottom: 48 }}>
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 600,
-            color: "var(--accent)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase" as const,
-            marginBottom: 12,
-          }}
-        >
-          Quality Assurance
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              color: "var(--accent)",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase" as const,
+              flex: 1,
+            }}
+          >
+            Quality Assurance
+          </div>
+          <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
         </div>
         <h1
           style={{
@@ -59,7 +83,7 @@ export default function QualityPage() {
 
       {/* ── Quality Score ── */}
       <div style={{ marginBottom: 48 }}>
-        <QualityScore score={94} />
+        <QualityScore score={displayScore} />
       </div>
 
       {/* ── 7-Phase Gates ── */}
