@@ -6,12 +6,53 @@ import { PIPELINE_PHASES } from "../data/hub-data";
 import { useApexState } from "../hooks/useApexState";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import type { PipelineState } from "../data/hub-types";
-import { StatCard } from "@starters/primitives/StatCard";
 
 const DEFAULT_PIPELINE: PipelineState = {
   currentPhase: 0,
   phases: [],
 };
+
+// ── Autonomy stat pill ───────────────────────────────────────────────────────
+
+function StatPill({ value, label }: { value: string; label: string }) {
+  return (
+    <div
+      style={{
+        textAlign: "center",
+        padding: "20px 28px",
+        background: "var(--bg-elevated)",
+        border: "1px solid var(--border)",
+        borderRadius: 12,
+        flex: "1 1 120px",
+        minWidth: 0,
+      }}
+    >
+      <div
+        style={{
+          fontSize: 32,
+          fontWeight: 800,
+          color: "var(--text)",
+          letterSpacing: "-0.03em",
+          lineHeight: 1,
+          marginBottom: 6,
+        }}
+      >
+        {value}
+      </div>
+      <div
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase" as const,
+          color: "var(--text-muted)",
+        }}
+      >
+        {label}
+      </div>
+    </div>
+  );
+}
 
 // ── Main page ────────────────────────────────────────────────────────────────
 
@@ -145,7 +186,7 @@ export default function PipelinePage() {
           the rest.
         </p>
 
-        {/* Quick stats — using StatCard from DNA starters */}
+        {/* Quick stats */}
         <div
           style={{
             display: "flex",
@@ -153,10 +194,10 @@ export default function PipelinePage() {
             flexWrap: "wrap",
           }}
         >
-          <StatCard value="7" label="Phases" className="flex-1" />
-          <StatCard value="5" label="Agents" className="flex-1" />
-          <StatCard value={String(gateCount)} label="User Gates" className="flex-1" />
-          <StatCard value={String(autonomousCount)} label="Autonomous" className="flex-1" />
+          <StatPill value="7" label="Phases" />
+          <StatPill value="5" label="Agents" />
+          <StatPill value={String(gateCount)} label="User gates" />
+          <StatPill value={String(autonomousCount)} label="Autonomous" />
         </div>
       </div>
 

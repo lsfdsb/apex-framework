@@ -1,8 +1,4 @@
-import { GitCommit, Tag } from "lucide-react";
-import { Card } from "@starters/primitives/Card";
-import { Badge } from "@starters/primitives/Badge";
-
-type BadgeVariant = "default" | "success" | "warning" | "error" | "info" | "accent";
+import { GitCommit, Tag, ArrowRight } from "lucide-react";
 
 const RELEASES = [
   {
@@ -49,10 +45,10 @@ const RELEASES = [
   },
 ] as const;
 
-const TYPE_CONFIG: Record<string, { variant: BadgeVariant; label: string }> = {
-  feat: { variant: "accent", label: "NEW" },
-  changed: { variant: "warning", label: "CHANGED" },
-  fix: { variant: "success", label: "FIXED" },
+const TYPE_STYLES: Record<string, { bg: string; label: string }> = {
+  feat: { bg: "var(--accent)", label: "NEW" },
+  changed: { bg: "var(--warning)", label: "CHANGED" },
+  fix: { bg: "var(--success)", label: "FIXED" },
 };
 
 export default function ChangelogPage() {
@@ -74,7 +70,7 @@ export default function ChangelogPage() {
       {/* Releases */}
       <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
         {RELEASES.map((release) => (
-          <div key={release.version}>
+          <div key={release.version} style={{ position: "relative" }}>
             {/* Version header */}
             <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
               <div style={{
@@ -89,24 +85,30 @@ export default function ChangelogPage() {
               <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>{release.title}</span>
             </div>
 
-            {/* Changes — wrapped in Card */}
-            <Card hover={false}>
-              <Card.Body>
-                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-                  {release.changes.map((change, i) => {
-                    const config = TYPE_CONFIG[change.type] ?? { variant: "default" as BadgeVariant, label: change.type.toUpperCase() };
-                    return (
-                      <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
-                        <Badge variant={config.variant}>{config.label}</Badge>
-                        <span style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5, paddingTop: 1 }}>
-                          {change.text}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card.Body>
-            </Card>
+            {/* Changes */}
+            <div style={{
+              background: "var(--bg-elevated)", border: "1px solid var(--border)",
+              borderRadius: 12, padding: "16px 20px",
+              display: "flex", flexDirection: "column", gap: 10,
+            }}>
+              {release.changes.map((change, i) => {
+                const style = TYPE_STYLES[change.type] ?? { bg: "var(--text-muted)", label: change.type.toUpperCase() };
+                return (
+                  <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+                    <span style={{
+                      fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.04em",
+                      padding: "2px 6px", borderRadius: 4, background: style.bg, color: "var(--bg)",
+                      flexShrink: 0, marginTop: 2,
+                    }}>
+                      {style.label}
+                    </span>
+                    <span style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+                      {change.text}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ))}
       </div>
