@@ -3,10 +3,12 @@ import { PaletteProvider } from "./context/PaletteContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
-import { TEMPLATE_ROUTES } from "./data/routes";
+import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, type RouteEntry } from "./data/routes";
+import { OpsLayout } from "./layout/OpsLayout";
 import TemplatePage from "./pages/TemplatePage";
 
-// Lazy-load HomePage (includes 52KB CHANGELOG raw import)
+// Lazy-load pages
+const HubHome = lazy(() => import("./pages/HubHome"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 
 // Lazy source imports — only loaded when user clicks "Source" on a template
@@ -70,7 +72,7 @@ function AnimatedBackground() {
   );
 }
 
-function TemplateWithSource({ route }: { route: (typeof TEMPLATE_ROUTES)[number] }) {
+function TemplateWithSource({ route }: { route: RouteEntry }) {
   const [source, setSource] = useState("");
   const templateName = getTemplateName(route.path);
 
@@ -91,21 +93,37 @@ function TemplateWithSource({ route }: { route: (typeof TEMPLATE_ROUTES)[number]
 export default function App() {
   const hash = useHash();
 
-  const route = TEMPLATE_ROUTES.find((r) => r.path === hash);
+  // Strip query params for route matching — params are consumed by page components
+  const hashPath = hash.split("?")[0];
+
+  const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hashPath);
+  const opsRoute = OPS_ROUTES.find((r) => r.path === hashPath);
+  const navRoute = NAV_ROUTES.find((r) => r.path === hashPath);
+
+  // OPS routes get the sidebar layout — it's a full app
+  const isOps = !!opsRoute;
 
   return (
     <PaletteProvider>
       <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
         <AnimatedBackground />
-        <ShowcaseNav activePath={hash} />
+        <ShowcaseNav activePath={hashPath} />
         <div style={{ height: 56 }} />
 
         <div style={{ position: "relative", zIndex: 1 }}>
           <Suspense fallback={<LoadingState />}>
-            {hash === "/" ? (
+            {isOps && opsRoute ? (
+              <OpsLayout>
+                <opsRoute.component />
+              </OpsLayout>
+            ) : hash === "/" ? (
+              <HubHome />
+            ) : hash === "/dna" ? (
               <HomePage />
-            ) : route ? (
-              <TemplateWithSource route={route} />
+            ) : navRoute ? (
+              <navRoute.component />
+            ) : templateRoute ? (
+              <TemplateWithSource route={templateRoute} />
             ) : (
               <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
                 <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>

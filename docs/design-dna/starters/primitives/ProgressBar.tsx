@@ -1,12 +1,16 @@
+import type { CSSProperties } from "react";
+
 interface ProgressBarProps {
   percentage: number;
   height?: number;
   showLabel?: boolean;
+  color?: string;
+  style?: CSSProperties;
 }
 
-export function ProgressBar({ percentage, height = 4, showLabel = false }: ProgressBarProps) {
+export function ProgressBar({ percentage, height = 4, showLabel = false, color = "var(--accent)", style }: ProgressBarProps) {
   return (
-    <div className="w-full">
+    <div className="w-full" style={style}>
       {showLabel && (
         <div className="flex justify-between mb-1">
           <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>
@@ -27,7 +31,7 @@ export function ProgressBar({ percentage, height = 4, showLabel = false }: Progr
       >
         <div
           className="h-full rounded-full transition-all duration-[var(--duration-slow)] ease-[var(--ease-out)]"
-          style={{ width: `${percentage}%`, background: "var(--accent)" }}
+          style={{ width: `${percentage}%`, background: color }}
         />
       </div>
     </div>

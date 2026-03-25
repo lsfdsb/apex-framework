@@ -27,6 +27,9 @@ Thumbs.db
 # Testing
 coverage/
 
+# APEX live-state files (written by Claude Code at runtime, not source)
+.apex/state/
+
 # Claude Code runtime (generated, not source)
 .claude/settings.local.json
 .claude/.apex-state.json

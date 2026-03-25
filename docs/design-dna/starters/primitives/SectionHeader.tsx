@@ -1,13 +1,16 @@
+import type { CSSProperties } from "react";
+
 interface SectionHeaderProps {
   label?: string;
   title: string;
   subtitle?: string;
   align?: "left" | "center";
+  style?: CSSProperties;
 }
 
-export function SectionHeader({ label, title, subtitle, align = "left" }: SectionHeaderProps) {
+export function SectionHeader({ label, title, subtitle, align = "left", style }: SectionHeaderProps) {
   return (
-    <div className={`mb-8 ${align === "center" ? "text-center" : ""}`}>
+    <div className={`mb-8 ${align === "center" ? "text-center" : ""}`} style={style}>
       {label && (
         <p className="apex-label mb-3" style={{ color: "var(--accent)" }}>
           {label}

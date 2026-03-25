@@ -1,13 +1,28 @@
 import { lazy, type ComponentType } from "react";
 import { type PaletteName } from "./palettes";
 
+export type RouteCategory = "hub" | "template" | "system";
+
 export interface RouteEntry {
   path: string;
   label: string;
   component: React.LazyExoticComponent<ComponentType>;
   palette: PaletteName;
-  category: "template" | "system";
+  category: RouteCategory;
 }
+
+export const OPS_ROUTES: RouteEntry[] = [
+  { path: "/projects", label: "Projects", component: lazy(() => import("../pages/ProjectsPage")), palette: "saas", category: "hub" },
+  { path: "/tasks", label: "Tasks", component: lazy(() => import("../pages/TaskBoardPage")), palette: "saas", category: "hub" },
+];
+
+export const NAV_ROUTES: RouteEntry[] = [
+  { path: "/about", label: "About", component: lazy(() => import("../pages/AboutPage")), palette: "saas", category: "hub" },
+  { path: "/changelog", label: "Changelog", component: lazy(() => import("../pages/ChangelogPage")), palette: "saas", category: "hub" },
+];
+
+/** @deprecated use OPS_ROUTES */
+export const HUB_ROUTES = OPS_ROUTES;
 
 export const TEMPLATE_ROUTES: RouteEntry[] = [
   { path: "/landing", label: "Landing", component: lazy(() => import("@templates/LandingPage")), palette: "startup", category: "template" },

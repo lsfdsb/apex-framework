@@ -376,15 +376,15 @@ APEX has 4 specialized agents — a championship roster. Use `/teams` for parall
 
 Use `/teams` and Claude auto-selects the right roster.
 
-### Design DNA
+### Design DNA & Visual Pipeline HUB
 
-Premium UI pattern library with 14 pages, 5 palettes, dark/light mode, and 22 background options:
+**HUB at localhost:3001** — Web-based command center with OPS dashboard, pipeline visualization, and team management. Features HUB Home, Pipeline Overview, Apple EPM Task Board, Agent Team page, Quality Gates visualization, Projects selector, Changelog, About page, plus complete Design DNA pattern library.
 
-```bash
-node -e "require('http').createServer((q,s)=>{let f=q.url.split('?')[0];if(f==='/')f='/index.html';if(!require('path').extname(f))f+='.html';const p=require('path').join(__dirname,'docs/design-dna',f);if(!require('fs').existsSync(p)){s.writeHead(404);s.end();return}s.writeHead(200,{'Content-Type':require('path').extname(p)==='.js'?'text/javascript':'text/html'});require('fs').createReadStream(p).pipe(s)}).listen(3001)"
-```
+**Design DNA** — Premium UI pattern library with 14 pages, 5 palettes, dark/light mode, and 22 background options:
 
-Open `http://localhost:3001` — 14 pattern pages for Landing, CRM (15 patterns), E-Commerce, SaaS, Blog, Portfolio, Social, LMS, Presentation, E-Book, Email Templates, Backoffice, plus Design System tokens and SVG Patterns library (14 static + 8 animated). Unified design widget on every page — palette, dark/light mode, backgrounds from one icon.
+14 pattern pages for Landing, CRM (15 patterns), E-Commerce, SaaS, Blog, Portfolio, Social, LMS, Presentation, E-Book, Email Templates, Backoffice, plus Design System tokens and SVG Patterns library (14 static + 8 animated). Unified design widget on every page — palette, dark/light mode, backgrounds from one icon.
+
+The HUB includes interactive 7-phase pipeline flow, 5-column Kanban board with WIP limits, breathing loop team animation, and live metrics synced from `.apex/state/` files.
 
 ### Step 6: Trust the Safety Net
 

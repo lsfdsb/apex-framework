@@ -19,11 +19,15 @@
     "paths": {
       "@starters/*": ["../starters/*"],
       "@templates/*": ["../templates/*"],
-      "@tokens/*": ["../tokens/*"]
+      "@tokens/*": ["../tokens/*"],
+      "@hub/*": ["../hub/*"],
+      "lucide-react": ["./node_modules/lucide-react"],
+      "react": ["./node_modules/@types/react"],
+      "react/jsx-runtime": ["./node_modules/@types/react/jsx-runtime"]
     },
     "typeRoots": ["./node_modules/@types"]
   },
-  "include": ["src", "../starters", "../templates"],
+  "include": ["src", "../starters", "../templates", "../hub"],
   "exclude": [
     "src/**/*.test.tsx",
     "src/**/*.test.ts",

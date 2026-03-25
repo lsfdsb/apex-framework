@@ -219,6 +219,17 @@
             "statusMessage": "Validating framework integrity..."
           }
         ]
+      },
+      {
+        "matcher": "TaskCreate|TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/task-state-writer.sh",
+            "timeout": 5,
+            "statusMessage": "Syncing task state to HUB..."
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
