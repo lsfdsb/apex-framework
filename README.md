@@ -429,6 +429,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 3. **Review PRDs before approving** — the PRD drives everything downstream. Get it right.
 4. **Run `/qa` before every PR** — it catches what you miss.
 5. **Review session learnings** — check the startup banner for patterns from past sessions.
+6. **Enjoy the startup sound** — On macOS, APEX plays a Mandalorian-themed chime with "This is the Way" at session start. Disable with `export APEX_SOUND=0` if you prefer silence.
 
 ---
 
@@ -451,6 +452,8 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 - **Production Hooks** — 16 hooks across 6 groups + TaskCompleted, TeammateIdle, ConfigChange events (#187, #190)
 - **Design DNA Oscar** — 10 animation keyframes, 5 new primitives, DnaBackground component (#187)
 - **E2E + Performance Tests** — 27 framework tests + hook performance profiler (#187)
+- **Mandalorian Startup Sound** — Session opens with Hero chime + "This is the Way" voice on macOS; disable via `APEX_SOUND=0` (#199)
+- **Hook Recursion Fix** — Fixed infinite recursion in `generate-about.sh` sed wrapper (#199)
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

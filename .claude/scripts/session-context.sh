@@ -149,6 +149,17 @@ if [ "$SOURCE" = "startup" ]; then
     fi
   }
 
+  # ── Startup sound (macOS only, background, non-blocking) ──
+  # Plays Hero sound + speaks "This is the Way" for atmosphere.
+  # Disable with APEX_SOUND=0
+  if [ "$ANIMATE" = true ] && [[ "$OSTYPE" == "darwin"* ]] && [ "${APEX_SOUND:-1}" != "0" ]; then
+    (
+      afplay /System/Library/Sounds/Hero.aiff 2>/dev/null
+      sleep 0.3
+      say -v Daniel -r 140 "This is the Way." 2>/dev/null
+    ) &
+  fi
+
   # ── Animated banner (stderr → terminal) ──
   if [ "$ANIMATE" = true ]; then
     echo "" >&2
