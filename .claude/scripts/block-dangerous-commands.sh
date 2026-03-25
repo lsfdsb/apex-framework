@@ -7,8 +7,8 @@
 set -uo pipefail  # no -e because hook must not crash Claude Code
 
 if ! command -v jq &> /dev/null; then
-  echo '{"systemMessage":"⚠️ APEX Safety: jq not installed — dangerous command blocking DISABLED. Install: brew install jq"}'
-  exit 1
+  echo '{"systemMessage":"⚠️ APEX Safety: jq not installed — dangerous command blocking DISABLED. Install: https://jqlang.github.io/jq/download/"}'
+  exit 0
 fi
 
 INPUT=$(cat)

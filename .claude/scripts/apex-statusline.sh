@@ -10,7 +10,7 @@
 #   - Added session cost (total_cost_usd)
 #   - Added rate limit indicator (five_hour.used_percentage)
 #
-# JSON schema (code.claude.com/docs/en/statusline):
+# JSON schema (docs.anthropic.com/en/docs/claude-code):
 #   .model.id / .model.display_name
 #   .context_window.used_percentage / .context_window.total_input_tokens
 #   .context_window.total_output_tokens / .context_window.context_window_size
@@ -18,7 +18,7 @@
 #   .cost.total_lines_added / .cost.total_lines_removed
 #   .rate_limits.five_hour.used_percentage
 
-set -euo pipefail
+set -uo pipefail
 
 export LC_NUMERIC=C
 
@@ -95,7 +95,7 @@ fmt_tok() {
 fmt_cost() {
   local c=$1
   if command -v bc &>/dev/null; then
-    local cents
+    local cents cents_int
     cents=$(echo "$c * 100" | bc 2>/dev/null || echo "0")
     cents_int=$(printf '%.0f' "$cents" 2>/dev/null || echo "0")
     if [ "$cents_int" -lt 1 ] 2>/dev/null; then
@@ -190,7 +190,7 @@ VER_STR="${VER:+v${VER} }"
 # Bar + % = main thread context (overflow constraint)
 # Σ tokens = session-wide SUM (main + all agents)
 if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
-  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% · Σ $(fmt_tok "$TOK_TOTAL") / $(fmt_tok "$CTX_SIZE")"
+  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% of $(fmt_tok "$CTX_SIZE") · Σ $(fmt_tok "$TOK_TOTAL")"
 else
   CTX_STR="${HEALTH} ready"
 fi

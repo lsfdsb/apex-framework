@@ -3,7 +3,7 @@
 # Generates .claude/.manifest.json with framework component map
 # Gives agents 360-degree framework awareness
 
-set -euo pipefail
+set -uo pipefail
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 MANIFEST="$PROJECT_DIR/.claude/.manifest.json"
@@ -18,7 +18,7 @@ fi
 AGENT_COUNT=$(ls "$PROJECT_DIR/.claude/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
 SKILL_COUNT=$(find "$PROJECT_DIR/.claude/skills" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
 SCRIPT_COUNT=$(ls "$PROJECT_DIR/.claude/scripts/"*.sh 2>/dev/null | wc -l | tr -d ' ')
-RULE_COUNT=$(ls "$PROJECT_DIR/.claude/rules/"*.md 2>/dev/null | wc -l | tr -d ' ')
+RULE_COUNT=$(ls "$PROJECT_DIR/.claude/rules/"*.md 2>/dev/null | grep -v README | wc -l | tr -d ' ')
 
 # List agent names
 AGENTS="[]"

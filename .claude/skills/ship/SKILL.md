@@ -83,7 +83,7 @@ If README version is stale, update it now. If CHANGELOG is empty, the /commit sk
 
 Code review happens through two channels — no separate code-review skill is needed:
 
-1. **QA agent review** — If a QA agent is active in the team, message it with the PR number. It will run the full 6-phase quality gate and report APPROVED / BLOCKED.
+1. **QA agent review** — If a QA agent is active in the team, message it with the PR number. It will run the full 7-phase quality gate and report APPROVED / BLOCKED.
 2. **GitHub native PR review** — Show the PR URL to the user and ask them to review it in GitHub. GitHub's native review tools (diff, comments, approval) are the primary review mechanism.
 
 **Show the PR URL to the user.** Don't ask to merge yet.

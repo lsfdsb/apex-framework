@@ -67,8 +67,7 @@ if [ -f "$SETTINGS_FILE" ] && command -v jq &>/dev/null; then
     .hooks // {} |
     to_entries[] |
     select(.key | test("SessionStop|Stop|SessionEnd"; "i")) |
-    .value[].hooks[]? |
-    select(type == "string")
+    .value[].hooks[]?.command // empty
   ' "$SETTINGS_FILE" 2>/dev/null | xargs -I{} basename {} 2>/dev/null || true)
 fi
 
