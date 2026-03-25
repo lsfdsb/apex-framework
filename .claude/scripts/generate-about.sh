@@ -6,7 +6,7 @@
 set -uo pipefail
 
 # Portable sed in-place (macOS vs Linux)
-_sed_i() { if [[ "$OSTYPE" == "darwin"* ]]; then _sed_i "$@"; else sed -i "$@"; fi; }
+_sed_i() { if [[ "$OSTYPE" == "darwin"* ]]; then sed -i '' "$@"; else sed -i "$@"; fi; }
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 SKILL_FILE="$PROJECT_DIR/.claude/skills/about/SKILL.md"
