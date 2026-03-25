@@ -3,7 +3,7 @@
 # Validates conventional commit format with visual feedback.
 #
 # Install: cp this file to .git/hooks/commit-msg && chmod +x .git/hooks/commit-msg
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 # ── Source color library ──
 SCRIPT_DIR="$(cd "$(dirname "$0")/../.." 2>/dev/null && pwd)/.claude/scripts"

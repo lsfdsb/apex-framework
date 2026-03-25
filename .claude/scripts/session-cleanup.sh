@@ -4,7 +4,7 @@
 # SAFETY: Only kills PIDs that are actual node/vite processes, never hook scripts.
 #         Previous bug: PID file contained the hook script's PID, and killing it
 #         disrupted Claude Code's process group, preventing next session responses.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

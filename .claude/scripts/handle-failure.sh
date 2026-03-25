@@ -3,7 +3,7 @@
 # Provides diagnostic context when a Bash command fails.
 # Reinforces the APEX "definitive fix" philosophy: understand before fixing.
 # Cannot block (informational only). Stdout added to Claude's context.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

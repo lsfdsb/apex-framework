@@ -1,6 +1,6 @@
 #!/bin/bash
 # apex-colors.sh — APEX Framework Shared Color & Style Library
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 #
 # Source this file in any script that outputs to a real terminal (not Claude context).
 # Usage: source "$(dirname "$0")/apex-colors.sh"

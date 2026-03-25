@@ -243,7 +243,7 @@ import { PageShell } from "@/components/dna/layout/PageShell";`}
         {/* ── Footer ── */}
         <div className="footer">
           <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 12 }}>
-            Forged by L.B. & Claude &middot; S&atilde;o Paulo &middot; 2026
+            Forged by Bueno & Claude &middot; S&atilde;o Paulo &middot; 2026
           </p>
           <p style={{ fontFamily: "Instrument Serif, Georgia, serif", fontStyle: "italic", fontSize: 15, color: "var(--text-muted)" }}>
             "The beskar is pure. This is the Way."

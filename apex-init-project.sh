@@ -6,7 +6,7 @@
 # This is the PRIMARY installer. Each project gets its own complete
 # copy of the framework in .claude/ — no user-level install needed.
 #
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -e
 
@@ -32,7 +32,7 @@ APEX_V_SHORT=$(echo "$APEX_VERSION" | sed 's/\.[0-9]*$//')
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
 echo "  ║    ⚔️  APEX Framework v${APEX_V_SHORT} — Project Setup   ║"
-echo "  ║     by L.B. & Claude · São Paulo, 2026      ║"
+echo "  ║     by Bueno & Claude · São Paulo, 2026      ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
 echo "📁 Project: $PROJECT_DIR"

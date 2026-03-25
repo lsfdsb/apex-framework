@@ -2,7 +2,7 @@
 # block-dangerous-commands.sh — PreToolUse hook on Bash tool
 # Blocks destructive commands before they execute.
 # Uses official hookSpecificOutput JSON format per Claude Code docs.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

@@ -13,7 +13,7 @@
 #   4. Verifies data landed correctly
 #
 # Prerequisites: bash, curl, jq
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -euo pipefail
 

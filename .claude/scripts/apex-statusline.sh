@@ -1,6 +1,6 @@
 #!/bin/bash
 # apex-statusline.sh — APEX Framework Status Line v3
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 #
 # Philosophy: Glance, don't read. Hide zeros. Earn every character.
 #

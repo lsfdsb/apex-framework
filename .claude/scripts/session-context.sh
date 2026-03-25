@@ -1,6 +1,6 @@
 #!/bin/bash
 # session-context.sh — APEX Framework SessionStart Hook
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
 
 set -uo pipefail
@@ -168,7 +168,7 @@ if [ "$SOURCE" = "startup" ]; then
     _fade   "  Design like Ive · Code like Torvalds"
     _fade   "  Secure like Ionescu · Ship like Jobs"
     printf "  \033[38;5;245m──────────────────────────────────────\033[0m\n" >&2
-    printf "  \033[38;5;245mby L.B. & Claude · São Paulo\033[0m\n" >&2
+    printf "  \033[38;5;245mby Bueno & Claude · São Paulo\033[0m\n" >&2
     echo "" >&2
   fi
 
@@ -176,7 +176,7 @@ if [ "$SOURCE" = "startup" ]; then
   printf "\nAPEX Framework v%s\n" "$APEX_V_SHORT"
   echo "──────────────────────────────────────"
   echo "Agent-Powered EXcellence for Claude"
-  echo "by L.B. & Claude · São Paulo · 2026"
+  echo "by Bueno & Claude · São Paulo · 2026"
   echo ""
 fi
 
@@ -305,6 +305,6 @@ fi
 
 # ── Watermark (always) ──
 echo ""
-echo "⚔️ APEX v$APEX_V_SHORT | by L.B. & Claude | /about for the full story"
+echo "⚔️ APEX v$APEX_V_SHORT | by Bueno & Claude | /about for the full story"
 
 exit 0

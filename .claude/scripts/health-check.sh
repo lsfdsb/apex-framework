@@ -6,9 +6,9 @@
 # Usage: .claude/scripts/health-check.sh
 #   or:  bash .claude/scripts/health-check.sh
 #
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
-set -euo pipefail
+set -uo pipefail
 
 # ── Find project root ──
 if [ -n "${CLAUDE_PROJECT_DIR:-}" ]; then
@@ -295,8 +295,8 @@ if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   fi
 
   # Check git user identity
-  GIT_USER=$(git config user.name 2>/dev/null)
-  GIT_EMAIL=$(git config user.email 2>/dev/null)
+  GIT_USER=$(git config user.name 2>/dev/null || true)
+  GIT_EMAIL=$(git config user.email 2>/dev/null || true)
   if [ -n "$GIT_USER" ] && [ -n "$GIT_EMAIL" ]; then
     ok "Git identity: $GIT_USER <$GIT_EMAIL>" "Your commits will be attributed to this identity"
   else

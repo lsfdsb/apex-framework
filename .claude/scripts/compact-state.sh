@@ -1,7 +1,7 @@
 #!/bin/bash
 # compact-state.sh — PreCompact/PostCompact hook
 # Logs compaction events for session auditing.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail
 

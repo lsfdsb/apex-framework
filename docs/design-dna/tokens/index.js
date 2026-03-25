@@ -1,7 +1,7 @@
 /**
  * APEX Design DNA — Token Definitions (Plain JavaScript / CommonJS + ESM)
  * Extracted from the five canonical palettes + foundation.css
- * by L.B. & Claude · São Paulo, 2026
+ * by Bueno & Claude · São Paulo, 2026
  *
  * CommonJS:  const { palettes, spacing } = require('@apex/tokens');
  * ESM:       import { palettes, spacing } from '@apex/tokens';

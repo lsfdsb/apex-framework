@@ -24,7 +24,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
      ║   Forged by:  Lucas Bueno & Claude                        ║
      ║   Born:       March 13, 2026                              ║
      ║   Location:   São Paulo, BR → The World                   ║
-     ║   Version:    5.21.0                                    ║
+     ║   Version:    5.22.0                                    ║
      ║                                                           ║
      ║   "Simplicity is the ultimate sophistication"             ║
      ║                                    — Leonardo da Vinci    ║
@@ -38,7 +38,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 21 skills (+1 internal) · 4 agents · 21 scripts · 7 rules · 19 hooks
+**Stats**: 21 skills (+1 internal) · 5 agents · 23 scripts · 7 rules · 22 hooks
 
 ---
 
@@ -107,6 +107,7 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 | Agent | Model | Role |
 |-------|-------|------|
 | **Builder** | Sonnet | Full-capability implementation agent for parallel coding wor... |
+| **Project Manager** | Sonnet | Project management agent that breaks PRD+Architecture into p... |
 | **QA** | Sonnet | Quality assurance agent that runs comprehensive tests, valid... |
 | **Technical Writer** | Haiku | Documentation specialist that keeps README, CHANGELOG, PRD s... |
 | **Watcher** | Haiku | Continuous monitoring agent that watches for errors, test fa... |

@@ -12,7 +12,7 @@
   ║  Business like Amodei                        ║
   ║  Experience like Walt Disney                 ║
   ║                                              ║
-  ║     Forged by L.B. & Claude                  ║
+  ║     Forged by Bueno & Claude                  ║
   ║     São Paulo · March 2026                   ║
   ║                                              ║
   ║     This is the way. ⚔️                      ║
@@ -49,7 +49,7 @@ cd ~/my-project
 ~/.apex-framework/install.sh
 ```
 
-**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 20 hooks across 9 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd, TaskCompleted, TeammateIdle, ConfigChange) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 14 hooks across 12 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd, TaskCompleted, TeammateIdle, ConfigChange, SubagentStart, PreCompact, PostCompact) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
 
 ### For additional projects
 
@@ -190,8 +190,8 @@ One install. Everything in your project's `.claude/` directory.
 | Layer | Files | What |
 |-------|-------|------|
 | **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 new animation keyframes (ripple, focus-glow, pop-in, shake, checkmark, stroke-draw, pulse-ring, slide-up, slide-down, counter-roll) + prefers-reduced-motion support + foundation |
-| **Starters** | 29 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) — 20 total primitives with enhanced animations |
-| **Templates** | 14 TSX | Landing, SaaS Dashboard, CRM Pipeline, E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase — full pages ready to customize |
+| **Starters** | 33 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) — 20 total primitives with enhanced animations |
+| **Templates** | 39 TSX | Landing, SaaS Dashboard, CRM Pipeline, E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase — full pages ready to customize |
 | **Recipes** | 13 MD | One per app type — tells the builder exactly which palette, background, and components to use |
 
 The builder reads the recipe, copies the starters and templates, and writes only business logic. Design is inherited, not translated.
@@ -450,7 +450,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 - **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)
 - **Prettier + Icons** — `.prettierrc` config, Lucide React as standard icon library (#191)
 - **Enhanced Gates** — QA bundle size limit, component duplication check, architecture audit tags (#191)
-- **Production Hooks** — 16 hooks across 6 groups + TaskCompleted, TeammateIdle, ConfigChange events (#187, #190)
+- **Production Hooks** — 14 hooks across 12 lifecycle groups (#187, #190, #202)
 - **Design DNA Oscar** — 10 animation keyframes, 5 new primitives, DnaBackground component (#187)
 - **E2E + Performance Tests** — 27 framework tests + hook performance profiler (#187)
 - **Mandalorian Startup Sound** — Session opens with Hero chime + "This is the Way" voice on macOS; disable via `APEX_SOUND=0` (#199)
@@ -477,7 +477,7 @@ This is the way.
 ---
 
 <p align="center">
-  <strong>Forged by L.B. & Claude · São Paulo · March 13, 2026</strong><br><br>
+  <strong>Forged by Bueno & Claude · São Paulo · March 13, 2026</strong><br><br>
   <em>"The best frameworks aren't about tools — they're about discipline.<br>
   A process followed consistently beats genius applied randomly."</em><br><br>
   <strong>This is the way. ⚔️</strong>

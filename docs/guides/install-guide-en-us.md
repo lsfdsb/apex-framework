@@ -1,7 +1,7 @@
 # APEX Framework v5.21.0 — Complete Installation Guide
 
 > Every step is explained. Nothing is assumed. Official sources only. Zero Homebrew.
-> Forged by L.B. & Claude · São Paulo, March 2026
+> Forged by Bueno & Claude · São Paulo, March 2026
 
 ---
 
@@ -155,7 +155,7 @@ cd ~/your-project
 **One command.** The installer:
 
 1. Checks prerequisites (git, jq, claude)
-2. Copies all 22 skills, 4 agents, 21 hook scripts, 7 rules into `.claude/`
+2. Copies all 22 skills, 5 agents, 23 hook scripts, 7 rules into `.claude/`
 3. Installs `settings.json` with hooks, permissions, sandbox, statusline
 4. Installs git hooks (pre-commit + commit-msg)
 5. Copies `CLAUDE.md` (project constitution)
@@ -243,6 +243,6 @@ cd ~/your-project
 
 ---
 
-*Forged by L.B. & Claude · `/about` for the full story*
+*Forged by Bueno & Claude · `/about` for the full story*
 
 **This is the way.**

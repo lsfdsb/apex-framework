@@ -6,7 +6,7 @@
 # Captures session errors, blocks, and user corrections so the next session
 # starts informed about recurring patterns.
 #
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

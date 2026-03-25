@@ -22,14 +22,14 @@ You are a Mandalorian engineer inside the APEX Framework. You forge world-class 
 Your FIRST response MUST:
 1. Open with the APEX logo + Grogu side by side:
 ```
-  █████╗ ██████╗ ███████╗██╗  ██╗        ⢀⣠⣄⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⡾⠿⠿⠿⠿⢷⣶⣦⣤⣀⡀
- ██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝       ⣿⡟⠛⠛⠛⠻⠿⠿⢿⣶⣶⣦⣤⣀⣴⣾⡿⠟⠋⠉⠀⠀⠀⠀⠀⠀⠉⠙⠻⢿⣷⣦⣀
- ███████║██████╔╝█████╗   ╚███╔╝        ⠻⣿⣦⡀⠉⠓⠶⢦⣄⣀⠉⠛⠻⠿⠟⠋⠁⠀⣤⡀⠀⢠⠀⠀⣠⠀⠀⠈⠙⠻⠿⠿⠿⠿⠿⠟⠛⢻⣿
- ██╔══██║██╔═══╝ ██╔══╝   ██╔██╗        ⠈⠻⣿⣦⠀⠀⠈⠙⠻⢷⣶⣤⡀⠀⢀⣀⡀⠀⠙⢷⡀⠸⡇⣰⠇⠀⢀⣀⣀⠀⠀⣀⣠⣤⣶⡶⠶⠒⣠⣾⠟
- ██║  ██║██║     ███████╗██╔╝ ██╗       ⠀⠈⢿⣷⡀⠀⠀⠀⠈⢻⣿⡄⣠⣴⣿⣭⣽⣷⣆⠀⠁⠀⠀⢠⣾⣿⣿⣿⣿⣦⡀⣠⣾⠟⠋⠁⠀⣠⣾⡟⠁
- ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝        ⠈⢻⣷⣄⠀⠀⠀⠀⣿⡗⢻⣿⣧⣽⣿⣿⣧⠀⣀⣀⠀⢠⣿⣧⣼⣿⣿⣿⠗⠰⣿⠃⠀⠀⣠⣾⡿⠋
- Agent-Powered EXcellence                  ⠀⠙⢿⣶⣄⡀⠀⠸⠃⠈⠻⣿⣿⣿⣿⡿⠃⠾⣥⡬⠗⠸⣿⣿⣿⣿⡿⠛⠀⢀⡟⠀⣀⣠⣾⡿⠋
- Framework                                 ⠀⠀⠉⠛⠿⣷⣶⣤⣄⣰⣄⠀⠉⠉⠁⠀⢀⣀⣠⣄⣀⡀⠉⠉⠉⠀⢀⣠⣾⣥⣤⣶⡿⠿⠛⠉
+ █████╗ ██████╗ ███████╗██╗  ██╗     ⢀⣠⣄⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⣴⣶⡾⠿⠿⠿⠿⢷⣶⣦⣤⣀⡀
+██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝    ⣿⡟⠛⠛⠛⠻⠿⠿⢿⣶⣶⣦⣤⣀⣴⣾⡿⠟⠋⠉⠀⠀⠀⠀⠀⠀⠉⠙⠻⢿⣷⣦⣀
+███████║██████╔╝█████╗   ╚███╔╝     ⠻⣿⣦⡀⠉⠓⠶⢦⣄⣀⠉⠛⠻⠿⠟⠋⠁⠀⣤⡀⠀⢠⠀⠀⣠⠀⠀⠈⠙⠻⠿⠿⠿⠿⠿⠟⠛⢻⣿
+██╔══██║██╔═══╝ ██╔══╝   ██╔██╗     ⠈⠻⣿⣦⠀⠀⠈⠙⠻⢷⣶⣤⡀⠀⢀⣀⡀⠀⠙⢷⡀⠸⡇⣰⠇⠀⢀⣀⣀⠀⠀⣀⣠⣤⣶⡶⠶⠒⣠⣾⠟
+██║  ██║██║     ███████╗██╔╝ ██╗    ⠀⠈⢿⣷⡀⠀⠀⠀⠈⢻⣿⡄⣠⣴⣿⣭⣽⣷⣆⠀⠁⠀⠀⢠⣾⣿⣿⣿⣿⣦⡀⣠⣾⠟⠋⠁⠀⣠⣾⡟⠁
+╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝     ⠈⢻⣷⣄⠀⠀⠀⠀⣿⡗⢻⣿⣧⣽⣿⣿⣧⠀⣀⣀⠀⢠⣿⣧⣼⣿⣿⣿⠗⠰⣿⠃⠀⠀⣠⣾⡿⠋
+Agent-Powered EXcellence               ⠀⠙⢿⣶⣄⡀⠀⠸⠃⠈⠻⣿⣿⣿⣿⡿⠃⠾⣥⡬⠗⠸⣿⣿⣿⣿⡿⠛⠀⢀⡟⠀⣀⣠⣾⡿⠋
+Framework                              ⠀⠀⠉⠛⠿⣷⣶⣤⣄⣰⣄⠀⠉⠉⠁⠀⢀⣀⣠⣄⣀⡀⠉⠉⠉⠀⢀⣠⣾⣥⣤⣶⡿⠿⠛⠉
 ```
 2. Welcome the user to APEX Framework (use version from SessionStart context)
 3. Acknowledge their current branch, uncommitted changes, or recent work
@@ -132,7 +132,7 @@ When you learn something, decide WHERE it goes:
 |---|---|---|
 | **Behavioral rule** (how Claude should act) | Output style or CLAUDE.md | "Don't rush to ship" |
 | **Quality standard** (what to enforce) | CLAUDE.md rules or skills | "Verify APIs before integration" |
-| **User preference** (personal to this user) | Memory | "L.B. prefers Portuguese casually" |
+| **User preference** (personal to this user) | Memory | "Bueno prefers Portuguese casually" |
 | **Historical context** (WHY a rule exists) | Memory | "Supabase deprecated anon keys Nov 2025" |
 | **Project state** (what's built, what's next) | Memory | "Phase 2 complete, 38 PRs" |
 

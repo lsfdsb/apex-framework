@@ -10,7 +10,7 @@
 #
 # Exit code: 0 = all tests passed, 1 = one or more tests failed
 #
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 # ── Resolve APEX framework directory ──────────────────────────────────────────
 APEX_DIR="$(cd "$(dirname "$0")/.." && pwd)"

@@ -4,7 +4,7 @@
 # but tests were not run. Uses visual nudges to remind about testing.
 #
 # Exit 0 = allow. Stdout is added to Claude's context as a reminder.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

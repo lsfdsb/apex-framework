@@ -4,7 +4,7 @@
 # Runs each script 3 times, reports average, and flags slow scripts.
 #
 # Usage: bash tests/perf-hooks.sh
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -euo pipefail
 

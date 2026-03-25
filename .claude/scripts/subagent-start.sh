@@ -1,7 +1,7 @@
 #!/bin/bash
 # subagent-start.sh — SubagentStart hook
 # Auto-injects Design DNA context into builder agents before they start work.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail
 
