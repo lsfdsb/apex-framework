@@ -12,9 +12,9 @@ export function useHash(): string {
   return hash;
 }
 
-export function Link({ to, children, className }: { to: string; children: ReactNode; className?: string }) {
+export function Link({ to, children, className, style }: { to: string; children: ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
-    <a href={`#${to}`} className={className}>
+    <a href={`#${to}`} className={className} style={style}>
       {children}
     </a>
   );

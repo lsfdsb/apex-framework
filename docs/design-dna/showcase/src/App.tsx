@@ -3,10 +3,11 @@ import { PaletteProvider } from "./context/PaletteContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
-import { TEMPLATE_ROUTES } from "./data/routes";
+import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, type RouteEntry } from "./data/routes";
 import TemplatePage from "./pages/TemplatePage";
 
-// Lazy-load HomePage (includes 52KB CHANGELOG raw import)
+// Lazy-load HubHome and HomePage (HomePage includes 52KB CHANGELOG raw import)
+const HubHome = lazy(() => import("./pages/HubHome"));
 const HomePage = lazy(() => import("./pages/HomePage"));
 
 // Lazy source imports — only loaded when user clicks "Source" on a template
@@ -70,7 +71,7 @@ function AnimatedBackground() {
   );
 }
 
-function TemplateWithSource({ route }: { route: (typeof TEMPLATE_ROUTES)[number] }) {
+function TemplateWithSource({ route }: { route: RouteEntry }) {
   const [source, setSource] = useState("");
   const templateName = getTemplateName(route.path);
 
@@ -91,7 +92,8 @@ function TemplateWithSource({ route }: { route: (typeof TEMPLATE_ROUTES)[number]
 export default function App() {
   const hash = useHash();
 
-  const route = TEMPLATE_ROUTES.find((r) => r.path === hash);
+  const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hash);
+  const hubRoute = OPS_ROUTES.find((r) => r.path === hash) || NAV_ROUTES.find((r) => r.path === hash);
 
   return (
     <PaletteProvider>
@@ -103,9 +105,13 @@ export default function App() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <Suspense fallback={<LoadingState />}>
             {hash === "/" ? (
+              <HubHome />
+            ) : hash === "/dna" ? (
               <HomePage />
-            ) : route ? (
-              <TemplateWithSource route={route} />
+            ) : hubRoute ? (
+              <TemplateWithSource route={hubRoute} />
+            ) : templateRoute ? (
+              <TemplateWithSource route={templateRoute} />
             ) : (
               <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
                 <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>

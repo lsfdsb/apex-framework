@@ -14,6 +14,7 @@ export default defineConfig({
       "@starters": resolve(__dirname, "../starters"),
       "@templates": resolve(__dirname, "../templates"),
       "@tokens": resolve(__dirname, "../tokens"),
+      "@hub": resolve(__dirname, "../hub"),
     },
     extensions: [".tsx", ".ts", ".jsx", ".js"],
   },
