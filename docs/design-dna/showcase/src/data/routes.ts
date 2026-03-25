@@ -13,10 +13,7 @@ export interface RouteEntry {
 
 export const OPS_ROUTES: RouteEntry[] = [
   { path: "/projects", label: "Projects", component: lazy(() => import("../pages/ProjectsPage")), palette: "saas", category: "hub" },
-  { path: "/pipeline", label: "Pipeline", component: lazy(() => import("../pages/PipelinePage")), palette: "saas", category: "hub" },
   { path: "/tasks", label: "Tasks", component: lazy(() => import("../pages/TaskBoardPage")), palette: "saas", category: "hub" },
-  { path: "/agents", label: "Agents", component: lazy(() => import("../pages/AgentsPage")), palette: "saas", category: "hub" },
-  { path: "/quality", label: "Quality", component: lazy(() => import("../pages/QualityPage")), palette: "saas", category: "hub" },
 ];
 
 export const NAV_ROUTES: RouteEntry[] = [

@@ -1,4 +1,8 @@
-import { Heart, MapPin, Rocket, Shield, Users, Sparkles } from "lucide-react";
+import { Heart, Lock, MapPin, Rocket, Shield, Sparkles, Users } from "lucide-react";
+import { PIPELINE_PHASES } from "../data/hub-data";
+import { LucideIcon } from "../components/hub/LucideIcon";
+
+// ── Values ───────────────────────────────────────────────────────────────────
 
 const VALUES = [
   { icon: <Shield size={20} />, title: "Quality is Non-Negotiable", text: "7-phase QA gate. Security scanning. Accessibility audits. CX reviews. Nothing ships without passing every gate." },
@@ -7,10 +11,251 @@ const VALUES = [
   { icon: <Sparkles size={20} />, title: "Apple-Grade Polish", text: "The last 10% is the other 90%. Truncated text, stale versions, dead references — these are quality failures, not nitpicks." },
 ] as const;
 
+// ── Apple EPM Principles ──────────────────────────────────────────────────────
+
+const EPM_PRINCIPLES = [
+  {
+    heading: "No Story Points",
+    body: "Concrete tasks with explicit acceptance criteria. Done means all criteria are met — not 'mostly done'.",
+  },
+  {
+    heading: "DRI Ownership",
+    body: "Every task has one Directly Responsible Individual. One owner, no ambiguity, no diffused accountability.",
+  },
+  {
+    heading: "Phases, Not Sprints",
+    body: "P0 ships first. P1 follows. P2 is polish. Under pressure, you know exactly what to cut.",
+  },
+  {
+    heading: "WIP Limits",
+    body: "In-Progress capped at 2. Review capped at 1. Focus beats context-switching every time.",
+  },
+  {
+    heading: "Quality Gates",
+    body: "Each phase ends at a gate. Gates enforce the standard. Nothing slips through by accident.",
+  },
+];
+
+// ── Phase Timeline Card ───────────────────────────────────────────────────────
+
+function PhaseCard({ phase, index }: { phase: (typeof PIPELINE_PHASES)[number]; index: number }) {
+  const num = String(phase.id).padStart(2, "0");
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: 0,
+        position: "relative",
+      }}
+    >
+      {/* Timeline column */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: 56,
+          flexShrink: 0,
+        }}
+      >
+        {/* Circle node */}
+        <div
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: "50%",
+            background: phase.isGate ? "var(--accent)" : "var(--bg-elevated)",
+            border: `2px solid ${phase.isGate ? "var(--accent)" : "var(--border)"}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: phase.isGate ? "var(--bg)" : "var(--accent)",
+            flexShrink: 0,
+            zIndex: 1,
+            position: "relative",
+          }}
+          aria-hidden="true"
+        >
+          <LucideIcon name={phase.icon} size={18} />
+        </div>
+        {/* Connecting line — don't render after last item */}
+        {index < PIPELINE_PHASES.length - 1 && (
+          <div
+            aria-hidden="true"
+            style={{
+              flex: 1,
+              width: 2,
+              borderLeft: "2px dashed var(--border)",
+              marginTop: 4,
+              marginBottom: 0,
+              minHeight: 40,
+            }}
+          />
+        )}
+      </div>
+
+      {/* Card content */}
+      <div
+        style={{
+          flex: 1,
+          marginLeft: 20,
+          marginBottom: index < PIPELINE_PHASES.length - 1 ? 24 : 0,
+          background: "var(--bg-elevated)",
+          border: phase.isGate ? "1px solid var(--accent)" : "1px solid var(--border)",
+          borderLeft: phase.isGate ? "3px solid var(--accent)" : "1px solid var(--border)",
+          borderRadius: 14,
+          padding: "24px 24px 20px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Phase number — decorative background digit */}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            top: -8,
+            right: 16,
+            fontSize: 72,
+            fontWeight: 900,
+            color: "var(--accent)",
+            opacity: 0.06,
+            lineHeight: 1,
+            fontFamily: "var(--font-display)",
+            userSelect: "none",
+          }}
+        >
+          {num}
+        </div>
+
+        {/* Phase number + name row */}
+        <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 6 }}>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 800,
+              color: "var(--accent)",
+              letterSpacing: "0.06em",
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {num}
+          </span>
+          <h3
+            style={{
+              fontSize: 18,
+              fontWeight: 700,
+              color: "var(--text)",
+              letterSpacing: "-0.02em",
+              lineHeight: 1.2,
+              fontFamily: "var(--font-display)",
+              fontStyle: "italic",
+              margin: 0,
+            }}
+          >
+            {phase.name}
+          </h3>
+          {phase.isGate && (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                padding: "2px 8px",
+                borderRadius: 20,
+                background: "var(--accent-glow, color-mix(in srgb, var(--accent) 15%, transparent))",
+                border: "1px solid var(--accent)",
+                color: "var(--accent)",
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                marginLeft: 4,
+              }}
+            >
+              <Lock size={10} />
+              Gate
+            </span>
+          )}
+        </div>
+
+        {/* Description */}
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-secondary)",
+            lineHeight: 1.6,
+            marginBottom: 16,
+          }}
+        >
+          {phase.description}
+        </p>
+
+        {/* Agents + Skills badges */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 16 }}>
+          {phase.agents.map((agent) => (
+            <span
+              key={agent}
+              style={{
+                padding: "3px 10px",
+                borderRadius: 20,
+                background: "var(--bg-surface, var(--bg))",
+                border: "1px solid var(--border)",
+                color: "var(--text-secondary)",
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+            >
+              {agent}
+            </span>
+          ))}
+          {phase.skills.map((skill) => (
+            <span
+              key={skill}
+              style={{
+                padding: "3px 10px",
+                borderRadius: 20,
+                background: "transparent",
+                border: "1px solid var(--border)",
+                color: "var(--text-muted)",
+                fontSize: 11,
+                fontFamily: "var(--font-mono, monospace)",
+                letterSpacing: "0.02em",
+              }}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
+
+        {/* Teaching point */}
+        <p
+          style={{
+            fontFamily: "var(--font-display)",
+            fontStyle: "italic",
+            fontSize: 14,
+            color: "var(--text-muted)",
+            lineHeight: 1.6,
+            margin: 0,
+            paddingTop: 14,
+            borderTop: "1px solid var(--border)",
+          }}
+        >
+          "{phase.teachingPoint}"
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
 export default function AboutPage() {
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "48px 24px 80px" }}>
-      {/* Header */}
+
+      {/* ── Section 1: Hero ── */}
       <div style={{ marginBottom: 48 }}>
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>
           The Story
@@ -23,10 +268,10 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* Origin */}
+      {/* ── Section 2: Origin ── */}
       <div style={{
         background: "var(--bg-elevated)", border: "1px solid var(--border)",
-        borderRadius: 16, padding: "32px 28px", marginBottom: 32,
+        borderRadius: 16, padding: "32px 28px", marginBottom: 56,
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, color: "var(--text-muted)", fontSize: 13 }}>
           <MapPin size={14} />
@@ -43,51 +288,130 @@ export default function AboutPage() {
         </p>
       </div>
 
-      {/* Vision */}
-      <div style={{ marginBottom: 32 }}>
-        <h2 style={{ fontFamily: "var(--font-body)", fontSize: 22, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em", marginBottom: 8 }}>
-          Our Vision
-        </h2>
-        <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.7 }}>
-          Make AI-assisted development indistinguishable from a world-class engineering team. Not faster coding — better software. Every app built with APEX should feel like it was made by a team that cares about every detail.
-        </p>
-      </div>
-
-      {/* Values */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 48 }}>
-        {VALUES.map((v) => (
-          <div key={v.title} style={{
-            background: "var(--bg-elevated)", border: "1px solid var(--border)",
-            borderRadius: 12, padding: "24px 20px",
-          }}>
-            <div style={{ color: "var(--accent)", marginBottom: 12, display: "flex" }}>{v.icon}</div>
-            <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 8, fontFamily: "var(--font-body)" }}>
-              {v.title}
-            </h3>
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>
-              {v.text}
-            </p>
+      {/* ── Section 3: 7-Phase Pipeline ── */}
+      <div style={{ marginBottom: 56 }}>
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
+            How it works
           </div>
-        ))}
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontStyle: "italic",
+            fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 400,
+            color: "var(--text)", letterSpacing: "-0.02em",
+            lineHeight: 1.15, marginBottom: 12,
+          }}>
+            The 7-Phase Pipeline
+          </h2>
+          <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 580 }}>
+            From idea to production — autonomously. You make 3 decisions at gate phases. APEX handles everything between them.
+          </p>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          {PIPELINE_PHASES.map((phase, index) => (
+            <PhaseCard key={phase.id} phase={phase} index={index} />
+          ))}
+        </div>
       </div>
 
-      {/* The Creed */}
-      <div style={{ textAlign: "center", padding: "32px 0", borderTop: "1px solid var(--border)" }}>
-        <p style={{
-          fontFamily: "var(--font-display)", fontStyle: "italic",
-          fontSize: 18, color: "var(--text-muted)", lineHeight: 1.8,
-          maxWidth: 500, margin: "0 auto 12px",
+      {/* ── Section 4: The Creed ── */}
+      <div style={{ marginBottom: 56 }}>
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
+            Values
+          </div>
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontStyle: "italic",
+            fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 400,
+            color: "var(--text)", letterSpacing: "-0.02em", lineHeight: 1.15,
+          }}>
+            What we believe
+          </h2>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16, marginBottom: 40 }}>
+          {VALUES.map((v) => (
+            <div key={v.title} style={{
+              background: "var(--bg-elevated)", border: "1px solid var(--border)",
+              borderRadius: 12, padding: "24px 20px",
+            }}>
+              <div style={{ color: "var(--accent)", marginBottom: 12, display: "flex" }}>{v.icon}</div>
+              <h3 style={{ fontSize: 14, fontWeight: 700, color: "var(--text)", marginBottom: 8, fontFamily: "var(--font-body)" }}>
+                {v.title}
+              </h3>
+              <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                {v.text}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        <div style={{ textAlign: "center", padding: "32px 0", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)" }}>
+          <p style={{
+            fontFamily: "var(--font-display)", fontStyle: "italic",
+            fontSize: 18, color: "var(--text-muted)", lineHeight: 1.8,
+            maxWidth: 500, margin: "0 auto 12px",
+          }}>
+            "Never ship untested code. Never skip the PRD. Never break the build. Weapons are part of my religion."
+          </p>
+          <p style={{ fontSize: 12, color: "var(--accent)", letterSpacing: "0.06em", fontWeight: 600 }}>
+            This is the Way.
+          </p>
+        </div>
+      </div>
+
+      {/* ── Section 5: Apple EPM Methodology ── */}
+      <div style={{ marginBottom: 56 }}>
+        <div style={{ marginBottom: 24 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
+            Methodology
+          </div>
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontStyle: "italic",
+            fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 400,
+            color: "var(--text)", letterSpacing: "-0.02em", lineHeight: 1.15, marginBottom: 12,
+          }}>
+            Apple EPM
+          </h2>
+          <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 560 }}>
+            Engineering Project Management — the discipline that keeps APEX teams moving without letting quality slip. No sprints, no story points, no ambiguity.
+          </p>
+        </div>
+
+        <div style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
+          gap: 16,
         }}>
-          "Never ship untested code. Never skip the PRD. Never break the build. Weapons are part of my religion."
-        </p>
-        <p style={{ fontSize: 12, color: "var(--accent)", letterSpacing: "0.06em", fontWeight: 600 }}>
-          This is the Way.
-        </p>
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, marginTop: 24, color: "var(--text-muted)", fontSize: 13 }}>
+          {EPM_PRINCIPLES.map(({ heading, body }) => (
+            <div
+              key={heading}
+              style={{
+                padding: "20px 20px",
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border)",
+                borderRadius: 12,
+              }}
+            >
+              <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text)", marginBottom: 8, lineHeight: 1.3 }}>
+                {heading}
+              </div>
+              <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, margin: 0 }}>
+                {body}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Section 6: Footer ── */}
+      <div style={{ textAlign: "center", paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, color: "var(--text-muted)", fontSize: 13 }}>
           <Heart size={14} style={{ color: "var(--destructive)" }} />
           Forged by Bueno & Claude · São Paulo · 2026
         </div>
       </div>
+
     </div>
   );
 }

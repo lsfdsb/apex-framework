@@ -139,7 +139,7 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
   const progress = Math.round((sub.tasksDone / sub.tasksTotal) * 100);
 
   return (
-    <Link to="/pipeline" style={{ textDecoration: "none" }}>
+    <Link to="/pipeline" style={{ textDecoration: "none", display: "flex" }}>
       <div
         style={{
           background: "var(--bg-elevated)",
@@ -148,6 +148,9 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
           padding: "20px",
           cursor: "pointer",
           transition: "all 0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = "translateY(-2px)";
@@ -171,7 +174,7 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
           </div>
         </div>
 
-        <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, marginBottom: 12 }}>
+        <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, marginBottom: 12, flex: 1 }}>
           {sub.description}
         </p>
 
@@ -215,18 +218,25 @@ function SubProjectCard({ sub }: { sub: SubProject }) {
 
 /* ── Project Section ──────────────────────────────────────────────────────── */
 
-function ProjectSection({ project }: { project: Project }) {
+function ProjectSection({ project, defaultExpanded = true }: { project: Project; defaultExpanded?: boolean }) {
+  const [expanded, setExpanded] = useState(defaultExpanded);
   const totalTasks = project.subProjects.reduce((sum, s) => sum + s.tasksTotal, 0);
   const doneTasks = project.subProjects.reduce((sum, s) => sum + s.tasksDone, 0);
   const activeCount = project.subProjects.filter(s => s.status === "building").length;
 
   return (
     <div style={{ marginBottom: 40 }}>
-      {/* Project header */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 12, marginBottom: 8,
-        padding: "12px 0", borderBottom: "1px solid var(--border)",
-      }}>
+      {/* Project header — clickable to collapse */}
+      <div
+        style={{
+          display: "flex", alignItems: "center", gap: 12,
+          padding: "12px 0", borderBottom: "1px solid var(--border)",
+          cursor: "pointer", userSelect: "none",
+        }}
+        onClick={() => setExpanded(!expanded)}
+        role="button"
+        aria-expanded={expanded}
+      >
         <FolderOpen size={20} style={{ color: "var(--accent)" }} />
         <div style={{ flex: 1 }}>
           <h2 style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", fontFamily: "var(--font-body)", letterSpacing: "-0.01em" }}>
@@ -236,53 +246,62 @@ function ProjectSection({ project }: { project: Project }) {
             {project.repo}
           </p>
         </div>
-        <div style={{ display: "flex", gap: 16, fontSize: 12, color: "var(--text-muted)" }}>
+        <div style={{ display: "flex", gap: 16, fontSize: 12, color: "var(--text-muted)", alignItems: "center" }}>
           <span><strong style={{ color: "var(--text-secondary)" }}>{project.subProjects.length}</strong> sub-projects</span>
           <span><strong style={{ color: "var(--accent)" }}>{activeCount}</strong> active</span>
           <span><strong style={{ color: "var(--text-secondary)" }}>{doneTasks}/{totalTasks}</strong> tasks</span>
+          <ChevronRight size={16} style={{
+            color: "var(--text-muted)",
+            transition: "transform 0.2s",
+            transform: expanded ? "rotate(90deg)" : "rotate(0deg)",
+          }} />
         </div>
       </div>
 
-      <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, margin: "12px 0 20px" }}>
-        {project.description}
-      </p>
+      {expanded && (
+        <>
+          <p style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6, margin: "12px 0 20px" }}>
+            {project.description}
+          </p>
 
-      {/* Sub-projects grid */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-        gap: 12,
-      }}>
-        {project.subProjects.map((sub) => (
-          <SubProjectCard key={sub.id} sub={sub} />
-        ))}
+          {/* Sub-projects grid — equal height via stretch */}
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+            gap: 12,
+            alignItems: "stretch",
+          }}>
+            {project.subProjects.map((sub) => (
+              <SubProjectCard key={sub.id} sub={sub} />
+            ))}
 
-        {/* New sub-project */}
-        <div
-          style={{
-            border: "1px dashed var(--border)",
-            borderRadius: 12,
-            padding: "32px 20px",
-            display: "flex", flexDirection: "column",
-            alignItems: "center", justifyContent: "center",
-            gap: 8, cursor: "pointer", transition: "all 0.2s",
-            minHeight: 160,
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.borderColor = "var(--accent)";
-            e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 4%, transparent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.borderColor = "var(--border)";
-            e.currentTarget.style.background = "";
-          }}
-          onClick={() => alert("New sub-project — starts with /prd")}
-        >
-          <Plus size={18} style={{ color: "var(--accent)" }} />
-          <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary)" }}>New Sub-Project</span>
-          <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Starts with a PRD</span>
-        </div>
-      </div>
+            {/* New sub-project */}
+            <div
+              style={{
+                border: "1px dashed var(--border)",
+                borderRadius: 12,
+                padding: "32px 20px",
+                display: "flex", flexDirection: "column",
+                alignItems: "center", justifyContent: "center",
+                gap: 8, cursor: "pointer", transition: "all 0.2s",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 4%, transparent)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.background = "";
+              }}
+              onClick={() => alert("New sub-project — starts with /prd")}
+            >
+              <Plus size={18} style={{ color: "var(--accent)" }} />
+              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text-secondary)" }}>New Sub-Project</span>
+              <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Starts with a PRD</span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }
