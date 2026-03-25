@@ -23,6 +23,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Pipeline Architecture** — Expanded from 6 phases to 7 phases (added Decompose phase for PM) (#202)
 - **Agent Teams Roster** — Updated from 4 agents to 5 agents (added Project Manager) (#202)
 - **README Agent Roster** — Updated agent list and model strategy table (#202)
+- **Rebranding** — "L.B." → "Bueno" across 36 files (scripts, agents, docs, tokens, templates) (#202)
+- **GitHub Actions** — Upgraded actions/checkout v4 → v6, actions/setup-node v4 → v6 (#202)
+- **Node.js LTS** — Updated CI from Node.js 20 (maintenance) to 22 (Jod) LTS (#202)
+- **README Hook Counts** — Corrected to 14 hooks across 12 groups (was stale) (#202)
+- **README Component Counts** — Updated to 33 starters, 39 templates (accurate to current state) (#202)
+
+### Fixed
+- **APEX Logo Alignment** — Consistent column padding in output style (#202)
+- **health-check.sh** — Removed erroneous `set -e` that caused CI failure; script manages own exit code (#202)
 
 ## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
