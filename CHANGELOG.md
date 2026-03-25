@@ -7,6 +7,22 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **Visual Pipeline HUB** — Web-based command center at localhost:3001 with interactive dashboard, pipeline visualization, and team management
+- **HUB Home page** — APEX OPS and APEX DNA cards with dynamic metrics and feature showcase
+- **Pipeline Overview** — Interactive 7-phase flow visualization with phase details and timeline
+- **Apple EPM Task Board** — 5-column Kanban with 14 demo tasks, WIP limits, and phase filtering
+- **Agent Team page** — Championship roster display with Breathing Loop SVG animation and responsibility matrix
+- **Quality Gates page** — 7-phase QA visualization with gate status and acceptance criteria
+- **Projects page** — Project selector landing as OPS integration point
+- **Changelog page** — Versioned release history with interactive timeline
+- **About page** — Framework story, values, and mission statement
+- **Collapsible OPS sidebar** — Glass sidebar with icons-only mode for navigation
+- **LucideIcon component** — Mapping of 20 Lucide React icons for consistent iconography
+- **useApexState hook** — Live sync with .apex/state/ files via polling for real-time metrics
+- **Teaching components** — TeachingTooltip, WhyButton, ConceptLink for interactive learning
+- **Sign In button** — Placeholder authentication UI in navbar
+- **Dropdown navigation** — OPS and DNA section dropdowns in navbar
+- **Visual Pipeline HUB PRD and Architecture** — Complete product requirements and system design documentation
 - **Project Manager Agent** — New agent (project-manager.md) with Apple EPM methodology, phased task decomposition, DRI assignments, and acceptance criteria (#202)
 - **Pipeline Phase 3: Decompose** — PM auto-decomposes PRD+Architecture into phased task board with P0/P1/P2 phases (#202)
 - **SubagentStart Hook** — Auto-injects Design DNA context into builder agents for consistent UI quality (#202)
@@ -16,6 +32,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Session Log Rotation** — session-cleanup.sh now keeps last 10 session logs, deletes older ones (#202)
 
 ### Changed
+- **PaletteSwitcher** — Moved from bottom-left to top-right in navbar
+- **ShowcaseNav restructured** — Now includes About, Changelog, OPS dropdown, DNA dropdown, and Sign In button
+- **DNA Home navigation** — Moved from #/ to #/dna; HUB Home now serves as #/ landing
+- **lucide-react dependency** — Updated to v1.6.0 as primary icon library
+- **Page titles styling** — All page titles use Instrument Serif italic (DNA design standard)
+- **Link component** — Extended with style prop support for custom styling
 - **Builder maxTurns** — Increased from 40 to 50 for longer implementation sessions (#202)
 - **Watcher Status Labels** — Changed from emoji to text labels ([CLEAN], [WARNINGS], [CRITICAL]) for better accessibility (#202)
 - **Technical Writer Ownership** — Strengthened CHANGELOG ownership model (single owner, auto-changelog hook deleted in PR #201) (#201)
