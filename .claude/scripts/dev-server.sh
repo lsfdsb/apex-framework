@@ -2,7 +2,7 @@
 # dev-server.sh — SessionStart hook
 # Auto-starts the dev server in background and captures logs for monitoring.
 # Only activates if a package.json with a "dev" script exists in the project.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

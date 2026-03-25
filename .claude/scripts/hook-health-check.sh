@@ -11,7 +11,7 @@
 # Called by:           /self-test skill, sentinel agent
 #
 # Exit: 0 if clean, 1 if any warnings or errors found
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -euo pipefail
 

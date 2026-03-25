@@ -79,7 +79,7 @@ export default function BlogLayout() {
               <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>Featured</div>
               <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(32px, 4vw, 48px)", fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.15, marginBottom: 16 }}>The invisible rules that make design feel intentional.</h1>
               <p style={{ fontSize: 17, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 24 }}>Design systems aren&rsquo;t about consistency for its own sake. They&rsquo;re about building trust through predictability — and then knowing exactly when to break the pattern.</p>
-              <Author initials="LB" name="L.B." date="March 19, 2026 · 8 min read" />
+              <Author initials="B" name="Bueno" date="March 19, 2026 · 8 min read" />
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@ export default function BlogLayout() {
             <div style={{ fontFamily: "var(--font-sans)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)", fontWeight: 500, marginBottom: 16 }}>Design · 8 min read</div>
             <h1 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 5vw, 56px)", fontWeight: 400, letterSpacing: "-0.03em", lineHeight: 1.1, marginBottom: 16 }}>The invisible rules that make design feel intentional.</h1>
             <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 48, paddingBottom: 24, borderBottom: "1px solid var(--border)" }}>
-              <Author initials="LB" name="L.B." date="March 19, 2026" />
+              <Author initials="B" name="Bueno" date="March 19, 2026" />
               <span style={{ fontFamily: "var(--font-sans)", fontSize: 12, color: "var(--text-muted)" }}>8 min read</span>
             </div>
             <div style={{ fontSize: 18, lineHeight: 1.8, color: "var(--text-secondary)" }}>

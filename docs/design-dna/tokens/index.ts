@@ -1,7 +1,7 @@
 /**
  * APEX Design DNA — Token Definitions (TypeScript)
  * Extract from the five canonical palettes + foundation.css
- * by L.B. & Claude · São Paulo, 2026
+ * by Bueno & Claude · São Paulo, 2026
  *
  * Usage:
  *   import { palettes, semantic, spacing, typography, radii, shadows, breakpoints, zIndex } from '@apex/tokens';

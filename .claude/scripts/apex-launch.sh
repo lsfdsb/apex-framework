@@ -12,7 +12,7 @@ echo ""
 printf "  \033[1mAPEX\033[0m v${VERSION}\n"
 printf "  \033[38;5;245m──────────────────────────────────────\033[0m\n"
 printf "  \033[38;5;245mAgent-Powered EXcellence for Claude\033[0m\n"
-printf "  \033[38;5;245mby L.B. & Claude · São Paulo\033[0m\n"
+printf "  \033[38;5;245mby Bueno & Claude · São Paulo\033[0m\n"
 echo ""
 
 exec claude "$@"

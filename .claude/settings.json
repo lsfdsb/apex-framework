@@ -2,6 +2,9 @@
   "permissions": {
     "allow": [
       "Read",
+      "Edit",
+      "Write",
+      "MultiEdit",
       "Glob",
       "Grep",
       "Skill",
@@ -277,6 +280,43 @@
             "type": "command",
             "command": "echo '{\"systemMessage\":\"⚔️ APEX: Settings changed. Hooks and permissions reloaded.\"}'",
             "timeout": 2
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "builder",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/subagent-start.sh",
+            "timeout": 5,
+            "statusMessage": "Injecting Design DNA..."
+          }
+        ]
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/compact-state.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PostCompact": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/compact-state.sh",
+            "timeout": 5
           }
         ]
       }

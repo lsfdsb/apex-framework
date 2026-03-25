@@ -4,7 +4,7 @@
 # SAFETY: Only kills PIDs that are actual node/vite processes, never hook scripts.
 #         Previous bug: PID file contained the hook script's PID, and killing it
 #         disrupted Claude Code's process group, preventing next session responses.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 
@@ -36,6 +36,19 @@ done
 # ── Clean up stale worktrees ──
 if command -v git &>/dev/null && git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
   git worktree prune 2>/dev/null
+fi
+
+# ── Rotate session logs (keep last 10) ──
+SESSION_LOG_DIR="$PROJECT_DIR/.claude/session-logs"
+if [ -d "$SESSION_LOG_DIR" ]; then
+  LOG_COUNT=$(find "$SESSION_LOG_DIR" -name 'session-*.md' -type f 2>/dev/null | wc -l | tr -d ' ')
+  if [ "$LOG_COUNT" -gt 10 ]; then
+    # Delete oldest logs, keeping the 10 most recent by modification time
+    find "$SESSION_LOG_DIR" -name 'session-*.md' -type f -print0 2>/dev/null \
+      | xargs -0 ls -t 2>/dev/null \
+      | tail -n +"11" \
+      | xargs rm -f 2>/dev/null
+  fi
 fi
 
 # ── Clean up temporary files ──

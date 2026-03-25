@@ -4,7 +4,7 @@
 # Exit 2 = block with educational message. Exit 0 = allow.
 #
 # This is a deterministic security gate — catches secrets BEFORE they enter the codebase.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

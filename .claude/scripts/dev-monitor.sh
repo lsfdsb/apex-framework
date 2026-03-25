@@ -2,7 +2,7 @@
 # dev-monitor.sh — Stop hook (runs after Claude responds)
 # Checks dev server logs for new errors/warnings since last check.
 # Injects findings into Claude's context so issues get addressed proactively.
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 
 set -uo pipefail  # no -e because hook must not crash Claude Code
 

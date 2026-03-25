@@ -1,6 +1,6 @@
 #!/bin/bash
 # auto-update.sh — APEX Framework Auto-Update System
-# by L.B. & Claude · São Paulo, 2026
+# by Bueno & Claude · São Paulo, 2026
 #
 # Runs on SessionStart. Checks GitHub for newer APEX version.
 # If found, pulls updates into the CURRENT PROJECT's .claude/ only.
