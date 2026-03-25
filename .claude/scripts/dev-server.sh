@@ -4,6 +4,8 @@
 # Only activates if a package.json with a "dev" script exists in the project.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 # Skip if not in a project directory
 if [ -z "${CLAUDE_PROJECT_DIR:-}" ]; then
   echo "⚙️ Dev server: no project directory detected. Skipped."
@@ -111,7 +113,7 @@ if ! cd "$PROJECT_DIR" 2>/dev/null; then
   echo "🔴 Cannot cd to $PROJECT_DIR — dev server not started." >&2
   exit 0
 fi
-nohup $PKG_MGR run dev > "$LOG_FILE" 2>&1 < /dev/null &
+nohup "$PKG_MGR" run dev > "$LOG_FILE" 2>&1 < /dev/null &
 DEV_PID=$!
 
 # Save PID

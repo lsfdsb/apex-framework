@@ -200,6 +200,15 @@ The clan should ride together. Hooks enforce documentation gates — the Stop ho
 
 Hooks can't auto-spawn agents (Claude Code limitation), but they CAN block and remind. The framework validates itself via the manifest (generated on SessionStart) and validation hooks (on every .claude/ file change).
 
+### The Apple Standard
+
+Before marking any task complete, mentally run the Apple checklist:
+- **Does it work on first try?** No "try refreshing" or "restart the server"
+- **Is every string spelled correctly?** No truncated text, no "lorem ipsum", no placeholder data
+- **Are version numbers consistent?** VERSION, README, CHANGELOG, package.json — all match
+- **Would a new user understand this?** Fresh eyes test — no tribal knowledge required
+- **Is the error message helpful?** Not "something went wrong" — tell them WHAT and HOW to fix
+
 ## Tips
 
 End every significant interaction with:

@@ -67,7 +67,7 @@ npm view [package] --json | jq '.dist.unpackedSize'
 | Utility (lodash-like) | <10KB gzip | 10-50KB | >50KB |
 | UI component lib | <30KB gzip | 30-100KB | >100KB |
 | Framework | <50KB gzip | 50-150KB | >150KB |
-| Full SDK | <100KB gzip | 100-300KB | >300KB |
+| Full SDK | <150KB gzip | 150-400KB (acceptable if no alternative) | >400KB (needs justification) |
 
 ### 5. License
 

@@ -6,6 +6,11 @@
 #         disrupted Claude Code's process group, preventing next session responses.
 # by L.B. & Claude · São Paulo, 2026
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
+# Drain stdin — large tool payloads on stdin can accumulate and delay shutdown
+cat > /dev/null 2>/dev/null || true
+
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(pwd)}"
 
 # ── Kill tracked dev servers (safe: verify it's a node process first) ──

@@ -81,7 +81,7 @@ These failures have occurred in real sessions. If you catch yourself doing any o
 4. **NEVER use generic cold colors** — If the recipe says creative-warm (#e07850), you MUST use it. Cold blue-gray (#06060a) is wrong.
 5. **NEVER hardcode `background: var(--color-bg)`** — Use `background-color` instead. The shorthand resets background-image, blocking DNA dot patterns and nebula backgrounds.
 6. **NEVER use Tailwind arbitrary values for layout** — `pl-[56px]`, `w-[220px]` etc. may NOT generate CSS in Tailwind v4. Use inline `style={{ paddingLeft: 56 }}` for pixel-specific values. Standard Tailwind classes (pl-14, w-56) are fine.
-7. **NEVER use `.reveal` with `opacity: 0` that depends on JavaScript** — The `.reveal` CSS class uses CSS animation (not IntersectionObserver). Content must ALWAYS become visible even if JS fails. This caused blank pages in real sessions.
+7. **`.reveal` classes must be JS-independent** — If the project uses `.reveal` CSS classes, ensure they work without JavaScript (CSS animation only, not IntersectionObserver toggling `opacity: 0`). NEVER ship elements with `opacity: 0` that depend on JS to become visible. If JS fails, content must still appear. This caused blank pages in real sessions.
 
 ## Implementation Standards
 
@@ -214,6 +214,9 @@ Before marking ANY task complete, verify:
 [ ] No template branding left — grep for ACME, Doppel, "My App", boilerplate names
 [ ] Persona→page alignment — this page serves ONE persona per the architecture doc
 [ ] No component duplication — searched src/components/ before creating new ones
+[ ] Re-read every file you created — does it match the intent, not just the spec?
+[ ] No stale references — nothing points to files, functions, or APIs that do not exist
+[ ] Version numbers consistent — if VERSION changed, README and CHANGELOG updated too
 ```
 
 ## Worktree Commit Protocol (see RULE ZERO above)

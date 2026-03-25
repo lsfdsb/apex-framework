@@ -31,7 +31,9 @@ for f in "$PROJECT_DIR/.claude/agents/"*.md; do
   [ -f "$f" ] || continue
   name=$(grep "^name:" "$f" 2>/dev/null | head -1 | sed 's/^name: *//')
   model=$(grep "^model:" "$f" 2>/dev/null | head -1 | sed 's/^model: *//')
-  desc=$(grep "^description:" "$f" 2>/dev/null | head -1 | sed 's/^description: *//' | cut -c1-50)
+  raw_desc=$(grep "^description:" "$f" 2>/dev/null | head -1 | sed 's/^description: *//')
+  desc=$(echo "$raw_desc" | cut -c1-60)
+  [ ${#raw_desc} -gt 60 ] && desc="${desc}..."
   # Format name: replace hyphens with spaces, title-case each word
   # Special cases: "qa" → "QA", "technical-writer" → "Technical Writer"
   name=$(echo "$name" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++){if(tolower($i)=="qa"){$i="QA"}else{$i=toupper(substr($i,1,1)) tolower(substr($i,2))}}}1')
@@ -49,7 +51,9 @@ for d in "$PROJECT_DIR/.claude/skills"/*/; do
   [ "$skill_name" = "commit" ] && continue
   skill_file="$d/SKILL.md"
   if [ -f "$skill_file" ]; then
-    desc=$(grep "^description:" "$skill_file" 2>/dev/null | head -1 | sed 's/^description: *//' | cut -c1-55)
+    raw_desc=$(grep "^description:" "$skill_file" 2>/dev/null | head -1 | sed 's/^description: *//')
+    desc=$(echo "$raw_desc" | cut -c1-65)
+    [ ${#raw_desc} -gt 65 ] && desc="${desc}..."
   else
     desc="—"
   fi

@@ -2,6 +2,8 @@
 # PostToolUse hook: auto-clean worktrees after merge or worktree remove
 # Fires on Bash commands containing gh pr merge, git worktree, or git branch -D
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 INPUT=$(cat)
 
 if ! command -v jq &>/dev/null; then

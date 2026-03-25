@@ -1,4 +1,4 @@
-# APEX Framework v5.20 — Complete Installation Guide
+# APEX Framework v5.21.0 — Complete Installation Guide
 
 > Every step is explained. Nothing is assumed. Official sources only. Zero Homebrew.
 > Forged by L.B. & Claude · São Paulo, March 2026

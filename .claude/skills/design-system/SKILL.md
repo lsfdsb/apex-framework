@@ -31,6 +31,20 @@ Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults
 - Max 2 font families per page
 - Prose max-width: 65ch
 
+### Recommended Fonts
+
+**Display fonts** (for headings — distinctive, characterful):
+- **Fraunces** — editorial serif with optical size axis; great for editorial, blog, portfolio
+- **Space Grotesk** — geometric sans with quirky terminals; great for SaaS, tech, startups
+- **Plus Jakarta Sans** — geometric humanist; versatile for SaaS dashboards and landing pages
+
+**Body fonts** (for content — clean, highly readable at small sizes):
+- **Kumbh Sans** — geometric, neutral, very legible; pairs well with Fraunces or Space Grotesk
+- **General Sans** — neo-grotesque with personality; works as both display and body at scale
+- **Switzer** — grotesque with warmth; excellent for long-form reading and app interfaces
+
+Load via Google Fonts or Fontsource. Never use Inter, Roboto, or system-ui as a primary font choice.
+
 ## Color
 
 - **One** strong accent color, not a rainbow

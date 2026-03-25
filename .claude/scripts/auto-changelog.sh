@@ -7,6 +7,8 @@
 # Mapping: feat→Added, fix→Fixed, security→Security,
 #          refactor/perf/docs→Changed, chore/test→skipped
 
+set -uo pipefail  # no -e because hook must not crash Claude Code
+
 if ! command -v jq &> /dev/null; then
   echo '{"systemMessage":"⚠️ APEX: jq not installed — changelog automation DISABLED. Install: brew install jq"}'
   exit 0

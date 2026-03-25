@@ -62,14 +62,14 @@
   },
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
-    "APEX_FRAMEWORK_REPO": "/Users/lsfdsb/projects/apex-framework"
+    "APEX_FRAMEWORK_REPO": "/Users/lsfdsb/Projects/apex-framework"
   },
   "sandbox": {
     "filesystem": {
       "denyWrite": [
-        "//etc/**",
-        "//usr/**",
-        "//System/**",
+        "/etc/**",
+        "/usr/**",
+        "/System/**",
         "~/.ssh/**",
         "~/.aws/**",
         "~/.gnupg/**",

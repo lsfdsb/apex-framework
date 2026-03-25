@@ -48,8 +48,9 @@ const client = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+// Check docs.anthropic.com for current model IDs
 const message = await client.messages.create({
-  model: "claude-sonnet-4-20250514",
+  model: "claude-sonnet-4-6", // Check docs.anthropic.com for current model IDs
   max_tokens: 1024,
   messages: [
     { role: "user", content: "Hello, Claude" }
@@ -82,7 +83,7 @@ WebFetch("https://docs.anthropic.com/en/docs/build-with-claude/tool-use")
 **Pattern (verify against docs):**
 ```typescript
 const response = await client.messages.create({
-  model: "claude-sonnet-4-20250514",
+  model: "claude-sonnet-4-6", // Check docs.anthropic.com for current model IDs
   max_tokens: 1024,
   tools: [
     {
