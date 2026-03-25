@@ -197,8 +197,20 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
 
           <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 25%, transparent)", flexShrink: 0, margin: "0 6px" }} />
 
-          {/* Desktop dropdowns */}
+          {/* Desktop nav: About  Changelog  |  OPS ▾  DNA ▾  |  Sign In */}
           <div className="apex-nav-links">
+            {NAV_ROUTES.map((route) => (
+              <a
+                key={route.path}
+                href={`#${route.path}`}
+                className={`apex-nav-link${activePath === route.path ? " active" : ""}`}
+              >
+                {route.label}
+              </a>
+            ))}
+
+            <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 20%, transparent)", flexShrink: 0, margin: "0 4px", alignSelf: "center" }} />
+
             <NavDropdown label="OPS" isActive={opsActive} glassBackground={glassBackground} glassBorder={glassBorder}>
               {OPS_ROUTES.map((route) => (
                 <a key={route.path} href={`#${route.path}`} className={activePath === route.path ? "active" : ""}>
@@ -218,18 +230,6 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
                 </a>
               ))}
             </NavDropdown>
-
-            <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 20%, transparent)", flexShrink: 0, margin: "0 2px", alignSelf: "center" }} />
-
-            {NAV_ROUTES.map((route) => (
-              <a
-                key={route.path}
-                href={`#${route.path}`}
-                className={`apex-nav-link${activePath === route.path ? " active" : ""}`}
-              >
-                {route.label}
-              </a>
-            ))}
 
             <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 20%, transparent)", flexShrink: 0, margin: "0 6px", alignSelf: "center" }} />
 
