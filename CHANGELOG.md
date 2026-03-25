@@ -10,6 +10,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Apple-Grade Quality Standard** — QA Phase 7, QUALITY-STANDARD.md, CLAUDE.md rules 22-23, Apple Standard checklist in output style (#194)
 - **Shell Hardening** — `set -uo pipefail` on all 22 scripts, critical hooks exit 1 on missing jq, stdin drain on SessionEnd hooks (#194)
 - **SVG Patterns Recipe** — `docs/design-dna/recipes/patterns.md` completes all 13 Design DNA recipes (#194)
+- **Mandalorian Startup Sound** — Session startup plays Hero system sound + `say "This is the Way"` in Daniel's voice on macOS; disable with `APEX_SOUND=0` (#199)
 
 ### Fixed
 - **Statusline** — `claude-opus-4-6` correctly maps to 1M context window (#193)
@@ -20,6 +21,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Settings** — Path case fix, sandbox double-slash fix (#194)
 - **Supabase Keys** — Clarified as REMOVED, not deprecated (#194)
 - **4-Pass Apple Audit** — 81 fixes: portable shell wrappers, atomic writes, 7-phase QA standardization, dynamic count injection, Pattern D fix (#196)
+- **Hook sed Recursion** — Fixed infinite recursion in `generate-about.sh` line 9 (`_sed_i` now correctly calls `sed -i ''` on macOS instead of recursing) (#199)
 
 ## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
