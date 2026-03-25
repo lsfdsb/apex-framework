@@ -102,7 +102,7 @@ apex_spinner_stop() {
   local result="${1:-ok}"  # ok | fail | warn
   local msg="${2:-}"
   if [ -n "$APEX_SPINNER_PID" ]; then
-    kill "$APEX_SPINNER_PID" 2>/dev/null
+    kill "$APEX_SPINNER_PID" 2>/dev/null  # safe-kill: self-spawned spinner subprocess
     wait "$APEX_SPINNER_PID" 2>/dev/null
     APEX_SPINNER_PID=""
   fi

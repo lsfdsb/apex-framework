@@ -40,16 +40,17 @@ if [ ! -f "$PACKAGE_JSON" ]; then
         exit 0
       }
     fi
-    # Start Vite dev server (nohup at top level to avoid subshell SIGHUP)
+    # Start Vite dev server — fully detached so hook pipe closes cleanly
     > "$DNA_LOG_FILE" 2>/dev/null
-    cd "$SHOWCASE_DIR" && nohup npm run dev > "$DNA_LOG_FILE" 2>&1 &
-    echo "$!" > "$DNA_PID_FILE"
-    cd "$PROJECT_DIR"
+    nohup "$SHOWCASE_DIR/node_modules/.bin/vite" --port 3001 --host > "$DNA_LOG_FILE" 2>&1 < /dev/null &
+    VITE_PID=$!
+    echo "$VITE_PID" > "$DNA_PID_FILE"
     sleep 2
-    if [ -f "$DNA_PID_FILE" ] && kill -0 "$(cat "$DNA_PID_FILE" 2>/dev/null)" 2>/dev/null; then
-      echo "🟢 Design DNA server started · http://localhost:3001"
+    if kill -0 "$VITE_PID" 2>/dev/null; then
+      echo "🟢 Design DNA server started (PID $VITE_PID · http://localhost:3001)"
     else
       echo "⚠️ Design DNA server failed to start. Check $DNA_LOG_FILE"
+      rm -f "$DNA_PID_FILE" 2>/dev/null
     fi
     exit 0
   fi
@@ -104,12 +105,13 @@ fi
 # Clear previous log
 > "$LOG_FILE" 2>/dev/null
 
-# Start dev server in background
+# Start dev server in background — fully detached so hook pipe closes cleanly
+# < /dev/null detaches stdin; > log 2>&1 redirects all output; & backgrounds
 if ! cd "$PROJECT_DIR" 2>/dev/null; then
   echo "🔴 Cannot cd to $PROJECT_DIR — dev server not started." >&2
   exit 0
 fi
-nohup $PKG_MGR run dev > "$LOG_FILE" 2>&1 &
+nohup $PKG_MGR run dev > "$LOG_FILE" 2>&1 < /dev/null &
 DEV_PID=$!
 
 # Save PID

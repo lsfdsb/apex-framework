@@ -101,8 +101,9 @@ for script_path in "${SCRIPT_FILES[@]}"; do
     content=$(echo "$match" | cut -d: -f2-)
     trimmed="${content#"${content%%[! ]*}"}"
     [[ "$trimmed" == \#* ]] && continue
-    # Acceptable if the script has a ps -o comm= guard anywhere in the 10 lines above
-    # We check the whole file for a ps guard near any kill — a coarse but fast heuristic
+    # Skip if line has # safe-kill annotation (self-spawned processes like spinners)
+    echo "$content" | grep -q '# safe-kill' && continue
+    # Acceptable if the script has a ps -o comm= guard anywhere in the file
     if ! grep -q 'ps.*-o.*comm\|ps.*-p.*-o\|PROC_CMD\|proc_cmd' "$script_path" 2>/dev/null; then
       emit_err "${name}:${lineno} — kill without process-type verification (Pattern B)"
       emit_err "         Killing an unknown PID may terminate Claude's own hook processes"

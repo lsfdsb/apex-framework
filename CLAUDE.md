@@ -37,6 +37,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
 19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable.
 20. **Rules in framework, stories in memory** — When you learn a lesson, the behavioral rule goes in the framework (CLAUDE.md, output style, skills, agents). The historical context (WHY) goes in memory. Framework rules serve all users. Memory serves this user. If every APEX user would benefit, it's a framework change.
+21. **Safe hook processes** — Hook scripts that spawn background processes MUST use `nohup cmd > log 2>&1 < /dev/null &`. The `< /dev/null` detaches stdin so the child doesn't inherit Claude Code's pipe. Never kill PIDs from hook scripts without first verifying via `ps -o comm=` that the target is the expected process (node/vite/npm), not a bash hook script in Claude's process group. Killing the wrong PID can silently prevent Claude Code from responding.
 
 ## Code Standards
 
