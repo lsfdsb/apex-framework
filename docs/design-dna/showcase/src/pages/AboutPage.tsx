@@ -1,6 +1,7 @@
-import { Heart, Lock, MapPin, Rocket, Shield, Sparkles, Users } from "lucide-react";
+import { Heart, Lock, MapPin, Palette, Rocket, Shield, Sparkles, Users, Workflow } from "lucide-react";
 import { PIPELINE_PHASES } from "../data/hub-data";
 import { LucideIcon } from "../components/hub/LucideIcon";
+import { Link } from "../router/Router";
 
 // ── Values ───────────────────────────────────────────────────────────────────
 
@@ -286,6 +287,174 @@ export default function AboutPage() {
         <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.8 }}>
           Built by <strong style={{ color: "var(--text)" }}>Bueno & Claude</strong>, APEX is a complete framework for Claude Code that enforces quality at every step — from PRD to production. 22 skills, 5 specialized agents, 14 hooks, and a 7-phase autonomous pipeline that turns "build me X" into shipped, tested, documented code.
         </p>
+      </div>
+
+      {/* ── Section 2b: The Two Apps ── */}
+      <div style={{ marginBottom: 56 }}>
+        <div style={{ marginBottom: 32 }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10 }}>
+            The Products
+          </div>
+          <h2 style={{
+            fontFamily: "var(--font-display)", fontStyle: "italic",
+            fontSize: "clamp(24px, 3vw, 32px)", fontWeight: 400,
+            color: "var(--text)", letterSpacing: "-0.02em",
+            lineHeight: 1.15, marginBottom: 12,
+          }}>
+            The Two Apps
+          </h2>
+          <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.6, maxWidth: 560 }}>
+            APEX ships two complementary tools. One keeps you in command of every build. The other guarantees every screen looks world-class.
+          </p>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 20 }}>
+
+          {/* OPS card */}
+          <div style={{
+            background: "var(--bg-elevated)",
+            border: "1px solid var(--border)",
+            borderRadius: 16,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+            {/* Accent bar */}
+            <div style={{ height: 3, background: "var(--accent)" }} />
+
+            <div style={{ padding: "28px 24px 24px", flex: 1, display: "flex", flexDirection: "column" }}>
+              {/* Icon + title row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10,
+                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--accent)", flexShrink: 0,
+                }}>
+                  <Workflow size={20} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", lineHeight: 1.1, letterSpacing: "-0.01em" }}>
+                    <span style={{ fontWeight: 800 }}>APEX</span>{" "}
+                    <span style={{ fontWeight: 400 }}>OPS</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 500, marginTop: 2 }}>
+                    The Command Center
+                  </div>
+                </div>
+              </div>
+
+              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20 }}>
+                A project management dashboard built into the framework. See what's being built, who's building it, and where it stands — all in real time.
+              </p>
+
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  "Projects with sub-projects, phases, and DRI ownership",
+                  "Apple EPM Kanban — WIP-limited, gate-enforced",
+                  "Live agent tracking — tasks move as agents work",
+                  "No manual updates — live sync by default",
+                ].map((item) => (
+                  <li key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                    <span style={{
+                      width: 5, height: 5, borderRadius: "50%",
+                      background: "var(--accent)", flexShrink: 0, marginTop: 7,
+                    }} />
+                    <span style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div style={{ marginTop: "auto" }}>
+                <Link
+                  to="/projects"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    fontSize: 13, fontWeight: 600, color: "var(--accent)",
+                    textDecoration: "none", letterSpacing: "0.01em",
+                  }}
+                >
+                  Explore OPS
+                  <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>&#8594;</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* DNA card */}
+          <div style={{
+            background: "var(--bg-elevated)",
+            border: "1px solid var(--border)",
+            borderRadius: 16,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+          }}>
+            {/* Accent bar */}
+            <div style={{ height: 3, background: "var(--accent)" }} />
+
+            <div style={{ padding: "28px 24px 24px", flex: 1, display: "flex", flexDirection: "column" }}>
+              {/* Icon + title row */}
+              <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: 10,
+                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--accent)", flexShrink: 0,
+                }}>
+                  <Palette size={20} />
+                </div>
+                <div>
+                  <div style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", lineHeight: 1.1, letterSpacing: "-0.01em" }}>
+                    <span style={{ fontWeight: 800 }}>APEX</span>{" "}
+                    <span style={{ fontWeight: 400 }}>DNA</span>
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 500, marginTop: 2 }}>
+                    The Design System
+                  </div>
+                </div>
+              </div>
+
+              <p style={{ fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.7, marginBottom: 20 }}>
+                14 premium UI templates and 33 starter components. Every app built with APEX inherits world-class design automatically — builders write only business logic.
+              </p>
+
+              <ul style={{ listStyle: "none", padding: 0, margin: "0 0 24px", display: "flex", flexDirection: "column", gap: 10 }}>
+                {[
+                  "14 template types: Landing, SaaS, CRM, Blog, Portfolio, and 9 more",
+                  "33 starter components — promote to src/components/ and customize",
+                  "Design tokens: palette, typography, spacing, motion",
+                  "Builders read the DNA recipe, copy starters, ship fast",
+                ].map((item) => (
+                  <li key={item} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+                    <span style={{
+                      width: 5, height: 5, borderRadius: "50%",
+                      background: "var(--accent)", flexShrink: 0, marginTop: 7,
+                    }} />
+                    <span style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5 }}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div style={{ marginTop: "auto" }}>
+                <Link
+                  to="/dna"
+                  style={{
+                    display: "inline-flex", alignItems: "center", gap: 6,
+                    fontSize: 13, fontWeight: 600, color: "var(--accent)",
+                    textDecoration: "none", letterSpacing: "0.01em",
+                  }}
+                >
+                  Explore DNA
+                  <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>&#8594;</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
 
       {/* ── Section 3: 7-Phase Pipeline ── */}

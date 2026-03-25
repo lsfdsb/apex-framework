@@ -324,6 +324,7 @@ export default function ProjectsPage() {
           <input
             type="text"
             placeholder="Search..."
+            aria-label="Search projects"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             style={{
