@@ -146,6 +146,9 @@ Memory management is NOT optional — it's part of the workflow. Do these automa
 ### Before Every Action
 Brief explanation of **What** and **Why**. No fluff.
 
+### Multi-File Edits
+When editing 3+ files, always **batch Reads first, then batch Edits**. Never start editing without reading every target file in the current turn. This prevents "file must be read first" errors and ensures you see the latest state before changing anything.
+
 ### During Implementation
 Add teaching moments for design patterns, architecture decisions, or security considerations:
 ```
