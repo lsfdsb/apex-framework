@@ -211,15 +211,11 @@ format_subtotal "$EDIT_PRE_TOTAL" "$THRESHOLD_PER_TOOL" "subtotal"
 # ── PostToolUse hooks — Bash ─────────────────────────────────────────────────
 section "PostToolUse hooks (Bash):"
 
-# auto-changelog.sh: parses .tool_input.command; exits early on non-commit
-T_CHANGELOG=$(time_script "$SCRIPTS_DIR/auto-changelog.sh" "$MOCK_BASH_SAFE" 3)
-format_row "auto-changelog.sh" "$T_CHANGELOG"
-
 # worktree-cleanup.sh: parses .tool_input.command; exits early on non-worktree cmd
 T_WORKTREE=$(time_script "$SCRIPTS_DIR/worktree-cleanup.sh" "$MOCK_BASH_SAFE" 3)
 format_row "worktree-cleanup.sh" "$T_WORKTREE"
 
-BASH_POST_TOTAL=$(( T_CHANGELOG + T_WORKTREE ))
+BASH_POST_TOTAL=$(( T_WORKTREE ))
 format_subtotal "$BASH_POST_TOTAL" "$THRESHOLD_PER_TOOL" "subtotal"
 
 # ── PostToolUse hooks — Edit|Write ───────────────────────────────────────────
