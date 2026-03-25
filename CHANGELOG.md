@@ -19,6 +19,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **CHANGELOG** — Duplicate [5.11.0] entry resolved (#194)
 - **Settings** — Path case fix, sandbox double-slash fix (#194)
 - **Supabase Keys** — Clarified as REMOVED, not deprecated (#194)
+- **4-Pass Apple Audit** — 81 fixes: portable shell wrappers, atomic writes, 7-phase QA standardization, dynamic count injection, Pattern D fix (#196)
 
 ## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
