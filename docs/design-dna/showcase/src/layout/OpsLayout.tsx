@@ -11,9 +11,15 @@ const SIDEBAR_ICONS: Record<string, ReactNode> = {
 };
 
 const opsStyles = `
-.ops-layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 56px);position:relative}
-.ops-sidebar{position:sticky;top:56px;height:calc(100vh - 56px);border-right:1px solid var(--border);
-  padding:20px 12px;display:flex;flex-direction:column;gap:2px;overflow-y:auto;background:var(--bg)}
+.ops-layout{display:grid;grid-template-columns:232px 1fr;min-height:calc(100vh - 56px);position:relative}
+.ops-sidebar{position:sticky;top:68px;height:calc(100vh - 80px);
+  margin:12px 0 12px 12px;padding:20px 12px;
+  display:flex;flex-direction:column;gap:2px;overflow-y:auto;
+  border-radius:14px;
+  backdrop-filter:blur(20px) saturate(1.6);-webkit-backdrop-filter:blur(20px) saturate(1.6);
+  background:color-mix(in srgb, var(--bg-elevated) 88%, transparent);
+  border:1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
+  box-shadow:0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)}
 .ops-sidebar-brand{padding:8px 12px 16px;margin-bottom:4px;border-bottom:1px solid var(--border)}
 .ops-sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;
   font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all .2s;text-decoration:none;
@@ -27,8 +33,8 @@ const opsStyles = `
 .ops-mobile-overlay{display:none;position:fixed;inset:0;z-index:88;background:rgba(0,0,0,0.5)}
 @media(max-width:768px){
   .ops-layout{grid-template-columns:1fr}
-  .ops-sidebar{display:none;position:fixed;top:56px;left:0;bottom:0;z-index:89;width:240px;
-    box-shadow:4px 0 24px rgba(0,0,0,0.3)}
+  .ops-sidebar{display:none;position:fixed;top:68px;left:12px;bottom:12px;z-index:89;width:240px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.04);margin:0}
   .ops-sidebar.open{display:flex}
   .ops-mobile-toggle{display:flex}
   .ops-mobile-overlay.open{display:block}
