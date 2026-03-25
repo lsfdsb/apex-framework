@@ -59,7 +59,7 @@ export default function ChangelogPage() {
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>
           APEX Framework
         </div>
-        <h1 style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em", marginBottom: 12 }}>
+        <h1 style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 36, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.02em", marginBottom: 12 }}>
           Changelog
         </h1>
         <p style={{ fontSize: 15, color: "var(--text-secondary)", lineHeight: 1.6 }}>

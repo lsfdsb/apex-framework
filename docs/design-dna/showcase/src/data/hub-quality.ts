@@ -10,7 +10,7 @@ import type { QualityGateDefinition } from "./hub-types";
 export const QA_GATES: QualityGateDefinition[] = [
   {
     name: "Dependencies",
-    icon: "📦",
+    icon: "package",
     description: "Package versions, security advisories, license compliance.",
     teachingPoint: "Your dependencies are your attack surface. Every package you install is code you didn't write but are responsible for. Check versions, scan for CVEs, verify licenses.",
     checks: [
@@ -23,7 +23,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Code Quality",
-    icon: "📝",
+    icon: "file-code",
     description: "TypeScript strict, no `any`, ESLint, Prettier, conventional commits.",
     teachingPoint: "Style consistency eliminates cognitive load. When every file follows the same patterns, developers spend time thinking about logic — not formatting. TypeScript strict mode catches bugs at compile time, not runtime.",
     checks: [
@@ -37,7 +37,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Logic",
-    icon: "🧠",
+    icon: "brain",
     description: "Business logic correctness, edge cases, error handling.",
     teachingPoint: "Code that works is not the same as code that's correct. Does it handle empty states? Null values? Network failures? Race conditions? Correct code works on the happy path AND every edge case.",
     checks: [
@@ -51,7 +51,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Design DNA",
-    icon: "🎨",
+    icon: "palette",
     description: "Matches design tokens, responsive, dark/light, no hardcoded colors.",
     teachingPoint: "Design is how it works, not just how it looks. Using design tokens means every color, spacing, and font comes from a single source of truth. Change the token, change the entire app. Hardcoded colors are design debt.",
     checks: [
@@ -65,7 +65,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Performance",
-    icon: "⚡",
+    icon: "zap",
     description: "Bundle size, lazy loading, no N+1, pagination, Lighthouse.",
     teachingPoint: "Speed is a feature, not an optimization. Users don't wait — they leave. Lazy load routes, virtualize long lists, paginate queries, and measure everything. If Lighthouse says it's slow, it's slow.",
     checks: [
@@ -79,7 +79,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Security",
-    icon: "🔒",
+    icon: "lock",
     description: "OWASP Top 10, auth patterns, input validation, secrets scan.",
     teachingPoint: "Security is not a feature — it's a constraint. Every input is untrusted. Every API is a potential attack vector. OWASP Top 10 is the minimum. Defense in depth means multiple layers, not one wall.",
     checks: [
@@ -94,7 +94,7 @@ export const QA_GATES: QualityGateDefinition[] = [
   },
   {
     name: "Polish",
-    icon: "💎",
+    icon: "gem",
     description: "Spelling, version consistency, dead references, truncated text.",
     teachingPoint: "The last 10% is the other 90%. Truncated text, misaligned tables, stale version numbers, dead references — these are not nitpicks, they are quality failures. The difference between good and great is the details nobody notices until they are wrong.",
     checks: [
@@ -113,19 +113,19 @@ export const QA_GATES: QualityGateDefinition[] = [
 export const ADDITIONAL_GATES = [
   {
     name: "Accessibility",
-    icon: "♿",
+    icon: "accessibility",
     description: "WCAG 2.2 AA compliance. Keyboard navigation. Screen reader support.",
     teachingPoint: "Accessibility is not optional — it's a legal and ethical requirement. 15% of the world has a disability. If your app doesn't work with a keyboard, a screen reader, or high contrast, you've excluded 1 billion people.",
   },
   {
     name: "CX Review",
-    icon: "💬",
+    icon: "message-circle",
     description: "Customer journey validation. Onboarding flow. Error message quality.",
     teachingPoint: "Every error message is a conversation with a frustrated user. Every onboarding step is a chance to lose them. CX review asks: would a first-time user succeed on their own? If not, fix the product — not the documentation.",
   },
   {
     name: "Security Deep",
-    icon: "🔐",
+    icon: "shield-alert",
     description: "Auth flow audit. Encryption verification. Token storage review.",
     teachingPoint: "The deep security gate runs on code that handles authentication, payments, or PII. It's not a scan — it's a review. How are tokens stored? What happens on session expiry? Can a user escalate privileges? Trust nothing.",
   },

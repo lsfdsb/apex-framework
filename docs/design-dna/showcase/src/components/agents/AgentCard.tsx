@@ -1,4 +1,5 @@
 import type { AgentDefinition } from "../../data/hub-types";
+import { LucideIcon } from "../hub/LucideIcon";
 
 interface AgentCardProps {
   agent: AgentDefinition;
@@ -58,16 +59,16 @@ export function AgentCard({ agent, status = "idle" }: AgentCardProps) {
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
         <span
           style={{
-            fontSize: 28,
             lineHeight: 1,
-            display: "block",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
             filter: isActive ? "drop-shadow(0 0 8px var(--accent))" : "none",
             transition: "filter 0.3s ease",
           }}
-          role="img"
           aria-hidden="true"
         >
-          {agent.icon}
+          <LucideIcon name={agent.icon} size={28} />
         </span>
 
         <div style={{ flex: 1, minWidth: 0 }}>

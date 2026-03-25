@@ -413,12 +413,13 @@ export default function TaskBoardPage() {
         <h1
           style={{
             fontSize: "clamp(26px, 4vw, 36px)",
-            fontWeight: 800,
+            fontWeight: 400,
             color: "var(--text)",
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.02em",
             lineHeight: 1.1,
             marginBottom: 8,
-            fontFamily: "'Inter', -apple-system, sans-serif",
+            fontFamily: "var(--font-display)",
+            fontStyle: "italic",
           }}
         >
           Task Board

@@ -1,4 +1,5 @@
 import type { PipelinePhaseDefinition } from "../../data/hub-types";
+import { LucideIcon } from "../hub/LucideIcon";
 
 interface PhaseNodeProps {
   phase: PipelinePhaseDefinition;
@@ -92,16 +93,16 @@ export function PhaseNode({ phase, isActive, isExpanded, onClick }: PhaseNodePro
       {/* Phase icon */}
       <span
         style={{
-          fontSize: 24,
           lineHeight: 1,
-          display: "block",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
           filter: isActive ? "drop-shadow(0 0 8px var(--accent))" : "none",
           transition: "filter 0.3s ease",
         }}
-        role="img"
         aria-hidden="true"
       >
-        {phase.icon}
+        <LucideIcon name={phase.icon} size={24} />
       </span>
 
       {/* Phase number */}

@@ -15,7 +15,7 @@ export default function AboutPage() {
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 12 }}>
           The Story
         </div>
-        <h1 style={{ fontFamily: "var(--font-body)", fontSize: 36, fontWeight: 800, color: "var(--text)", letterSpacing: "-0.03em", marginBottom: 16 }}>
+        <h1 style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 36, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.02em", marginBottom: 16 }}>
           About APEX Framework
         </h1>
         <p style={{ fontSize: 16, color: "var(--text-secondary)", lineHeight: 1.7 }}>

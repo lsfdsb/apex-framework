@@ -152,12 +152,13 @@ export default function PipelinePage() {
         <h1
           style={{
             fontSize: "clamp(32px, 5vw, 48px)",
-            fontWeight: 800,
+            fontWeight: 400,
             color: "var(--text)",
-            letterSpacing: "-0.03em",
+            letterSpacing: "-0.02em",
             lineHeight: 1.1,
             marginBottom: 16,
-            fontFamily: "'Inter', -apple-system, sans-serif",
+            fontFamily: "var(--font-display)",
+            fontStyle: "italic",
           }}
         >
           The 7-Phase Pipeline
