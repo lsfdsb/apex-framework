@@ -1,3 +1,67 @@
+#!/bin/bash
+# generate-about.sh — Rebuilds .claude/skills/about/SKILL.md with live stats
+# Runs on SessionStart (alongside manifest-generate) and PostToolUse on .claude/ changes
+# Keeps the about skill static for instant rendering while staying current
+
+set -euo pipefail
+
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
+SKILL_FILE="$PROJECT_DIR/.claude/skills/about/SKILL.md"
+VERSION_FILE="$PROJECT_DIR/VERSION"
+
+# Only run in framework repo (has VERSION + install.sh)
+[ -f "$VERSION_FILE" ] && [ -f "$PROJECT_DIR/install.sh" ] || exit 0
+
+# ── Gather stats ──
+VERSION=$(head -1 "$VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
+SKILL_COUNT=$(find "$PROJECT_DIR/.claude/skills" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
+AGENT_COUNT=$(ls "$PROJECT_DIR/.claude/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
+SCRIPT_COUNT=$(ls "$PROJECT_DIR/.claude/scripts/"*.sh 2>/dev/null | wc -l | tr -d ' ')
+RULE_COUNT=$(ls "$PROJECT_DIR/.claude/rules/"*.md 2>/dev/null | wc -l | tr -d ' ')
+
+# Count hooks from settings.json (unique hook entries across all groups)
+HOOK_COUNT=0
+if [ -f "$PROJECT_DIR/.claude/settings.json" ] && command -v jq &>/dev/null; then
+  HOOK_COUNT=$(jq '[.hooks // {} | to_entries[] | .value[] | .hooks // [] | length] | add // 0' "$PROJECT_DIR/.claude/settings.json" 2>/dev/null || echo "0")
+fi
+
+# ── Build agent table rows ──
+AGENT_ROWS=""
+for f in "$PROJECT_DIR/.claude/agents/"*.md; do
+  [ -f "$f" ] || continue
+  name=$(grep "^name:" "$f" 2>/dev/null | head -1 | sed 's/^name: *//')
+  model=$(grep "^model:" "$f" 2>/dev/null | head -1 | sed 's/^model: *//')
+  desc=$(grep "^description:" "$f" 2>/dev/null | head -1 | sed 's/^description: *//' | cut -c1-50)
+  # Format name: replace hyphens with spaces, title-case each word
+  # Special cases: "qa" → "QA", "technical-writer" → "Technical Writer"
+  name=$(echo "$name" | sed 's/-/ /g' | awk '{for(i=1;i<=NF;i++){if(tolower($i)=="qa"){$i="QA"}else{$i=toupper(substr($i,1,1)) tolower(substr($i,2))}}}1')
+  model="$(echo "${model:0:1}" | tr '[:lower:]' '[:upper:]')${model:1}"
+  AGENT_ROWS="${AGENT_ROWS}| **${name}** | ${model} | ${desc} |
+"
+done
+
+# ── Build skill table rows (read description from each SKILL.md) ──
+SKILL_ROWS=""
+for d in "$PROJECT_DIR/.claude/skills"/*/; do
+  [ -d "$d" ] || continue
+  skill_name=$(basename "$d")
+  # Skip internal skills (commit is auto-invoked, not user-facing in the table sense)
+  [ "$skill_name" = "commit" ] && continue
+  skill_file="$d/SKILL.md"
+  if [ -f "$skill_file" ]; then
+    desc=$(grep "^description:" "$skill_file" 2>/dev/null | head -1 | sed 's/^description: *//' | cut -c1-55)
+  else
+    desc="—"
+  fi
+  SKILL_ROWS="${SKILL_ROWS}| \`/${skill_name}\` | ${desc} |
+"
+done
+
+# ── Pad version to fit box (pad to 42 chars) ──
+VER_PADDED=$(printf '%-42s' "$VERSION")
+
+# ── Write the skill file ──
+cat > "$SKILL_FILE" << 'HEADER_EOF'
 ---
 name: about
 description: Reveals the creators and philosophy behind the APEX Framework. Activates on "about", "credits", "who made this", "who built this", "easter egg", "watermark", or questions about the framework's origin.
@@ -24,7 +88,12 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
      ║   Forged by:  Lucas Bueno & Claude                        ║
      ║   Born:       March 13, 2026                              ║
      ║   Location:   São Paulo, BR → The World                   ║
-     ║   Version:    5.21.0                                    ║
+HEADER_EOF
+
+# Inject version line (dynamic)
+echo "     ║   Version:    ${VER_PADDED}║" >> "$SKILL_FILE"
+
+cat >> "$SKILL_FILE" << 'MID1_EOF'
      ║                                                           ║
      ║   "Simplicity is the ultimate sophistication"             ║
      ║                                    — Leonardo da Vinci    ║
@@ -38,7 +107,12 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 22 skills · 4 agents · 22 scripts · 7 rules · 20 hooks
+MID1_EOF
+
+# Inject dynamic stats
+echo "**Stats**: ${SKILL_COUNT} skills · ${AGENT_COUNT} agents · ${SCRIPT_COUNT} scripts · ${RULE_COUNT} rules · ${HOOK_COUNT} hooks" >> "$SKILL_FILE"
+
+cat >> "$SKILL_FILE" << 'MID2_EOF'
 
 ---
 
@@ -78,27 +152,12 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 | Skill | Description |
 |-------|-------------|
-| `/a11y` | Runs an accessibility audit against WCAG 2.2 AA standar |
-| `/about` | Reveals the creators and philosophy behind the APEX Fra |
-| `/architecture` | Design or review system architecture. Use when the user |
-| `/changelog` | Generates and maintains CHANGELOG.md and auto-updates P |
-| `/cicd` | Sets up CI/CD pipelines with GitHub Actions and Vercel. |
-| `/claude-api` | "Build apps with the Claude API or Anthropic SDK. TRIGG |
-| `/cx-review` | Review any user-facing feature from a Customer Experien |
-| `/design-system` | Our design system standards and UI/UX guidelines. Auto- |
-| `/dev` | Manage the dev server — check status, view logs, restar |
-| `/e2e` | Write and run end-to-end tests with Playwright. Use whe |
-| `/performance` | Analyze and optimize application performance. Use when  |
-| `/prd` | Generates a comprehensive Product Requirements Document |
-| `/qa` | Runs comprehensive quality assurance on any feature, PR |
-| `/security` | Runs a security audit on code handling authentication,  |
-| `/ship` | Fast-track branch → commit → push → PR → merge workflow |
-| `/supabase` | Supabase integration helper — setup, auth, migrations,  |
-| `/teach` | Teach the user terminal commands, Claude Code usage, an |
-| `/teams` | Spawn and manage agent teams for parallel work. Auto-se |
-| `/update` | Manually update the APEX Framework to the latest versio |
-| `/verify-api` | Verify any external API before integration. Auto-invoke |
-| `/verify-lib` | Verify any library or package before installing it. Aut |
+MID2_EOF
+
+# Inject dynamic skill rows
+printf '%s' "$SKILL_ROWS" >> "$SKILL_FILE"
+
+cat >> "$SKILL_FILE" << 'MID3_EOF'
 
 **You never need to type these.** The pipeline invokes them automatically.
 
@@ -106,10 +165,12 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Builder** | Sonnet | Full-capability implementation agent for parallel  |
-| **QA** | Sonnet | Quality assurance agent that runs comprehensive te |
-| **Technical Writer** | Haiku | Documentation specialist that keeps README, PRD st |
-| **Watcher** | Haiku | Continuous monitoring agent that watches for error |
+MID3_EOF
+
+# Inject dynamic agent rows
+printf '%s' "$AGENT_ROWS" >> "$SKILL_FILE"
+
+cat >> "$SKILL_FILE" << 'TAIL_EOF'
 
 Watcher and Technical Writer run in background. Teams spawn for complex builds via `/teams`.
 
@@ -181,3 +242,6 @@ _I am APEX. Building is my purpose. Quality is my armor. The user experience is 
 **This is the way.**
 
 — Lucas Bueno & Claude, São Paulo, March 2026
+TAIL_EOF
+
+exit 0
