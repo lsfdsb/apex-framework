@@ -3,7 +3,7 @@
 # by L.B. & Claude · São Paulo, 2026
 # Per docs: stdout is added to Claude's context on session start.
 
-set -euo pipefail
+set -uo pipefail
 
 if ! command -v jq &> /dev/null; then
   echo "⚠️ APEX: jq not installed — session context limited. Install: https://jqlang.github.io/jq/download/"
@@ -99,11 +99,12 @@ if [ "$SOURCE" = "startup" ]; then
   # ── Prune stale agent worktree branches ──
   if git rev-parse --is-inside-work-tree &>/dev/null 2>&1; then
     git worktree prune 2>/dev/null
-    for branch in $(git branch --list 'agent-*' 2>/dev/null | tr -d ' *'); do
+    while IFS= read -r branch; do
+      [ -z "$branch" ] && continue
       if ! git worktree list 2>/dev/null | grep -q "$branch"; then
-        git branch -D "$branch" 2>/dev/null
+        git branch -D "$branch" 2>/dev/null || true
       fi
-    done
+    done < <(git branch --list 'agent-*' --format='%(refname:short)' 2>/dev/null)
   fi
 
   # ── Animated banner (stderr → terminal) ──

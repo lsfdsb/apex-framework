@@ -77,7 +77,7 @@ User says "build me X"
   │   (No gate — the builder works autonomously)
   │
   ├─ PHASE 5: QUALITY ───────────────────────────
-  │   Auto-invoke /qa (6-phase gate)
+  │   Auto-invoke /qa (7-phase gate)
   │   Auto-invoke /security (if auth/payments/PII)
   │   Auto-invoke /a11y (if UI components)
   │   Auto-invoke /cx-review (if user-facing)

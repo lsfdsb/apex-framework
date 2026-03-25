@@ -36,12 +36,12 @@ if [ -d "$WORKTREE_DIR" ]; then
 fi
 
 # Clean up orphaned worktree branches
-for branch in $(git branch --list 'worktree-agent-*' 2>/dev/null); do
-  branch=$(echo "$branch" | tr -d ' *')
+while IFS= read -r branch; do
+  [ -z "$branch" ] && continue
   # If no worktree uses this branch, delete it
   if ! git worktree list 2>/dev/null | grep -q "$branch"; then
-    git branch -D "$branch" 2>/dev/null
+    git branch -D "$branch" 2>/dev/null || true
   fi
-done
+done < <(git branch --list 'worktree-agent-*' --format='%(refname:short)' 2>/dev/null)
 
 exit 0

@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 source "$SCRIPT_DIR/apex-colors.sh" 2>/dev/null
 
-VERSION=$(cat "$(dirname "$SCRIPT_DIR")/../VERSION" 2>/dev/null || echo "5.11")
+VERSION=$(cat "$(dirname "$SCRIPT_DIR")/../VERSION" 2>/dev/null || echo "5.21")
 
 echo ""
 printf "  \033[1mAPEX\033[0m v${VERSION}\n"

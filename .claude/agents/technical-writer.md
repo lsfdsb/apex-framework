@@ -2,6 +2,7 @@
 name: technical-writer
 description: Documentation specialist that keeps README, PRD status, and docs in sync with code changes. CHANGELOG is handled by /commit — the tech writer owns everything else. Spawned before PRs to verify docs consistency.
 tools: Read, Glob, Grep, Bash, Edit, Write, TaskCreate, TaskUpdate, TaskList, SendMessage
+skills: changelog
 model: haiku
 permissionMode: dontAsk
 background: true

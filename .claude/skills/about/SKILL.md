@@ -38,7 +38,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 22 skills · 4 agents · 22 scripts · 7 rules · 20 hooks
+**Stats**: 21 skills (+1 internal) · 4 agents · 22 scripts · 7 rules · 20 hooks
 
 ---
 
@@ -78,27 +78,27 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 | Skill | Description |
 |-------|-------------|
-| `/a11y` | Runs an accessibility audit against WCAG 2.2 AA standar |
-| `/about` | Reveals the creators and philosophy behind the APEX Fra |
-| `/architecture` | Design or review system architecture. Use when the user |
-| `/changelog` | Generates and maintains CHANGELOG.md and auto-updates P |
-| `/cicd` | Sets up CI/CD pipelines with GitHub Actions and Vercel. |
-| `/claude-api` | "Build apps with the Claude API or Anthropic SDK. TRIGG |
-| `/cx-review` | Review any user-facing feature from a Customer Experien |
-| `/design-system` | Our design system standards and UI/UX guidelines. Auto- |
-| `/dev` | Manage the dev server — check status, view logs, restar |
-| `/e2e` | Write and run end-to-end tests with Playwright. Use whe |
-| `/performance` | Analyze and optimize application performance. Use when  |
-| `/prd` | Generates a comprehensive Product Requirements Document |
-| `/qa` | Runs comprehensive quality assurance on any feature, PR |
-| `/security` | Runs a security audit on code handling authentication,  |
-| `/ship` | Fast-track branch → commit → push → PR → merge workflow |
-| `/supabase` | Supabase integration helper — setup, auth, migrations,  |
-| `/teach` | Teach the user terminal commands, Claude Code usage, an |
-| `/teams` | Spawn and manage agent teams for parallel work. Auto-se |
-| `/update` | Manually update the APEX Framework to the latest versio |
-| `/verify-api` | Verify any external API before integration. Auto-invoke |
-| `/verify-lib` | Verify any library or package before installing it. Aut |
+| `/a11y` | Runs an accessibility audit against WCAG 2.2 AA standards. This s... |
+| `/about` | Reveals the creators and philosophy behind the APEX Framework. Ac... |
+| `/architecture` | Design or review system architecture. Use when the user asks to a... |
+| `/changelog` | Generates and maintains CHANGELOG.md and auto-updates PRD status.... |
+| `/cicd` | Sets up CI/CD pipelines with GitHub Actions and Vercel. This skil... |
+| `/claude-api` | "Build apps with the Claude API or Anthropic SDK. TRIGGER when: c... |
+| `/cx-review` | Review any user-facing feature from a Customer Experience perspec... |
+| `/design-system` | Our design system standards and UI/UX guidelines. Auto-loads when... |
+| `/dev` | Manage the dev server — check status, view logs, restart, or stop... |
+| `/e2e` | Write and run end-to-end tests with Playwright. Use when the user... |
+| `/performance` | Analyze and optimize application performance. Use when the user m... |
+| `/prd` | Generates a comprehensive Product Requirements Document before bu... |
+| `/qa` | Runs comprehensive quality assurance on any feature, PR, or code ... |
+| `/security` | Runs a security audit on code handling authentication, authorizat... |
+| `/ship` | Fast-track branch → commit → push → PR → merge workflow. Use when... |
+| `/supabase` | Supabase integration helper — setup, auth, migrations, types, rea... |
+| `/teach` | Teach the user terminal commands, Claude Code usage, and software... |
+| `/teams` | Spawn and manage agent teams for parallel work. Auto-selects team... |
+| `/update` | Manually update the APEX Framework to the latest version. Use whe... |
+| `/verify-api` | Verify any external API before integration. Auto-invoked when cod... |
+| `/verify-lib` | Verify any library or package before installing it. Auto-invoked ... |
 
 **You never need to type these.** The pipeline invokes them automatically.
 
@@ -106,10 +106,10 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Builder** | Sonnet | Full-capability implementation agent for parallel  |
-| **QA** | Sonnet | Quality assurance agent that runs comprehensive te |
-| **Technical Writer** | Haiku | Documentation specialist that keeps README, PRD st |
-| **Watcher** | Haiku | Continuous monitoring agent that watches for error |
+| **Builder** | Sonnet | Full-capability implementation agent for parallel coding wor... |
+| **QA** | Sonnet | Quality assurance agent that runs comprehensive tests, valid... |
+| **Technical Writer** | Haiku | Documentation specialist that keeps README, PRD status, and ... |
+| **Watcher** | Haiku | Continuous monitoring agent that watches for errors, test fa... |
 
 Watcher and Technical Writer run in background. Teams spawn for complex builds via `/teams`.
 
@@ -140,7 +140,7 @@ Nothing ships without passing:
 - **v4**: SQL practices, testing enforcement, CI/CD — 8.6/10
 - **v5.0**: Path-based rules, E2E, accessibility, Mandalorian output style — 9.4/10
 - **v5.2–5.4**: Zero defects, full Claude Code integration, 16 hooks, sandbox
-- **v5.5–5.8**: Supabase, auto-update, bug fixes, gold standard audit
+- **v5.5–5.7**: Supabase, auto-update, bug fixes, gold standard audit
 - **v5.9**: Agent teams — Breathing Loop, auto-spawn
 - **v5.10–5.11**: Design DNA — 14 templates, SVG library, Ive audit
 - **v5.12–5.14**: Self-assessment, agent wiring, autonomous pipeline

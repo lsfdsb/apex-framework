@@ -3,7 +3,11 @@
 # Validates framework integrity when .claude/ files are modified
 # Checks cross-references, broken skill refs, orphaned files
 
-set -euo pipefail
+set -uo pipefail
+
+if ! command -v jq &> /dev/null; then
+  exit 0
+fi
 
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty' 2>/dev/null)

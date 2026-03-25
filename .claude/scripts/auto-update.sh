@@ -13,7 +13,10 @@
 #   - Project-scoped: only updates the current project's .claude/
 #   - Verbose: always reports status (up-to-date, updated, error, throttled)
 
-set -euo pipefail
+set -uo pipefail
+
+# Portable timeout (macOS may not have coreutils timeout)
+_timeout() { if command -v timeout &>/dev/null; then timeout "$@"; else shift; "$@"; fi; }
 
 # ── Configuration ──
 APEX_CACHE="$HOME/.apex-framework"
@@ -105,7 +108,7 @@ if [ -z "$REMOTE_VERSION" ] && command -v wget &>/dev/null; then
 fi
 if [ -z "$REMOTE_VERSION" ] && command -v gh &>/dev/null; then
   # Fallback: gh CLI works inside Claude Code sandbox when curl/wget are blocked
-  REMOTE_VERSION=$(timeout 10 gh api "repos/${APEX_REPO}/contents/VERSION" \
+  REMOTE_VERSION=$(_timeout 10 gh api "repos/${APEX_REPO}/contents/VERSION" \
     --jq '.content' 2>/dev/null | base64 -d 2>/dev/null | tr -d '[:space:]' || true)
 fi
 
@@ -144,16 +147,16 @@ log "Update available: v$LOCAL_VERSION → v$REMOTE_VERSION"
 # Clone or pull the repo cache
 if [ -d "$APEX_CACHE/.git" ]; then
   cd "$APEX_CACHE"
-  git fetch origin "$APEX_BRANCH" --depth=1 2>/dev/null || { log "Failed to fetch"; echo "⚠️ APEX Auto-Update: git fetch failed. Run manually: cd ~/.apex-framework && git pull"; exit 0; }
+  _timeout 30 git fetch origin "$APEX_BRANCH" --depth=1 2>/dev/null || { log "Failed to fetch"; echo "⚠️ APEX Auto-Update: git fetch failed. Run manually: cd ~/.apex-framework && git pull"; exit 0; }
   git reset --hard "origin/$APEX_BRANCH" 2>/dev/null || { log "Failed to reset"; echo "⚠️ APEX Auto-Update: git reset failed."; exit 0; }
 else
   rm -rf "$APEX_CACHE"
   # Try gh repo clone first (works inside Claude Code sandbox), fall back to git clone
   if command -v gh &>/dev/null; then
-    gh repo clone "${APEX_REPO}" "$APEX_CACHE" -- --depth=1 --branch "$APEX_BRANCH" 2>/dev/null
+    _timeout 30 gh repo clone "${APEX_REPO}" "$APEX_CACHE" -- --depth=1 --branch "$APEX_BRANCH" 2>/dev/null
   fi
   if [ ! -d "$APEX_CACHE/.git" ]; then
-    git clone --depth=1 --branch "$APEX_BRANCH" \
+    _timeout 30 git clone --depth=1 --branch "$APEX_BRANCH" \
       "https://github.com/${APEX_REPO}.git" "$APEX_CACHE" 2>/dev/null
   fi
   if [ ! -d "$APEX_CACHE/.git" ]; then
@@ -178,7 +181,7 @@ rollback_update() {
     echo "⚠️ APEX: Update failed — rolling back from backup..." >&2
     for component in scripts skills agents rules output-styles; do
       if [ -d "$backup_dir/$component" ]; then
-        rm -r "$PROJECT_DIR/.claude/$component" 2>/dev/null
+        rm -r "$PROJECT_DIR/.claude/$component" 2>/dev/null || true
         cp -r "$backup_dir/$component" "$PROJECT_DIR/.claude/$component"
       fi
     done

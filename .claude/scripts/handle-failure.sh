@@ -21,7 +21,7 @@ if [ -z "$COMMAND" ]; then
 fi
 
 # Track consecutive failures on similar commands
-FAILURE_LOG="$CLAUDE_PROJECT_DIR/.claude/.failure-log"
+FAILURE_LOG="${CLAUDE_PROJECT_DIR:-.}/.claude/.failure-log"
 TIMESTAMP=$(date +%s)
 
 # Log this failure

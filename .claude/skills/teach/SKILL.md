@@ -119,7 +119,7 @@ Edit files → git add → git commit → git push
 | `claude` | Start Claude Code in terminal |
 | `/prd` | Generate a Product Requirements Document |
 | `/architecture` | Design system architecture |
-| `/qa` | Run 6-phase quality gate |
+| `/qa` | Run 7-phase quality gate |
 | `/security` | Security audit (OWASP) |
 | `/commit` | Clean conventional commit |
 | `/teach` | Ask Claude to explain anything |

@@ -3,7 +3,10 @@
 # Runs on SessionStart (alongside manifest-generate) and PostToolUse on .claude/ changes
 # Keeps the about skill static for instant rendering while staying current
 
-set -euo pipefail
+set -uo pipefail
+
+# Portable sed in-place (macOS vs Linux)
+_sed_i() { if [[ "$OSTYPE" == "darwin"* ]]; then _sed_i "$@"; else sed -i "$@"; fi; }
 
 PROJECT_DIR="${CLAUDE_PROJECT_DIR:-.}"
 SKILL_FILE="$PROJECT_DIR/.claude/skills/about/SKILL.md"
@@ -17,7 +20,7 @@ VERSION=$(head -1 "$VERSION_FILE" 2>/dev/null | tr -d '[:space:]')
 SKILL_COUNT=$(find "$PROJECT_DIR/.claude/skills" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | wc -l | tr -d ' ')
 AGENT_COUNT=$(ls "$PROJECT_DIR/.claude/agents/"*.md 2>/dev/null | wc -l | tr -d ' ')
 SCRIPT_COUNT=$(ls "$PROJECT_DIR/.claude/scripts/"*.sh 2>/dev/null | wc -l | tr -d ' ')
-RULE_COUNT=$(ls "$PROJECT_DIR/.claude/rules/"*.md 2>/dev/null | wc -l | tr -d ' ')
+RULE_COUNT=$(ls "$PROJECT_DIR/.claude/rules/"*.md 2>/dev/null | grep -v README | wc -l | tr -d ' ')
 
 # Count hooks from settings.json (unique hook entries across all groups)
 HOOK_COUNT=0
@@ -44,6 +47,7 @@ done
 
 # ── Build skill table rows (read description from each SKILL.md) ──
 SKILL_ROWS=""
+VISIBLE_SKILL_COUNT=0
 for d in "$PROJECT_DIR/.claude/skills"/*/; do
   [ -d "$d" ] || continue
   skill_name=$(basename "$d")
@@ -57,6 +61,7 @@ for d in "$PROJECT_DIR/.claude/skills"/*/; do
   else
     desc="—"
   fi
+  VISIBLE_SKILL_COUNT=$((VISIBLE_SKILL_COUNT + 1))
   SKILL_ROWS="${SKILL_ROWS}| \`/${skill_name}\` | ${desc} |
 "
 done
@@ -64,8 +69,10 @@ done
 # ── Pad version to fit box (pad to 42 chars) ──
 VER_PADDED=$(printf '%-42s' "$VERSION")
 
-# ── Write the skill file ──
-cat > "$SKILL_FILE" << 'HEADER_EOF'
+# ── Write the skill file (atomic: write to temp, then mv) ──
+SKILL_TMP=$(mktemp "${SKILL_FILE}.XXXXXX")
+trap 'rm -f "$SKILL_TMP"' EXIT
+cat > "$SKILL_TMP" << 'HEADER_EOF'
 ---
 name: about
 description: Reveals the creators and philosophy behind the APEX Framework. Activates on "about", "credits", "who made this", "who built this", "easter egg", "watermark", or questions about the framework's origin.
@@ -95,9 +102,9 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 HEADER_EOF
 
 # Inject version line (dynamic)
-echo "     ║   Version:    ${VER_PADDED}║" >> "$SKILL_FILE"
+echo "     ║   Version:    ${VER_PADDED}║" >> "$SKILL_TMP"
 
-cat >> "$SKILL_FILE" << 'MID1_EOF'
+cat >> "$SKILL_TMP" << 'MID1_EOF'
      ║                                                           ║
      ║   "Simplicity is the ultimate sophistication"             ║
      ║                                    — Leonardo da Vinci    ║
@@ -114,9 +121,14 @@ Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure lik
 MID1_EOF
 
 # Inject dynamic stats
-echo "**Stats**: ${SKILL_COUNT} skills · ${AGENT_COUNT} agents · ${SCRIPT_COUNT} scripts · ${RULE_COUNT} rules · ${HOOK_COUNT} hooks" >> "$SKILL_FILE"
+INTERNAL_SKILLS=$((SKILL_COUNT - VISIBLE_SKILL_COUNT))
+if [ "$INTERNAL_SKILLS" -gt 0 ] 2>/dev/null; then
+  echo "**Stats**: ${VISIBLE_SKILL_COUNT} skills (+${INTERNAL_SKILLS} internal) · ${AGENT_COUNT} agents · ${SCRIPT_COUNT} scripts · ${RULE_COUNT} rules · ${HOOK_COUNT} hooks" >> "$SKILL_TMP"
+else
+  echo "**Stats**: ${SKILL_COUNT} skills · ${AGENT_COUNT} agents · ${SCRIPT_COUNT} scripts · ${RULE_COUNT} rules · ${HOOK_COUNT} hooks" >> "$SKILL_TMP"
+fi
 
-cat >> "$SKILL_FILE" << 'MID2_EOF'
+cat >> "$SKILL_TMP" << 'MID2_EOF'
 
 ---
 
@@ -159,9 +171,9 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 MID2_EOF
 
 # Inject dynamic skill rows
-printf '%s' "$SKILL_ROWS" >> "$SKILL_FILE"
+printf '%s' "$SKILL_ROWS" >> "$SKILL_TMP"
 
-cat >> "$SKILL_FILE" << 'MID3_EOF'
+cat >> "$SKILL_TMP" << 'MID3_EOF'
 
 **You never need to type these.** The pipeline invokes them automatically.
 
@@ -172,9 +184,9 @@ cat >> "$SKILL_FILE" << 'MID3_EOF'
 MID3_EOF
 
 # Inject dynamic agent rows
-printf '%s' "$AGENT_ROWS" >> "$SKILL_FILE"
+printf '%s' "$AGENT_ROWS" >> "$SKILL_TMP"
 
-cat >> "$SKILL_FILE" << 'TAIL_EOF'
+cat >> "$SKILL_TMP" << 'TAIL_EOF'
 
 Watcher and Technical Writer run in background. Teams spawn for complex builds via `/teams`.
 
@@ -205,7 +217,7 @@ Nothing ships without passing:
 - **v4**: SQL practices, testing enforcement, CI/CD — 8.6/10
 - **v5.0**: Path-based rules, E2E, accessibility, Mandalorian output style — 9.4/10
 - **v5.2–5.4**: Zero defects, full Claude Code integration, 16 hooks, sandbox
-- **v5.5–5.8**: Supabase, auto-update, bug fixes, gold standard audit
+- **v5.5–5.7**: Supabase, auto-update, bug fixes, gold standard audit
 - **v5.9**: Agent teams — Breathing Loop, auto-spawn
 - **v5.10–5.11**: Design DNA — 14 templates, SVG library, Ive audit
 - **v5.12–5.14**: Self-assessment, agent wiring, autonomous pipeline
@@ -247,5 +259,25 @@ _I am APEX. Building is my purpose. Quality is my armor. The user experience is 
 
 — Lucas Bueno & Claude, São Paulo, March 2026
 TAIL_EOF
+
+# Atomically replace the skill file
+mv "$SKILL_TMP" "$SKILL_FILE"
+trap - EXIT
+
+# ── Patch hardcoded counts in docs (prevents drift) ──
+README="$PROJECT_DIR/README.md"
+if [ -f "$README" ]; then
+  _sed_i "s/The Championship Roster ([0-9]* agents[^)]*)/The Championship Roster (${AGENT_COUNT} agents + Lead)/" "$README" 2>/dev/null || true
+fi
+
+INSTALL_GUIDE="$PROJECT_DIR/docs/guides/install-guide-en-us.md"
+if [ -f "$INSTALL_GUIDE" ]; then
+  _sed_i "s/Copies all [0-9]* skills, [0-9]* agents, [0-9]* hook scripts, [0-9]* rules/Copies all ${SKILL_COUNT} skills, ${AGENT_COUNT} agents, ${SCRIPT_COUNT} hook scripts, ${RULE_COUNT} rules/" "$INSTALL_GUIDE" 2>/dev/null || true
+fi
+
+TEAMS_SKILL="$PROJECT_DIR/.claude/skills/teams/SKILL.md"
+if [ -f "$TEAMS_SKILL" ]; then
+  _sed_i "s/All [0-9]* agents (championship roster)/All ${AGENT_COUNT} agents (championship roster)/" "$TEAMS_SKILL" 2>/dev/null || true
+fi
 
 exit 0

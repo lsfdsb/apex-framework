@@ -49,7 +49,7 @@ cd ~/my-project
 ~/.apex-framework/install.sh
 ```
 
-**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 16 git hooks across 6 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
+**What this does:** Copies APEX's skills, hooks, agents, and rules into your project's `.claude/` folder. It installs 20 hooks across 9 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd, TaskCompleted, TeammateIdle, ConfigChange) that enforce code quality, creates doc directories for your PRDs, copies the Design DNA pattern library (14 premium UI pages), and sets up the safety net. Each project gets its own complete copy — no shared state, no conflicts.
 
 ### For additional projects
 
@@ -124,10 +124,10 @@ When you say `/prd my LMS app`, APEX:
 5. **Spawns a team** — Builder, Watcher, QA, Technical Writer work in parallel
 6. **Builds the app** — using starter components from Design DNA (not from scratch)
 7. **Runs quality gates** — QA agent checks code, security, performance, accessibility
-9. **Updates docs** — CHANGELOG, README updated automatically
-10. **Ships** — PR created, reviewed, merged with one command
+8. **Updates docs** — CHANGELOG, README updated automatically
+9. **Ships** — PR created, reviewed, merged with one command
 
-**You see steps 1 and 10.** Steps 2-9 are invisible.
+**You see steps 1 and 9.** Steps 2-8 are invisible.
 
 ### The Philosophy
 
@@ -154,7 +154,7 @@ One install. Everything in your project's `.claude/` directory.
 | `/architecture` | After PRD approval | Plans system design, picks DNA recipe |
 | `/ship` | When ready to deploy | Commit → push → PR → code review → merge |
 | `/teach` | When you're learning | Explains concepts at your level |
-| `/qa` | Manual quality check | 6-phase gate (also runs automatically) |
+| `/qa` | Manual quality check | 7-phase gate (also runs automatically) |
 | `/teams` | Complex features | Spawns parallel agent team |
 | `/commit` | Save a checkpoint | Clean conventional commit + changelog |
 
@@ -172,13 +172,13 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (5 agents)
+### The Championship Roster (4 agents + Lead)
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Lead** (you + Claude) | Opus | Orchestrates everything |
+| **Lead** (you + Claude) | Opus | Orchestrates everything — not a spawned agent |
 | **Builder** | Sonnet | Writes production code and fixes bugs |
-| **QA** | Sonnet | 6-phase quality gate |
+| **QA** | Sonnet | 7-phase quality gate |
 | **Watcher** | Haiku | Continuous monitoring |
 | **Technical Writer** | Haiku | Documentation, CHANGELOG |
 
@@ -338,7 +338,7 @@ The enforced workflow saves you from yourself:
 | 2 | `/architecture` | Plan the system — database schema, API design, component tree |
 | 3 | WebSearch | Verify APIs and libraries exist — never hallucinate an endpoint |
 | 4 | Build | Write code — APEX auto-formats, enforces standards, validates types |
-| 5 | `/qa` | Run 5-phase quality gate — lint, types, tests, security, review |
+| 5 | `/qa` | Run 7-phase quality gate — deps, lint, types, tests, security, review, polish |
 | 6 | `/security` | OWASP audit on auth, payments, PII handling |
 | 7 | `/a11y` | WCAG 2.2 AA accessibility check |
 | 8 | `/cx-review` | Customer experience review — is this good enough to ship? |
@@ -370,7 +370,7 @@ APEX has 4 specialized agents — a championship roster. Use `/teams` for parall
 |-------|-------|------|
 | **watcher** | Haiku | Continuous monitoring — catches errors, security, drift |
 | **builder** | Sonnet | Implements features and fixes bugs directly |
-| **qa** | Sonnet | 6-phase quality gate — blocks bad code |
+| **qa** | Sonnet | 7-phase quality gate — blocks bad code |
 | **technical-writer** | Haiku | Keeps CHANGELOG, README, docs in sync |
 
 Use `/teams` and Claude auto-selects the right roster.
@@ -442,7 +442,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### Latest — v5.21.0+ (2026-03-25)
+### Latest — v5.21.0+ (2026-03-24)
 
 - **Safe Hook Processes** — PIDs verified before kill, fully detached dev servers, Rule #21 (#190)
 - **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)
