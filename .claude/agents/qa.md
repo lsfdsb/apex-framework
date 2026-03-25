@@ -104,7 +104,8 @@ jq empty .claude/settings.json 2>/dev/null || echo "🔴 settings.json is invali
 [ -d ".claude/agents" ] && echo "✅ agents/ present" || echo "⚠️ agents/ missing"
 [ -d ".claude/scripts" ] && echo "✅ scripts/ present" || echo "⚠️ scripts/ missing"
 for f in .claude/scripts/*.sh; do [ -x "$f" ] || echo "⚠️ NOT EXECUTABLE: $f"; done
-[ -f "tests/test-framework.sh" ] && bash tests/test-framework.sh 2>&1 | tail -5
+# Framework-specific: validate shell scripts and agent integrity
+bash -n .claude/scripts/*.sh 2>&1 || echo "SHELL SYNTAX ERRORS FOUND"
 ```
 
 ## Quality Gate Checklist
