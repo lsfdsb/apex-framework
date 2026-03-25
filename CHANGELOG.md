@@ -6,6 +6,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [5.22.0] — 2026-03-25
+
 ### Added
 - **Project Manager Agent** — New agent (project-manager.md) with Apple EPM methodology, phased task decomposition, DRI assignments, and acceptance criteria (#202)
 - **Pipeline Phase 3: Decompose** — PM auto-decomposes PRD+Architecture into phased task board with P0/P1/P2 phases (#202)
