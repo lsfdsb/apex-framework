@@ -288,7 +288,7 @@ Agent({
   name: "builder",
   subagent_type: "builder",
   prompt: "Implement the landing page with hero, features grid, and CTA.
-    DESIGN DNA: Read docs/design-dna/landing.html FIRST.
+    DESIGN DNA: Read docs/design-dna/templates/LandingPage.tsx FIRST.
     Extract the palette, fonts, and patterns before writing ANY code.
     globals.css must match the DNA palette exactly."
 })

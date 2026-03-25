@@ -8,7 +8,7 @@ const RELEASES = [
     changes: [
       { type: "feat", text: "Project Manager Agent — Apple EPM methodology (Kanban + DRI + Milestones)" },
       { type: "feat", text: "7-phase autonomous pipeline with Decompose phase and 3 user gates" },
-      { type: "feat", text: "Visual Pipeline HUB — command center dashboard" },
+      { type: "feat", text: "Visual Pipeline HUB — command center dashboard (#203)" },
       { type: "feat", text: "SubagentStart, PreCompact, PostCompact hooks" },
       { type: "feat", text: "Builder API Verification Protocol" },
       { type: "feat", text: "Session log rotation (keep last 10)" },

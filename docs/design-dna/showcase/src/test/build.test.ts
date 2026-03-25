@@ -19,7 +19,6 @@ describe("build smoke test", () => {
       "SocialFeed",
       "EmailTemplate",
       "PresentationSlide",
-      "EbookPage",
       "DesignSystemPage",
       "PatternShowcase",
     ];

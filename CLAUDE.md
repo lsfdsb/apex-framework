@@ -37,7 +37,7 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 13. **Branding sweep** — After any project init or template scaffolding, grep for template branding (ACME, Doppel, "My App", boilerplate names) and replace ALL instances with the actual project name. No template branding ships to production.
 14. **Persona→page alignment** — Every page serves ONE primary persona. Never mix management views (dashboards, KPIs) with operational views (queues, kanban, forms) on the same page unless the PRD explicitly calls for it.
 15. **Default isolation: none** — Agents write directly to the project. Only use `isolation: worktree` for 2+ parallel builders modifying the SAME files. Worktrees have caused data loss in 6+ sessions — `isolation: none` eliminates this risk.
-16. **Design DNA before UI** — Before building ANY user-facing page, read the matching pattern from `docs/design-dna/`. This is our visual quality bar. Landing→`landing.html`, SaaS→`saas.html`, CRM→`crm.html`, E-commerce→`ecommerce.html`, Blog→`blog.html`, Portfolio→`portfolio.html`, Social→`social.html`, LMS→`lms.html`, Email→`email.html`, Slides→`presentation.html`, E-book→`ebook.html`, Backoffice→`backoffice.html`, SVG patterns→`patterns.html`+`svg-backgrounds.js`. QA will BLOCK pages that don't match DNA quality.
+16. **Design DNA before UI** — Before building ANY user-facing page, read the matching React template from `docs/design-dna/templates/`. These are the single source of truth for visual quality. Landing→`LandingPage.tsx`, SaaS→`SaaSDashboard.tsx`, CRM→`CRMPipeline.tsx`, E-commerce→`EcommercePage.tsx`, Blog→`BlogLayout.tsx`, Portfolio→`PortfolioPage.tsx`, Social→`SocialFeed.tsx`, LMS→`LMSDashboard.tsx`, Email→`EmailTemplate.tsx`, Slides→`PresentationSlide.tsx`, Backoffice→`BackofficePage.tsx`, Design System→`DesignSystemPage.tsx`, SVG patterns→`PatternShowcase.tsx`. Extract palette, typography, spacing, patterns from the React code. QA will BLOCK pages that don't match DNA quality.
 17. **Reuse before create** — Before creating ANY new component, search for existing ones. If a pattern appears on 2+ pages, it MUST be a shared component in `src/components/`. Three similar files doing the same thing = architectural failure.
 18. **Mobile-first + dual theme** — ALL layouts start at 320px and scale up. Dark AND light mode must work from day one. No raw colors — semantic tokens only. This is architecture, not polish.
 19. **Performance by default** — Lazy load routes, virtualize lists 100+ items, no N+1 queries, paginate at 20+ items. Our apps have zero lag — non-negotiable.
@@ -96,19 +96,29 @@ fi
 
 This works even if the project has an outdated APEX version without the `/update` skill.
 
-## Workflow — Autonomous Pipeline
+## Workflow — 7-Phase Autonomous Pipeline
 
-When the user asks to build something new, APEX drives the full pipeline autonomously. The user makes decisions at 3 gates only:
+The pipeline is a **state machine with 7 phases and 3 user gates**. When the user asks to build something new, execute all 7 phases in order. The user only decides at gates — everything else is autonomous.
 
-1. **Approve PRD** — auto-generated, presented for review
-2. **Approve Architecture** — auto-designed, presented for review
-3. **Approve Ship** — PR created, user says "merge"
+### The 7 Phases
 
-Everything between gates is autonomous: PM task decomposition, API verification (WebSearch), Design DNA loading, team spawning, building, QA, security, accessibility, CX review, and documentation. If a quality gate fails, fix and re-run — no user intervention needed.
+| Phase | Name | Action | Gate? |
+|-------|------|--------|-------|
+| 1 | **Plan** | Invoke `/prd` → generate PRD | YES — user approves |
+| 2 | **Architect** | Invoke `/architecture` + `/verify-api` for each external API + read Design DNA | YES — user approves |
+| 3 | **Decompose** | Spawn PM agent → phased task board (P0/P1/P2) with DRI assignments | No |
+| 4 | **Verify** | Verify remaining APIs, read Design DNA template, extract design values | No |
+| 5 | **Build** | Spawn team if complex, build directly if simple, Watcher in background | No |
+| 6 | **Quality** | `/qa` (mandatory) + `/security` + `/a11y` + `/cx-review` as needed | No — auto-fix failures |
+| 7 | **Ship** | Technical Writer + commit + push + PR | YES — user approves merge |
 
-**Do NOT ask the user to type slash commands.** The pipeline invokes skills internally. The user just says what they want and approves at gates.
+### Enforcement Rules
 
-**MCP Elicitation gates (v2.1.76+)** — If the project has an `apex-gates` MCP server configured, gates present structured forms instead of text prompts: typed decision fields, merge strategy selector, dependency checklist. See `docs/mcp-elicitation-gates.md` for the implementation pattern and `.mcp.json.template` for the server config entry.
+- **Never ask the user to type slash commands.** You invoke skills internally. The user sees results, not commands.
+- **Never skip Quality (Phase 6).** No code ships without `/qa`. If QA finds issues, fix them and re-run — do not ask the user.
+- **Never integrate an unverified API.** Before writing any code that imports from an external API, invoke `/verify-api`. Before installing any new package, invoke `/verify-lib`. This is not optional.
+- **Never build UI without Design DNA.** Before building any user-facing page, read the matching template from `docs/design-dna/`. Extract palette, fonts, spacing, patterns. Inject into builder prompts.
+- **Never mark a task complete without QA.** Run `/qa` on changed code. If auth/payments/PII, also run `/security`. If UI, also run `/a11y`. Only mark complete after gates pass.
 
 For quick fixes, bugs, and questions — skip the pipeline entirely. Just do it.
 

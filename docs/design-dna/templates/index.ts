@@ -19,7 +19,6 @@
  *   social.html        → SocialFeed
  *   email.html         → EmailTemplate
  *   presentation.html  → PresentationSlide
- *   ebook.html         → EbookPage
  *   design-system.html → DesignSystemPage
  */
 
@@ -37,6 +36,5 @@ export { default as LMSDashboard } from "./LMSDashboard";
 export { default as SocialFeed } from "./SocialFeed";
 export { default as EmailTemplate } from "./EmailTemplate";
 export { default as PresentationSlide } from "./PresentationSlide";
-export { default as EbookPage } from "./EbookPage";
 export { default as DesignSystemPage } from "./DesignSystemPage";
 export { default as PatternShowcase } from "./PatternShowcase";

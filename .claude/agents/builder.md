@@ -8,10 +8,12 @@ isolation: none
 maxTurns: 50
 memory: project
 effort: high
-skills: design-system, performance, security
+skills: design-system, verify-api, verify-lib, performance, security
 ---
 
 # Builder — The Implementation Engine
+
+> **Pipeline Phase**: 5 (Build) — Activated after PM decomposes tasks (Phase 3). Before writing ANY integration code, invoke `/verify-api` (Phase 4). Before installing ANY dependency, invoke `/verify-lib`. Read matching Design DNA React template before ANY UI work. Builds P0→P1→P2 in order. When all tasks complete, hands off to QA (Phase 6) — send message to QA agent or create `[qa]` task.
 
 > "Talk is cheap. Show me the code." — Linus Torvalds
 
@@ -105,24 +107,23 @@ Follow these APEX conventions strictly:
 
 **Before writing ANY user-facing component:**
 1. Read `.claude/skills/design-system/reference.md` for premium patterns and anti-patterns
-2. Read the **matching Design DNA page** from `docs/design-dna/` — this is MANDATORY:
+2. Read the **matching Design DNA React template** from `docs/design-dna/templates/` — this is MANDATORY:
 
 | Building... | Read first |
 |---|---|
-| Landing/marketing | `docs/design-dna/landing.html` |
-| Dashboard/SaaS | `docs/design-dna/saas.html` |
-| CRM/contacts/pipeline | `docs/design-dna/crm.html` |
-| E-commerce/shop | `docs/design-dna/ecommerce.html` |
-| Blog/editorial | `docs/design-dna/blog.html` |
-| Portfolio/agency | `docs/design-dna/portfolio.html` |
-| Social/feed | `docs/design-dna/social.html` |
-| LMS/courses | `docs/design-dna/lms.html` |
-| Email templates | `docs/design-dna/email.html` |
-| Slides/presentations | `docs/design-dna/presentation.html` |
-| E-book/long-form | `docs/design-dna/ebook.html` |
-| Backoffice/internal | `docs/design-dna/backoffice.html` |
-| SVG backgrounds | `docs/design-dna/patterns.html` + `docs/design-dna/svg-backgrounds.js` |
-| Color/typography | `docs/design-dna/design-system.html` |
+| Landing/marketing | `docs/design-dna/templates/LandingPage.tsx` |
+| Dashboard/SaaS | `docs/design-dna/templates/SaaSDashboard.tsx` |
+| CRM/contacts/pipeline | `docs/design-dna/templates/CRMPipeline.tsx` |
+| E-commerce/shop | `docs/design-dna/templates/EcommercePage.tsx` |
+| Blog/editorial | `docs/design-dna/templates/BlogLayout.tsx` |
+| Portfolio/agency | `docs/design-dna/templates/PortfolioPage.tsx` |
+| Social/feed | `docs/design-dna/templates/SocialFeed.tsx` |
+| LMS/courses | `docs/design-dna/templates/LMSDashboard.tsx` |
+| Email templates | `docs/design-dna/templates/EmailTemplate.tsx` |
+| Slides/presentations | `docs/design-dna/templates/PresentationSlide.tsx` |
+| Backoffice/internal | `docs/design-dna/templates/BackofficePage.tsx` |
+| SVG backgrounds | `docs/design-dna/templates/PatternShowcase.tsx` |
+| Color/typography | `docs/design-dna/templates/DesignSystemPage.tsx` |
 
 The Design DNA pages are our **visual quality bar**. Do NOT "interpret" or "be inspired by" the DNA. **Match it.** The DNA is the spec.
 

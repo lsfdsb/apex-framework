@@ -224,25 +224,23 @@ Preview server: `http://localhost:3001` (run from project root if not already ru
 
 ### Page-Type Routing Table
 
-| Building this... | Read this first | Key patterns inside |
+| Building this... | Read this React template | Key patterns inside |
 |---|---|---|
-| Landing page, marketing site | `docs/design-dna/landing.html` | Hero, features grid, pricing, testimonials, CTA banner, auth card |
-| SaaS dashboard, admin panel | `docs/design-dna/saas.html` | Dashboard layout, data tables, settings page, empty states |
-| CRM, contacts, pipelines | `docs/design-dna/crm.html` | **19 patterns**: Kanban pipeline, contact cards, activity timeline, chat widget, ticket list, deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring, data table, filter bar, task list, empty states, email composer, notes panel, **sidebar navigation**, **CRM dashboard** (KPI strip + sparklines + bar chart + donut + activity feed), **helpdesk dashboard** (SLA metrics + queue by channel + agent performance cards) |
-| Sidebar navigation | `docs/design-dna/crm.html` | Collapsible sidebar with logo, sections, icons, active states, badges, user avatar — use for any app with 5+ navigation items |
-| Dashboard layout | `docs/design-dna/crm.html` | Sidebar + compact content area with KPI strip (sparklines), bar charts, donut charts, activity feed — the REAL dashboard pattern (not marketing-page style) |
-| E-commerce, shop, products | `docs/design-dna/ecommerce.html` | Product grid, product detail, cart, 3-step checkout |
-| Blog, editorial, articles | `docs/design-dna/blog.html` | Hero, featured article, article grid, reading experience, newsletter |
-| Portfolio, agency, showcase | `docs/design-dna/portfolio.html` | Selected work grid, services list, contact form |
-| Social feed, community | `docs/design-dna/social.html` | 3-column feed layout, sidebar, trending, suggested |
-| LMS, courses, learning | `docs/design-dna/lms.html` | Course catalog, lesson player, progress overview, certificate |
-| Email templates | `docs/design-dna/email.html` | 8 transactional patterns: welcome, verification, order, shipping, password reset, team invite, payment failed, weekly digest |
-| Presentations, slides | `docs/design-dna/presentation.html` | 10 slide types: title, divider, stats, content grid, quote, split, timeline, team, pricing, CTA |
-| E-book, long-form content | `docs/design-dna/ebook.html` | Cover, table of contents, reading page, drop caps, sidenotes, chapter nav |
-| Backoffice, internal tools | `docs/design-dna/backoffice.html` | User management CRUD, activity log, invoices, permission matrix |
-| SVG backgrounds, patterns | `docs/design-dna/patterns.html` | 14 static SVG patterns + 8 animated backgrounds (orbs, aurora, particles, gradient mesh, rings, matrix, nebula, spotlight) |
-| Color system, typography, tokens | `docs/design-dna/design-system.html` | 5 color palettes, typography scale, spacing, motion, component states, radii + shadows |
-| **Any page** (always read) | `docs/design-dna/index.html` | Hub page with navigation to all patterns |
+| Landing page, marketing site | `docs/design-dna/templates/LandingPage.tsx` | Hero, features grid, pricing, testimonials, CTA banner, auth card |
+| SaaS dashboard, admin panel | `docs/design-dna/templates/SaaSDashboard.tsx` | Dashboard layout, data tables, settings page, empty states |
+| CRM, contacts, pipelines | `docs/design-dna/templates/CRMPipeline.tsx` | 19 patterns: Kanban pipeline, contact cards, activity timeline, chat widget, deal drawer, sidebar nav, CRM dashboard, helpdesk dashboard |
+| Sidebar navigation | `docs/design-dna/templates/CRMPipeline.tsx` | Collapsible sidebar with logo, sections, icons, active states, badges — use for any app with 5+ nav items |
+| Dashboard layout | `docs/design-dna/templates/CRMPipeline.tsx` | Sidebar + compact content area with KPI strip, sparklines, bar charts, donut charts, activity feed |
+| E-commerce, shop, products | `docs/design-dna/templates/EcommercePage.tsx` | Product grid, product detail, cart, 3-step checkout |
+| Blog, editorial, articles | `docs/design-dna/templates/BlogLayout.tsx` | Hero, featured article, article grid, reading experience, newsletter |
+| Portfolio, agency, showcase | `docs/design-dna/templates/PortfolioPage.tsx` | Selected work grid, services list, contact form |
+| Social feed, community | `docs/design-dna/templates/SocialFeed.tsx` | 3-column feed layout, sidebar, trending, suggested |
+| LMS, courses, learning | `docs/design-dna/templates/LMSDashboard.tsx` | Course catalog, lesson player, progress overview, certificate |
+| Email templates | `docs/design-dna/templates/EmailTemplate.tsx` | 8 transactional patterns: welcome, verification, order, shipping, password reset, team invite, payment failed, weekly digest |
+| Presentations, slides | `docs/design-dna/templates/PresentationSlide.tsx` | 10 slide types: title, divider, stats, content grid, quote, split, timeline, team, pricing, CTA |
+| Backoffice, internal tools | `docs/design-dna/templates/BackofficePage.tsx` | User management CRUD, activity log, invoices, permission matrix |
+| SVG backgrounds, patterns | `docs/design-dna/templates/PatternShowcase.tsx` | 14 static SVG patterns + 8 animated backgrounds |
+| Color system, typography, tokens | `docs/design-dna/templates/DesignSystemPage.tsx` | 5 color palettes, typography scale, spacing, motion, component states |
 
 ### Reusable JS Modules
 
@@ -253,10 +251,10 @@ These modules are **production-ready code** that can be directly adapted into an
 
 ### How to Use Design DNA
 
-1. **Read the matching page** before writing any component
-2. **Follow the Translation Guide** in `$SKILL_DIR/reference.md` — it has exact CSS→Tailwind token mappings, a worked React example, proportion rules, and a 9-point verification checklist
-3. **Match, don't interpret** — the DNA is the spec. Font sizes within ±1px, padding within ±2px, same border radius, same transition curves. Open the DNA page side-by-side with your component
+1. **Read the matching React template** before writing any component — these are production React code, not wireframes
+2. **Follow the Translation Guide** in `$SKILL_DIR/reference.md` — CSS→Tailwind token mappings, worked React example, proportion rules, 9-point verification checklist
+3. **Match, don't interpret** — the DNA is the spec. Font sizes within ±1px, padding within ±2px, same border radius, same transition curves
 4. **Add page animations** — every page root gets `apex-enter`, content sections get `stagger-1/2/3`, cards get `hover:-translate-y-px transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]`
-5. **Use the SVG backgrounds** — for any page that needs visual texture, reference `patterns.html` and `svg-backgrounds.js`
-6. **Check all 5 palettes** — your implementation should work with any palette from `design-system.html`
+5. **Use the SVG backgrounds** — reference `PatternShowcase.tsx` for all pattern/animation options
+6. **Check all 5 palettes** — your implementation should work with any palette from `DesignSystemPage.tsx`
 7. **Verify before done** — run the 9-point side-by-side checklist from the Translation Guide. If any item fails, fix it before reporting done

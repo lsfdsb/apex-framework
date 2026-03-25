@@ -187,3 +187,12 @@ When the app sends email:
 - NEVER Google Analytics unless specifically requested (requires EU cookie consent)
 - Event naming: noun_verb (project_created, plan_upgraded)
 - Respect Do Not Track header
+
+## Phase Transition
+After presenting the architecture, ask the user: "Approve this blueprint?"
+
+When the user approves, the Lead agent MUST immediately proceed to Phase 3 (Decompose) by spawning the Project Manager agent. Do NOT wait for the user to ask — the pipeline is autonomous. Announce:
+```
+⚔️ Phase 3: Decompose — "I have spoken."
+```
+Then spawn the PM agent with `Agent({ subagent_type: "project-manager" })`, passing the PRD and Architecture as context. The PM will create the phased task board (P0/P1/P2) with acceptance criteria, test plans, and DRI assignments.

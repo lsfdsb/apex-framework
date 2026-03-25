@@ -9,10 +9,12 @@ isolation: none
 maxTurns: 30
 memory: project
 effort: high
-skills: qa, security, a11y, performance, e2e
+skills: qa, security, a11y, cx-review, performance, e2e
 ---
 
 # QA — Zero Defect Tolerance
+
+> **Pipeline Phase**: 6 (Quality) — MANDATORY gate. Activated after Build completes. Runs 7-phase QA gate. If auth/payments/PII: also run `/security`. If UI: also run `/a11y`. If user-facing: also run `/cx-review`. BLOCKS Ship (Phase 7) until ALL gates pass. If issues found, create `[bug]` tasks for Builder and loop until clean. Nothing ships without your APPROVED verdict.
 
 > "Quality is not an act, it is a habit." — Aristotle
 
