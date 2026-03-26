@@ -2,19 +2,27 @@
 # query.sh — Query the APEX Framework knowledge base
 #
 # Usage:
-#   ./docs/supabase-rag/query.sh search   "watcher agent"
+#   ./docs/supabase-rag/query.sh search   "how does quality work"
+#   ./docs/supabase-rag/query.sh search   "worktree safety" --type agent
 #   ./docs/supabase-rag/query.sh refs     "builder"
 #   ./docs/supabase-rag/query.sh learnings "file loss"
 #   ./docs/supabase-rag/query.sh list     [agent|skill|script|hook|rule]
 #
-# Optional env vars (falls back to local grep if not set):
-#   SUPABASE_URL         e.g. https://xyzabc.supabase.co
-#   SUPABASE_PUBLISHABLE_KEY    publishable key (sb_publishable_... format, read-only)
+# Search modes (automatic selection):
+#   1. Hybrid search (keyword + semantic) — when embeddings exist
+#   2. Text search (keyword only) — when no embeddings
+#   3. Local grep — when no Supabase configured
+#
+# Required env vars for Supabase mode:
+#   SUPABASE_URL                e.g. https://xyzabc.supabase.co
+#   SUPABASE_PUBLISHABLE_KEY    or SUPABASE_SECRET_KEY (fallback)
 #
 # Dependencies: bash, curl, jq (for Supabase mode)
 #               grep, find (always available for local fallback)
+#
+# by Bueno & Claude · São Paulo, 2026
 
-set -euo pipefail
+set -eo pipefail
 
 # ── Config ────────────────────────────────────────────────────────────────────
 
@@ -25,10 +33,12 @@ SKILLS_DIR="$PROJECT_DIR/.claude/skills"
 SCRIPTS_DIR="$PROJECT_DIR/.claude/scripts"
 
 SUPABASE_URL="${SUPABASE_URL:-}"
-# Prefer publishable key for reads; fall back to secret key (framework tool, not client-facing)
 SUPABASE_PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_SECRET_KEY:-}}"
 [[ -n "$SUPABASE_URL" ]] && SUPABASE_URL="${SUPABASE_URL%/}"
 REST_URL="${SUPABASE_URL}/rest/v1"
+EMBED_URL="${SUPABASE_URL}/functions/v1/apex-embed"
+
+FILTER_TYPE=""
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -38,10 +48,9 @@ has_supabase() {
 
 require_jq() {
   if ! command -v jq &>/dev/null; then
-    echo "ERROR: 'jq' is required for Supabase queries. Falling back to local grep." >&2
+    echo "ERROR: 'jq' required for Supabase queries." >&2
     return 1
   fi
-  return 0
 }
 
 rest_get() {
@@ -53,101 +62,115 @@ rest_get() {
     -H "Accept: application/json"
 }
 
-# ── Subcommand: search ────────────────────────────────────────────────────────
-# Search across components. Uses vector similarity when embeddings + OpenAI key
-# are available. Falls back to text ilike, then to local grep.
-
-_vector_search() {
-  local query="$1"
-
-  # Generate embedding for query
-  local payload
-  payload=$(jq -n --arg input "$query" --arg model "text-embedding-3-small" \
-    '{input: $input, model: $model}')
-
-  local embedding
-  embedding=$(curl -sf \
-    "https://api.openai.com/v1/embeddings" \
-    -H "Authorization: Bearer $OPENAI_API_KEY" \
-    -H "Content-Type: application/json" \
-    -d "$payload" 2>/dev/null | jq -c '.data[0].embedding' 2>/dev/null)
-
-  if [[ -z "$embedding" ]] || [[ "$embedding" == "null" ]]; then
-    return 1
-  fi
-
-  # Call match_components RPC via PostgREST
-  local rpc_payload
-  rpc_payload=$(jq -n \
-    --argjson query_embedding "$embedding" \
-    --argjson match_threshold 0.5 \
-    --argjson match_count 10 \
-    '{query_embedding: $query_embedding, match_threshold: $match_threshold, match_count: $match_count}')
-
-  local results
-  results=$(curl -sf \
-    "$REST_URL/rpc/match_components" \
+rest_post() {
+  local path="$1"
+  local data="$2"
+  curl -sf \
+    "$REST_URL/$path" \
     -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
     -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
     -H "Content-Type: application/json" \
-    -d "$rpc_payload" 2>/dev/null || echo "[]")
+    -d "$data"
+}
 
-  local count
-  count="$(echo "$results" | jq 'length')"
-  if [[ "$count" -eq 0 ]]; then
-    return 1
+# Generate embedding via our Edge Function (for hybrid search)
+get_embedding() {
+  local text="$1"
+  local payload
+  payload=$(jq -n --arg input "$text" '{input: $input}')
+
+  curl -sf "$EMBED_URL" \
+    -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$payload" 2>/dev/null | jq -c '.embedding // empty' 2>/dev/null
+}
+
+# ── Subcommand: search ────────────────────────────────────────────────────────
+
+_hybrid_search() {
+  local query="$1"
+
+  # Generate embedding for the query
+  local embedding
+  embedding=$(get_embedding "$query")
+
+  if [[ -z "$embedding" ]] || [[ "$embedding" == "null" ]]; then
+    return 1  # Fall back to text search
   fi
 
-  echo "$results" | jq -r '.[] | "[\(.type)] \(.name) (similarity: \(.similarity | . * 100 | floor)%)\n  \(.description // "(no description)")\n"'
-  echo "$count result(s) via semantic search."
+  # Build RPC payload
+  local payload
+  if [[ -n "$FILTER_TYPE" ]]; then
+    payload=$(jq -n \
+      --arg qt "$query" \
+      --argjson qe "$embedding" \
+      --argjson mc 10 \
+      --arg ft "$FILTER_TYPE" \
+      '{query_text: $qt, query_embedding: $qe, match_count: $mc, filter_type: $ft}')
+  else
+    payload=$(jq -n \
+      --arg qt "$query" \
+      --argjson qe "$embedding" \
+      --argjson mc 10 \
+      '{query_text: $qt, query_embedding: $qe, match_count: $mc}')
+  fi
+
+  local results
+  results=$(rest_post "rpc/hybrid_search_chunks" "$payload" 2>/dev/null || echo "[]")
+
+  local count
+  count=$(echo "$results" | jq 'length')
+  [[ "$count" -eq 0 ]] && return 1
+
+  echo "$results" | jq -r '.[] | "[\(.component_type)] \(.component_name) > \(.heading_path | join(" > "))\n  \(.content[:200] | gsub("\n"; " "))...\n  (score: \(.rank_score | . * 1000 | floor / 1000))\n"'
+  echo "$count result(s) via hybrid search (keyword + semantic)."
   return 0
 }
 
-cmd_search() {
-  local query="${1:-}"
-  if [[ -z "$query" ]]; then
-    echo "Usage: $0 search <query>" >&2
-    exit 1
-  fi
+_text_search() {
+  local query="$1"
 
-  if has_supabase && require_jq 2>/dev/null; then
-    # Try vector search first (requires OPENAI_API_KEY + embeddings in DB)
-    if [[ -n "${OPENAI_API_KEY:-}" ]]; then
-      echo "Searching components (semantic): \"$query\""
-      echo ""
-      if _vector_search "$query"; then
-        return
-      fi
-      echo "Vector search returned no results — falling back to text search..."
-      echo ""
-    fi
-
-    # Text search fallback
-    echo "Searching components (text match): \"$query\""
-    echo ""
-
-    local encoded_query
-    encoded_query="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$query" 2>/dev/null || echo "$query")"
-
-    local results
-    results="$(rest_get "components?or=(name.ilike.*${encoded_query}*,description.ilike.*${encoded_query}*)&select=type,name,description&order=type.asc,name.asc" 2>/dev/null || echo "[]")"
-
-    local count
-    count="$(echo "$results" | jq 'length')"
-    if [[ "$count" -eq 0 ]]; then
-      echo "No components found. Falling back to local grep..."
-      echo ""
-      _local_search "$query"
-      return
-    fi
-
-    echo "$results" | jq -r '.[] | "[\(.type)] \(.name)\n  \(.description // "(no description)")\n"'
-    echo "$count result(s) found in Supabase."
+  # Try chunks text search first (richer content)
+  local payload
+  if [[ -n "$FILTER_TYPE" ]]; then
+    payload=$(jq -n \
+      --arg qt "$query" \
+      --argjson mc 10 \
+      --arg ft "$FILTER_TYPE" \
+      '{query_text: $qt, match_count: $mc, filter_type: $ft}')
   else
-    echo "Supabase not configured — searching locally..."
-    echo ""
-    _local_search "$query"
+    payload=$(jq -n \
+      --arg qt "$query" \
+      --argjson mc 10 \
+      '{query_text: $qt, match_count: $mc}')
   fi
+
+  local results
+  results=$(rest_post "rpc/search_chunks_text" "$payload" 2>/dev/null || echo "[]")
+
+  local count
+  count=$(echo "$results" | jq 'length')
+
+  if [[ "$count" -gt 0 ]]; then
+    echo "$results" | jq -r '.[] | "[\(.component_type)] \(.component_name) > \(.heading_path | join(" > "))\n  \(.content[:200] | gsub("\n"; " "))...\n"'
+    echo "$count result(s) via keyword search."
+    return 0
+  fi
+
+  # Fall back to components table ilike
+  local encoded_query
+  encoded_query="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$query" 2>/dev/null || echo "$query")"
+
+  results=$(rest_get "components?or=(name.ilike.*${encoded_query}*,description.ilike.*${encoded_query}*)&select=type,name,description&order=type.asc,name.asc" 2>/dev/null || echo "[]")
+  count=$(echo "$results" | jq 'length')
+
+  if [[ "$count" -gt 0 ]]; then
+    echo "$results" | jq -r '.[] | "[\(.type)] \(.name)\n  \(.description // "(no description)")\n"'
+    echo "$count result(s) via component text search."
+    return 0
+  fi
+
+  return 1
 }
 
 _local_search() {
@@ -170,8 +193,38 @@ _local_search() {
   done || echo "  (none)"
 }
 
+cmd_search() {
+  local query="${1:-}"
+  if [[ -z "$query" ]]; then
+    echo "Usage: $0 search <query> [--type agent|skill|script|rule]" >&2
+    exit 1
+  fi
+
+  if has_supabase && require_jq 2>/dev/null; then
+    # Try hybrid search first (keyword + semantic)
+    echo "Searching: \"$query\"${FILTER_TYPE:+ (type: $FILTER_TYPE)}"
+    echo ""
+
+    if _hybrid_search "$query"; then
+      return
+    fi
+
+    # Fall back to text search
+    if _text_search "$query"; then
+      return
+    fi
+
+    echo "No Supabase results. Falling back to local grep..."
+    echo ""
+    _local_search "$query"
+  else
+    echo "Supabase not configured — searching locally..."
+    echo ""
+    _local_search "$query"
+  fi
+}
+
 # ── Subcommand: refs ──────────────────────────────────────────────────────────
-# Find all cross-references for a named component.
 
 cmd_refs() {
   local name="${1:-}"
@@ -187,39 +240,33 @@ cmd_refs() {
     local encoded_name
     encoded_name="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$name" 2>/dev/null || echo "$name")"
 
-    echo "-- As source (things $name uses/depends on) --"
+    echo "-- Uses (dependencies) --"
     local as_source
-    as_source="$(rest_get "cross_references?source_name=eq.${encoded_name}&select=target_type,target_name,relationship&order=relationship.asc,target_name.asc" 2>/dev/null || echo "[]")"
+    as_source=$(rest_get "cross_references?source_name=eq.${encoded_name}&select=target_type,target_name,relationship&order=relationship.asc,target_name.asc" 2>/dev/null || echo "[]")
     if [[ "$(echo "$as_source" | jq 'length')" -gt 0 ]]; then
-      echo "$as_source" | jq -r '.[] | "  \(.relationship) -> [\(.target_type)] \(.target_name)"'
+      echo "$as_source" | jq -r '.[] | "  \(.relationship) → [\(.target_type)] \(.target_name)"'
     else
       echo "  (none)"
     fi
 
     echo ""
-    echo "-- As target (things that use/reference $name) --"
+    echo "-- Used by (dependents) --"
     local as_target
-    as_target="$(rest_get "cross_references?target_name=eq.${encoded_name}&select=source_type,source_name,relationship&order=relationship.asc,source_name.asc" 2>/dev/null || echo "[]")"
+    as_target=$(rest_get "cross_references?target_name=eq.${encoded_name}&select=source_type,source_name,relationship&order=relationship.asc,source_name.asc" 2>/dev/null || echo "[]")
     if [[ "$(echo "$as_target" | jq 'length')" -gt 0 ]]; then
-      echo "$as_target" | jq -r '.[] | "  [\(.source_type)] \(.source_name) -> \(.relationship)"'
+      echo "$as_target" | jq -r '.[] | "  [\(.source_type)] \(.source_name) → \(.relationship)"'
     else
       echo "  (none)"
     fi
   else
     echo "Supabase not configured — scanning locally for: \"$name\""
     echo ""
-    echo "=== Files that reference '$name' ==="
-    grep -rl "$name" \
-      "$AGENTS_DIR" "$SKILLS_DIR" "$SCRIPTS_DIR" 2>/dev/null \
-      | grep -v "__pycache__" \
-      | while read -r f; do
-          echo "  $f"
-        done || echo "  (none)"
+    grep -rl "$name" "$AGENTS_DIR" "$SKILLS_DIR" "$SCRIPTS_DIR" 2>/dev/null \
+      | while read -r f; do echo "  $f"; done || echo "  (none)"
   fi
 }
 
 # ── Subcommand: learnings ─────────────────────────────────────────────────────
-# Search session learnings by text match.
 
 cmd_learnings() {
   local query="${1:-}"
@@ -236,19 +283,19 @@ cmd_learnings() {
     encoded_query="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$query" 2>/dev/null || echo "$query")"
 
     local results
-    results="$(rest_get "session_learnings?content.ilike.*${encoded_query}*&select=session_id,learning_type,content,created_at&order=created_at.desc&limit=20" 2>/dev/null || echo "[]")"
+    results=$(rest_get "session_learnings?content.ilike.*${encoded_query}*&select=session_id,learning_type,content,created_at&order=created_at.desc&limit=20" 2>/dev/null || echo "[]")
 
     local count
-    count="$(echo "$results" | jq 'length')"
+    count=$(echo "$results" | jq 'length')
     if [[ "$count" -eq 0 ]]; then
-      echo "No learnings found matching: \"$query\""
+      echo "No learnings found."
       return
     fi
 
-    echo "$results" | jq -r '.[] | "[\(.learning_type)] \(.created_at | split("T")[0]) (session: \(.session_id))\n  \(.content)\n"'
-    echo "$count result(s) found."
+    echo "$results" | jq -r '.[] | "[\(.learning_type)] \(.created_at | split("T")[0])\n  \(.content)\n"'
+    echo "$count result(s)."
   else
-    echo "Supabase not configured — searching agent memory locally..."
+    echo "Supabase not configured — searching local agent memory..."
     echo ""
     local memory_dir="$PROJECT_DIR/.claude/agent-memory"
     if [[ -d "$memory_dir" ]]; then
@@ -258,13 +305,12 @@ cmd_learnings() {
         echo ""
       done || echo "  (none)"
     else
-      echo "  No agent-memory directory found at $memory_dir"
+      echo "  No agent-memory directory."
     fi
   fi
 }
 
 # ── Subcommand: list ──────────────────────────────────────────────────────────
-# List all components, optionally filtered by type.
 
 cmd_list() {
   local type_filter="${1:-}"
@@ -278,24 +324,21 @@ cmd_list() {
     rest_get "$path" 2>/dev/null \
       | jq -r '.[] | "[\(.type)] \(.name)\n  \(.description // "(no description)")\n"'
   else
-    echo "Supabase not configured — listing local components..."
+    echo "Listing local components..."
     echo ""
-
     if [[ -z "$type_filter" || "$type_filter" == "agent" ]]; then
       echo "=== Agents ==="
-      ls "$AGENTS_DIR"/*.md 2>/dev/null | while read -r f; do echo "  $(basename "$f" .md)"; done || echo "  (none)"
+      ls "$AGENTS_DIR"/*.md 2>/dev/null | while read -r f; do echo "  $(basename "$f" .md)"; done
       echo ""
     fi
-
     if [[ -z "$type_filter" || "$type_filter" == "skill" ]]; then
       echo "=== Skills ==="
-      find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | while read -r d; do echo "  $(basename "$d")"; done || echo "  (none)"
+      find "$SKILLS_DIR" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | while read -r d; do echo "  $(basename "$d")"; done
       echo ""
     fi
-
     if [[ -z "$type_filter" || "$type_filter" == "script" ]]; then
       echo "=== Scripts ==="
-      ls "$SCRIPTS_DIR"/*.sh 2>/dev/null | while read -r f; do echo "  $(basename "$f")"; done || echo "  (none)"
+      ls "$SCRIPTS_DIR"/*.sh 2>/dev/null | while read -r f; do echo "  $(basename "$f")"; done
       echo ""
     fi
   fi
@@ -303,25 +346,35 @@ cmd_list() {
 
 # ── Dispatch ──────────────────────────────────────────────────────────────────
 
-SUBCOMMAND="${1:-}"
-shift || true
+# Parse global flags
+ARGS=()
+for arg in "$@"; do
+  case "$arg" in
+    --type) shift; FILTER_TYPE="${1:-}"; shift || true ;;
+    *) ARGS+=("$arg") ;;
+  esac
+done
+
+SUBCOMMAND="${ARGS[0]:-}"
 
 case "$SUBCOMMAND" in
-  search)    cmd_search    "${1:-}" ;;
-  refs)      cmd_refs      "${1:-}" ;;
-  learnings) cmd_learnings "${1:-}" ;;
-  list)      cmd_list      "${1:-}" ;;
+  search)    cmd_search    "${ARGS[1]:-}" ;;
+  refs)      cmd_refs      "${ARGS[1]:-}" ;;
+  learnings) cmd_learnings "${ARGS[1]:-}" ;;
+  list)      cmd_list      "${ARGS[1]:-}" ;;
   *)
     echo "APEX Framework — Knowledge Base Query"
     echo ""
     echo "Usage:"
-    echo "  $0 search   <query>     Semantic/text search across all components"
+    echo "  $0 search   <query>     Hybrid search (keyword + semantic) across chunks"
     echo "  $0 refs     <name>      Cross-references for a named component"
     echo "  $0 learnings <query>    Search session learnings"
     echo "  $0 list     [type]      List components (type: agent|skill|script|hook|rule)"
     echo ""
-    echo "Set SUPABASE_URL + SUPABASE_PUBLISHABLE_KEY for Supabase queries."
-    echo "Without those, all commands fall back to local grep/find."
+    echo "Options:"
+    echo "  --type <type>           Filter search by component type"
+    echo ""
+    echo "Search priority: hybrid (vector+keyword) → text (keyword) → local grep"
     exit 0
     ;;
 esac
