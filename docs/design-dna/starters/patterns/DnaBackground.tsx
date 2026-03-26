@@ -1,4 +1,4 @@
-// DnaBackground — React wrapper for svg-backgrounds.js patterns + animated backgrounds
+// DnaBackground — React wrapper for SVG patterns + animated backgrounds
 // Usage: <DnaBackground pattern="dots" animated="orbs" />
 // Place as first child inside a position:relative container
 

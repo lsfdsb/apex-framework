@@ -93,7 +93,23 @@ Description:
   [Blocked by Task #N — reason]
 ```
 
-### Step 4: Set Dependencies
+### Step 4: Shared Component Analysis
+
+For EACH file in the task's file list, check if it's used by 2+ other tasks:
+
+```bash
+# Find shared components
+grep -rl "ComponentName" src/ --include="*.tsx" | wc -l
+```
+
+If a component is shared (used by 2+ tasks):
+1. Add to task description: `## Shared Components\n- ComponentName (src/path) — used by Task #X, #Y, #Z`
+2. Mark blast radius: HIGH (3+ tasks) or MEDIUM (2 tasks)
+3. Ensure dependent tasks know: "If you change this, re-test tasks #X, #Y, #Z"
+
+This metadata ensures any agent touching the task knows the blast radius before making changes.
+
+### Step 5: Set Dependencies
 
 After creating all tasks, wire the DAG:
 
@@ -107,7 +123,30 @@ Common dependency patterns:
 - Database schema → blocks everything
 - QA verification → blocks ship tasks
 
-### Step 5: Report to Lead
+### Step 6: Phase Exit Criteria
+
+Each priority phase (P0/P1/P2) has a gate before advancing:
+
+**P0 Gate** (before P1 starts):
+- All P0 acceptance criteria met
+- All P0 tests pass
+- Code compiles clean (`npx tsc --noEmit`)
+- No `console.log`, no `any` types
+- Lead confirms: "P0 gate passed"
+
+**P1 Gate** (before P2 starts):
+- All P0 + P1 tests pass (no regressions)
+- Error handling complete for all async operations
+- Mobile-first responsive (tested at 320px)
+- Design DNA compliance verified by Designer
+
+**P2 Gate** (before Quality phase):
+- Full test suite passes (P0 + P1 + P2)
+- Visual polish matches Design DNA
+- No template branding (grep for ACME, Doppel)
+- Version numbers consistent
+
+### Step 7: Report to Lead
 
 Send the lead a summary:
 

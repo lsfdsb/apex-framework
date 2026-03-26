@@ -242,13 +242,6 @@ Preview server: `http://localhost:3001` (run from project root if not already ru
 | SVG backgrounds, patterns | `docs/design-dna/templates/PatternShowcase.tsx` | 14 static SVG patterns + 8 animated backgrounds |
 | Color system, typography, tokens | `docs/design-dna/templates/DesignSystemPage.tsx` | 5 color palettes, typography scale, spacing, motion, component states |
 
-### Reusable JS Modules
-
-These modules are **production-ready code** that can be directly adapted into any project:
-
-- **`docs/design-dna/svg-backgrounds.js`** — 14 static SVG patterns (dots, grid, topo, circuit, hexagons, crosses, diamonds, diagonals, constellation, isometric, waves, dna, noise, triangles) + 8 animated canvas/CSS backgrounds. Import and use directly.
-- **`docs/design-dna/palette.js`** — Global palette switcher widget with 5 curated palettes + dark/light mode toggle. Reference implementation for theme switching.
-
 ### How to Use Design DNA
 
 1. **Read the matching React template** before writing any component — these are production React code, not wireframes

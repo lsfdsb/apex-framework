@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// DNA source: docs/design-dna/patterns.html + docs/design-dna/svg-backgrounds.js
 // SVG patterns are inline data URIs — no external dependencies required
 
 import React, { useState, useCallback, useEffect } from "react";

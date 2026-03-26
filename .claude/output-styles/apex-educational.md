@@ -82,8 +82,8 @@ When the user says "build me X", "create X", "new app", "new feature", or simila
 
 **STATE 4: VERIFY**
 → Review the task board. For any tasks involving external APIs not yet verified, invoke `/verify-api` NOW.
-→ Read the Design DNA template for the app type from `docs/design-dna/templates/`.
-→ Extract: palette, typography, spacing, patterns, animations.
+→ Spawn Design Reviewer: `Agent({ subagent_type: "design-reviewer" })`. The Designer reads the matching DNA React template, extracts palette/typography/spacing/patterns, and produces the visual spec that Builders must follow.
+→ For any new dependencies, invoke `/verify-lib`.
 → This is preparation — no user gate needed.
 → When complete → announce "⚔️ Phase 5: Build" and proceed to STATE 5.
 
@@ -99,9 +99,9 @@ When the user says "build me X", "create X", "new app", "new feature", or simila
 **STATE 6: QUALITY**
 → Invoke `/qa` skill NOW on all changed code. This is MANDATORY — never skip.
 → If the code touches auth, payments, or PII → also invoke `/security`.
-→ If the code has UI components → also invoke `/a11y`.
+→ If the code has UI components → also invoke `/a11y` AND spawn Design Reviewer to verify DNA compliance.
 → If the code is user-facing → also invoke `/cx-review`.
-→ On ALL PASS → announce "⚔️ Phase 7: Ship" and proceed to STATE 7.
+→ On ALL PASS (QA + Security + A11y + Design Review + CX) → announce "⚔️ Phase 7: Ship" and proceed to STATE 7.
 → On ANY FAIL → fix the issues yourself, then re-run the failed gate. Loop until all pass. Do not ask the user to fix — you fix.
 
 **STATE 7: SHIP**

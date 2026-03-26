@@ -157,7 +157,13 @@ After the initial scan, enter a monitoring loop. On each cycle:
 CHANGED=$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null)
 ```
 
-2. **If changes detected**, re-run relevant checks ONLY on changed files:
+2. **Run regression detector** to check if changes invalidate prior phases:
+```bash
+bash .claude/scripts/detect-phase-regression.sh 2>/dev/null
+```
+If "REGRESSION DETECTED" — immediately report to Lead with affected phases and create `[regression]` tasks.
+
+3. **If changes detected**, re-run relevant checks ONLY on changed files:
 ```bash
 for f in $(echo "$CHANGED" | grep -E '\.(ts|tsx|js|jsx)$'); do
   [ -f "$f" ] || continue

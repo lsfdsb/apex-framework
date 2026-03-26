@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// DNA source: docs/design-dna/social.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 // Self-contained — zero imports from starters/
 

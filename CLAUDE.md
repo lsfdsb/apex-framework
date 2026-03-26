@@ -102,15 +102,15 @@ The pipeline is a **state machine with 7 phases and 3 user gates**. When the use
 
 ### The 7 Phases
 
-| Phase | Name | Action | Gate? |
-|-------|------|--------|-------|
-| 1 | **Plan** | Invoke `/prd` → generate PRD | YES — user approves |
-| 2 | **Architect** | Invoke `/architecture` + `/verify-api` for each external API + read Design DNA | YES — user approves |
-| 3 | **Decompose** | Spawn PM agent → phased task board (P0/P1/P2) with DRI assignments | No |
-| 4 | **Verify** | Verify remaining APIs, read Design DNA template, extract design values | No |
-| 5 | **Build** | Spawn team if complex, build directly if simple, Watcher in background | No |
-| 6 | **Quality** | `/qa` (mandatory) + `/security` + `/a11y` + `/cx-review` as needed | No — auto-fix failures |
-| 7 | **Ship** | Technical Writer + commit + push + PR | YES — user approves merge |
+| Phase | Name | Team | Action | Gate? |
+|-------|------|------|--------|-------|
+| 1 | **Plan** | Lead | Invoke `/prd` → generate PRD | YES — user approves |
+| 2 | **Architect** | Lead | Invoke `/architecture` + `/verify-api` for each external API | YES — user approves |
+| 3 | **Decompose** | PM | Spawn PM agent → phased task board (P0/P1/P2) with DRI assignments | No |
+| 4 | **Verify** | Lead, Designer | Verify APIs + libs, Design Reviewer loads DNA template, extracts visual spec | No |
+| 5 | **Build** | Builder, Watcher | Spawn team if complex, build directly if simple, Watcher in background | No |
+| 6 | **Quality** | QA, Designer | `/qa` (mandatory) + `/security` + `/a11y` + `/cx-review` + Design Review | No — auto-fix |
+| 7 | **Ship** | Tech Writer, Lead | Technical Writer + commit + push + PR | YES — user approves merge |
 
 ### Enforcement Rules
 
