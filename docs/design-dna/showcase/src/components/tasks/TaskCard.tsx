@@ -1,6 +1,32 @@
 import { useState } from "react";
-import type { TaskItem, TaskPhase, TaskDRI, TaskColumn, ReviewGate } from "../../data/hub-types";
+import type { TaskItem, TaskPhase, TaskDRI, TaskColumn, TaskTag, ReviewGate } from "../../data/hub-types";
 import { TaskDetail } from "./TaskDetail";
+
+// ── Tag badge colors ────────────────────────────────────────────────────────
+
+const TAG_STYLE: Record<TaskTag, { label: string; color: string; bg: string }> = {
+  feat:     { label: "feat",     color: "var(--accent)",                bg: "color-mix(in srgb, var(--accent) 12%, transparent)" },
+  fix:      { label: "fix",      color: "var(--destructive)",           bg: "color-mix(in srgb, var(--destructive) 12%, transparent)" },
+  refactor: { label: "refactor", color: "var(--warning)",               bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
+  docs:     { label: "docs",     color: "var(--info, #60a5fa)",         bg: "color-mix(in srgb, var(--info, #60a5fa) 12%, transparent)" },
+  chore:    { label: "chore",    color: "var(--text-muted)",            bg: "color-mix(in srgb, var(--text-muted) 12%, transparent)" },
+  perf:     { label: "perf",     color: "var(--success)",               bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
+  a11y:     { label: "a11y",     color: "var(--success)",               bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
+  security: { label: "security", color: "var(--destructive)",           bg: "color-mix(in srgb, var(--destructive) 12%, transparent)" },
+  test:     { label: "test",     color: "var(--warning)",               bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
+};
+
+/** Extract tag from title prefix (e.g., "feat: add X" → "feat") or use explicit tag field. */
+function resolveTag(task: TaskItem): TaskTag | null {
+  if (task.tag) return task.tag;
+  const match = task.title.match(/^(feat|fix|refactor|docs|chore|perf|a11y|security|test):/);
+  return match ? (match[1] as TaskTag) : null;
+}
+
+/** Strip tag prefix from title for display (e.g., "feat: add X" → "add X"). */
+function displayTitle(task: TaskItem): string {
+  return task.title.replace(/^(feat|fix|refactor|docs|chore|perf|a11y|security|test):\s*/, "");
+}
 
 // ── Phase badge colors ───────────────────────────────────────────────────────
 
@@ -92,6 +118,9 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
   const [expanded, setExpanded] = useState(autoExpand);
 
   const phase = PHASE_COLOR[task.phase];
+  const tag = resolveTag(task);
+  const tagStyle = tag ? TAG_STYLE[tag] : null;
+  const title = displayTitle(task);
   const metCount = task.acceptanceCriteria.filter((c) => c.met).length;
   const total = task.acceptanceCriteria.length;
   const progressPct = total > 0 ? (metCount / total) * 100 : 0;
@@ -153,6 +182,22 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
           >
             {task.phase}
           </span>
+          {tagStyle && (
+            <span
+              style={{
+                fontSize: 9,
+                fontWeight: 700,
+                padding: "1px 6px",
+                borderRadius: "var(--radius-full)",
+                background: tagStyle.bg,
+                color: tagStyle.color,
+                letterSpacing: "0.04em",
+                flexShrink: 0,
+              }}
+            >
+              {tagStyle.label}
+            </span>
+          )}
           <span
             style={{
               fontSize: 10,
@@ -178,7 +223,7 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
             color: "var(--text)",
           }}
         >
-          {task.title}
+          {title}
         </div>
 
         {/* Criteria progress bar */}

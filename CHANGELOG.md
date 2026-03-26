@@ -6,6 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — Task Tagging & OPS Rebuild (#216–#220)
+- **Task tag system** — `TaskTag` enum (feat/fix/refactor/docs/chore/perf/a11y/security/test), optional `tag` field on tasks, colored badge display in TaskCard
+- **Tag parsing** — `resolveTag()` reads from task field or parses conventional commit prefix from title (e.g., "feat: ..." → feat tag)
+- **Tag styles** — Accent colors for 9 tag types, adjacent to phase badges on task cards (#221)
+- **Tag extraction script** — `task-state-writer.sh` parses subject line prefix, writes tag field to tasks.json state (#221)
+
 ### Added — OPS Rebuild (#216–#220)
 - **OpsContext shared state provider** — Centralizes useApexState polling for tasks, agents, pipeline, quality, session. All 5 OPS pages consume via `useOps()` (#217)
 - **3 new OPS pages** — PipelinePage (7-phase flow + Apple provenance), AgentsPage (live roster + thought streams), QualityPage (score ring + gate dashboard) (#217, #218)

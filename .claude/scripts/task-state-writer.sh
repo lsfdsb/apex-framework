@@ -38,8 +38,13 @@ if [ "$TOOL_NAME" = "TaskCreate" ] && [ -n "$TOOL_INPUT" ]; then
   [ -z "$TASK_ID" ] && TASK_ID="task-$(date +%s)"
 
   if [ -n "$SUBJECT" ]; then
-    jq --arg id "$TASK_ID" --arg title "$SUBJECT" \
-      '.tasks += [{"id":$id,"title":$title,"description":"","column":"todo","phase":"P0","dri":"builder","acceptanceCriteria":[],"files":[],"blockedBy":[],"blocks":[],"createdAt":(now|todate),"updatedAt":(now|todate)}]' \
+    # Extract tag from conventional prefix (feat:, fix:, refactor:, etc.)
+    TAG=$(echo "$SUBJECT" | sed -n 's/^\(feat\|fix\|refactor\|docs\|chore\|perf\|a11y\|security\|test\):.*/\1/p')
+    TAG_JSON="null"
+    [ -n "$TAG" ] && TAG_JSON="\"$TAG\""
+
+    jq --arg id "$TASK_ID" --arg title "$SUBJECT" --argjson tag "$TAG_JSON" \
+      '.tasks += [{"id":$id,"title":$title,"tag":$tag,"description":"","column":"todo","phase":"P0","dri":"builder","acceptanceCriteria":[],"files":[],"blockedBy":[],"blocks":[],"createdAt":(now|todate),"updatedAt":(now|todate)}]' \
       "$TASKS_FILE" > "${TASKS_FILE}.tmp" && mv "${TASKS_FILE}.tmp" "$TASKS_FILE" 2>/dev/null || true
   fi
 fi

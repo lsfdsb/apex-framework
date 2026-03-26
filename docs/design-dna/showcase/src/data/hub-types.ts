@@ -58,10 +58,13 @@ export interface ReviewGate {
   status: "pending" | "passed" | "failed";
 }
 
+export type TaskTag = "feat" | "fix" | "refactor" | "docs" | "chore" | "perf" | "a11y" | "security" | "test";
+
 export interface TaskItem {
   id: string;
   title: string;
   description: string;
+  tag?: TaskTag;
   column: TaskColumn;
   phase: TaskPhase;
   dri: TaskDRI;
