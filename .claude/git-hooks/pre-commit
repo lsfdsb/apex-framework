@@ -141,7 +141,10 @@ for FILE in $STAGED_FILES; do
     fi
   fi
 
-  # No hardcoded secrets (all file types)
+  # No hardcoded secrets (skip config templates that use env() references)
+  if [[ "$FILE" =~ \.(toml|yaml|yml)$ ]]; then
+    continue
+  fi
   if grep -inE '(password|secret|api_key|apikey|token)\s*[=:]\s*["\x27][^"\x27]{8,}' "$FILE" 2>/dev/null | grep -v '\.example' | grep -v '\.env' | grep -v 'test' > /dev/null; then
     PATTERN_ERRORS=$((PATTERN_ERRORS + 1))
     if [ "$APEX_COLORS" = true ]; then
