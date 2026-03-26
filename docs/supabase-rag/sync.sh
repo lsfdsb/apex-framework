@@ -39,13 +39,15 @@ for cmd in curl jq; do
   fi
 done
 
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+
 if [[ -z "${SUPABASE_URL:-}" ]]; then
   echo "ERROR: SUPABASE_URL is not set." >&2
   exit 1
 fi
 
-if [[ -z "${SUPABASE_SECRET_KEY:-}" ]]; then
-  echo "ERROR: SUPABASE_SECRET_KEY is not set." >&2
+if [[ -z "$SB_KEY" ]]; then
+  echo "ERROR: SUPABASE_SB_SECRET_KEY (or SUPABASE_SECRET_KEY) is not set." >&2
   exit 1
 fi
 
@@ -80,8 +82,7 @@ upsert_component() {
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
     -X POST "$REST_URL/components?on_conflict=name,type" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: resolution=merge-duplicates,return=minimal" \
     -d "$payload")
@@ -103,8 +104,7 @@ upsert_ref() {
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
     -X POST "$REST_URL/cross_references?on_conflict=source_name,source_type,target_name,target_type,relationship" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: resolution=merge-duplicates,return=minimal" \
     -d "$payload")

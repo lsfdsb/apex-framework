@@ -68,8 +68,10 @@ log() {
 
 # ── Validation ────────────────────────────────────────────────────────────────
 
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+
 if [[ "$MODE" != "status" ]]; then
-  if [[ -z "${SUPABASE_URL:-}" || -z "${SUPABASE_SECRET_KEY:-}" ]]; then
+  if [[ -z "${SUPABASE_URL:-}" || -z "$SB_KEY" ]]; then
     # Silently skip if Supabase not configured (graceful degradation)
     [[ "$QUIET" == "false" ]] && echo "RAG sync: Supabase not configured, skipping."
     exit 0
@@ -177,8 +179,7 @@ chunk_and_embed_file() {
   # Delete existing chunks for this component (clean re-chunk)
   curl -sf -o /dev/null \
     -X DELETE "$REST_URL/chunks?component_type=eq.${comp_type}&component_name=eq.${comp_name}" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" 2>/dev/null || true
+    -H "apikey: $SB_KEY" 2>/dev/null || true
 
   # Chunk the file using the appropriate strategy
   local chunk_idx=0
@@ -277,8 +278,7 @@ _upsert_chunk() {
 
   curl -sf -o /dev/null \
     -X POST "$REST_URL/chunks?on_conflict=component_type,component_name,chunk_index" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: resolution=merge-duplicates,return=minimal" \
     -d "$payload" 2>/dev/null || true
@@ -291,8 +291,7 @@ _embed_chunks() {
   local chunks
   chunks=$(curl -sf \
     "$REST_URL/chunks?component_type=eq.${comp_type}&component_name=eq.${comp_name}&embedding=is.null&select=id,heading_path,content" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Accept: application/json" 2>/dev/null || echo "[]")
 
   local count
@@ -313,7 +312,7 @@ _embed_chunks() {
 
     local embedding
     embedding=$(curl -sf "$EMBED_URL" \
-      -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+      -H "apikey: $SB_KEY" \
       -H "Content-Type: application/json" \
       -d "$embed_payload" 2>/dev/null | jq -c '.embedding // empty' 2>/dev/null)
 
@@ -323,8 +322,7 @@ _embed_chunks() {
 
       curl -sf -o /dev/null \
         -X PATCH "$REST_URL/chunks?id=eq.${id}" \
-        -H "apikey: $SUPABASE_SECRET_KEY" \
-        -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+        -H "apikey: $SB_KEY" \
         -H "Content-Type: application/json" \
         -H "Prefer: return=minimal" \
         -d "$update_payload" 2>/dev/null || true

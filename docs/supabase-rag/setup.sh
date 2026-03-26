@@ -27,12 +27,14 @@ echo "  ╚═══════════════════════
 echo ""
 
 # ── Step 1: Validate env vars ──
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+
 MISSING=""
 if [ -z "${SUPABASE_URL:-}" ]; then
   MISSING="${MISSING}SUPABASE_URL "
 fi
-if [ -z "${SUPABASE_SECRET_KEY:-}" ]; then
-  MISSING="${MISSING}SUPABASE_SECRET_KEY "
+if [ -z "$SB_KEY" ]; then
+  MISSING="${MISSING}SUPABASE_SB_SECRET_KEY "
 fi
 
 if [ -n "$MISSING" ]; then
@@ -40,7 +42,7 @@ if [ -n "$MISSING" ]; then
   echo ""
   echo "  Set them first:"
   echo "    export SUPABASE_URL=\"https://your-project.supabase.co\""
-  echo "    export SUPABASE_SECRET_KEY=\"sb_secret_...\""
+  echo "    export SUPABASE_SB_SECRET_KEY=\"sb_secret_...\""
   echo ""
   echo "  Get these from: Supabase Dashboard → Settings → API"
   echo "  (Use the new format: sb_secret_... not the old JWT service_role key)"
@@ -55,21 +57,21 @@ if ! echo "$SUPABASE_URL" | grep -q "supabase.co"; then
 fi
 
 # Validate key format
-if echo "$SUPABASE_SECRET_KEY" | grep -q "^eyJ"; then
+if echo "$SB_KEY" | grep -q "^eyJ"; then
   echo "  Warning: SUPABASE_SECRET_KEY looks like a legacy JWT key (starts with 'eyJ')."
   echo "  New projects use 'sb_secret_...' format. Legacy keys still work but are deprecated."
   echo ""
 fi
 
 echo "  Project: $SUPABASE_URL"
-echo "  Key: ${SUPABASE_SECRET_KEY:0:12}..."
+echo "  Key: ${SB_KEY:0:12}..."
 echo ""
 
 # ── Step 2: Test connection ──
 echo "  Testing connection..."
 HEALTH=$(curl -s -o /dev/null -w "%{http_code}" \
   "${SUPABASE_URL}/rest/v1/" \
-  -H "apikey: ${SUPABASE_SECRET_KEY}" 2>/dev/null || echo "000")
+  -H "apikey: ${SB_KEY}" 2>/dev/null || echo "000")
 
 if [ "$HEALTH" = "000" ]; then
   echo "  Connection failed. Check your SUPABASE_URL."
@@ -96,8 +98,7 @@ fi
 # Execute migration via Supabase REST SQL endpoint
 MIGRATION_SQL=$(cat "$MIGRATION_FILE")
 RESULT=$(curl -s -X POST "${SUPABASE_URL}/rest/v1/rpc/exec_sql" \
-  -H "apikey: ${SUPABASE_SECRET_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+  -H "apikey: ${SB_KEY}" \
   -H "Content-Type: application/json" \
   -d "{\"query\": $(echo "$MIGRATION_SQL" | jq -Rs .)}" 2>/dev/null || echo "FALLBACK")
 
@@ -128,12 +129,10 @@ echo ""
 # ── Step 5: Verify ──
 echo "  Verifying data..."
 COMPONENT_COUNT=$(curl -s "${SUPABASE_URL}/rest/v1/components?select=id" \
-  -H "apikey: ${SUPABASE_SECRET_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
+  -H "apikey: ${SB_KEY}" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
 
 REF_COUNT=$(curl -s "${SUPABASE_URL}/rest/v1/cross_references?select=id" \
-  -H "apikey: ${SUPABASE_SECRET_KEY}" \
-  -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
+  -H "apikey: ${SB_KEY}" 2>/dev/null | jq 'length' 2>/dev/null || echo "0")
 
 echo "  Components synced: $COMPONENT_COUNT"
 echo "  Cross-references synced: $REF_COUNT"
@@ -149,7 +148,7 @@ if [ "$COMPONENT_COUNT" -gt 0 ]; then
   echo ""
   echo "  Add to your shell profile for persistence:"
   echo "    export SUPABASE_URL=\"$SUPABASE_URL\""
-  echo "    export SUPABASE_SECRET_KEY=\"${SUPABASE_SECRET_KEY:0:12}...\""
+  echo "    export SUPABASE_SB_SECRET_KEY=\"${SB_KEY:0:12}...\""
 else
   echo "  No components found. The migration may not have run yet."
   echo "  Run the migration manually, then: bash docs/supabase-rag/sync.sh"

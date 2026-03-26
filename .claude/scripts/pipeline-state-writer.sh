@@ -90,7 +90,10 @@ if [ "$PHASE" -gt 0 ]; then
     "$PIPELINE_FILE" > "${PIPELINE_FILE}.tmp" && mv "${PIPELINE_FILE}.tmp" "$PIPELINE_FILE" 2>/dev/null || true
 
   # ── Supabase dual-write (non-blocking) ──────────────────────────────────────
-  if [ -n "$SESSION_ID" ] && [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+  # Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
+  # apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.
+  SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+  if [ -n "$SESSION_ID" ] && [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ]; then
     SB_PAYLOAD=$(jq -n \
       --arg session_id "$SESSION_ID" \
       --argjson phase_id "$PHASE" \
@@ -106,8 +109,7 @@ if [ "$PHASE" -gt 0 ]; then
 
     if [ -n "$SB_PAYLOAD" ]; then
       curl -sf -X POST "${SUPABASE_URL}/rest/v1/pipeline_phases" \
-        -H "apikey: ${SUPABASE_SECRET_KEY}" \
-        -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+        -H "apikey: ${SB_KEY}" \
         -H "Content-Type: application/json" \
         -H "Prefer: resolution=merge-duplicates" \
         -d "$SB_PAYLOAD" --max-time 3 &>/dev/null &
@@ -118,8 +120,7 @@ if [ "$PHASE" -gt 0 ]; then
     if [ "$PREV_PHASE" -gt 0 ]; then
       for P in $(seq 1 "$PREV_PHASE"); do
         curl -sf -X PATCH "${SUPABASE_URL}/rest/v1/pipeline_phases?session_id=eq.${SESSION_ID}&phase_id=eq.${P}&status=eq.active" \
-          -H "apikey: ${SUPABASE_SECRET_KEY}" \
-          -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+          -H "apikey: ${SB_KEY}" \
           -H "Content-Type: application/json" \
           -d '{"status":"complete","completed_at":"'"$TIMESTAMP"'"}' --max-time 3 &>/dev/null &
       done

@@ -126,7 +126,10 @@ ls -t "$LOG_DIR"/session-*.md 2>/dev/null | tail -n +31 | xargs rm -f 2>/dev/nul
 # If Supabase is configured, persist learnings for cross-session RAG retrieval.
 # Gracefully skip if not configured — local reports are always written above.
 
-if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ] && command -v curl &>/dev/null; then
+# Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
+# apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+if [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ] && command -v curl &>/dev/null; then
   SUPABASE_URL="${SUPABASE_URL%/}"
   REST_URL="$SUPABASE_URL/rest/v1"
 
@@ -163,8 +166,7 @@ JSON
   # Fire-and-forget POST — don't block session end on network
   curl -sf -o /dev/null \
     -X POST "$REST_URL/session_learnings" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: return=minimal" \
     -d "$PAYLOAD" 2>/dev/null &

@@ -58,7 +58,10 @@ else
 fi
 
 # ── Supabase dual-write (non-blocking) ────────────────────────────────────────
-if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+# Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
+# apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+if [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ]; then
   PAYLOAD=$(jq -n \
     --arg id "$SESSION_ID" \
     --arg started "$STARTED_AT" \
@@ -75,8 +78,7 @@ if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
 
   if [ -n "$PAYLOAD" ]; then
     curl -sf -X POST "${SUPABASE_URL}/rest/v1/sessions" \
-      -H "apikey: ${SUPABASE_SECRET_KEY}" \
-      -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+      -H "apikey: ${SB_KEY}" \
       -H "Content-Type: application/json" \
       -H "Prefer: resolution=merge-duplicates" \
       -d "$PAYLOAD" --max-time 3 &>/dev/null &
