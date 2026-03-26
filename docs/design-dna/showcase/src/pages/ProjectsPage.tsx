@@ -1,230 +1,221 @@
+/**
+ * ProjectsPage — Live project overview powered by OpsContext.
+ * All data from useOps() — no hardcoded project data.
+ */
+
 import { useState } from "react";
-import { GitPullRequest, Search, Check, Circle, ExternalLink, X } from "lucide-react";
-import { PROJECTS, ALL_SUB_PROJECTS, RECENT_PRS, PIPELINE_PHASES } from "../data/projects-data";
-import type { PullRequest } from "../data/projects-data";
-import { PipelineTimeline } from "../components/projects/PipelineTimeline";
-import { ProjectCard } from "../components/projects/ProjectCard";
+import { GitBranch, Cpu, CheckCircle2, ChevronDown, ChevronUp, Users, LayoutGrid, Activity, Circle } from "lucide-react";
+import { useOps } from "../context/OpsContext";
+import { LiveBadge } from "../components/hub/LiveBadge";
+import { Link } from "../router/Router";
+import type { PhaseStatus } from "../data/hub-types";
 
-// ── PR Status Badge ────────────────────────────────────────────────────────────
+const PHASE_NAMES = ["Plan", "Architect", "Decompose", "Verify", "Build", "Quality", "Ship"];
 
-function PRStatusBadge({ status }: { status: PullRequest["status"] }) {
-  const cfg = {
-    merged: { label: "merged", bg: "color-mix(in srgb, var(--success) 12%, transparent)", color: "var(--success)" },
-    open:   { label: "open",   bg: "color-mix(in srgb, var(--accent) 12%, transparent)",  color: "var(--accent)" },
-    closed: { label: "closed", bg: "color-mix(in srgb, var(--text-muted) 12%, transparent)", color: "var(--text-muted)" },
-  }[status];
+// ── Phase strip — compact 7-phase visual summary ──────────────────────────────
+
+function PhaseStrip({ currentPhase, phases }: { currentPhase: number; phases: { id: number; status: PhaseStatus }[] }) {
+  const getStatus = (id: number): PhaseStatus =>
+    phases.find((p) => p.id === id)?.status ?? (id < currentPhase ? "complete" : "idle");
 
   return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", gap: 4,
-      background: cfg.bg, color: cfg.color, fontWeight: 600, fontSize: 10,
-      padding: "2px 8px", borderRadius: 6,
-    }}>
-      {status === "merged" && <Check size={8} />}
-      {status === "open" && <Circle size={8} />}
-      {cfg.label}
-    </span>
-  );
-}
-
-// ── Recent PRs (inline — simple list, no sub-components needed) ────────────────
-
-function RecentPRs() {
-  return (
-    <div style={{ marginTop: 40 }}>
-      <div style={{
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        paddingBottom: 12, borderBottom: "1px solid var(--border)", marginBottom: 4,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <GitPullRequest size={16} style={{ color: "var(--accent)" }} />
-          <h2 style={{ fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 18, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.02em" }}>
-            Recent Pull Requests
-          </h2>
-        </div>
-        <a href="https://github.com/lsfdsb/apex-framework/pulls" target="_blank" rel="noopener noreferrer"
-          style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, color: "var(--accent)", textDecoration: "none" }}>
-          View all on GitHub <ExternalLink size={12} />
-        </a>
-      </div>
-      <div style={{ display: "flex", flexDirection: "column" }}>
-        {RECENT_PRS.map((pr, idx) => (
-          <div key={pr.number} style={{
-            display: "flex", alignItems: "center", gap: 14, padding: "12px 8px",
-            borderBottom: idx < RECENT_PRS.length - 1 ? "1px solid var(--border)" : "none",
-            transition: "background 0.15s",
-            borderRadius: idx === 0 ? "8px 8px 0 0" : idx === RECENT_PRS.length - 1 ? "0 0 8px 8px" : 0,
-          }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 4%, transparent)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = ""; }}
-          >
-            <a href={`https://github.com/lsfdsb/apex-framework/pull/${pr.number}`} target="_blank" rel="noopener noreferrer"
-              style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)", textDecoration: "none", flexShrink: 0, minWidth: 36 }}>
-              #{pr.number}
-            </a>
-            <PRStatusBadge status={pr.status} />
-            <span style={{ fontSize: 13, color: "var(--text)", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {pr.title}
-            </span>
+    <div aria-label="Pipeline phase overview" style={{ display: "flex", alignItems: "center", gap: 4, flexWrap: "wrap" }}>
+      {PHASE_NAMES.map((name, idx) => {
+        const id = idx + 1;
+        const s = getStatus(id);
+        const done = s === "complete";
+        const active = s === "active" || (currentPhase === id && s === "idle");
+        const color = done ? "var(--success)" : active ? "var(--accent)" : "var(--text-muted)";
+        return (
+          <span key={id} style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
             <span style={{
-              fontSize: 10, color: "var(--text-muted)", fontFamily: "var(--font-mono, monospace)",
-              background: "var(--bg-elevated)", border: "1px solid var(--border)",
-              padding: "2px 7px", borderRadius: 5, flexShrink: 0,
-              overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: 200,
+              display: "inline-flex", alignItems: "center", gap: 5,
+              background: done ? "color-mix(in srgb,var(--success) 12%,transparent)" : active ? "color-mix(in srgb,var(--accent) 12%,transparent)" : "var(--bg-surface)",
+              border: `1px solid ${done ? "color-mix(in srgb,var(--success) 25%,transparent)" : active ? "color-mix(in srgb,var(--accent) 30%,transparent)" : "var(--border)"}`,
+              borderRadius: 8, padding: "4px 10px", fontSize: 11, fontWeight: 600, color,
+              transition: "all 0.2s cubic-bezier(0.22,1,0.36,1)", whiteSpace: "nowrap",
             }}>
-              {pr.branch}
+              <span style={{ fontSize: 10, opacity: 0.6 }}>{id}</span>{name}
+              {done && <CheckCircle2 size={10} />}
+              {active && <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)", animation: "projectPulse 2s ease-in-out infinite" }} />}
             </span>
-            <span style={{ fontSize: 11, color: "var(--text-muted)", flexShrink: 0, minWidth: 40, textAlign: "right" }}>
-              {pr.date}
-            </span>
-          </div>
-        ))}
-      </div>
+            {idx < 6 && <span aria-hidden style={{ color: "var(--border)", fontSize: 10 }}>›</span>}
+          </span>
+        );
+      })}
+      <style>{`@keyframes projectPulse { 0%,100% { opacity:1 } 50% { opacity:0.3 } }`}</style>
     </div>
   );
 }
 
-// ── Main Page ──────────────────────────────────────────────────────────────────
+// ── Project card ──────────────────────────────────────────────────────────────
 
-export default function ProjectsPage() {
-  const [selectedPhase, setSelectedPhase] = useState<number | null>(null);
-  const [expandedSub, setExpandedSub] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-
-  const subsByPhase = (phaseId: number) =>
-    ALL_SUB_PROJECTS.filter(s => {
-      if (s.currentPhase === 7 && s.status === "shipped") return phaseId === 7;
-      return s.currentPhase === phaseId;
-    });
-
-  const filteredProjects = search
-    ? PROJECTS.map(p => ({
-        ...p,
-        subProjects: p.subProjects.filter(s =>
-          s.name.toLowerCase().includes(search.toLowerCase()) ||
-          s.description.toLowerCase().includes(search.toLowerCase())
-        ),
-      })).filter(p => p.subProjects.length > 0)
-    : PROJECTS;
-
-  const shippedCount = ALL_SUB_PROJECTS.filter(s => s.status === "shipped").length;
-  const totalCount = ALL_SUB_PROJECTS.length;
-
-  const handleSubToggle = (id: string) => {
-    setExpandedSub(expandedSub === id ? null : id);
-  };
-
-  const handleSelectPhase = (phaseId: number) => {
-    setSelectedPhase(selectedPhase === phaseId ? null : phaseId);
-    setExpandedSub(null);
-  };
-
+function ProjectCard({ name, done, total, agents, phase, phases }: {
+  name: string; done: number; total: number; agents: number; phase: number; phases: { id: number; status: PhaseStatus }[];
+}) {
+  const [open, setOpen] = useState(true);
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto", minHeight: "calc(100vh - 120px)" }}>
-      {/* Header */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 32 }}>
-        <div>
-          <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
-            APEX Framework
+    <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 16, overflow: "hidden" }}>
+      <div style={{ padding: "20px 24px 16px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 14 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <h2 style={{ margin: "0 0 4px", fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", fontSize: 20, fontWeight: 400, letterSpacing: "-0.02em", color: "var(--text)" }}>
+              {name}
+            </h2>
+            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+              {agents > 0 && (
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 600, color: "var(--accent)" }}>
+                  <Activity size={11} />{agents} agent{agents !== 1 ? "s" : ""} active
+                </span>
+              )}
+              <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{done}/{total} tasks</span>
+            </div>
           </div>
-          <h1 style={{
-            fontFamily: "var(--font-display)", fontStyle: "italic",
-            fontSize: 32, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.02em", marginBottom: 8,
-          }}>
-            Project Timeline
-          </h1>
-          <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
-            {shippedCount}/{totalCount} sub-projects shipped through the 7-phase pipeline.
-          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            <Link to="/tasks" style={{
+              display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600,
+              color: "var(--accent)", textDecoration: "none", padding: "5px 12px",
+              background: "color-mix(in srgb,var(--accent) 10%,transparent)",
+              border: "1px solid color-mix(in srgb,var(--accent) 25%,transparent)", borderRadius: 8,
+            }}>View Tasks</Link>
+            <button onClick={() => setOpen(!open)} aria-expanded={open} aria-label={open ? "Collapse" : "Expand"} style={{
+              background: "none", border: "1px solid var(--border)", borderRadius: 8, padding: "5px 8px",
+              cursor: "pointer", color: "var(--text-muted)", display: "flex", alignItems: "center",
+            }}>
+              {open ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+            </button>
+          </div>
         </div>
-        <div style={{
-          display: "flex", alignItems: "center", gap: 8,
-          background: "var(--bg-elevated)", border: "1px solid var(--border)",
-          borderRadius: 10, padding: "7px 12px", width: 220,
-        }}>
-          <Search size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
-          <input type="text" placeholder="Search..." aria-label="Search projects"
-            value={search} onChange={(e) => setSearch(e.target.value)}
-            style={{ background: "none", border: "none", outline: "none", fontSize: 12, color: "var(--text)", width: "100%", fontFamily: "var(--font-body)" }}
-          />
+        <div role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label={`${pct}% complete`}
+          style={{ height: 4, background: "var(--bg-surface)", borderRadius: 2, overflow: "hidden" }}>
+          <div style={{ height: "100%", width: `${pct}%`, background: pct === 100 ? "var(--success)" : "var(--accent)", borderRadius: 2, transition: "width 0.4s cubic-bezier(0.22,1,0.36,1)" }} />
         </div>
       </div>
-
-      {/* 7-Phase Pipeline Timeline */}
-      <div style={{
-        background: "var(--bg-elevated)", border: "1px solid var(--border)",
-        borderRadius: 16, padding: "24px 24px 20px", marginBottom: 28,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-          <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: "0.08em", textTransform: "uppercase", color: "var(--accent)" }}>
-            7-Phase Autonomous Pipeline
-          </span>
-          {selectedPhase !== null && (
-            <button onClick={() => { setSelectedPhase(null); setExpandedSub(null); }}
-              style={{
-                background: "color-mix(in srgb, var(--accent) 10%, transparent)",
-                border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
-                borderRadius: 6, padding: "2px 8px", cursor: "pointer",
-                fontSize: 10, fontWeight: 600, color: "var(--accent)",
-                display: "flex", alignItems: "center", gap: 4,
-              }}
-            >
-              Show All <X size={10} />
-            </button>
-          )}
+      {open && (
+        <div style={{ padding: "12px 24px 18px", borderTop: "1px solid var(--border)" }}>
+          <PhaseStrip currentPhase={phase} phases={phases} />
         </div>
-        <PipelineTimeline
-          selectedPhase={selectedPhase}
-          onSelectPhase={handleSelectPhase}
-          subsByPhase={subsByPhase}
+      )}
+    </div>
+  );
+}
+
+// ── Session banner — glass morphism ──────────────────────────────────────────
+
+function SessionBanner({ branch, model, contextUsed, contextMax }: { branch: string; model: string; contextUsed: number; contextMax: number }) {
+  const pct = contextMax > 0 ? Math.round((contextUsed / contextMax) * 100) : 0;
+  const ctxColor = pct > 80 ? "var(--destructive,#ef4444)" : pct > 60 ? "var(--warning,#f59e0b)" : "var(--success)";
+  return (
+    <div aria-label="Active session" style={{
+      background: "color-mix(in srgb,var(--accent) 6%,var(--bg-elevated))",
+      border: "1px solid color-mix(in srgb,var(--accent) 20%,var(--border))",
+      borderRadius: 12, padding: "14px 20px", marginBottom: 24,
+      backdropFilter: "blur(8px)", WebkitBackdropFilter: "blur(8px)",
+      display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap",
+    }}>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+        <GitBranch size={13} style={{ color: "var(--accent)" }} />
+        <code style={{ fontSize: 12, fontFamily: "var(--font-mono,'JetBrains Mono',monospace)", color: "var(--text)" }}>{branch || "no branch"}</code>
+      </span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+        <Cpu size={13} style={{ color: "var(--accent)" }} />
+        <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>{model || "unknown"}</span>
+      </span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, marginLeft: "auto" }}>
+        <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Context</span>
+        <span style={{ fontSize: 12, fontWeight: 600, color: ctxColor }}>{pct}%</span>
+      </span>
+    </div>
+  );
+}
+
+// ── Main Page ─────────────────────────────────────────────────────────────────
+
+export default function ProjectsPage() {
+  const { tasks, pipeline, agents, session, isLive, lastUpdated } = useOps();
+
+  const allTasks = tasks.tasks;
+  const totalTasks = allTasks.length;
+  const doneTasks = allTasks.filter((t) => t.column === "done").length;
+  const inProgressTasks = allTasks.filter((t) => t.column === "in-progress").length;
+  const activeAgents = agents.agents.filter((a) => a.status === "active").length;
+
+  const statCard = (label: string, value: number, accent = "var(--accent)") => (
+    <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px", flex: 1 }}>
+      <div style={{ fontSize: 22, fontWeight: 700, color: accent, lineHeight: 1, marginBottom: 4 }}>{value}</div>
+      <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.06em", textTransform: "uppercase" as const, color: "var(--text-muted)" }}>{label}</div>
+    </div>
+  );
+
+  return (
+    <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 64px" }}>
+
+      {/* Header */}
+      <div style={{ marginBottom: 32 }}>
+        <p style={{ margin: "0 0 8px", fontSize: 11, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--accent)" }}>
+          APEX Framework
+        </p>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 8 }}>
+          <h1 style={{ margin: 0, fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", fontSize: "clamp(28px,4vw,40px)", fontWeight: 400, letterSpacing: "-0.02em", lineHeight: 1.1, color: "var(--text)" }}>
+            Projects
+          </h1>
+          <LiveBadge isLive={isLive} lastUpdated={lastUpdated} />
+        </div>
+        <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+          What's being built, current pipeline phase, and live task progress.
+        </p>
+      </div>
+
+      {/* Session banner */}
+      {isLive && session.active && (
+        <SessionBanner branch={session.branch} model={session.model} contextUsed={session.contextUsed} contextMax={session.contextMax} />
+      )}
+
+      {/* Quick stats */}
+      <div style={{ display: "flex", gap: 12, marginBottom: 28, flexWrap: "wrap" }}>
+        {statCard("Total Tasks", totalTasks, "var(--text)")}
+        {statCard("Completed", doneTasks, "var(--success)")}
+        {statCard("In Progress", inProgressTasks, "var(--accent)")}
+        {statCard("Agents Active", activeAgents, activeAgents > 0 ? "var(--accent)" : "var(--text-muted)")}
+      </div>
+
+      {/* Project card */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+          <LayoutGrid size={14} style={{ color: "var(--text-muted)" }} />
+          <h2 style={{ margin: 0, fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic", fontSize: 18, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.01em" }}>
+            Active Project
+          </h2>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 5, fontSize: 11, fontWeight: 600,
+            color: "var(--success)", background: "color-mix(in srgb,var(--success) 12%,transparent)",
+            border: "1px solid color-mix(in srgb,var(--success) 25%,transparent)", borderRadius: 6, padding: "2px 8px",
+          }}>
+            <Circle size={6} style={{ fill: "var(--success)" }} />1 active
+          </span>
+        </div>
+        <ProjectCard
+          name={tasks.projectName || "APEX Framework"}
+          done={doneTasks}
+          total={totalTasks}
+          agents={activeAgents}
+          phase={pipeline.currentPhase || 0}
+          phases={pipeline.phases.map((p) => ({ id: p.id, status: p.status }))}
         />
       </div>
 
-      {/* Project Groups */}
-      <div style={{ marginBottom: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <h2 style={{
-            fontFamily: "var(--font-display)", fontStyle: "italic",
-            fontSize: 22, fontWeight: 400, color: "var(--text)", letterSpacing: "-0.02em",
-          }}>
-            {selectedPhase !== null
-              ? `${PIPELINE_PHASES.find(p => p.id === selectedPhase)?.name} Phase`
-              : "All Projects"
-            }
-          </h2>
-          <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {filteredProjects.length} project{filteredProjects.length !== 1 ? "s" : ""}
-          </span>
+      {/* Demo mode note */}
+      {!isLive && (
+        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 10 }}>
+          <Users size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
+          <p style={{ margin: 0, fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.5 }}>
+            Showing demo data. Write state files to{" "}
+            <code style={{ fontFamily: "var(--font-mono,monospace)", fontSize: 11, color: "var(--accent)" }}>.apex/state/</code>
+            {" "}to see live data.
+          </p>
         </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {filteredProjects.map((project) => {
-            const visibleSubs = selectedPhase !== null
-              ? project.subProjects.filter(s => {
-                  if (s.currentPhase === 7 && s.status === "shipped") return selectedPhase === 7;
-                  return s.currentPhase === selectedPhase;
-                })
-              : project.subProjects;
-            if (selectedPhase !== null && visibleSubs.length === 0) return null;
-            const displayProject = selectedPhase !== null ? { ...project, subProjects: visibleSubs } : project;
-            return (
-              <ProjectCard
-                key={project.id}
-                project={displayProject}
-                expandedSub={expandedSub}
-                onSubToggle={handleSubToggle}
-              />
-            );
-          })}
-          {filteredProjects.length === 0 && (
-            <div style={{ textAlign: "center", padding: "32px 0", color: "var(--text-muted)", fontSize: 13, fontStyle: "italic" }}>
-              No projects match your search.
-            </div>
-          )}
-        </div>
-      </div>
-
-      <RecentPRs />
+      )}
     </div>
   );
 }
