@@ -25,7 +25,8 @@ fi
 INPUT=$(cat)
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 TOOL_INPUT=$(echo "$INPUT" | jq -c '.tool_input // {}' 2>/dev/null || true)
-TOOL_OUTPUT=$(echo "$INPUT" | jq -c '.tool_output // {}' 2>/dev/null || true)
+# Claude Code uses 'tool_response' (not 'tool_output') in PostToolUse hooks
+TOOL_RESPONSE=$(echo "$INPUT" | jq -c '.tool_response // {}' 2>/dev/null || true)
 
 # Only process task tools
 case "$TOOL_NAME" in
@@ -61,17 +62,9 @@ supabase_upsert_task() {
 
 if [ "$TOOL_NAME" = "TaskCreate" ]; then
   SUBJECT=$(echo "$TOOL_INPUT" | jq -r '.subject // empty' 2>/dev/null || true)
-  # Task ID comes from tool_output — Claude Code returns various formats:
-  #   JSON: {"taskId": "9"} or {"id": "9"}
-  #   String: "Task #9 created successfully: subject here"
-  TASK_ID=""
-  # Try JSON first
-  TASK_ID=$(echo "$TOOL_OUTPUT" | jq -r '.taskId // .id // empty' 2>/dev/null || true)
-  # Try extracting from "Task #N ..." string format
-  if [ -z "$TASK_ID" ]; then
-    TOOL_OUTPUT_STR=$(echo "$TOOL_OUTPUT" | jq -r 'if type == "string" then . else empty end' 2>/dev/null || echo "$TOOL_OUTPUT")
-    TASK_ID=$(echo "$TOOL_OUTPUT_STR" | sed -n 's/.*[Tt]ask #\([0-9a-zA-Z_-]*\).*/\1/p' | head -1)
-  fi
+  # Task ID from tool_response — Claude Code PostToolUse provides:
+  #   { "tool_response": { "task": { "id": "15", "subject": "..." } } }
+  TASK_ID=$(echo "$TOOL_RESPONSE" | jq -r '.task.id // .taskId // .id // empty' 2>/dev/null || true)
   [ -z "$TASK_ID" ] && TASK_ID="task-$(date +%s)"
 
   if [ -n "$SUBJECT" ]; then

@@ -1,11 +1,18 @@
 /**
  * OpsContext — Shared state provider for all APEX OPS pages.
- * Centralizes useApexState polling so each .apex/state/ file is polled
- * exactly once, regardless of how many pages consume it.
+ *
+ * Data source priority:
+ *   1. Supabase Realtime (if VITE_SUPABASE_URL is set) — near-instant
+ *   2. Local file polling (.apex/state/*.json every 2s) — always works
+ *
+ * Both paths produce the same shape. Consumers use `useOps()` and
+ * never care which source is active.
  */
 
 import { createContext, useContext, useState, useMemo, type ReactNode } from "react";
 import { useApexState } from "../hooks/useApexState";
+import { useSupabaseState } from "../hooks/useSupabaseState";
+import { isSupabaseConfigured } from "../lib/supabase/client";
 import type {
   TaskBoardState,
   AgentState,
@@ -47,6 +54,92 @@ const DEFAULT_QUALITY: QualityState = {
   },
 };
 
+// ── Supabase → App State Transformers ────────────────────────────────────────
+// These convert raw Supabase rows into the shapes the OPS pages expect.
+
+function transformSession(rows: Record<string, unknown>[]): SessionState {
+  const active = rows.find((r) => r.active === true);
+  if (!active) return DEFAULT_SESSION;
+  return {
+    active: true,
+    startedAt: (active.started_at as string) ?? "",
+    branch: (active.branch as string) ?? "",
+    model: (active.model as string) ?? "opus",
+    contextUsed: (active.context_used as number) ?? 0,
+    contextMax: (active.context_max as number) ?? 1000000,
+  };
+}
+
+function transformTasks(rows: Record<string, unknown>[]): TaskBoardState {
+  const tasks: TaskItem[] = rows.map((r) => ({
+    id: (r.task_id as string) ?? (r.id as string),
+    title: (r.title as string) ?? "",
+    description: (r.description as string) ?? "",
+    tag: (r.tag as string) ?? null,
+    column: (r.column as string) ?? "todo",
+    phase: (r.phase as string) ?? "P0",
+    dri: (r.dri as string) ?? "builder",
+    acceptanceCriteria: (r.acceptance_criteria as TaskItem["acceptanceCriteria"]) ?? [],
+    files: (r.files as string[]) ?? [],
+    blockedBy: (r.blocked_by as string[]) ?? [],
+    blocks: (r.blocks as string[]) ?? [],
+    createdAt: (r.created_at as string) ?? "",
+    updatedAt: (r.updated_at as string) ?? "",
+  }));
+  const done = tasks.filter((t) => t.column === "done").length;
+  return {
+    projectName: "APEX Session",
+    tasks,
+    meta: { p0Count: 0, p1Count: 0, p2Count: 0, completedCount: done, velocity: 0 },
+  };
+}
+
+function transformAgents(rows: Record<string, unknown>[]): AgentState {
+  return {
+    agents: rows.map((r) => ({
+      name: (r.name as string) ?? "agent",
+      status: (r.status as AgentStatus) ?? "idle",
+      model: (r.model as string) ?? "sonnet",
+      currentTask: r.current_task as string | undefined,
+      thoughtStream: (r.thought_stream as AgentState["agents"][0]["thoughtStream"]) ?? [],
+      startedAt: r.started_at as string | undefined,
+      completedAt: r.completed_at as string | undefined,
+    })),
+  };
+}
+
+function transformPipeline(rows: Record<string, unknown>[]): PipelineState {
+  const sorted = [...rows].sort(
+    (a, b) => ((a.phase_id as number) ?? 0) - ((b.phase_id as number) ?? 0),
+  );
+  const current = sorted.findLast((r) => r.status === "active");
+  return {
+    currentPhase: (current?.phase_id as number) ?? 0,
+    phases: sorted.map((r) => ({
+      id: (r.phase_id as number) ?? 0,
+      name: (r.name as string) ?? "",
+      status: (r.status as string) ?? "idle",
+      startedAt: r.started_at as string | undefined,
+      completedAt: r.completed_at as string | undefined,
+      gateApproved: r.gate_approved as boolean | undefined,
+    })),
+  };
+}
+
+function transformQuality(rows: Record<string, unknown>[]): QualityState {
+  const latest = rows[rows.length - 1];
+  if (!latest) return DEFAULT_QUALITY;
+  return {
+    score: (latest.score as number) ?? 0,
+    phases: (latest.phases as QualityState["phases"]) ?? [],
+    additionalGates: (latest.additional_gates as QualityState["additionalGates"]) ?? {
+      security: "pending",
+      accessibility: "pending",
+      cxReview: "pending",
+    },
+  };
+}
+
 // ── Derived agent entry type ──────────────────────────────────────────────────
 
 export interface DerivedAgentEntry {
@@ -58,7 +151,6 @@ export interface DerivedAgentEntry {
 // ── Context Shape ────────────────────────────────────────────────────────────
 
 interface OpsContextValue {
-  // Live state from .apex/state/ polling
   tasks: TaskBoardState;
   agents: AgentState;
   pipeline: PipelineState;
@@ -72,6 +164,9 @@ interface OpsContextValue {
   isLive: boolean;
   lastUpdated: Date | null;
 
+  // Data source indicator
+  source: "supabase" | "local";
+
   // Selected project for cross-page navigation
   selectedProject: string | null;
   setSelectedProject: (id: string | null) => void;
@@ -82,20 +177,36 @@ const OpsContext = createContext<OpsContextValue | null>(null);
 // ── Provider ─────────────────────────────────────────────────────────────────
 
 export function OpsProvider({ children }: { children: ReactNode }) {
-  const tasksState = useApexState<TaskBoardState>("tasks.json", MOCK_TASK_BOARD);
-  const agentsState = useApexState<AgentState>("agents.json", DEFAULT_AGENTS);
-  const pipelineState = useApexState<PipelineState>("pipeline.json", DEFAULT_PIPELINE);
-  const qualityState = useApexState<QualityState>("quality.json", DEFAULT_QUALITY);
-  const sessionState = useApexState<SessionState>("session.json", DEFAULT_SESSION);
+  // ── Data source: Supabase Realtime (when configured) ────────────────────
+  const sbSession = useSupabaseState("sessions", DEFAULT_SESSION, transformSession);
+  const sbTasks = useSupabaseState("tasks", MOCK_TASK_BOARD, transformTasks);
+  const sbAgents = useSupabaseState("agents", DEFAULT_AGENTS, transformAgents);
+  const sbPipeline = useSupabaseState("pipeline_phases", DEFAULT_PIPELINE, transformPipeline);
+  const sbQuality = useSupabaseState("quality_gates", DEFAULT_QUALITY, transformQuality);
+
+  // ── Data source: Local file polling (always runs as fallback) ───────────
+  const localSession = useApexState<SessionState>("session.json", DEFAULT_SESSION);
+  const localTasks = useApexState<TaskBoardState>("tasks.json", MOCK_TASK_BOARD);
+  const localAgents = useApexState<AgentState>("agents.json", DEFAULT_AGENTS);
+  const localPipeline = useApexState<PipelineState>("pipeline.json", DEFAULT_PIPELINE);
+  const localQuality = useApexState<QualityState>("quality.json", DEFAULT_QUALITY);
+
+  // ── Pick the active source ──────────────────────────────────────────────
+  // Supabase wins when configured AND live. Otherwise fall back to local.
+  const useSupabase = isSupabaseConfigured && sbSession.isLive;
+
+  const tasksState = useSupabase ? sbTasks : localTasks;
+  const agentsState = useSupabase ? sbAgents : localAgents;
+  const pipelineState = useSupabase ? sbPipeline : localPipeline;
+  const qualityState = useSupabase ? sbQuality : localQuality;
+  const sessionState = useSupabase ? sbSession : localSession;
 
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
   // Derive agent activity from tasks — more reliable than agents.json
-  // which can be overwritten by a new session before the previous one ends.
   const derivedAgents = useMemo((): Map<string, DerivedAgentEntry> => {
     const map = new Map<string, DerivedAgentEntry>();
 
-    // Seed from live agents.json so status/currentTask from hooks is respected
     for (const agent of agentsState.data.agents) {
       map.set(agent.name, {
         status: agent.status,
@@ -104,7 +215,6 @@ export function OpsProvider({ children }: { children: ReactNode }) {
       });
     }
 
-    // Overlay with task-derived activity — tasks.json is the ground truth
     for (const task of tasksState.data.tasks) {
       const dri = task.dri ?? "builder";
       if (!map.has(dri)) {
@@ -113,7 +223,6 @@ export function OpsProvider({ children }: { children: ReactNode }) {
       const entry = map.get(dri)!;
       entry.tasks.push(task);
 
-      // An in-progress task makes the DRI active; take the first one found
       if (task.column === "in-progress" && entry.status !== "active") {
         entry.status = "active";
         entry.currentTask = task.title;
@@ -123,7 +232,6 @@ export function OpsProvider({ children }: { children: ReactNode }) {
     return map;
   }, [agentsState.data, tasksState.data]);
 
-  // Consider "live" if ANY state file is successfully fetched
   const isLive =
     tasksState.isLive ||
     agentsState.isLive ||
@@ -131,7 +239,6 @@ export function OpsProvider({ children }: { children: ReactNode }) {
     qualityState.isLive ||
     sessionState.isLive;
 
-  // Latest update across all state files
   const timestamps = [
     tasksState.lastUpdated,
     agentsState.lastUpdated,
@@ -155,6 +262,7 @@ export function OpsProvider({ children }: { children: ReactNode }) {
         derivedAgents,
         isLive,
         lastUpdated,
+        source: useSupabase ? "supabase" : "local",
         selectedProject,
         setSelectedProject,
       }}
