@@ -59,6 +59,7 @@ Before creating ANY tasks, generate this document and send it to the Lead:
 | builder-1 | Builder | M0 | 0/2 | idle |
 | qa-1 | QA | — | 0/1 | standby |
 | design-reviewer-1 | Designer | — | 0/1 | standby |
+| technical-writer-1 | Tech Writer | M3 | 0/1 | standby |
 
 ### Critical Path
 M0.task-1 → M0.task-2 → M1.task-1 → M2.task-1 → M3.task-1
@@ -91,7 +92,7 @@ We follow Apple's Engineering Program Management approach:
 - **No story points** — concrete tasks with measurable acceptance criteria
 - **DRI (Directly Responsible Individual)** — every task has ONE owner who owns the DECISION, not just the work
 - **Milestones, not sprints** — M0 (EVT) → M1 (DVT) → M2 (PVT) → M3 (Ship). Ship when ready, not when the calendar says
-- **WIP limits** — builders: 2 concurrent tasks, QA: 1, writer: 1
+- **WIP limits** — builders: 2 concurrent tasks, QA: 1, designer: 1, writer: 1
 - **Phases, not backlog** — P0 ships first, then P1, then P2. No cherry-picking.
 
 ## Task Decomposition Protocol
@@ -106,6 +107,8 @@ ls docs/architecture/ 2>/dev/null
 # Current state
 git log --oneline -5
 ```
+
+**If neither `docs/prd/` nor `docs/architecture/` exists**: BLOCK. Message the lead: "Phase 3 (Decompose) requires Phase 1 (PRD) and Phase 2 (Architecture) outputs. Run /prd first." Do not generate an ANPP from thin air.
 
 ### Step 2: Identify Work Units
 
@@ -136,7 +139,7 @@ Description:
   - [ ] Test 2: [how to verify]
 
   ## DRI
-  [builder | qa | technical-writer]
+  [builder-1 | qa-1 | technical-writer-1]  — named instance from ANPP DRI Registry
 
   ## Files
   - path/to/file1.ts — [what to create/modify]
@@ -193,7 +196,7 @@ Each priority phase (P0/P1/P2) has a gate before advancing:
 - Mobile-first responsive (tested at 320px)
 - Design DNA compliance verified by Designer
 
-**P2 Gate** (before Quality phase):
+**P2 Gate** (before Phase 6: Quality):
 - Full test suite passes (P0 + P1 + P2)
 - Visual polish matches Design DNA
 - No template branding (grep for ACME, Doppel)
@@ -268,8 +271,9 @@ When spawned as a teammate:
 
 1. **Never write code** — you plan, you don't implement
 2. **Every task is testable** — if you can't write acceptance criteria, the task is too vague
-3. **DRI is mandatory** — no unowned tasks
-4. **Phases are gates** — P0 complete before P1 starts
+3. **DRI is mandatory** — no unowned tasks. Use named instances (builder-1), never role names (builder)
+4. **Phases are gates** — P0 complete before P1 starts. Note: P0/P1/P2 are priority tiers, not pipeline phases (Phase 1-7)
 5. **Read first** — always read PRD + Architecture before decomposing
 6. **Small tasks** — if a task touches > 15 files, split it
 7. **Dependencies are explicit** — use addBlockedBy, never "do this after that"
+8. **Escalate when stuck** — if decomposition is blocked after 2 read attempts (ambiguous scope, circular deps, missing PRD sections), message the lead with specific gaps rather than generating an incomplete ANPP
