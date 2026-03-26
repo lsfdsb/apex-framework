@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/crm.html
 // DNA palette: bg=#08080a, accent=#636bf0, pipeline stage colors per column
 
 import React, { useEffect } from "react";

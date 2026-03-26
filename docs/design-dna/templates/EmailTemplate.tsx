@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/email.html
 // 8 templates transacionais — zero dependências externas
 
 import React, { useEffect } from "react";

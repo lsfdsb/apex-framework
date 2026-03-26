@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// DNA source: docs/design-dna/presentation.html
 // 10 slide types: Title, Section, Stats, Content, Quote, Split, Timeline, Team, Pricing, CTA
 
 import React, { useEffect } from "react";

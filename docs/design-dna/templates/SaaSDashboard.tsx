@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/saas.html
 // DNA palette: bg=#09090b, accent=#3b82f6, sidebar 220px, stats 4-col grid
 
 import React, { useEffect, useState } from "react";

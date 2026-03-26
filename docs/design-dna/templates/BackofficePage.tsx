@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/backoffice.html
 // DNA: bg=#08080a, accent=#636bf0, display=Instrument Serif, mono=JetBrains Mono
 
 import React, { useEffect } from "react";

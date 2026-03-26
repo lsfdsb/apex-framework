@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/blog.html
 // DNA palette: light bg=#faf9f6, dark bg=#0f0d0b, accent=#e07850 (dark)/#c45d3e (light)
 // Fonts: Newsreader (body), Instrument Serif (display), Inter (sans labels)
 

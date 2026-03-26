@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/landing.html
 // DNA palette: bg=#08080a, accent=#636bf0, font-display=Instrument Serif
 
 import React, { useEffect } from "react";

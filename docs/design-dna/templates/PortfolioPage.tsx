@@ -1,5 +1,4 @@
 // Copy this file into your app and customize
-// Visual reference: docs/design-dna/portfolio.html
 // DNA palette: bg=var(--bg), accent=var(--accent), Instrument Serif display, centered hero
 
 import React, { useEffect, FormEvent, useState } from "react";

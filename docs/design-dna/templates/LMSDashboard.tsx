@@ -1,5 +1,4 @@
 // Unified LMS — courses, lesson player, reading, progress, certificates
-// Visual references: lms.html + ebook.html combined
 // Zero external dependencies
 
 import React, { useState, useEffect, useRef } from "react";
