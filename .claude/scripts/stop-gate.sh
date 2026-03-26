@@ -97,4 +97,23 @@ if [ "$WROTE_CODE" = true ]; then
   fi
 fi
 
+# ── Mark Lead agent as idle in agents.json ─────────────────────────────────────
+PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+AGENTS_FILE="$PROJECT_DIR/.apex/state/agents.json"
+if [ -f "$AGENTS_FILE" ]; then
+  STOP_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+  jq --arg ts "$STOP_TS" \
+    'if (.agents | map(.name) | index("Lead")) then
+      (.agents[] | select(.name == "Lead")) |= (
+        .status = "idle"
+        | .currentTask = null
+        | .completedAt = $ts
+        | .thoughtStream = (
+            (.thoughtStream // []) + [{"timestamp": $ts, "action": "Response complete", "explanation": "Lead paused — waiting for input"}]
+          )[-5:]
+      )
+    else . end' \
+    "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
+fi
+
 exit 0
