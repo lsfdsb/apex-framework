@@ -235,8 +235,16 @@ export function OpsProvider({ children }: { children: ReactNode }) {
       }
     }
 
+    // Lead is active whenever the session is active (Claude is responding)
+    const sessionActive = sessionState.data.active;
+    const leadEntry = map.get("lead");
+    if (leadEntry && sessionActive && leadEntry.status !== "active") {
+      leadEntry.status = "active";
+      leadEntry.currentTask = leadEntry.currentTask ?? "Session active";
+    }
+
     return map;
-  }, [agentsState.data, tasksState.data]);
+  }, [agentsState.data, tasksState.data, sessionState.data]);
 
   const isLive =
     tasksState.isLive ||
