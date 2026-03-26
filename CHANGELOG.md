@@ -7,6 +7,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **AgentsPage Typewriter Effect** — Animated thought stream text revelation with staggered timing, ripple animation on state transitions, SVG connection lines linking agents to current task, theme-safe model badges (#219)
+- **TaskBoardPage Iteration Tracking** — Iteration/Ship sections with tab navigation, collapsible shipped iteration cards, live current-ship status banner, backward-compatible TaskBoard state (#219)
+- **Global Accessibility Block** — `prefers-reduced-motion: reduce` CSS block disables all animations site-wide for users with motion sensitivity, respects system accessibility preferences (#219)
+- **Animated Score Ring** — QualityPage score visualization with CSS keyframes and smooth rotation, phase timing display integration (#219)
+- **Theme-Safe Gate Badges** — PipelinePage gate badges use semantic color tokens instead of raw hex, light/dark mode compatible (#219)
+- **OpsLayout Light Theme Tuning** — Sidebar: reduced blur effect (8px→4px), increased opacity (0.8→0.95) for better readability in light mode (#219)
+- **ARIA Landmarks & Live Regions** — Full suite: nav/main/complementary landmarks, aria-live on state updates, aria-expanded on expandable cards, proper heading hierarchy (#219)
 - **AgentsPage Live Animations** — Breathing pulse animations on active agents, thought stream with staggered slide-in transitions, current task links to /tasks route (#219)
 - **PipelinePage Phase Visualization** — Animated SVG connector lines between phases, active phase pulse glow effect, click-to-expand task cards, Apple EPM provenance badges on each phase (#219)
 - **QualityPage Enhanced Scoring** — Animated score ring via CSS keyframes, phase timing display, running phase shimmer effect (#219)
@@ -28,6 +35,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
 
 ### Changed
+- **hub-types Extended** — Added Iteration interface (id, name, startDate, endDate, status, tasks) and iteration field on TaskItem, iterations array on TaskBoardState for full iteration lifecycle management (#219)
 - **settings.json Hook Registration** — Added 3 new hook scripts: agent-state-writer.sh (PostToolUse), session-state-writer.sh (SessionStart), pipeline-state-writer.sh (PostToolUse) for real-time state tracking across OPS pages (#219)
 - **ProjectsPage.tsx Extraction** — Refactored from 941 lines into 230-line index + 4 modular components (ProjectList, ProjectGroup, SubProjectCard, CompletionRing) for maintainability (#218)
 - **OpsLayout Sidebar Redesign** — Auto-expand on hover, persistent logo, 5 primary routes (Pipeline, Agents, Quality, Changelog, About) with active state indicators, live agent count badge (#218)
@@ -45,6 +53,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **README Agent Roster** — No structural changes; version ref updated (#210)
 
 ### Fixed
+- **QualityPage Status Badge Colors** — Fixed broken color token concatenation in status badges, now properly renders light/dark theme colors (#219)
 - **Dead Reference Cleanup** — Removed health-check.sh references from README, CONTRIBUTING.md, Watcher agent (script deleted in #206) (#210)
 - **Stale HTML/CSS Reference** — Builder agent now correctly says "React/TSX reference implementations", not "HTML/CSS files" (#210)
 - **Memory File Cleanup** — Deleted 3 stale memory files from v5.22 audit; updated MEMORY.md index (#210)

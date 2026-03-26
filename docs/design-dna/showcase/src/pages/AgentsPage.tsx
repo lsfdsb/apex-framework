@@ -71,6 +71,8 @@ const DEMO_AGENTS: AgentState = {
 };
 
 // ── Model badge colors ────────────────────────────────────────────────────────
+// T15: Use color-mix tokens instead of hardcoded rgba so both light and dark
+//      themes get correct tinting derived from CSS custom properties.
 
 function modelStyle(model: AgentModel): {
   bg: string;
@@ -80,30 +82,32 @@ function modelStyle(model: AgentModel): {
 } {
   switch (model) {
     case "opus":
+      // Purple-tinted accent — distinct from the SaaS blue accent
       return {
-        bg: "rgba(168,85,247,0.12)",
-        border: "rgba(168,85,247,0.3)",
-        text: "#a855f7",
+        bg: "color-mix(in srgb, color-mix(in srgb, var(--accent) 80%, #a855f7) 12%, transparent)",
+        border: "color-mix(in srgb, color-mix(in srgb, var(--accent) 80%, #a855f7) 30%, transparent)",
+        text: "color-mix(in srgb, var(--accent) 80%, #a855f7)",
         label: "Opus",
       };
     case "haiku":
+      // Teal-tinted success — fast / lightweight feel
       return {
-        bg: "rgba(6,182,212,0.12)",
-        border: "rgba(6,182,212,0.3)",
-        text: "#06b6d4",
+        bg: "color-mix(in srgb, color-mix(in srgb, var(--success) 80%, #06b6d4) 12%, transparent)",
+        border: "color-mix(in srgb, color-mix(in srgb, var(--success) 80%, #06b6d4) 30%, transparent)",
+        text: "color-mix(in srgb, var(--success) 80%, #06b6d4)",
         label: "Haiku",
       };
     default: // sonnet
       return {
-        bg: "rgba(99,102,241,0.12)",
-        border: "rgba(99,102,241,0.3)",
+        bg: "color-mix(in srgb, var(--accent) 12%, transparent)",
+        border: "color-mix(in srgb, var(--accent) 30%, transparent)",
         text: "var(--accent)",
         label: "Sonnet",
       };
   }
 }
 
-// ── Status dot with breathing pulse ──────────────────────────────────────────
+// ── Status dot with breathing pulse + ripple on active ───────────────────────
 
 function StatusDot({ status }: { status: AgentStatus }) {
   const color =
@@ -116,12 +120,14 @@ function StatusDot({ status }: { status: AgentStatus }) {
           : "var(--text-muted)";
 
   return (
+    // Wrapper provides position:relative for the ::after ripple pseudo-element
     <span
       title={status}
       aria-label={`Status: ${status}`}
       className={status === "active" ? "agent-status-dot--active" : undefined}
       style={{
         display: "inline-block",
+        position: "relative",
         width: 10,
         height: 10,
         borderRadius: "50%",
@@ -142,6 +148,10 @@ interface ThoughtEntryProps {
 }
 
 function ThoughtEntry({ timestamp, action, explanation, index }: ThoughtEntryProps) {
+  // T12: Apply typewriter effect only to the newest (first) entry.
+  // CSS-only: overflow:hidden + white-space:nowrap + width animation from 0 → 100%.
+  const isNewest = index === 0;
+
   return (
     <div
       className="thought-entry"
@@ -170,6 +180,7 @@ function ThoughtEntry({ timestamp, action, explanation, index }: ThoughtEntryPro
       </span>
       <div style={{ minWidth: 0 }}>
         <span
+          className={isNewest ? "thought-typewriter" : undefined}
           style={{
             fontSize: 12,
             fontWeight: 700,
@@ -212,6 +223,7 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
 
   return (
     <div
+      role="listitem"
       className={isActive ? "agent-card agent-card--active" : "agent-card"}
       style={{
         background: "var(--bg-elevated)",
@@ -354,56 +366,89 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
           ))}
         </div>
 
-        {/* Current task badge — clickable */}
+        {/* T12: Connection line + current task badge — clickable */}
         {isActive && currentTask && (
-          <a
-            href={`#/tasks?task=${encodeURIComponent(currentTask)}`}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              marginBottom: 12,
-              padding: "8px 12px",
-              background: "rgba(99,102,241,0.06)",
-              border: "1px solid rgba(99,102,241,0.2)",
-              borderRadius: 8,
-              fontSize: 12,
-              color: "var(--text-secondary)",
-              textDecoration: "none",
-              transition: "background 0.15s ease, border-color 0.15s ease",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "rgba(99,102,241,0.12)";
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(99,102,241,0.4)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.background =
-                "rgba(99,102,241,0.06)";
-              (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                "rgba(99,102,241,0.2)";
-            }}
-          >
-            <span
+          <div style={{ marginBottom: 12 }}>
+            {/* Dashed connector SVG from agent card down to the task badge */}
+            <div style={{ display: "flex", justifyContent: "flex-start", paddingLeft: 16, marginBottom: 4 }}>
+              <svg
+                width="2"
+                height="20"
+                viewBox="0 0 2 20"
+                fill="none"
+                aria-hidden="true"
+                className="task-connector-line"
+              >
+                <line
+                  x1="1"
+                  y1="0"
+                  x2="1"
+                  y2="20"
+                  stroke="var(--accent)"
+                  strokeWidth="2"
+                  strokeDasharray="3 3"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+            {/* Task badge */}
+            <a
+              href={`#/tasks?task=${encodeURIComponent(currentTask)}`}
               style={{
-                width: 6,
-                height: 6,
-                borderRadius: "50%",
-                background: "var(--accent)",
-                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "8px 12px",
+                background: "color-mix(in srgb, var(--accent) 6%, transparent)",
+                border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+                borderRadius: 8,
+                fontSize: 12,
+                color: "var(--text-secondary)",
+                textDecoration: "none",
+                transition: "background 0.15s ease, border-color 0.15s ease",
               }}
-            />
-            <span>
-              <span style={{ color: "var(--accent)", fontWeight: 600 }}>Working on: </span>
-              {currentTask}
-            </span>
-          </a>
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background =
+                  "color-mix(in srgb, var(--accent) 12%, transparent)";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor =
+                  "color-mix(in srgb, var(--accent) 40%, transparent)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLAnchorElement).style.background =
+                  "color-mix(in srgb, var(--accent) 6%, transparent)";
+                (e.currentTarget as HTMLAnchorElement).style.borderColor =
+                  "color-mix(in srgb, var(--accent) 20%, transparent)";
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "var(--accent)",
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  minWidth: 0,
+                  flex: 1,
+                }}
+              >
+                <span style={{ color: "var(--accent)", fontWeight: 600 }}>Working on: </span>
+                {currentTask}
+              </span>
+            </a>
+          </div>
         )}
 
         {/* Thought stream */}
         <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12 }}>
           <p
+            id={`thought-label-${agent.name}`}
             style={{
               margin: "0 0 10px",
               fontSize: 10,
@@ -417,7 +462,12 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
           </p>
 
           {entries.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <div
+              aria-live="polite"
+              aria-atomic="false"
+              aria-labelledby={`thought-label-${agent.name}`}
+              style={{ display: "flex", flexDirection: "column", gap: 8 }}
+            >
               {entries.map((t, i) => (
                 <ThoughtEntry
                   key={`${t.timestamp}-${i}`}
@@ -542,6 +592,10 @@ export default function AgentsPage() {
 
       {/* Agent grid */}
       <div
+        role="list"
+        aria-label="Agent roster"
+        aria-live="polite"
+        aria-atomic="false"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
@@ -614,6 +668,7 @@ export default function AgentsPage() {
       </div>
 
       <style>{`
+        /* ── Breathing pulse on active agent card ─────────────────────────── */
         @keyframes agent-breathe {
           0%, 100% {
             box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
@@ -623,11 +678,19 @@ export default function AgentsPage() {
           }
         }
 
+        /* ── Status dot opacity pulse ─────────────────────────────────────── */
         @keyframes livePulse {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.4; }
         }
 
+        /* ── T12: One-shot ripple expanding from the status dot ──────────── */
+        @keyframes agent-ripple {
+          0%   { transform: scale(1);   opacity: 0.3; }
+          100% { transform: scale(2.5); opacity: 0;   }
+        }
+
+        /* ── T12: Thought entry slide-in ─────────────────────────────────── */
         @keyframes thoughtSlideIn {
           from {
             opacity: 0;
@@ -639,16 +702,70 @@ export default function AgentsPage() {
           }
         }
 
+        /* ── T12: Typewriter — width expands left→right, text reveals ────── */
+        @keyframes typewriter {
+          from { width: 0; }
+          to   { width: 100%; }
+        }
+
+        /* ── T12: Flowing dashes on connector line ───────────────────────── */
+        @keyframes connector-flow {
+          0%   { stroke-dashoffset: 12; }
+          100% { stroke-dashoffset: 0;  }
+        }
+
+        /* ── Active agent card breathe ───────────────────────────────────── */
         .agent-card--active {
           animation: agent-breathe 3s ease-in-out infinite;
         }
 
+        /* ── Status dot pulse + ripple ::after ──────────────────────────── */
         .agent-status-dot--active {
           animation: livePulse 2s ease-in-out infinite;
         }
+        .agent-status-dot--active::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          border-radius: 50%;
+          background: var(--success, #22c55e);
+          animation: agent-ripple 2s ease-out infinite;
+        }
 
+        /* ── Thought entry slide-in ──────────────────────────────────────── */
         .thought-entry {
           animation: thoughtSlideIn 0.3s ease-out both;
+        }
+
+        /* ── Typewriter on newest thought entry ──────────────────────────── */
+        .thought-typewriter {
+          overflow: hidden;
+          white-space: nowrap;
+          width: 0;
+          animation: typewriter 0.6s steps(40, end) 0.1s both;
+        }
+
+        /* ── Connector line flowing dashes ───────────────────────────────── */
+        .task-connector-line line {
+          animation: connector-flow 0.6s linear infinite;
+        }
+
+        /* ── T12 + T15: prefers-reduced-motion — disable ALL animations ─── */
+        @media (prefers-reduced-motion: reduce) {
+          .agent-card--active,
+          .agent-status-dot--active,
+          .agent-status-dot--active::after,
+          .thought-entry,
+          .thought-typewriter,
+          .task-connector-line line {
+            animation: none !important;
+          }
+          /* Ensure typewriter text is fully visible without animation */
+          .thought-typewriter {
+            width: auto;
+            overflow: visible;
+            white-space: normal;
+          }
         }
       `}</style>
     </div>

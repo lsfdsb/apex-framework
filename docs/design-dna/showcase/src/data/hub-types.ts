@@ -39,6 +39,15 @@ export type TaskColumn = "backlog" | "todo" | "in-progress" | "review" | "done";
 export type TaskPhase = "P0" | "P1" | "P2";
 export type TaskDRI = "builder" | "qa" | "technical-writer" | "pm";
 
+export interface Iteration {
+  id: number;
+  label: string;
+  startedAt: string;
+  shippedAt?: string;
+  prUrl?: string;
+  feedback?: string;
+}
+
 export interface AcceptanceCriterion {
   text: string;
   met: boolean;
@@ -63,6 +72,8 @@ export interface TaskItem {
   createdAt: string;
   updatedAt: string;
   reviewGates?: ReviewGate[];
+  /** Optional: links this task to an iteration/ship. */
+  iteration?: number;
 }
 
 export interface TaskBoardMeta {
@@ -77,6 +88,7 @@ export interface TaskBoardState {
   projectName: string;
   tasks: TaskItem[];
   meta: TaskBoardMeta;
+  iterations?: Iteration[];
 }
 
 // ── Agent State ────────────────────────────────────────────────────────────────

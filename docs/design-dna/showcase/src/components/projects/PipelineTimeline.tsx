@@ -25,7 +25,7 @@ function PipelineNode({ phase, isLast, isSelected, subCount, completedCount, onC
   const dotColor = allDone ? "var(--success)" : hasWork ? "var(--accent)" : "var(--text-muted)";
 
   return (
-    <div style={{ display: "flex", alignItems: "center", flex: isLast ? "0 0 auto" : 1 }}>
+    <div role="listitem" style={{ display: "flex", alignItems: "center", flex: isLast ? "0 0 auto" : 1 }}>
       <button
         onClick={onClick}
         style={{
@@ -108,9 +108,9 @@ function PipelineNode({ phase, isLast, isSelected, subCount, completedCount, onC
         </div>
       </button>
 
-      {/* Connector line */}
+      {/* Connector line — decorative */}
       {!isLast && (
-        <div style={{
+        <div aria-hidden="true" style={{
           flex: 1, height: 2, minWidth: 12,
           background: allDone && subCount > 0 ? "var(--success)" : "var(--border)",
           marginTop: -20, position: "relative",
@@ -139,7 +139,11 @@ interface PipelineTimelineProps {
 
 export function PipelineTimeline({ selectedPhase, onSelectPhase, subsByPhase }: PipelineTimelineProps) {
   return (
-    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflowX: "auto", scrollbarWidth: "none" }}>
+    <div
+      role="list"
+      aria-label="7-phase APEX pipeline"
+      style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", overflowX: "auto", scrollbarWidth: "none" }}
+    >
       {PIPELINE_PHASES.map((phase, i) => {
         const subs = subsByPhase(phase.id);
         const completed = subs.filter(s => s.status === "shipped").length;

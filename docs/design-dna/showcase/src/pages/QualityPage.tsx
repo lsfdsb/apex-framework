@@ -285,6 +285,7 @@ function PhaseGateCard({
           )}
         </div>
 
+        {/* T15: use color-mix instead of appending hex alpha digits to a CSS var string */}
         <span
           style={{
             fontSize: 11,
@@ -292,8 +293,8 @@ function PhaseGateCard({
             letterSpacing: "0.06em",
             textTransform: "uppercase",
             color,
-            background: `${color}18`,
-            border: `1px solid ${color}40`,
+            background: `color-mix(in srgb, ${color} 12%, transparent)`,
+            border: `1px solid color-mix(in srgb, ${color} 25%, transparent)`,
             borderRadius: 6,
             padding: "3px 10px",
             whiteSpace: "nowrap",
@@ -422,6 +423,10 @@ export default function QualityPage() {
 
       {/* Score + summary row */}
       <div
+        role="region"
+        aria-label="Quality score summary"
+        aria-live="polite"
+        aria-atomic="true"
         style={{
           display: "flex",
           gap: 24,
@@ -532,7 +537,11 @@ export default function QualityPage() {
       </div>
 
       {/* 7 QA phases */}
-      <div style={{ marginBottom: 32 }}>
+      <div
+        role="region"
+        aria-label="Seven verification phases"
+        style={{ marginBottom: 32 }}
+      >
         <p
           style={{
             margin: "0 0 14px",
@@ -545,7 +554,11 @@ export default function QualityPage() {
         >
           Seven Verification Phases
         </p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div
+          aria-live="polite"
+          aria-atomic="false"
+          style={{ display: "flex", flexDirection: "column", gap: 8 }}
+        >
           {quality.phases.map((phase, i) => (
             <PhaseGateCard
               key={phase.name}

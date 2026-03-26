@@ -29,11 +29,16 @@ export function SubProjectCard({ sub, isExpanded, onToggle }: SubProjectCardProp
       transition: "all 0.3s cubic-bezier(0.22, 1, 0.36, 1)",
       boxShadow: isExpanded ? "0 8px 32px rgba(0,0,0,0.2)" : "none",
     }}>
-      <button onClick={onToggle} style={{
-        width: "100%", textAlign: "left", background: "none", border: "none",
-        cursor: "pointer", padding: "16px 20px", color: "var(--text)",
-        display: "flex", flexDirection: "column", gap: 8,
-      }}>
+      <button
+        onClick={onToggle}
+        aria-expanded={isExpanded}
+        aria-label={`${sub.name} — ${isExpanded ? "collapse" : "expand"} details`}
+        style={{
+          width: "100%", textAlign: "left", background: "none", border: "none",
+          cursor: "pointer", padding: "16px 20px", color: "var(--text)",
+          display: "flex", flexDirection: "column", gap: 8,
+        }}
+      >
         {/* Title row */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
