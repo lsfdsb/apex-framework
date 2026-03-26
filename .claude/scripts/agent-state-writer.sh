@@ -23,6 +23,9 @@ fi
 
 # Read hook input from stdin (Claude Code passes JSON via stdin)
 INPUT=$(cat)
+if [ -z "$INPUT" ] || ! echo "$INPUT" | jq . >/dev/null 2>&1; then
+  exit 0
+fi
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 TOOL_INPUT=$(echo "$INPUT" | jq -c '.tool_input // {}' 2>/dev/null || true)
 
@@ -73,7 +76,7 @@ if [ "$TOOL_NAME" = "Agent" ]; then
   # Upsert agent entry (local)
   TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   jq --arg name "$AGENT_NAME" --arg desc "$AGENT_DESC" --arg model "$MODEL" --arg ts "$TIMESTAMP" \
-    'if (.agents | map(.name) | index($name)) then
+    'if ((.agents // []) | map(.name) | index($name)) then
       (.agents[] | select(.name == $name)) |= (
         .status = "active"
         | .currentTask = $desc
@@ -122,7 +125,7 @@ if [ "$TOOL_NAME" = "SendMessage" ]; then
   if [ -n "$AGENT_TO" ] && [ "$AGENT_TO" != "*" ]; then
     TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
     jq --arg name "$AGENT_TO" --arg ts "$TIMESTAMP" \
-      'if (.agents | map(.name) | index($name)) then
+      'if ((.agents // []) | map(.name) | index($name)) then
         (.agents[] | select(.name == $name)).thoughtStream = (
           ((.agents[] | select(.name == $name)).thoughtStream // [])
           + [{"timestamp": $ts, "action": "Received message", "explanation": "Communication from lead"}]

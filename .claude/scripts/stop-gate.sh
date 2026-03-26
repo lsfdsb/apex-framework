@@ -103,7 +103,7 @@ AGENTS_FILE="$PROJECT_DIR/.apex/state/agents.json"
 if [ -f "$AGENTS_FILE" ]; then
   STOP_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
   jq --arg ts "$STOP_TS" \
-    'if (.agents | map(.name) | index("Lead")) then
+    'if ((.agents // []) | map(.name) | index("Lead")) then
       (.agents[] | select(.name == "Lead")) |= (
         .status = "idle"
         | .currentTask = null

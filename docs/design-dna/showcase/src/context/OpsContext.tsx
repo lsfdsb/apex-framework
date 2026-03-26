@@ -23,6 +23,14 @@ import type {
   SessionState,
 } from "../data/hub-types";
 import { MOCK_TASK_BOARD } from "../data/hub-mock";
+import type { Database } from "../lib/supabase/types";
+
+// ── Supabase Row Types ───────────────────────────────────────────────────────
+type SessionRow = Database["public"]["Tables"]["sessions"]["Row"];
+type TaskRow = Database["public"]["Tables"]["tasks"]["Row"];
+type AgentRow = Database["public"]["Tables"]["agents"]["Row"];
+type PipelineRow = Database["public"]["Tables"]["pipeline_phases"]["Row"];
+type QualityRow = Database["public"]["Tables"]["quality_gates"]["Row"];
 
 // ── Default Fallbacks ────────────────────────────────────────────────────────
 
@@ -57,34 +65,34 @@ const DEFAULT_QUALITY: QualityState = {
 // ── Supabase → App State Transformers ────────────────────────────────────────
 // These convert raw Supabase rows into the shapes the OPS pages expect.
 
-function transformSession(rows: Record<string, unknown>[]): SessionState {
+function transformSession(rows: SessionRow[]): SessionState {
   const active = rows.find((r) => r.active === true);
   if (!active) return DEFAULT_SESSION;
   return {
     active: true,
-    startedAt: (active.started_at as string) ?? "",
-    branch: (active.branch as string) ?? "",
-    model: (active.model as string) ?? "opus",
-    contextUsed: (active.context_used as number) ?? 0,
-    contextMax: (active.context_max as number) ?? 1000000,
+    startedAt: active.started_at ?? "",
+    branch: active.branch ?? "",
+    model: active.model ?? "opus",
+    contextUsed: active.context_used ?? 0,
+    contextMax: active.context_max ?? 1000000,
   };
 }
 
-function transformTasks(rows: Record<string, unknown>[]): TaskBoardState {
+function transformTasks(rows: TaskRow[]): TaskBoardState {
   const tasks: TaskItem[] = rows.map((r) => ({
-    id: (r.task_id as string) ?? (r.id as string),
-    title: (r.title as string) ?? "",
-    description: (r.description as string) ?? "",
-    tag: (r.tag as string) ?? null,
-    column: (r.column as string) ?? "todo",
-    phase: (r.phase as string) ?? "P0",
-    dri: (r.dri as string) ?? "builder",
+    id: r.task_id ?? r.id,
+    title: r.title ?? "",
+    description: r.description ?? "",
+    tag: r.tag as TaskItem["tag"],
+    column: (r.column ?? "todo") as TaskItem["column"],
+    phase: (r.phase ?? "P0") as TaskItem["phase"],
+    dri: (r.dri ?? "builder") as TaskItem["dri"],
     acceptanceCriteria: (r.acceptance_criteria as TaskItem["acceptanceCriteria"]) ?? [],
-    files: (r.files as string[]) ?? [],
-    blockedBy: (r.blocked_by as string[]) ?? [],
-    blocks: (r.blocks as string[]) ?? [],
-    createdAt: (r.created_at as string) ?? "",
-    updatedAt: (r.updated_at as string) ?? "",
+    files: r.files ?? [],
+    blockedBy: r.blocked_by ?? [],
+    blocks: r.blocks ?? [],
+    createdAt: r.created_at ?? "",
+    updatedAt: r.updated_at ?? "",
   }));
   const done = tasks.filter((t) => t.column === "done").length;
   return {
@@ -94,43 +102,41 @@ function transformTasks(rows: Record<string, unknown>[]): TaskBoardState {
   };
 }
 
-function transformAgents(rows: Record<string, unknown>[]): AgentState {
+function transformAgents(rows: AgentRow[]): AgentState {
   return {
     agents: rows.map((r) => ({
-      name: (r.name as string) ?? "agent",
+      name: r.name ?? "agent",
       status: (r.status as AgentStatus) ?? "idle",
-      model: (r.model as string) ?? "sonnet",
-      currentTask: r.current_task as string | undefined,
+      model: r.model ?? "sonnet",
+      currentTask: r.current_task ?? undefined,
       thoughtStream: (r.thought_stream as AgentState["agents"][0]["thoughtStream"]) ?? [],
-      startedAt: r.started_at as string | undefined,
-      completedAt: r.completed_at as string | undefined,
+      startedAt: r.started_at ?? undefined,
+      completedAt: r.completed_at ?? undefined,
     })),
   };
 }
 
-function transformPipeline(rows: Record<string, unknown>[]): PipelineState {
-  const sorted = [...rows].sort(
-    (a, b) => ((a.phase_id as number) ?? 0) - ((b.phase_id as number) ?? 0),
-  );
+function transformPipeline(rows: PipelineRow[]): PipelineState {
+  const sorted = [...rows].sort((a, b) => a.phase_id - b.phase_id);
   const current = sorted.findLast((r) => r.status === "active");
   return {
-    currentPhase: (current?.phase_id as number) ?? 0,
+    currentPhase: current?.phase_id ?? 0,
     phases: sorted.map((r) => ({
-      id: (r.phase_id as number) ?? 0,
-      name: (r.name as string) ?? "",
-      status: (r.status as string) ?? "idle",
-      startedAt: r.started_at as string | undefined,
-      completedAt: r.completed_at as string | undefined,
-      gateApproved: r.gate_approved as boolean | undefined,
+      id: r.phase_id,
+      name: r.name,
+      status: r.status ?? "idle",
+      startedAt: r.started_at ?? undefined,
+      completedAt: r.completed_at ?? undefined,
+      gateApproved: r.gate_approved ?? undefined,
     })),
   };
 }
 
-function transformQuality(rows: Record<string, unknown>[]): QualityState {
+function transformQuality(rows: QualityRow[]): QualityState {
   const latest = rows[rows.length - 1];
   if (!latest) return DEFAULT_QUALITY;
   return {
-    score: (latest.score as number) ?? 0,
+    score: latest.score ?? 0,
     phases: (latest.phases as QualityState["phases"]) ?? [],
     additionalGates: (latest.additional_gates as QualityState["additionalGates"]) ?? {
       security: "pending",

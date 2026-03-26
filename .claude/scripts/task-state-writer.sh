@@ -23,6 +23,9 @@ fi
 
 # Read hook input from stdin (Claude Code passes JSON via stdin)
 INPUT=$(cat)
+if [ -z "$INPUT" ] || ! echo "$INPUT" | jq . >/dev/null 2>&1; then
+  exit 0
+fi
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 TOOL_INPUT=$(echo "$INPUT" | jq -c '.tool_input // {}' 2>/dev/null || true)
 # Claude Code uses 'tool_response' (not 'tool_output') in PostToolUse hooks

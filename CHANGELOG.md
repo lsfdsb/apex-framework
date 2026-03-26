@@ -33,8 +33,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **QualityPage color bug** — Fixed broken `${color}18` concatenation, now uses `color-mix()` (#219)
 - **Theme polish** — All hardcoded rgba replaced with `color-mix()` tokens, light mode sidebar tuned (#219)
 
+### Fixed — Audit Bug Fixes (#227)
+- **jq null crash in state writers** — agent-state-writer.sh, pipeline-state-writer.sh, and stop-gate.sh crashed when agents array was null/missing. Added `(.agents // [])` null guard pattern to all jq queries (#227)
+- **TaskDRI type incomplete** — Extended TaskDRI type to include all 7 agent DRI values: lead, designer, builder, qa, project-manager, design-reviewer, watcher (was missing 4 roles) (#227)
+- **migration-v3-ops.sql missing trigger function** — Migration would fail if run independently from v1 or v2. Added `set_updated_at()` function definition to migration for standalone execution (#227)
+- **PostToolUse hooks JSON validation** — Hooks crashed silently on empty or invalid stdin. Added JSON validation before parsing to provide clear error messages (#227)
+- **Hardcoded Tailwind palette colors in OPS** — AgentCard.tsx and AgentsPage.tsx used hardcoded hex colors (#22c55e green, #ef4444 red). Replaced with design tokens var(--success) and var(--destructive) for proper theming (#227)
+
 ### Changed
 - **.gitignore** — Added .claude/plans/ directory to ignore list (#223)
+- **OpsContext transformer types** — Updated to use generated Supabase Database types (SessionRow, TaskRow, AgentRow, etc.) instead of Record<string, unknown> for compile-time type safety (#227)
 
 ### Fixed — Build Configuration (#223)
 - **pre-commit hook false positive** — Fixed incorrect flagging of .toml config files as Shell scripts (#223)
