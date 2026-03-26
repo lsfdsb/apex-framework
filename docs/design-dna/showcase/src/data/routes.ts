@@ -20,8 +20,12 @@ export const OPS_ROUTES: RouteEntry[] = [
 ];
 
 export const NAV_ROUTES: RouteEntry[] = [
-  { path: "/about", label: "About", component: lazy(() => import("../pages/AboutPage")), palette: "saas", category: "hub" },
   { path: "/changelog", label: "Changelog", component: lazy(() => import("../pages/ChangelogPage")), palette: "saas", category: "hub" },
+];
+
+// About page still exists for deep-dive, but not in main nav (content merged into home)
+export const HIDDEN_ROUTES: RouteEntry[] = [
+  { path: "/about", label: "About", component: lazy(() => import("../pages/AboutPage")), palette: "saas", category: "hub" },
 ];
 
 /** @deprecated use OPS_ROUTES */
