@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.22.0
+# ⚔️ APEX Framework v5.23.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.22.0           ║
+  ║         ⚔️  APEX Framework v5.23.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -76,10 +76,10 @@ Requires iTerm2 with **Settings → General → Magic → Enable Python API** en
 ### Verify it worked
 
 ```bash
-.claude/scripts/health-check.sh
+for f in .claude/scripts/*.sh; do bash -n "$f" || exit 1; done && echo "All scripts valid"
 ```
 
-This runs a diagnostic that checks every component. If everything is green, you're ready. If something is yellow, it tells you exactly what to fix and why.
+This validates every shell script in your APEX installation. If everything passes, you're ready. If a script fails, it tells you exactly which one and why.
 
 ### Requirements
 
@@ -445,17 +445,15 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### Latest — v5.22.0+ (2026-03-24)
+### Latest — v5.23.0 (2026-03-25)
 
-- **Safe Hook Processes** — PIDs verified before kill, fully detached dev servers, Rule #21 (#190)
-- **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)
-- **Prettier + Icons** — `.prettierrc` config, Lucide React as standard icon library (#191)
-- **Enhanced Gates** — QA bundle size limit, component duplication check, architecture audit tags (#191)
-- **Production Hooks** — 15 hooks across 12 lifecycle groups (#187, #190, #202)
-- **Design DNA Oscar** — 10 animation keyframes, 5 new primitives, DnaBackground component (#187)
-- **E2E + Performance Tests** — 27 framework tests + hook performance profiler (#187)
-- **Mandalorian Startup Sound** — Session opens with Hero chime + "This is the Way" voice on macOS; disable via `APEX_SOUND=0` (#199)
-- **Hook Recursion Fix** — Fixed infinite recursion in `generate-about.sh` sed wrapper (#199)
+- **Apple EPM Honest Alignment** — CLAUDE.md now distinguishes between Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews), and Aspire (10-to-3-to-1) features (#210)
+- **ANPP vs Rules of the Road** — PM generates ANPP (development plan with milestones). Tech Writer generates Rules of the Road (launch checklist). Clear separation of concerns (#210)
+- **Seven Elements as Real Exit Criteria** — QA agent verifies each element (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration) with concrete questions, not just labels (#210)
+- **Builder Quality-During-Build** — Builders self-verify with demo-first protocol during implementation, not just at pre-completion (#210)
+- **DRI Decision Ownership** — All agents own decisions transparently. Paired Design Review adds brainstorm + production passes (#210)
+- **Tech Writer Rules of the Road Template** — 12-point launch verification matrix in Phase 7 (#210)
+- **Dead Reference Cleanup** — Removed health-check.sh and stale HTML/CSS references; memory audit complete (#210)
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

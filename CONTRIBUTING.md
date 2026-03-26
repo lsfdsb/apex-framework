@@ -16,7 +16,7 @@ All contributors must read [`CLAUDE.md`](CLAUDE.md) before submitting code. It i
 1. Fork the repository
 2. Clone your fork: `git clone https://github.com/YOUR_USERNAME/apex-framework.git`
 3. Install into a test project: `./install.sh`
-4. Run the health check: `bash .claude/scripts/health-check.sh`
+4. Validate scripts: `for f in .claude/scripts/*.sh; do bash -n "$f" || exit 1; done`
 
 ## Development Workflow
 

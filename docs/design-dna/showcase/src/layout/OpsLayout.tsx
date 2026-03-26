@@ -126,7 +126,7 @@ export function OpsLayout({ children }: { children: ReactNode }) {
           {!collapsed && (
             <div className="ops-sidebar-footer">
               <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
-                <span style={{ fontWeight: 600, color: "var(--text-secondary)" }}>v5.22.0</span>
+                <span style={{ fontWeight: 600, color: "var(--text-secondary)" }}>v5.23.0</span>
                 <span style={{ margin: "0 6px" }}>·</span>
                 5 agents online
               </div>

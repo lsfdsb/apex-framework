@@ -2,6 +2,27 @@ import { GitCommit, Tag, ArrowRight } from "lucide-react";
 
 const RELEASES = [
   {
+    version: "5.23.0",
+    date: "2026-03-25",
+    title: "The Honest Audit",
+    changes: [
+      { type: "feat", text: "Apple EPM honest alignment — document what we implement vs. what Apple does" },
+      { type: "feat", text: "ANPP separated from Rules of the Road — two distinct Apple documents" },
+      { type: "feat", text: "Seven Elements as real exit criteria in QA, not decorative labels" },
+      { type: "feat", text: "3→1 design exploration (honest adaptation of Apple's 10→3→1)" },
+      { type: "feat", text: "Builder quality-during-build + demo-first protocol" },
+      { type: "feat", text: "Tech Writer owns Rules of the Road (launch checklist) in Phase 7" },
+      { type: "feat", text: "DRI decision ownership — DRI owns decisions, not just task execution" },
+      { type: "feat", text: "Paired design review — brainstorm pass + production pass" },
+      { type: "changed", text: "CLAUDE.md Apple EPM section with honest alignment tables" },
+      { type: "changed", text: "Pipeline phases mapped to Apple analogs (EVT/DVT/PVT)" },
+      { type: "changed", text: "PM ANPP template uses Apple milestone terminology (M0-M3)" },
+      { type: "fix", text: "Removed dead health-check.sh refs from README, CONTRIBUTING, watcher" },
+      { type: "fix", text: "Fixed stale 'plain HTML/CSS' reference in builder (templates are React)" },
+      { type: "fix", text: "Memory cleanup — deleted 3 stale files, updated index" },
+    ],
+  },
+  {
     version: "5.22.0",
     date: "2026-03-25",
     title: "The Apple Release",

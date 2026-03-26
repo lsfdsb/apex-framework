@@ -7,6 +7,31 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **Apple EPM Honest Alignment** — CLAUDE.md now has honest tables: Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews, paired design), Aspire (10-to-3-to-1, comprehensive analytics) (#210)
+- **ANPP Separated from Rules of the Road** — PM generates ANPP (development plan). Tech Writer generates Rules of the Road (launch checklist). Clear distinction in PM and Tech Writer agents (#210)
+- **Seven Elements Concrete Exit Criteria** — QA agent now has explicit verification questions for each of 7 elements (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration), not just labels (#210)
+- **Builder Quality-During-Build** — Builders self-verify during build via demo-first protocol for complex features, not just pre-completion checklist (#210)
+- **DRI Decision Ownership** — All agents now explicitly own decisions, not just task execution; agent headers clarified (#210)
+- **Paired Design Review Protocol** — Designer does brainstorm pass + production pass (Apple's paired meetings adapted for remote) (#210)
+- **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
+
+### Changed
+- **Version Bump** — 5.22.0 → 5.23.0 across VERSION, README, CLAUDE.md, skills, agents (#210)
+- **Builder Agent Documentation** — Enhanced with quality-during-build guidance and demo-first protocol (#210)
+- **QA Agent Documentation** — Added concrete Seven Elements verification questions (#210)
+- **PM Agent Documentation** — Clarified ANPP scope (milestones/DRI/risk), separated from launch checklist (#210)
+- **Designer Agent (Design Reviewer) Documentation** — Added paired review protocol (brainstorm + production passes) (#210)
+- **All Agent Headers** — Reorganized to show Implement/Adapt/Aspire categories for Apple EPM alignment (#210)
+- **README Agent Roster** — No structural changes; version ref updated (#210)
+
+### Fixed
+- **Dead Reference Cleanup** — Removed health-check.sh references from README, CONTRIBUTING.md, Watcher agent (script deleted in #206) (#210)
+- **Stale HTML/CSS Reference** — Builder agent now correctly says "React/TSX reference implementations", not "HTML/CSS files" (#210)
+- **Memory File Cleanup** — Deleted 3 stale memory files from v5.22 audit; updated MEMORY.md index (#210)
+
+## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
+
+### Added
 - **7-State Pipeline Engine** — Output style rewritten as executable state machine with imperative actions, 3 user gates, autonomous phase transitions (#204)
 - **Design Reviewer Agent** — New agent (Phase 4 Verify + Phase 6 Quality). 10→3→1 design exploration, DNA compliance, screenshot test. The Jony Ive of the team (#206)
 - **Apple EPM Agent Headers** — All 6 agents now have: Pipeline Phase, Apple EPM Role, Seven Elements (Craft/Taste/Diligence/Empathy/Inspiration/Decisiveness/Collaboration), Exit Criteria, DRI Protocol (#208)
