@@ -28,6 +28,7 @@ if [ -z "$INPUT" ] || ! echo "$INPUT" | jq . >/dev/null 2>&1; then
 fi
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 TOOL_INPUT=$(echo "$INPUT" | jq -c '.tool_input // {}' 2>/dev/null || true)
+TOOL_RESPONSE=$(echo "$INPUT" | jq -c '.tool_response // {}' 2>/dev/null || true)
 
 # Only process agent-related tools
 case "$TOOL_NAME" in
@@ -73,30 +74,50 @@ if [ "$TOOL_NAME" = "Agent" ]; then
     *) MODEL="sonnet" ;;
   esac
 
-  # Upsert agent entry (local)
   TIMESTAMP=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-  jq --arg name "$AGENT_NAME" --arg desc "$AGENT_DESC" --arg model "$MODEL" --arg ts "$TIMESTAMP" \
-    'if ((.agents // []) | map(.name) | index($name)) then
-      (.agents[] | select(.name == $name)) |= (
-        .status = "active"
-        | .currentTask = $desc
-        | .model = $model
-        | .startedAt = $ts
-        | .thoughtStream = (
-            (.thoughtStream // []) + [{"timestamp": $ts, "action": $desc, "explanation": "Agent spawned"}]
-          )[-5:]
-      )
-    else
-      .agents += [{
-        "name": $name,
-        "status": "active",
-        "model": $model,
-        "currentTask": $desc,
-        "thoughtStream": [{"timestamp": $ts, "action": $desc, "explanation": "Agent spawned"}],
-        "startedAt": $ts
-      }]
-    end' \
-    "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
+
+  # Detect if this is a SPAWN (no response) or COMPLETION (has response)
+  HAS_RESPONSE=$(echo "$TOOL_RESPONSE" | jq -r 'if . == {} or . == null then "no" else "yes" end' 2>/dev/null || echo "no")
+
+  if [ "$HAS_RESPONSE" = "yes" ]; then
+    # Agent COMPLETED — mark as completed
+    jq --arg name "$AGENT_NAME" --arg ts "$TIMESTAMP" \
+      'if ((.agents // []) | map(.name) | index($name)) then
+        (.agents[] | select(.name == $name)) |= (
+          .status = "completed"
+          | .currentTask = null
+          | .completedAt = $ts
+          | .thoughtStream = (
+              (.thoughtStream // []) + [{"timestamp": $ts, "action": "Task complete", "explanation": "Agent returned results"}]
+            )[-5:]
+        )
+      else . end' \
+      "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
+  else
+    # Agent SPAWNED — mark as active
+    jq --arg name "$AGENT_NAME" --arg desc "$AGENT_DESC" --arg model "$MODEL" --arg ts "$TIMESTAMP" \
+      'if ((.agents // []) | map(.name) | index($name)) then
+        (.agents[] | select(.name == $name)) |= (
+          .status = "active"
+          | .currentTask = $desc
+          | .model = $model
+          | .startedAt = $ts
+          | .thoughtStream = (
+              (.thoughtStream // []) + [{"timestamp": $ts, "action": $desc, "explanation": "Agent spawned"}]
+            )[-5:]
+        )
+      else
+        .agents += [{
+          "name": $name,
+          "status": "active",
+          "model": $model,
+          "currentTask": $desc,
+          "thoughtStream": [{"timestamp": $ts, "action": $desc, "explanation": "Agent spawned"}],
+          "startedAt": $ts
+        }]
+      end' \
+      "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
+  fi
 
   # Supabase dual-write
   if [ -n "$SESSION_ID" ]; then
