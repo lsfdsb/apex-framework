@@ -175,15 +175,8 @@ jobs:
 
           echo "----------------------------"
 
-      # ── Health check ────────────────────────────────────────────────────────
-      - name: Run health-check script
-        run: |
-          if [ -f ".claude/scripts/health-check.sh" ]; then
-            echo "==> Running health-check.sh..."
-            bash .claude/scripts/health-check.sh
-          else
-            echo "health-check.sh not found — skipping."
-          fi
+      # ── Framework-specific checks ───────────────────────────────────────────
+      # health-check.sh was deprecated in v5.23 — shell script syntax validation above is sufficient
 
   # ── Release ──────────────────────────────────────────────────────────────────
   release:

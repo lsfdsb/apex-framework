@@ -104,6 +104,7 @@ For each UI file, verify:
 | Backoffice | `docs/design-dna/templates/BackofficePage.tsx` |
 | Patterns/SVG | `docs/design-dna/templates/PatternShowcase.tsx` |
 | Design tokens | `docs/design-dna/templates/DesignSystemPage.tsx` |
+| Animations/transitions | `docs/design-dna/templates/AnimationsShowcase.tsx` |
 
 ## Message Format
 

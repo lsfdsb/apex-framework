@@ -232,7 +232,7 @@ export default function CRMPipeline() {
       {/* ═══ DEAL DRAWER ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Detalhe</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Tudo em um clique.</h2></div>
+          <div className="reveal"><Label>Detail</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Everything in one click.</h2></div>
           <div className="reveal reveal-delay-1"><DealDrawer /></div>
         </div>
       </section>
@@ -240,7 +240,7 @@ export default function CRMPipeline() {
       {/* ═══ CONTACT PROFILE ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Perfil</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Conheça seu cliente.</h2></div>
+          <div className="reveal"><Label>Profile</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Know your customer.</h2></div>
           <div className="reveal reveal-delay-1"><ContactProfile /></div>
         </div>
       </section>
@@ -248,7 +248,7 @@ export default function CRMPipeline() {
       {/* ═══ LEAD SCORES ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Scoring</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Qualifique seus leads.</h2></div>
+          <div className="reveal"><Label>Scoring</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Qualify your leads.</h2></div>
           <div className="reveal reveal-delay-1"><LeadScoreCards /></div>
         </div>
       </section>
@@ -256,7 +256,7 @@ export default function CRMPipeline() {
       {/* ═══ PIPELINE ANALYTICS ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Análise</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Pipeline em números.</h2></div>
+          <div className="reveal"><Label>Analytics</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Pipeline in numbers.</h2></div>
           <div className="reveal reveal-delay-1"><PipelineAnalytics /></div>
         </div>
       </section>
@@ -272,7 +272,7 @@ export default function CRMPipeline() {
       {/* ═══ TASKS ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Tarefas</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Nenhum follow-up esquecido.</h2></div>
+          <div className="reveal"><Label>Tasks</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>No follow-up forgotten.</h2></div>
           <div className="reveal reveal-delay-1"><TaskList /></div>
         </div>
       </section>
@@ -303,7 +303,7 @@ export default function CRMPipeline() {
       {/* ═══ NOTES ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Notas</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Contexto que se acumula.</h2></div>
+          <div className="reveal"><Label>Notes</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Context that compounds.</h2></div>
           <div className="reveal reveal-delay-1"><NotesPanel /></div>
         </div>
       </section>
@@ -311,7 +311,7 @@ export default function CRMPipeline() {
       {/* ═══ FILTER BAR ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><Label>Filtros</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Encontre qualquer coisa.</h2></div>
+          <div className="reveal"><Label>Filters</Label><h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 48 }}>Find anything.</h2></div>
           <div className="reveal reveal-delay-1"><FilterBar /></div>
         </div>
       </section>

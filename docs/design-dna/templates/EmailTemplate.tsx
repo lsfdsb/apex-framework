@@ -42,8 +42,8 @@ function Frame({ de, assunto, children }: { de: string; assunto: string; childre
         <span style={{ position: "absolute", left: "50%", transform: "translateX(-50%)", fontSize: 11, color: "var(--text-muted)" }}>Caixa de entrada</span>
       </div>
       <div style={{ padding: "12px 20px", borderBottom: "1px solid var(--border)", fontSize: 12, color: "var(--text-muted)" }}>
-        <div style={{ marginBottom: 4 }}><strong style={{ color: "var(--text-secondary)" }}>De:</strong> {de}</div>
-        <div><strong style={{ color: "var(--text-secondary)" }}>Assunto:</strong> {assunto}</div>
+        <div style={{ marginBottom: 4 }}><strong style={{ color: "var(--text-secondary)" }}>From:</strong> {de}</div>
+        <div><strong style={{ color: "var(--text-secondary)" }}>Subject:</strong> {assunto}</div>
       </div>
       <div style={{ background: "var(--bg)" }}><div className="em-inner" style={{ maxWidth: 560, margin: "0 auto", padding: "40px 32px" }}>{children}</div></div>
     </div>
@@ -208,7 +208,7 @@ export default function EmailTemplate() {
             <Frame de="APEX <resumo@apex.io>" assunto="Sua semana na Forma — 17 a 23 de março">
               <Logo /><h1 style={{ fontSize: 24, fontWeight: 600, marginBottom: 16, color: "var(--text)" }}>Sua semana em revisão.</h1>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 24 }}>
-                {[{ v: "14", l: "Tarefas feitas" }, { v: "+23%", l: "Velocidade" }, { v: "3", l: "PRs mergeados" }].map((s) => (
+                {[{ v: "14", l: "Tasks done" }, { v: "+23%", l: "Velocity" }, { v: "3", l: "PRs merged" }].map((s) => (
                   <div key={s.l} style={{ textAlign: "center", padding: 16, background: "var(--bg-elevated)", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--border)" }}>
                     <div style={{ fontSize: 22, fontWeight: 700, color: "var(--text)" }}>{s.v}</div>
                     <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>{s.l}</div>

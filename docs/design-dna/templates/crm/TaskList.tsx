@@ -14,11 +14,11 @@ interface Task {
 }
 
 const defaultTasks: Task[] = [
-  { id: "t1", title: "Follow-up com StyleHouse", context: "Deal: E-commerce Platform · $65k", assignee: { name: "Ana", initials: "AS" }, due: "Atrasado", dueType: "overdue", done: false },
-  { id: "t2", title: "Enviar proposta revisada", context: "Deal: API Integration · $45k", assignee: { name: "Marcus", initials: "MC" }, due: "Hoje", dueType: "today", done: false },
-  { id: "t3", title: "Agendar demo para Lumina", context: "Deal: Brand Identity · $8.5k", assignee: { name: "Julia", initials: "JP" }, due: "Amanhã", dueType: "upcoming", done: false },
+  { id: "t1", title: "Follow-up com StyleHouse", context: "Deal: E-commerce Platform · $65k", assignee: { name: "Ana", initials: "AS" }, due: "Overdue", dueType: "overdue", done: false },
+  { id: "t2", title: "Send revised proposal", context: "Deal: API Integration · $45k", assignee: { name: "Marcus", initials: "MC" }, due: "Today", dueType: "today", done: false },
+  { id: "t3", title: "Schedule demo for Lumina", context: "Deal: Brand Identity · $8.5k", assignee: { name: "Julia", initials: "JP" }, due: "Tomorrow", dueType: "upcoming", done: false },
   { id: "t4", title: "Revisar contrato DataFlow", context: "Deal: Dashboard MVP · $18k", assignee: { name: "Ana", initials: "AS" }, due: "Sex", dueType: "upcoming", done: true },
-  { id: "t5", title: "Ligar para InsightCo — feedback", context: "Deal: Analytics Suite · $52k", assignee: { name: "Marcus", initials: "MC" }, due: "Seg", dueType: "upcoming", done: true },
+  { id: "t5", title: "Call InsightCo — feedback", context: "Deal: Analytics Suite · $52k", assignee: { name: "Marcus", initials: "MC" }, due: "Mon", dueType: "upcoming", done: true },
 ];
 
 const dueBg: Record<string, string> = {

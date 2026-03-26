@@ -143,6 +143,7 @@ Follow these APEX conventions strictly:
 | Backoffice/internal | `docs/design-dna/templates/BackofficePage.tsx` |
 | SVG backgrounds | `docs/design-dna/templates/PatternShowcase.tsx` |
 | Color/typography | `docs/design-dna/templates/DesignSystemPage.tsx` |
+| Animations/transitions | `docs/design-dna/templates/AnimationsShowcase.tsx` |
 
 The Design DNA pages are our **visual quality bar**. Do NOT "interpret" or "be inspired by" the DNA. **Match it.** The DNA is the spec.
 

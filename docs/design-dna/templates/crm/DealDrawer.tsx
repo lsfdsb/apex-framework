@@ -31,7 +31,7 @@ const defaultDeal = {
   owner: { name: "Ana Souza", initials: "AS" },
   source: "Inbound · Website",
   tags: ["enterprise", "e-commerce", "high-value", "Q1 target"],
-  lastActivity: "Proposta enviada por e-mail — aguardando revisão do board. Follow-up agendado para sexta.",
+  lastActivity: "Proposal sent via email — awaiting board review. Follow-up scheduled for Friday.",
 };
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
@@ -98,9 +98,9 @@ export default function DealDrawer({ deal = defaultDeal, onClose }: DealDrawerPr
 
       {/* Actions */}
       <div style={{ padding: "16px 24px", borderTop: "1px solid var(--border)", display: "flex", gap: 8 }}>
-        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", transition: "all .2s", fontFamily: "var(--font-body)" }}>Enviar follow-up</button>
-        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Adicionar nota</button>
-        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Agendar ligação</button>
+        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "var(--accent)", color: "var(--accent-contrast, white)", border: "none", transition: "all .2s", fontFamily: "var(--font-body)" }}>Send follow-up</button>
+        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Add note</button>
+        <button style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", fontSize: 13, fontWeight: 500, cursor: "pointer", background: "none", color: "var(--text-secondary)", border: "1px solid var(--border)", transition: "all .2s", fontFamily: "var(--font-body)" }}>Schedule call</button>
       </div>
     </div>
   );
