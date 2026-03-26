@@ -158,9 +158,11 @@ export const AGENT_ROSTER: AgentDefinition[] = [
 // ── Framework Stats ────────────────────────────────────────────────────────────
 
 export const FRAMEWORK_STATS = [
-  { label: "Agents", value: 6 },
   { label: "Skills", value: 22 },
-  { label: "Hooks", value: 15 },
+  { label: "Agents", value: 7 },
+  { label: "Hooks", value: 14 },
   { label: "Phases", value: 7 },
   { label: "Templates", value: 14 },
+  { label: "Starters", value: 33 },
+  { label: "Palettes", value: 5 },
 ] as const;

@@ -104,11 +104,11 @@ function HubCard({ suffix, description, href, accent, icon, children }: {
 /* ── Metric Row ───────────────────────────────────────────────────────────── */
 
 const METRICS = [
-  { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 203 },
+  { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 215 },
   { icon: <Boxes size={16} />, label: "Components", value: 72 },
-  { icon: <ShieldCheck size={16} />, label: "QA Gates Passed", value: 198 },
-  { icon: <Users size={16} />, label: "Agents Active", value: 6 },
-  { icon: <TrendingUp size={16} />, label: "Versions Shipped", value: 22 },
+  { icon: <ShieldCheck size={16} />, label: "QA Gates Passed", value: 210 },
+  { icon: <Users size={16} />, label: "Agents Active", value: 7 },
+  { icon: <TrendingUp size={16} />, label: "Versions Shipped", value: 23 },
 ] as const;
 
 /* ── Main Page ────────────────────────────────────────────────────────────── */
@@ -138,7 +138,7 @@ export default function HubHome() {
           </span>
         </h1>
         <p style={{ fontSize: 16, color: "var(--text-secondary)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7, fontFamily: "var(--font-body)" }}>
-          Watch AI build software the right way. 7 phases. 6 agents. Quality gates that never sleep.
+          Watch AI build software the right way. 7 phases. 7 agents. Quality gates that never sleep.
         </p>
 
         {/* Live session info bar — only shown when connected */}
@@ -179,16 +179,16 @@ export default function HubHome() {
           accent="var(--accent)"
           icon={<Workflow size={20} />}
         >
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>7 phases · 6 agents · 3 user gates</div>
+          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>7 phases · 7 agents · 3 user gates</div>
         </HubCard>
         <HubCard
           suffix="DNA"
-          description="14 premium UI templates, 33 starters, 39 components. The visual quality bar that every APEX build inherits."
+          description="14 premium UI templates, 33 starters, 5 palettes. The visual quality bar that every APEX build inherits."
           href="/dna"
           accent="var(--success)"
           icon={<Palette size={20} />}
         >
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>14 templates · 33 starters · 65 files</div>
+          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>14 templates · 33 starters · 5 palettes</div>
         </HubCard>
       </div>
 
@@ -204,7 +204,7 @@ export default function HubHome() {
         >
           <Sparkles size={16} style={{ color: "var(--accent)", flexShrink: 0 }} />
           <span style={{ fontSize: 13, color: "var(--text-secondary)", flex: 1 }}>
-            <strong style={{ color: "var(--text)" }}>v5.23</strong> — Apple EPM honest audit, ANPP/RoR separation, Seven Elements as exit criteria
+            <strong style={{ color: "var(--text)" }}>v5.23</strong> — Pipeline autonomy, Supabase RAG live, 5-agent ET Review, Apple EPM strict
           </span>
           <span style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, flexShrink: 0, display: "flex", alignItems: "center", gap: 4 }}>
             Changelog <ArrowRight size={12} />
