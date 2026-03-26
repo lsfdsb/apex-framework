@@ -89,6 +89,22 @@ if [ "$PHASE" -gt 0 ]; then
      (.phases[] | select(.id < $phase and .status == "active")) |= (.status = "complete" | .completedAt = $ts)' \
     "$PIPELINE_FILE" > "${PIPELINE_FILE}.tmp" && mv "${PIPELINE_FILE}.tmp" "$PIPELINE_FILE" 2>/dev/null || true
 
+  # ── Keep Lead agent active during tool use ──────────────────────────────────
+  AGENTS_FILE="$STATE_DIR/agents.json"
+  if [ -f "$AGENTS_FILE" ]; then
+    jq --arg ts "$TIMESTAMP" --arg phase "$PHASE_NAME" \
+      'if (.agents | map(.name) | index("Lead")) then
+        (.agents[] | select(.name == "Lead")) |= (
+          .status = "active"
+          | .currentTask = ("Phase: " + $phase)
+          | .thoughtStream = (
+              (.thoughtStream // []) + [{"timestamp": $ts, "action": ("Phase: " + $phase), "explanation": "Lead working"}]
+            )[-5:]
+        )
+      else . end' \
+      "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
+  fi
+
   # ── Supabase dual-write (non-blocking) ──────────────────────────────────────
   # Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
   # apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.

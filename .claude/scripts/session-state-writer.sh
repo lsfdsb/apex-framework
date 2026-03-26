@@ -13,6 +13,13 @@ SESSION_FILE="$STATE_DIR/session.json"
 
 mkdir -p "$STATE_DIR"
 
+# Reset agents on new session — previous session's agents are stale.
+# Lead is always active during a session.
+LEAD_TS=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
+cat > "$STATE_DIR/agents.json" <<ENDJSON
+{"agents":[{"name":"Lead","status":"active","model":"opus","currentTask":"Session started","thoughtStream":[{"timestamp":"${LEAD_TS}","action":"Session started","explanation":"Lead agent initialized"}],"startedAt":"${LEAD_TS}"}]}
+ENDJSON
+
 # Get branch name
 BRANCH=$(cd "$PROJECT_DIR" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 
