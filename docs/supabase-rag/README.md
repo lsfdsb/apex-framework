@@ -150,28 +150,50 @@ Learning types: `error`, `correction`, `success`, `pattern`.
 
 ## Semantic Search with Embeddings
 
-The migration creates vector columns (`embedding vector(1536)`) and HNSW indexes. To populate embeddings:
+The full RAG pipeline: **sync** (data) → **embed** (vectors) → **query** (search).
 
-1. Generate embeddings using the OpenAI Embeddings API (`text-embedding-3-small`, 1536 dimensions).
-2. Update the `embedding` column via the REST API:
-
-```bash
-curl -s -X PATCH "$SUPABASE_URL/rest/v1/components?name=eq.builder&type=eq.agent" \
-  -H "apikey: $SUPABASE_SECRET_KEY" \
-  -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
-  -H "Content-Type: application/json" \
-  -d "{\"embedding\": [0.123, 0.456, ...]}"
-```
-
-3. Call the `match_components` RPC for vector similarity search:
+### Step 1: Generate Embeddings
 
 ```bash
-curl -s -X POST "$SUPABASE_URL/rest/v1/rpc/match_components" \
-  -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
-  -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
-  -H "Content-Type: application/json" \
-  -d "{\"query_embedding\": [...], \"match_threshold\": 0.7, \"match_count\": 5}"
+# Requires OPENAI_API_KEY (text-embedding-3-small, $0.02/MTok)
+export OPENAI_API_KEY="sk-..."
+
+# Embed all components that don't have embeddings yet
+bash docs/supabase-rag/embed.sh
+
+# Force re-embed everything
+bash docs/supabase-rag/embed.sh --all
+
+# Also embed session learnings
+bash docs/supabase-rag/embed.sh --learnings
+
+# Dry run (show what would be embedded)
+bash docs/supabase-rag/embed.sh --dry-run
 ```
+
+### Step 2: Query with Semantic Search
+
+When embeddings exist and `OPENAI_API_KEY` is set, `query.sh search` automatically uses vector similarity:
+
+```bash
+# This will use semantic search (vectors) if available, text search (ilike) as fallback
+bash docs/supabase-rag/query.sh search "how does the pipeline work"
+```
+
+### How It Works
+
+1. `embed.sh` reads all components from Supabase, generates 1536-dim embeddings via OpenAI, writes them back
+2. `query.sh search` generates an embedding for your query, calls `match_components()` RPC for cosine similarity
+3. Results ranked by similarity score (0-100%)
+4. Falls back to text `ilike` if no embeddings or no OpenAI key
+
+### Without OpenAI
+
+If you don't have an OpenAI key, everything still works — `query.sh` uses text search (`ilike`) instead of vector search. Text search is good for exact keyword matches. Vector search adds "find things that MEAN the same thing" capability.
+
+### Session Learnings
+
+Session learnings are automatically persisted to Supabase when the session ends (via `session-learner.sh`). This happens in the background — no impact on session shutdown time. Requires `SUPABASE_URL` and `SUPABASE_SECRET_KEY` in environment.
 
 ---
 

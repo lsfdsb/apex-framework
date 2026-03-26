@@ -122,4 +122,52 @@ REPORT_EOF
 # Keep only last 30 session logs (prevent unbounded growth)
 ls -t "$LOG_DIR"/session-*.md 2>/dev/null | tail -n +31 | xargs rm -f 2>/dev/null
 
+# ── Supabase RAG Persistence ─────────────────────────────────────────────────
+# If Supabase is configured, persist learnings for cross-session RAG retrieval.
+# Gracefully skip if not configured — local reports are always written above.
+
+if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ] && command -v curl &>/dev/null; then
+  SUPABASE_URL="${SUPABASE_URL%/}"
+  REST_URL="$SUPABASE_URL/rest/v1"
+
+  # Determine learning type based on content
+  if [ "$TOOL_ERRORS" -gt 5 ]; then
+    LEARNING_TYPE="error"
+  elif [ -n "$CORRECTIONS" ]; then
+    LEARNING_TYPE="correction"
+  elif [ -n "$BLOCKS" ]; then
+    LEARNING_TYPE="pattern"
+  else
+    LEARNING_TYPE="success"
+  fi
+
+  # Build content summary (compact, for embedding later)
+  CONTENT="Session $SESSION_ID ($TIMESTAMP) on branch $BRANCH."
+  [ "$TOOL_ERRORS" -gt 0 ] && CONTENT="$CONTENT Errors: $TOOL_ERRORS."
+  [ "$HOOK_BLOCKS" -gt 0 ] && CONTENT="$CONTENT Hook blocks: $HOOK_BLOCKS."
+  [ -n "$CORRECTIONS" ] && CONTENT="$CONTENT User corrections: $(echo "$CORRECTIONS" | head -3 | tr '\n' '; ')"
+  [ -n "$ERRORS" ] && CONTENT="$CONTENT Top errors: $(echo "$ERRORS" | head -3 | tr '\n' '; ')"
+
+  # Escape content for JSON
+  CONTENT_JSON=$(printf '%s' "$CONTENT" | jq -Rs '.')
+
+  PAYLOAD=$(cat <<JSON
+{
+  "session_id": "$SESSION_ID",
+  "learning_type": "$LEARNING_TYPE",
+  "content": $CONTENT_JSON
+}
+JSON
+)
+
+  # Fire-and-forget POST — don't block session end on network
+  curl -sf -o /dev/null \
+    -X POST "$REST_URL/session_learnings" \
+    -H "apikey: $SUPABASE_SECRET_KEY" \
+    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "Content-Type: application/json" \
+    -H "Prefer: return=minimal" \
+    -d "$PAYLOAD" 2>/dev/null &
+fi
+
 exit 0

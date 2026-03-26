@@ -54,9 +54,54 @@ rest_get() {
 }
 
 # ── Subcommand: search ────────────────────────────────────────────────────────
-# Semantic search across components.
-# Without embeddings available via REST, this does text-based ilike search.
-# Full vector search requires calling the match_components() RPC via PostgREST.
+# Search across components. Uses vector similarity when embeddings + OpenAI key
+# are available. Falls back to text ilike, then to local grep.
+
+_vector_search() {
+  local query="$1"
+
+  # Generate embedding for query
+  local payload
+  payload=$(jq -n --arg input "$query" --arg model "text-embedding-3-small" \
+    '{input: $input, model: $model}')
+
+  local embedding
+  embedding=$(curl -sf \
+    "https://api.openai.com/v1/embeddings" \
+    -H "Authorization: Bearer $OPENAI_API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$payload" 2>/dev/null | jq -c '.data[0].embedding' 2>/dev/null)
+
+  if [[ -z "$embedding" ]] || [[ "$embedding" == "null" ]]; then
+    return 1
+  fi
+
+  # Call match_components RPC via PostgREST
+  local rpc_payload
+  rpc_payload=$(jq -n \
+    --argjson query_embedding "$embedding" \
+    --argjson match_threshold 0.5 \
+    --argjson match_count 10 \
+    '{query_embedding: $query_embedding, match_threshold: $match_threshold, match_count: $match_count}')
+
+  local results
+  results=$(curl -sf \
+    "$REST_URL/rpc/match_components" \
+    -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+    -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$rpc_payload" 2>/dev/null || echo "[]")
+
+  local count
+  count="$(echo "$results" | jq 'length')"
+  if [[ "$count" -eq 0 ]]; then
+    return 1
+  fi
+
+  echo "$results" | jq -r '.[] | "[\(.type)] \(.name) (similarity: \(.similarity | . * 100 | floor)%)\n  \(.description // "(no description)")\n"'
+  echo "$count result(s) via semantic search."
+  return 0
+}
 
 cmd_search() {
   local query="${1:-}"
@@ -66,10 +111,21 @@ cmd_search() {
   fi
 
   if has_supabase && require_jq 2>/dev/null; then
+    # Try vector search first (requires OPENAI_API_KEY + embeddings in DB)
+    if [[ -n "${OPENAI_API_KEY:-}" ]]; then
+      echo "Searching components (semantic): \"$query\""
+      echo ""
+      if _vector_search "$query"; then
+        return
+      fi
+      echo "Vector search returned no results — falling back to text search..."
+      echo ""
+    fi
+
+    # Text search fallback
     echo "Searching components (text match): \"$query\""
     echo ""
 
-    # URL-encode the query for ilike
     local encoded_query
     encoded_query="$(python3 -c "import urllib.parse,sys; print(urllib.parse.quote(sys.argv[1]))" "$query" 2>/dev/null || echo "$query")"
 
