@@ -2,8 +2,16 @@
  * QualityPage — APEX quality gate dashboard.
  * Shows a score circle, 7 QA phases, and additional gates (security, a11y, CX).
  * Falls back to demo data when no live session is active.
+ *
+ * Upgrades (T9):
+ * - Animated score ring: CSS @keyframes score-fill from 0 to actual score on mount
+ * - Color-coded score tiers: green ≥90, yellow ≥70, red <70
+ * - Phase timing: shows duration when startedAt + completedAt are present
+ * - Running phase shimmer animation on card background
+ * - Live vs demo indicator via LiveBadge (already present)
  */
 
+import { useEffect, useRef } from "react";
 import { useOps } from "../context/OpsContext";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import type { GateStatus, AdditionalGateStatus, QualityState } from "../data/hub-types";
@@ -28,7 +36,22 @@ const DEMO_QUALITY: QualityState = {
   },
 };
 
-// ── Score circle (SVG arc) ────────────────────────────────────────────────────
+// ── Duration formatter ────────────────────────────────────────────────────────
+
+function formatDuration(startedAt?: string, completedAt?: string): string | null {
+  if (!startedAt || !completedAt) return null;
+  const start = new Date(startedAt).getTime();
+  const end = new Date(completedAt).getTime();
+  if (isNaN(start) || isNaN(end) || end < start) return null;
+  const ms = end - start;
+  if (ms < 1000) return `${ms}ms`;
+  if (ms < 60_000) return `${(ms / 1000).toFixed(1)}s`;
+  const mins = Math.floor(ms / 60_000);
+  const secs = Math.floor((ms % 60_000) / 1000);
+  return `${mins}m ${secs}s`;
+}
+
+// ── Score circle (SVG arc) — animated on mount ────────────────────────────────
 
 function ScoreCircle({ score }: { score: number }) {
   const r = 54;
@@ -37,11 +60,29 @@ function ScoreCircle({ score }: { score: number }) {
   const circumference = 2 * Math.PI * r;
   const filled = (score / 100) * circumference;
   const gap = circumference - filled;
+  // Arc starts at top (−π/2), offset by circumference/4 so dashoffset positions correctly
+  const dashOffset = circumference / 4;
+  // Animation target offset: full circumference = empty, dashOffset = fully filled to score
+  const targetOffset = circumference - filled + dashOffset;
 
   const color =
     score >= 90 ? "var(--success, #22c55e)"
     : score >= 70 ? "var(--warning, #f59e0b)"
     : "var(--destructive, #ef4444)";
+
+  // Use a unique animation name per score so re-mounts replay correctly
+  const animName = `score-fill-${score}`;
+
+  const arcRef = useRef<SVGCircleElement>(null);
+
+  // Force animation replay when score changes
+  useEffect(() => {
+    const el = arcRef.current;
+    if (!el) return;
+    el.style.animation = "none";
+    void el.getBoundingClientRect(); // flush
+    el.style.animation = `${animName} 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards`;
+  }, [score, animName]);
 
   return (
     <div
@@ -59,6 +100,7 @@ function ScoreCircle({ score }: { score: number }) {
         aria-label={`Quality score: ${score} out of 100`}
         role="img"
       >
+        {/* Keyframes injected inline via <style> in parent; arc refs animName */}
         {/* Track */}
         <circle
           cx={cx}
@@ -68,8 +110,9 @@ function ScoreCircle({ score }: { score: number }) {
           stroke="var(--border)"
           strokeWidth={10}
         />
-        {/* Filled arc */}
+        {/* Filled arc — animates from empty to score on mount */}
         <circle
+          ref={arcRef}
           cx={cx}
           cy={cy}
           r={r}
@@ -78,8 +121,10 @@ function ScoreCircle({ score }: { score: number }) {
           strokeWidth={10}
           strokeLinecap="round"
           strokeDasharray={`${filled} ${gap}`}
-          strokeDashoffset={circumference / 4}
-          style={{ transition: "stroke-dasharray 1s cubic-bezier(0.22, 1, 0.36, 1)" }}
+          strokeDashoffset={circumference + dashOffset}
+          style={{
+            animation: `${animName} 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards`,
+          }}
         />
         {/* Score text */}
         <text
@@ -116,6 +161,13 @@ function ScoreCircle({ score }: { score: number }) {
       >
         {score >= 90 ? "Excellent" : score >= 70 ? "Acceptable" : "Needs Work"}
       </span>
+      {/* Dynamic keyframes for this score value */}
+      <style>{`
+        @keyframes ${animName} {
+          from { stroke-dashoffset: ${circumference + dashOffset}; }
+          to   { stroke-dashoffset: ${targetOffset}; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -147,14 +199,19 @@ function PhaseGateCard({
   status,
   details,
   index,
+  startedAt,
+  completedAt,
 }: {
   name: string;
   status: GateStatus;
   details?: string;
   index: number;
+  startedAt?: string;
+  completedAt?: string;
 }) {
   const color = gateColor(status);
   const isRunning = status === "running";
+  const duration = formatDuration(startedAt, completedAt);
 
   return (
     <div
@@ -165,6 +222,7 @@ function PhaseGateCard({
         padding: "16px 18px",
         position: "relative",
         overflow: "hidden",
+        animation: isRunning ? "gate-shimmer 1.8s ease-in-out infinite" : "none",
       }}
     >
       {/* Left accent */}
@@ -200,6 +258,17 @@ function PhaseGateCard({
             >
               {name}
             </span>
+            {duration && (
+              <span
+                style={{
+                  fontSize: 10,
+                  color: "var(--text-muted)",
+                  fontFamily: "'JetBrains Mono', monospace",
+                }}
+              >
+                {duration}
+              </span>
+            )}
           </div>
           {details && (
             <p
@@ -484,6 +553,8 @@ export default function QualityPage() {
               status={phase.status}
               details={phase.details}
               index={i}
+              startedAt={phase.startedAt}
+              completedAt={phase.completedAt}
             />
           ))}
           {quality.phases.length === 0 && (
@@ -567,6 +638,10 @@ export default function QualityPage() {
         @keyframes livePulse {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.4; }
+        }
+        @keyframes gate-shimmer {
+          0%, 100% { opacity: 1; }
+          50%       { opacity: 0.7; }
         }
       `}</style>
     </div>

@@ -83,11 +83,13 @@ function FileCountIcon() {
 
 interface TaskCardProps {
   task: TaskItem;
+  /** Auto-expand the card on mount (used for ?task= deep-link navigation). */
+  autoExpand?: boolean;
 }
 
 /** Kanban card for the Apple EPM task board. Click to expand TaskDetail. */
-export function TaskCard({ task }: TaskCardProps) {
-  const [expanded, setExpanded] = useState(false);
+export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
+  const [expanded, setExpanded] = useState(autoExpand);
 
   const phase = PHASE_COLOR[task.phase];
   const metCount = task.acceptanceCriteria.filter((c) => c.met).length;
