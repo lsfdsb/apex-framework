@@ -16,6 +16,7 @@ export const OPS_ROUTES: RouteEntry[] = [
   { path: "/tasks", label: "Tasks", component: lazy(() => import("../pages/TaskBoardPage")), palette: "saas", category: "hub" },
   { path: "/pipeline", label: "Pipeline", component: lazy(() => import("../pages/PipelinePage")), palette: "saas", category: "hub" },
   { path: "/agents", label: "Agents", component: lazy(() => import("../pages/AgentsPage")), palette: "saas", category: "hub" },
+  { path: "/canvas", label: "Canvas", component: lazy(() => import("../pages/CanvasPage")), palette: "saas", category: "hub" },
   { path: "/quality", label: "Quality", component: lazy(() => import("../pages/QualityPage")), palette: "saas", category: "hub" },
 ];
 
