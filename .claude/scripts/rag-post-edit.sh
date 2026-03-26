@@ -9,7 +9,8 @@ set -uo pipefail
 
 # Skip if Supabase not configured
 [[ -z "${SUPABASE_URL:-}" ]] && exit 0
-[[ -z "${SUPABASE_SECRET_KEY:-}" ]] && exit 0
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+[[ -z "$SB_KEY" ]] && exit 0
 
 INPUT=$(cat 2>/dev/null || true)
 [[ -z "$INPUT" ]] && exit 0
