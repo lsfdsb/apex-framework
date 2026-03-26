@@ -96,6 +96,15 @@ fi
 # ── Run project init ──
 if [ -d ".git" ]; then
   "$APEX_DIR/apex-init-project.sh"
+
+  # RAG sync: if Supabase is configured, sync framework knowledge
+  RAG_SYNC="./docs/supabase-rag/rag-sync.sh"
+  if [ -f "$RAG_SYNC" ] && [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+    echo ""
+    echo "🧠 Syncing RAG knowledge base..."
+    nohup bash "$RAG_SYNC" --full --quiet > /dev/null 2>&1 < /dev/null &
+    echo "   RAG sync started in background."
+  fi
 else
   echo "⚠️  Not in a git repository. Please cd into your project first:"
   echo "   cd my-project"

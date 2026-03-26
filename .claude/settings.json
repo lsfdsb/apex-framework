@@ -138,6 +138,12 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/generate-about.sh",
             "timeout": 10,
             "statusMessage": "Generating about skill..."
+          },
+          {
+            "type": "command",
+            "command": "nohup bash $CLAUDE_PROJECT_DIR/docs/supabase-rag/rag-sync.sh --changed --quiet > /dev/null 2>&1 < /dev/null &",
+            "timeout": 5,
+            "statusMessage": "Syncing RAG knowledge base..."
           }
         ]
       }
@@ -217,6 +223,12 @@
             "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/validate-framework.sh",
             "timeout": 5,
             "statusMessage": "Validating framework integrity..."
+          },
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/rag-post-edit.sh",
+            "timeout": 5,
+            "statusMessage": "Updating RAG index..."
           }
         ]
       },
