@@ -41,26 +41,61 @@ create index if not exists session_learnings_embedding_hnsw
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- Step 2: Add full-text search columns to existing tables
+-- Note: to_tsvector() is STABLE, not IMMUTABLE — cannot use generated columns.
+-- We use triggers instead (standard Supabase pattern).
 -- ══════════════════════════════════════════════════════════════════════════════
 
 -- Components: weighted FTS (name=A, description=B)
 alter table public.components
-  add column if not exists fts tsvector generated always as (
-    setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
-    setweight(to_tsvector('english', coalesce(description, '')), 'B')
-  ) stored;
+  add column if not exists fts tsvector;
 
 create index if not exists components_fts_idx
   on public.components using gin (fts);
 
+create or replace function public.components_fts_update() returns trigger
+language plpgsql as $$
+begin
+  new.fts :=
+    setweight(to_tsvector('english', coalesce(new.name, '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(new.description, '')), 'B');
+  return new;
+end;
+$$;
+
+drop trigger if exists components_fts_trigger on public.components;
+create trigger components_fts_trigger
+  before insert or update on public.components
+  for each row execute function public.components_fts_update();
+
+-- Backfill existing rows
+update public.components set fts =
+  setweight(to_tsvector('english', coalesce(name, '')), 'A') ||
+  setweight(to_tsvector('english', coalesce(description, '')), 'B');
+
 -- Session learnings: FTS on content
 alter table public.session_learnings
-  add column if not exists fts tsvector generated always as (
-    to_tsvector('english', coalesce(content, ''))
-  ) stored;
+  add column if not exists fts tsvector;
 
 create index if not exists session_learnings_fts_idx
   on public.session_learnings using gin (fts);
+
+create or replace function public.session_learnings_fts_update() returns trigger
+language plpgsql as $$
+begin
+  new.fts := to_tsvector('english', coalesce(new.content, ''));
+  return new;
+end;
+$$;
+
+drop trigger if exists session_learnings_fts_trigger on public.session_learnings;
+create trigger session_learnings_fts_trigger
+  before insert or update on public.session_learnings
+  for each row execute function public.session_learnings_fts_update();
+
+-- Backfill existing rows
+update public.session_learnings set fts =
+  to_tsvector('english', coalesce(content, ''))
+where fts is null;
 
 -- ══════════════════════════════════════════════════════════════════════════════
 -- Step 3: Create chunks table
@@ -75,16 +110,29 @@ create table if not exists public.chunks (
   content       text not null,
   metadata      jsonb not null default '{}',
   token_count   int,
-  fts           tsvector generated always as (
-    setweight(to_tsvector('english', coalesce(array_to_string(heading_path, ' '), '')), 'A') ||
-    setweight(to_tsvector('english', coalesce(content, '')), 'B')
-  ) stored,
+  fts           tsvector,
   embedding     vector(384),
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now(),
 
   constraint chunks_unique unique (component_type, component_name, chunk_index)
 );
+
+-- FTS trigger for chunks
+create or replace function public.chunks_fts_update() returns trigger
+language plpgsql as $$
+begin
+  new.fts :=
+    setweight(to_tsvector('english', coalesce(array_to_string(new.heading_path, ' '), '')), 'A') ||
+    setweight(to_tsvector('english', coalesce(new.content, '')), 'B');
+  return new;
+end;
+$$;
+
+drop trigger if exists chunks_fts_trigger on public.chunks;
+create trigger chunks_fts_trigger
+  before insert or update on public.chunks
+  for each row execute function public.chunks_fts_update();
 
 -- Indexes
 create index if not exists chunks_fts_idx
@@ -104,12 +152,14 @@ create or replace trigger chunks_updated_at
 -- RLS
 alter table public.chunks enable row level security;
 
-create policy if not exists "chunks_read_anon"
+drop policy if exists "chunks_read_anon" on public.chunks;
+create policy "chunks_read_anon"
   on public.chunks for select
   to anon, authenticated
   using (true);
 
-create policy if not exists "chunks_write_service"
+drop policy if exists "chunks_write_service" on public.chunks;
+create policy "chunks_write_service"
   on public.chunks for all
   to service_role
   using (true)
