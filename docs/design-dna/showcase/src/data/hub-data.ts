@@ -18,6 +18,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/prd"],
     teachingPoint: "Every great product starts with a spec. A PRD forces you to think about what you're building and why — before writing a single line of code.",
     simulationDuration: 2000,
+    appleOrigin: "APEX addition — inspired by Apple's product briefs",
   },
   {
     id: 2,
@@ -29,6 +30,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/architecture"],
     teachingPoint: "Architecture is the skeleton of your app. Get it wrong and every feature fights the structure. Get it right and features fall into place.",
     simulationDuration: 2000,
+    appleOrigin: "APEX addition — architecture reviews happen within Apple's ANPP",
   },
   {
     id: 3,
@@ -40,6 +42,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/teams"],
     teachingPoint: "Apple's EPM methodology: no story points, no sprints. Concrete tasks with acceptance criteria, a single DRI (Directly Responsible Individual), and phased delivery — P0 ships first.",
     simulationDuration: 1500,
+    appleOrigin: "Grounded in Apple's ANPP (New Product Process)",
   },
   {
     id: 4,
@@ -51,6 +54,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/verify-api", "/verify-lib"],
     teachingPoint: "APIs change. SDKs deprecate keys. Blog posts go stale. APEX verifies every external dependency against live official documentation before a single integration line is written.",
     simulationDuration: 1000,
+    appleOrigin: "Inspired by Apple's 10→3→1 design convergence",
   },
   {
     id: 5,
@@ -62,6 +66,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/teams"],
     teachingPoint: "Multi-agent building means specialization. The Builder writes code. The Watcher catches errors in real-time. They form a continuous feedback loop — the Breathing Loop.",
     simulationDuration: 3000,
+    appleOrigin: "Maps to Apple's EVT→DVT→PVT validation cycle",
   },
   {
     id: 6,
@@ -73,6 +78,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/qa", "/security", "/a11y", "/cx-review"],
     teachingPoint: "Quality is not a phase you bolt on at the end — it's 7 phases of verification. Dependencies, code quality, logic, design, performance, security, and polish. If any gate fails, auto-fix and re-run.",
     simulationDuration: 2000,
+    appleOrigin: "Maps to Apple's Seven Elements exit criteria",
   },
   {
     id: 7,
@@ -84,6 +90,7 @@ export const PIPELINE_PHASES: PipelinePhaseDefinition[] = [
     skills: ["/ship", "/changelog"],
     teachingPoint: "Shipping is not pushing code — it's a ceremony. The Technical Writer updates CHANGELOG and README. A PR is created with full context. The user reviews and says 'merge.' Only then does it ship.",
     simulationDuration: 1500,
+    appleOrigin: "Grounded in Apple's Rules of the Road",
   },
 ];
 
