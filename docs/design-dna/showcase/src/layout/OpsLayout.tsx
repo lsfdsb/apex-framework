@@ -34,6 +34,11 @@ const opsStyles = `
   background:color-mix(in srgb, var(--bg-elevated) 88%, transparent);
   border:1px solid color-mix(in srgb, var(--text-muted) 15%, transparent);
   box-shadow:0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)}
+[data-theme="light"] .ops-sidebar{
+  backdrop-filter:blur(16px) saturate(1.4);-webkit-backdrop-filter:blur(16px) saturate(1.4);
+  background:color-mix(in srgb, var(--bg-elevated) 94%, transparent);
+  border-color:color-mix(in srgb, var(--text-muted) 22%, transparent);
+  box-shadow:0 2px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(0,0,0,0.04)}
 .ops-sidebar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:48px;
   background:linear-gradient(to bottom, transparent, color-mix(in srgb, var(--bg-elevated) 40%, transparent));
   border-radius:0 0 14px 14px;pointer-events:none}
@@ -209,17 +214,19 @@ export function OpsLayout({ children }: { children: ReactNode }) {
 
           {/* Footer */}
           {collapsed ? (
-            <div className="ops-sidebar-footer-collapsed">
+            <div className="ops-sidebar-footer-collapsed" aria-live="polite" aria-atomic="true">
               <div
                 className={`ops-agent-dot ${hasActiveAgents || isLive ? "active" : "idle"}`}
                 title={isLive ? `${agentLabel} online` : "No live agents"}
+                aria-label={isLive ? `${agentLabel} online` : "No live agents"}
+                role="status"
               />
               <div style={{ fontSize: 9, color: "var(--text-muted)", writingMode: "vertical-rl", letterSpacing: "0.05em" }}>
                 v5.23
               </div>
             </div>
           ) : (
-            <div className="ops-sidebar-footer">
+            <div className="ops-sidebar-footer" aria-live="polite" aria-atomic="true">
               <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
                 <span style={{ fontWeight: 600, color: "var(--text-secondary)" }}>v5.23.0</span>
                 <span style={{ margin: "0 6px" }}>·</span>
@@ -233,6 +240,7 @@ export function OpsLayout({ children }: { children: ReactNode }) {
         <div
           className={`ops-mobile-overlay${mobileOpen ? " open" : ""}`}
           onClick={() => setMobileOpen(false)}
+          aria-hidden="true"
         />
 
         {/* Mobile toggle */}

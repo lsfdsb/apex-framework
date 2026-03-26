@@ -6,6 +6,7 @@
 
 import type { TaskBoardState } from "./hub-types";
 
+
 export const MOCK_TASK_BOARD: TaskBoardState = {
   projectName: "APEX Visual Pipeline HUB",
   tasks: [
@@ -17,6 +18,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "5 state interfaces matching PRD specs", met: true },
         { text: "PIPELINE_PHASES with 7 phases", met: true },
@@ -36,6 +38,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "OPS_ROUTES with 5 entries (Projects, Pipeline, Tasks, Agents, Quality)", met: true },
         { text: "NAV_ROUTES with About + Changelog", met: true },
@@ -55,6 +58,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "Two hero cards: APEX OPS and APEX DNA with Lucide icons", met: true },
         { text: "Dynamic metrics with CountUp animation", met: true },
@@ -74,6 +78,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "7 phases render as connected nodes", met: true },
         { text: "Gate phases visually distinct with lock icon", met: true },
@@ -93,6 +98,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "Page title in Instrument Serif italic", met: true },
         { text: "PipelineFlow renders all 7 phases", met: true },
@@ -112,6 +118,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "5 columns: Backlog, To Do, In Progress, Review, Done", met: true },
         { text: "PhaseFilter works (All/P0/P1/P2)", met: true },
@@ -131,6 +138,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P0",
       dri: "builder",
+      iteration: 1,
       acceptanceCriteria: [
         { text: "6 agent cards with Lucide icons and model badges", met: true },
         { text: "Breathing Loop SVG with animated arrows", met: true },
@@ -152,6 +160,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P1",
       dri: "builder",
+      iteration: 2,
       acceptanceCriteria: [
         { text: "Hook polls every 2s with JSON.stringify comparison", met: true },
         { text: "Returns { data, isLive, lastUpdated }", met: true },
@@ -171,6 +180,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P1",
       dri: "builder",
+      iteration: 2,
       acceptanceCriteria: [
         { text: "LiveBadge shows green pulse when live, gray when demo", met: true },
         { text: "PipelinePage uses live pipeline.json when available", met: true },
@@ -190,6 +200,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P1",
       dri: "builder",
+      iteration: 2,
       acceptanceCriteria: [
         { text: "GatePhase: expandable card with checklist", met: true },
         { text: "QualityScore: circular accent ring with score number", met: true },
@@ -209,6 +220,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P1",
       dri: "builder",
+      iteration: 2,
       acceptanceCriteria: [
         { text: "TeachingTooltip: glass hover tooltip with 300ms delay", met: true },
         { text: "WhyButton: '?' circle that toggles explanation panel", met: true },
@@ -230,6 +242,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "done",
       phase: "P2",
       dri: "builder",
+      iteration: 3,
       acceptanceCriteria: [
         { text: "Simulate button triggers sequential phase animation", met: true },
         { text: "Gate phases pause briefly before completing", met: true },
@@ -248,6 +261,7 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
       column: "review",
       phase: "P2",
       dri: "qa",
+      iteration: 3,
       acceptanceCriteria: [
         { text: "npx tsc --noEmit — zero errors", met: true },
         { text: "npm run build — zero errors", met: true },
@@ -274,4 +288,25 @@ export const MOCK_TASK_BOARD: TaskBoardState = {
     completedCount: 12,
     velocity: 3.0,
   },
+  iterations: [
+    {
+      id: 1,
+      label: "Ship 1 — Foundation",
+      startedAt: "2026-03-25T12:00:00Z",
+      shippedAt: "2026-03-25T18:00:00Z",
+      prUrl: "https://github.com/lsfdsb/apex-framework/pull/203",
+    },
+    {
+      id: 2,
+      label: "Ship 2 — Live Sync",
+      startedAt: "2026-03-26T10:00:00Z",
+      shippedAt: "2026-03-26T14:00:00Z",
+      prUrl: "https://github.com/lsfdsb/apex-framework/pull/217",
+    },
+    {
+      id: 3,
+      label: "Ship 3 — Polish",
+      startedAt: "2026-03-26T15:00:00Z",
+    },
+  ],
 };

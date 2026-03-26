@@ -276,3 +276,22 @@ code { font-family: "JetBrains Mono", monospace; }
   .reveal { opacity: 1; transform: none; filter: none; }
   .orb { animation: none !important; }
 }
+
+/* ══════════════════════════════════════
+   OPS — Reduced motion overrides
+   Disables breathing/pulse/flow animations.
+   Hover transitions (bg, border-color) remain
+   but are made instant by the global rule above.
+   ══════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  /* Agent card breathing pulse */
+  .agent-card--active { animation: none !important; }
+  /* Agent status dot pulse */
+  .agent-status-dot--active { animation: none !important; }
+  /* Thought stream slide-in */
+  .thought-entry { animation: none !important; opacity: 1; transform: none; }
+  /* Task card enter animation */
+  .task-card-enter { animation: none !important; opacity: 1; transform: none; }
+  /* SVG connector flow line */
+  .connector-flow { animation: none !important; }
+}

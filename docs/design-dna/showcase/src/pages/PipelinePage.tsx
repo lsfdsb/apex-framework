@@ -311,7 +311,7 @@ function PhaseCard({ phase, status, isLast, nextStatus, tasks }: PhaseCardProps)
   const isActive = status === "active";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+    <div role="listitem" style={{ display: "flex", flexDirection: "column", gap: 0 }}>
       <div
         style={{
           background: "var(--bg-elevated)",
@@ -409,7 +409,7 @@ function PhaseCard({ phase, status, isLast, nextStatus, tasks }: PhaseCardProps)
                     {phase.name}
                   </h3>
 
-                  {/* Gate badge */}
+                  {/* Gate badge — T15: use color-mix tokens instead of hardcoded rgba */}
                   {phase.isGate && (
                     <span
                       style={{
@@ -418,8 +418,8 @@ function PhaseCard({ phase, status, isLast, nextStatus, tasks }: PhaseCardProps)
                         letterSpacing: "0.08em",
                         textTransform: "uppercase",
                         color: "var(--warning, #f59e0b)",
-                        background: "rgba(245,158,11,0.12)",
-                        border: "1px solid rgba(245,158,11,0.3)",
+                        background: "color-mix(in srgb, var(--warning, #f59e0b) 12%, transparent)",
+                        border: "1px solid color-mix(in srgb, var(--warning, #f59e0b) 30%, transparent)",
                         borderRadius: 6,
                         padding: "2px 8px",
                       }}
@@ -677,6 +677,7 @@ export default function PipelinePage() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
+            aria-hidden="true"
             style={{
               width: 8,
               height: 8,
@@ -690,6 +691,7 @@ export default function PipelinePage() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
+            aria-hidden="true"
             style={{
               width: 8,
               height: 8,
@@ -704,6 +706,7 @@ export default function PipelinePage() {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
+            aria-hidden="true"
             style={{
               width: 8,
               height: 8,
@@ -726,7 +729,13 @@ export default function PipelinePage() {
       </div>
 
       {/* Phase cards */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+      <div
+        role="list"
+        aria-label="Pipeline phases"
+        aria-live="polite"
+        aria-atomic="false"
+        style={{ display: "flex", flexDirection: "column", gap: 0 }}
+      >
         {PIPELINE_PHASES.map((phase, idx) => (
           <PhaseCard
             key={phase.id}
@@ -789,8 +798,10 @@ export default function PipelinePage() {
         }
 
         @media (prefers-reduced-motion: reduce) {
+          /* The global foundation.css already zeroes animation-duration for *,
+             but be explicit here so the SVG connector is definitely stopped. */
           .connector-flow {
-            animation: none;
+            animation: none !important;
           }
         }
       `}</style>
