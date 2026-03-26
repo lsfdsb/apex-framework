@@ -48,7 +48,11 @@ const canvasStyles = `
     overflow: hidden;
   }
   .react-flow__minimap-mask {
-    fill: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+    fill: rgba(100, 120, 255, 0.1) !important;
+  }
+  .react-flow__minimap-node {
+    fill: #6b7280 !important;
+    stroke: none !important;
   }
 `;
 
@@ -61,10 +65,15 @@ export default function CanvasPage() {
   // TaskLane height reservation (56px bar + up to 204px expanded)
   const TASK_LANE_HEIGHT = 56;
 
+  // MiniMap renders in SVG — CSS variables don't resolve there.
+  // Use computed colors from the DOM.
   const miniMapNodeColor = useMemo(() => {
+    const root = typeof document !== "undefined" ? getComputedStyle(document.documentElement) : null;
+    const success = root?.getPropertyValue("--success")?.trim() || "#22c55e";
+    const muted = root?.getPropertyValue("--text-muted")?.trim() || "#6b7280";
     return (node: { data?: Record<string, unknown> }) => {
       const status = node.data?.status as string | undefined;
-      return status === "active" ? "var(--success)" : "var(--text-muted)";
+      return status === "active" ? success : muted;
     };
   }, []);
 
