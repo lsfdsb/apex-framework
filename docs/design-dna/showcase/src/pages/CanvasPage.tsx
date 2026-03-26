@@ -79,12 +79,12 @@ export default function CanvasPage() {
     >
       <style>{canvasStyles}</style>
 
-      {/* Live badge — top right */}
+      {/* Live badge — top left (top-right reserved for palette switcher) */}
       <div
         style={{
           position: "absolute",
           top: 16,
-          right: 16,
+          left: 16,
           zIndex: 20,
           display: "flex",
           alignItems: "center",
