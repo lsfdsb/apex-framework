@@ -260,7 +260,7 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
                   Sign Out
                 </button>
               </div>
-            ) : isDemoMode ? null : (
+            ) : (
               <a
                 href="#/login"
                 style={{
