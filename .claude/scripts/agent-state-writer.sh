@@ -44,12 +44,14 @@ if [ -f "$SESSION_FILE" ]; then
 fi
 
 # ── Helper: Supabase dual-write (non-blocking) ────────────────────────────────
+# Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
+# apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
 supabase_upsert_agent() {
   local payload="$1"
-  if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ] && [ -n "$payload" ] && [ -n "$SESSION_ID" ]; then
+  if [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ] && [ -n "$payload" ] && [ -n "$SESSION_ID" ]; then
     curl -sf -X POST "${SUPABASE_URL}/rest/v1/agents" \
-      -H "apikey: ${SUPABASE_SECRET_KEY}" \
-      -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+      -H "apikey: ${SB_KEY}" \
       -H "Content-Type: application/json" \
       -H "Prefer: resolution=merge-duplicates" \
       -d "$payload" --max-time 3 &>/dev/null &
@@ -129,7 +131,7 @@ if [ "$TOOL_NAME" = "SendMessage" ]; then
       "$AGENTS_FILE" > "${AGENTS_FILE}.tmp" && mv "${AGENTS_FILE}.tmp" "$AGENTS_FILE" 2>/dev/null || true
 
     # Supabase dual-write
-    if [ -n "$SESSION_ID" ] && [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+    if [ -n "$SESSION_ID" ] && [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ]; then
       THOUGHT_STREAM=$(jq -r --arg name "$AGENT_TO" \
         '(.agents[] | select(.name == $name)).thoughtStream // []' \
         "$AGENTS_FILE" 2>/dev/null || echo "[]")

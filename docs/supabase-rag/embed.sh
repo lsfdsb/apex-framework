@@ -64,12 +64,14 @@ for cmd in curl jq; do
   fi
 done
 
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+
 if [[ -z "${SUPABASE_URL:-}" ]]; then
   echo "ERROR: SUPABASE_URL is not set." >&2
   exit 1
 fi
-if [[ -z "${SUPABASE_SECRET_KEY:-}" ]]; then
-  echo "ERROR: SUPABASE_SECRET_KEY is not set." >&2
+if [[ -z "$SB_KEY" ]]; then
+  echo "ERROR: SUPABASE_SB_SECRET_KEY (or SUPABASE_SECRET_KEY) is not set." >&2
   exit 1
 fi
 
@@ -89,7 +91,7 @@ echo ""
 if [[ "$DRY_RUN" == "false" ]]; then
   echo "Testing Edge Function..."
   HEALTH=$(curl -sf "$EMBED_URL" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" 2>/dev/null || echo "FAIL")
+    -H "apikey: $SB_KEY" 2>/dev/null || echo "FAIL")
 
   if [[ "$HEALTH" == "FAIL" ]] || ! echo "$HEALTH" | jq -e '.status == "ok"' &>/dev/null; then
     echo "ERROR: Edge Function not responding at $EMBED_URL" >&2
@@ -115,7 +117,7 @@ generate_embedding() {
   local response
   response=$(curl -sf \
     "$EMBED_URL" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -d "$payload" 2>/dev/null)
 
@@ -142,8 +144,7 @@ update_embedding() {
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
     -X PATCH "$REST_URL/${table}?${filter}" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: return=minimal" \
     -d "$payload")
@@ -167,8 +168,7 @@ embed_table() {
   local rows
   rows=$(curl -sf \
     "$REST_URL/${table}?select=${select}${filter}&limit=500" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Accept: application/json" 2>/dev/null || echo "[]")
 
   local count

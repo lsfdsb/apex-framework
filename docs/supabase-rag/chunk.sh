@@ -44,13 +44,15 @@ for cmd in curl jq; do
   fi
 done
 
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
+
 if [[ "$DRY_RUN" == "false" ]]; then
   if [[ -z "${SUPABASE_URL:-}" ]]; then
     echo "ERROR: SUPABASE_URL is not set." >&2
     exit 1
   fi
-  if [[ -z "${SUPABASE_SECRET_KEY:-}" ]]; then
-    echo "ERROR: SUPABASE_SECRET_KEY is not set." >&2
+  if [[ -z "$SB_KEY" ]]; then
+    echo "ERROR: SUPABASE_SB_SECRET_KEY (or SUPABASE_SECRET_KEY) is not set." >&2
     exit 1
   fi
   SUPABASE_URL="${SUPABASE_URL%/}"
@@ -114,8 +116,7 @@ upsert_chunk() {
   local http_code
   http_code=$(curl -s -o /dev/null -w "%{http_code}" \
     -X POST "$REST_URL/chunks?on_conflict=component_type,component_name,chunk_index" \
-    -H "apikey: $SUPABASE_SECRET_KEY" \
-    -H "Authorization: Bearer $SUPABASE_SECRET_KEY" \
+    -H "apikey: $SB_KEY" \
     -H "Content-Type: application/json" \
     -H "Prefer: resolution=merge-duplicates,return=minimal" \
     -d "$payload")

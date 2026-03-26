@@ -45,12 +45,14 @@ if [ -f "$SESSION_FILE" ]; then
 fi
 
 # ── Helper: Supabase dual-write (non-blocking) ────────────────────────────────
+# Uses sb_secret_ key (new Supabase API keys, post-Nov 2025).
+# apikey header only — Authorization: Bearer does NOT work with sb_secret_ keys.
+SB_KEY="${SUPABASE_SB_SECRET_KEY:-${SUPABASE_SECRET_KEY:-}}"
 supabase_upsert_task() {
   local payload="$1"
-  if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ] && [ -n "$payload" ]; then
+  if [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ] && [ -n "$payload" ]; then
     curl -sf -X POST "${SUPABASE_URL}/rest/v1/tasks" \
-      -H "apikey: ${SUPABASE_SECRET_KEY}" \
-      -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+      -H "apikey: ${SB_KEY}" \
       -H "Content-Type: application/json" \
       -H "Prefer: resolution=merge-duplicates" \
       -d "$payload" --max-time 3 &>/dev/null &
@@ -59,11 +61,16 @@ supabase_upsert_task() {
 
 if [ "$TOOL_NAME" = "TaskCreate" ]; then
   SUBJECT=$(echo "$TOOL_INPUT" | jq -r '.subject // empty' 2>/dev/null || true)
-  # Task ID comes from tool_output (Claude Code assigns it)
+  # Task ID comes from tool_output — Claude Code returns various formats:
+  #   JSON: {"taskId": "9"} or {"id": "9"}
+  #   String: "Task #9 created successfully: subject here"
+  TASK_ID=""
+  # Try JSON first
   TASK_ID=$(echo "$TOOL_OUTPUT" | jq -r '.taskId // .id // empty' 2>/dev/null || true)
-  # Also check tool_output as string (sometimes it's just the ID)
+  # Try extracting from "Task #N ..." string format
   if [ -z "$TASK_ID" ]; then
-    TASK_ID=$(echo "$TOOL_OUTPUT" | jq -r 'if type == "string" then . else empty end' 2>/dev/null || true)
+    TOOL_OUTPUT_STR=$(echo "$TOOL_OUTPUT" | jq -r 'if type == "string" then . else empty end' 2>/dev/null || echo "$TOOL_OUTPUT")
+    TASK_ID=$(echo "$TOOL_OUTPUT_STR" | sed -n 's/.*[Tt]ask #\([0-9a-zA-Z_-]*\).*/\1/p' | head -1)
   fi
   [ -z "$TASK_ID" ] && TASK_ID="task-$(date +%s)"
 
@@ -126,12 +133,11 @@ if [ "$TOOL_NAME" = "TaskUpdate" ]; then
       "$TASKS_FILE" > "${TASKS_FILE}.tmp" && mv "${TASKS_FILE}.tmp" "$TASKS_FILE" 2>/dev/null || true
 
     # Supabase dual-write — update column
-    if [ -n "${SUPABASE_URL:-}" ] && [ -n "${SUPABASE_SECRET_KEY:-}" ]; then
+    if [ -n "${SUPABASE_URL:-}" ] && [ -n "$SB_KEY" ]; then
       SB_PAYLOAD=$(jq -n --arg col "$COLUMN" "{\"column\": \$col}" 2>/dev/null)
       if [ -n "$SB_PAYLOAD" ]; then
         curl -sf -X PATCH "${SUPABASE_URL}/rest/v1/tasks?task_id=eq.${TASK_ID_INPUT}" \
-          -H "apikey: ${SUPABASE_SECRET_KEY}" \
-          -H "Authorization: Bearer ${SUPABASE_SECRET_KEY}" \
+          -H "apikey: ${SB_KEY}" \
           -H "Content-Type: application/json" \
           -d "$SB_PAYLOAD" --max-time 3 &>/dev/null &
       fi

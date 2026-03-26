@@ -33,7 +33,7 @@ SKILLS_DIR="$PROJECT_DIR/.claude/skills"
 SCRIPTS_DIR="$PROJECT_DIR/.claude/scripts"
 
 SUPABASE_URL="${SUPABASE_URL:-}"
-SUPABASE_PUBLISHABLE_KEY="${SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_SECRET_KEY:-}}"
+SB_PUB_KEY="${SUPABASE_SB_PUBLISHABLE_KEY:-${SUPABASE_PUBLISHABLE_KEY:-${SUPABASE_SECRET_KEY:-}}}"
 [[ -n "$SUPABASE_URL" ]] && SUPABASE_URL="${SUPABASE_URL%/}"
 REST_URL="${SUPABASE_URL}/rest/v1"
 EMBED_URL="${SUPABASE_URL}/functions/v1/apex-embed"
@@ -43,7 +43,7 @@ FILTER_TYPE=""
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
 has_supabase() {
-  [[ -n "$SUPABASE_URL" && -n "$SUPABASE_PUBLISHABLE_KEY" ]]
+  [[ -n "$SUPABASE_URL" && -n "$SB_PUB_KEY" ]]
 }
 
 require_jq() {
@@ -57,8 +57,7 @@ rest_get() {
   local path="$1"
   curl -sf \
     "$REST_URL/$path" \
-    -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
-    -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
+    -H "apikey: $SB_PUB_KEY" \
     -H "Accept: application/json"
 }
 
@@ -67,8 +66,7 @@ rest_post() {
   local data="$2"
   curl -sf \
     "$REST_URL/$path" \
-    -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
-    -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
+    -H "apikey: $SB_PUB_KEY" \
     -H "Content-Type: application/json" \
     -d "$data"
 }
@@ -80,7 +78,7 @@ get_embedding() {
   payload=$(jq -n --arg input "$text" '{input: $input}')
 
   curl -sf "$EMBED_URL" \
-    -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" \
+    -H "apikey: $SB_PUB_KEY" \
     -H "Content-Type: application/json" \
     -d "$payload" 2>/dev/null | jq -c '.embedding // empty' 2>/dev/null
 }
