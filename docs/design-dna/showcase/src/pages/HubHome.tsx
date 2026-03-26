@@ -107,7 +107,7 @@ const METRICS = [
   { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 203 },
   { icon: <Boxes size={16} />, label: "Components", value: 72 },
   { icon: <ShieldCheck size={16} />, label: "QA Gates Passed", value: 198 },
-  { icon: <Users size={16} />, label: "Agents Active", value: 5 },
+  { icon: <Users size={16} />, label: "Agents Active", value: 6 },
   { icon: <TrendingUp size={16} />, label: "Versions Shipped", value: 22 },
 ] as const;
 
@@ -138,7 +138,7 @@ export default function HubHome() {
           </span>
         </h1>
         <p style={{ fontSize: 16, color: "var(--text-secondary)", maxWidth: 520, margin: "0 auto", lineHeight: 1.7, fontFamily: "var(--font-body)" }}>
-          Watch AI build software the right way. 7 phases. 5 agents. Quality gates that never sleep.
+          Watch AI build software the right way. 7 phases. 6 agents. Quality gates that never sleep.
         </p>
 
         {/* Live session info bar — only shown when connected */}
@@ -179,7 +179,7 @@ export default function HubHome() {
           accent="var(--accent)"
           icon={<Workflow size={20} />}
         >
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>7 phases · 5 agents · 3 user gates</div>
+          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>7 phases · 6 agents · 3 user gates</div>
         </HubCard>
         <HubCard
           suffix="DNA"
