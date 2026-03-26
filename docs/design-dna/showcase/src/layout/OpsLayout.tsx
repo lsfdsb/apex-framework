@@ -87,7 +87,7 @@ const opsStyles = `
 
 export function OpsLayout({ children }: { children: ReactNode }) {
   const hash = useHash();
-  const { agents, isLive } = useOps();
+  const { agents, derivedAgents, isLive } = useOps();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(true);
   const [pinned, setPinned] = useState(false);
@@ -95,8 +95,8 @@ export function OpsLayout({ children }: { children: ReactNode }) {
   const expandTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const collapseTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const activeCount = agents.agents.filter((a) => a.status === "active").length;
-  const totalCount = agents.agents.length;
+  const activeCount = Array.from(derivedAgents.values()).filter((a) => a.status === "active").length;
+  const totalCount = derivedAgents.size || agents.agents.length;
   const agentLabel = activeCount > 0 ? `${activeCount} active` : `${totalCount || 7} agents`;
   const hasActiveAgents = activeCount > 0;
 

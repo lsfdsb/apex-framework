@@ -133,13 +133,13 @@ function SessionBanner({ branch, model, contextUsed, contextMax }: { branch: str
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function ProjectsPage() {
-  const { tasks, pipeline, agents, session, isLive, lastUpdated } = useOps();
+  const { tasks, pipeline, agents, derivedAgents, session, isLive, lastUpdated } = useOps();
 
   const allTasks = tasks.tasks;
   const totalTasks = allTasks.length;
   const doneTasks = allTasks.filter((t) => t.column === "done").length;
   const inProgressTasks = allTasks.filter((t) => t.column === "in-progress").length;
-  const activeAgents = agents.agents.filter((a) => a.status === "active").length;
+  const activeAgents = Array.from(derivedAgents.values()).filter((a) => a.status === "active").length;
 
   const statCard = (label: string, value: number, accent = "var(--accent)") => (
     <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 12, padding: "16px 20px", flex: 1 }}>

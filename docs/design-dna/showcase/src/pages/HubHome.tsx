@@ -1,18 +1,9 @@
 import { useState, useEffect } from "react";
 import { Link } from "../router/Router";
 import { Workflow, Palette, GitPullRequest, Boxes, ShieldCheck, Users, ArrowRight, TrendingUp, Sparkles } from "lucide-react";
-import { useApexState } from "../hooks/useApexState";
 import { LiveBadge } from "../components/hub/LiveBadge";
-import type { SessionState } from "../data/hub-types";
+import { useOps } from "../context/OpsContext";
 
-const DEFAULT_SESSION: SessionState = {
-  active: false,
-  startedAt: "",
-  branch: "",
-  model: "",
-  contextUsed: 0,
-  contextMax: 200000,
-};
 
 /* ── CountUp ──────────────────────────────────────────────────────────────── */
 
@@ -103,18 +94,25 @@ function HubCard({ suffix, description, href, accent, icon, children }: {
 
 /* ── Metric Row ───────────────────────────────────────────────────────────── */
 
-const METRICS = [
-  { icon: <GitPullRequest size={16} />, label: "PRs Merged", value: 215 },
-  { icon: <Boxes size={16} />, label: "Components", value: 72 },
-  { icon: <ShieldCheck size={16} />, label: "QA Gates Passed", value: 210 },
-  { icon: <Users size={16} />, label: "Agents Active", value: 7 },
-  { icon: <TrendingUp size={16} />, label: "Versions Shipped", value: 23 },
-] as const;
+function useMetrics() {
+  const { tasks, derivedAgents } = useOps();
+  const totalTasks = tasks.tasks.length;
+  const completedTasks = tasks.tasks.filter((t) => t.column === "done").length;
+  const activeAgents = Array.from(derivedAgents.values()).filter((a) => a.status === "active").length;
+  return [
+    { icon: <GitPullRequest size={16} />, label: "Tasks Completed", value: completedTasks },
+    { icon: <Boxes size={16} />, label: "Total Tasks", value: totalTasks },
+    { icon: <ShieldCheck size={16} />, label: "QA Gates", value: completedTasks },
+    { icon: <Users size={16} />, label: "Agents Active", value: activeAgents },
+    { icon: <TrendingUp size={16} />, label: "Velocity", value: totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0 },
+  ];
+}
 
 /* ── Main Page ────────────────────────────────────────────────────────────── */
 
 export default function HubHome() {
-  const { data: session, isLive, lastUpdated } = useApexState<SessionState>("session.json", DEFAULT_SESSION);
+  const { session, isLive, lastUpdated } = useOps();
+  const metrics = useMetrics();
 
   return (
     <div style={{ maxWidth: 960, margin: "0 auto", padding: "48px 24px 80px", minHeight: "calc(100vh - 120px)" }}>
@@ -219,7 +217,7 @@ export default function HubHome() {
         gap: 12,
         marginBottom: 48,
       }}>
-        {METRICS.map((m) => (
+        {metrics.map((m) => (
           <div key={m.label} style={{
             background: "var(--bg-elevated)",
             border: "1px solid var(--border)",
