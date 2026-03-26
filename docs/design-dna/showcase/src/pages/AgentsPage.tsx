@@ -1,460 +1,32 @@
 /**
  * AgentsPage — APEX agent roster.
- * Shows all 7 agents with model badges, responsibilities, status from OpsContext,
- * and live thought streams with staggered animations.
+ * Agent status is derived from tasks (reliable) via derivedAgents from OpsContext.
+ * Thought streams come from agents.json (live hook data).
  */
 
 import { useOps } from "../context/OpsContext";
 import { AGENT_ROSTER } from "../data/hub-data";
-import { LucideIcon } from "../components/hub/LucideIcon";
+import { AgentCard, modelStyle } from "../components/hub/AgentCard";
 import { LiveBadge } from "../components/hub/LiveBadge";
-import type { AgentModel, AgentStatus, AgentState } from "../data/hub-types";
+import type { AgentModel } from "../data/hub-types";
 
-// ── Demo fallback data ────────────────────────────────────────────────────────
+// ── DRI name mapping ──────────────────────────────────────────────────────────
+// Maps AGENT_ROSTER display names to the dri field values written by hooks.
 
-// Demo fallback: all agents idle, no fake activity.
-// Live data from .apex/state/agents.json replaces this when a session is active.
-const DEMO_AGENTS: AgentState = {
-  agents: [],
+const ROSTER_TO_DRI: Record<string, string> = {
+  Lead: "lead",
+  Builder: "builder",
+  QA: "qa",
+  "Design Reviewer": "design-reviewer",
+  PM: "project-manager",
+  Watcher: "watcher",
+  "Technical Writer": "technical-writer",
 };
-
-// ── Model badge colors ────────────────────────────────────────────────────────
-// T15: Use color-mix tokens instead of hardcoded rgba so both light and dark
-//      themes get correct tinting derived from CSS custom properties.
-
-function modelStyle(model: AgentModel): {
-  bg: string;
-  border: string;
-  text: string;
-  label: string;
-} {
-  switch (model) {
-    case "opus":
-      // Purple-tinted accent — distinct from the SaaS blue accent
-      return {
-        bg: "color-mix(in srgb, color-mix(in srgb, var(--accent) 80%, #a855f7) 12%, transparent)",
-        border: "color-mix(in srgb, color-mix(in srgb, var(--accent) 80%, #a855f7) 30%, transparent)",
-        text: "color-mix(in srgb, var(--accent) 80%, #a855f7)",
-        label: "Opus",
-      };
-    case "haiku":
-      // Teal-tinted success — fast / lightweight feel
-      return {
-        bg: "color-mix(in srgb, color-mix(in srgb, var(--success) 80%, #06b6d4) 12%, transparent)",
-        border: "color-mix(in srgb, color-mix(in srgb, var(--success) 80%, #06b6d4) 30%, transparent)",
-        text: "color-mix(in srgb, var(--success) 80%, #06b6d4)",
-        label: "Haiku",
-      };
-    default: // sonnet
-      return {
-        bg: "color-mix(in srgb, var(--accent) 12%, transparent)",
-        border: "color-mix(in srgb, var(--accent) 30%, transparent)",
-        text: "var(--accent)",
-        label: "Sonnet",
-      };
-  }
-}
-
-// ── Status dot with breathing pulse + ripple on active ───────────────────────
-
-function StatusDot({ status }: { status: AgentStatus }) {
-  const color =
-    status === "active"
-      ? "var(--success, #22c55e)"
-      : status === "failed"
-        ? "var(--destructive, #ef4444)"
-        : status === "completed"
-          ? "var(--success, #22c55e)"
-          : "var(--text-muted)";
-
-  return (
-    // Wrapper provides position:relative for the ::after ripple pseudo-element
-    <span
-      title={status}
-      aria-label={`Status: ${status}`}
-      className={status === "active" ? "agent-status-dot--active" : undefined}
-      style={{
-        display: "inline-block",
-        position: "relative",
-        width: 10,
-        height: 10,
-        borderRadius: "50%",
-        background: color,
-        flexShrink: 0,
-      }}
-    />
-  );
-}
-
-// ── Thought Stream Entry ──────────────────────────────────────────────────────
-
-interface ThoughtEntryProps {
-  timestamp: string;
-  action: string;
-  explanation: string;
-  index: number;
-}
-
-function ThoughtEntry({ timestamp, action, explanation, index }: ThoughtEntryProps) {
-  // T12: Apply typewriter effect only to the newest (first) entry.
-  // CSS-only: overflow:hidden + white-space:nowrap + width animation from 0 → 100%.
-  const isNewest = index === 0;
-
-  return (
-    <div
-      className="thought-entry"
-      style={{
-        display: "flex",
-        gap: 10,
-        animationDelay: `${index * 100}ms`,
-      }}
-    >
-      <span
-        style={{
-          fontSize: 10,
-          color: "var(--text-muted)",
-          fontFamily: "'JetBrains Mono', monospace",
-          whiteSpace: "nowrap",
-          paddingTop: 2,
-          flexShrink: 0,
-        }}
-      >
-        {new Date(timestamp).toLocaleTimeString("pt-BR", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false,
-          timeZone: "America/Sao_Paulo",
-        })}
-      </span>
-      <div style={{ minWidth: 0 }}>
-        <span
-          className={isNewest ? "thought-typewriter" : undefined}
-          style={{
-            fontSize: 12,
-            fontWeight: 700,
-            color: "var(--text)",
-            display: "block",
-            lineHeight: 1.3,
-          }}
-        >
-          {action}
-        </span>
-        <span
-          style={{
-            fontSize: 11,
-            color: "var(--text-secondary)",
-            lineHeight: 1.4,
-            display: "block",
-            marginTop: 1,
-          }}
-        >
-          {explanation}
-        </span>
-      </div>
-    </div>
-  );
-}
-
-// ── Agent Card ────────────────────────────────────────────────────────────────
-
-interface AgentCardProps {
-  agent: (typeof AGENT_ROSTER)[number];
-  liveStatus: AgentStatus;
-  currentTask?: string;
-  thoughtStream: Array<{ timestamp: string; action: string; explanation: string }>;
-}
-
-function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardProps) {
-  const badge = modelStyle(agent.model);
-  const isActive = liveStatus === "active";
-  const entries = thoughtStream.slice(0, 5);
-
-  return (
-    <div
-      role="listitem"
-      className={isActive ? "agent-card agent-card--active" : "agent-card"}
-      style={{
-        background: "var(--bg-elevated)",
-        border: `1px solid ${isActive ? "var(--accent)" : "var(--border)"}`,
-        borderRadius: 16,
-        overflow: "hidden",
-        position: "relative",
-        transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-      }}
-    >
-      {/* Accent bar */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: badge.text,
-        }}
-      />
-
-      <div style={{ padding: "28px 20px 20px" }}>
-        {/* Header */}
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 14 }}>
-          {/* Icon */}
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
-              background: badge.bg,
-              border: `1px solid ${badge.border}`,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              color: badge.text,
-              flexShrink: 0,
-            }}
-          >
-            <LucideIcon name={agent.icon} size={20} />
-          </div>
-
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                flexWrap: "wrap",
-                marginBottom: 3,
-              }}
-            >
-              <span
-                style={{
-                  fontSize: 15,
-                  fontWeight: 700,
-                  color: "var(--text)",
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                {agent.name}
-              </span>
-
-              {/* Model badge */}
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  letterSpacing: "0.06em",
-                  textTransform: "uppercase",
-                  color: badge.text,
-                  background: badge.bg,
-                  border: `1px solid ${badge.border}`,
-                  borderRadius: 6,
-                  padding: "2px 7px",
-                }}
-              >
-                {badge.label}
-              </span>
-
-              {/* Status */}
-              <StatusDot status={liveStatus} />
-              <span
-                style={{
-                  fontSize: 11,
-                  color: "var(--text-muted)",
-                  textTransform: "capitalize",
-                }}
-              >
-                {liveStatus}
-              </span>
-            </div>
-
-            <p
-              style={{
-                margin: 0,
-                fontSize: 12,
-                color: "var(--text-muted)",
-                fontWeight: 500,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-              }}
-            >
-              {agent.role}
-            </p>
-          </div>
-        </div>
-
-        {/* Tagline */}
-        <p
-          style={{
-            margin: "0 0 14px",
-            fontSize: 13,
-            fontStyle: "italic",
-            color: "var(--text-secondary)",
-            lineHeight: 1.5,
-          }}
-        >
-          {agent.tagline}
-        </p>
-
-        {/* Responsibilities */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 14 }}>
-          {agent.responsibilities.map((r) => (
-            <span
-              key={r}
-              style={{
-                fontSize: 11,
-                fontWeight: 500,
-                color: "var(--text-secondary)",
-                background: "var(--bg-surface)",
-                border: "1px solid var(--border)",
-                borderRadius: 20,
-                padding: "3px 10px",
-              }}
-            >
-              {r}
-            </span>
-          ))}
-        </div>
-
-        {/* T12: Connection line + current task badge — clickable */}
-        {isActive && currentTask && (
-          <div style={{ marginBottom: 12 }}>
-            {/* Dashed connector SVG from agent card down to the task badge */}
-            <div style={{ display: "flex", justifyContent: "flex-start", paddingLeft: 16, marginBottom: 4 }}>
-              <svg
-                width="2"
-                height="20"
-                viewBox="0 0 2 20"
-                fill="none"
-                aria-hidden="true"
-                className="task-connector-line"
-              >
-                <line
-                  x1="1"
-                  y1="0"
-                  x2="1"
-                  y2="20"
-                  stroke="var(--accent)"
-                  strokeWidth="2"
-                  strokeDasharray="3 3"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            {/* Task badge */}
-            <a
-              href={`#/tasks?task=${encodeURIComponent(currentTask)}`}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "8px 12px",
-                background: "color-mix(in srgb, var(--accent) 6%, transparent)",
-                border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-                borderRadius: 8,
-                fontSize: 12,
-                color: "var(--text-secondary)",
-                textDecoration: "none",
-                transition: "background 0.15s ease, border-color 0.15s ease",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background =
-                  "color-mix(in srgb, var(--accent) 12%, transparent)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                  "color-mix(in srgb, var(--accent) 40%, transparent)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLAnchorElement).style.background =
-                  "color-mix(in srgb, var(--accent) 6%, transparent)";
-                (e.currentTarget as HTMLAnchorElement).style.borderColor =
-                  "color-mix(in srgb, var(--accent) 20%, transparent)";
-              }}
-            >
-              <span
-                style={{
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "var(--accent)",
-                  flexShrink: 0,
-                }}
-              />
-              <span
-                style={{
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  minWidth: 0,
-                  flex: 1,
-                }}
-              >
-                <span style={{ color: "var(--accent)", fontWeight: 600 }}>Working on: </span>
-                {currentTask}
-              </span>
-            </a>
-          </div>
-        )}
-
-        {/* Thought stream */}
-        <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12 }}>
-          <p
-            id={`thought-label-${agent.name}`}
-            style={{
-              margin: "0 0 10px",
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "var(--text-muted)",
-            }}
-          >
-            Thought Stream
-          </p>
-
-          {entries.length > 0 ? (
-            <div
-              aria-live="polite"
-              aria-atomic="false"
-              aria-labelledby={`thought-label-${agent.name}`}
-              style={{ display: "flex", flexDirection: "column", gap: 8 }}
-            >
-              {entries.map((t, i) => (
-                <ThoughtEntry
-                  key={`${t.timestamp}-${i}`}
-                  timestamp={t.timestamp}
-                  action={t.action}
-                  explanation={t.explanation}
-                  index={i}
-                />
-              ))}
-            </div>
-          ) : (
-            <p
-              style={{
-                margin: 0,
-                fontSize: 12,
-                color: "var(--text-muted)",
-                fontStyle: "italic",
-              }}
-            >
-              Waiting for agent activity...
-            </p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function AgentsPage() {
-  const { agents, isLive, lastUpdated } = useOps();
-
-  // Use live data if available, otherwise show demo data so the page looks alive
-  const effectiveAgents = agents.agents.length > 0 ? agents : DEMO_AGENTS;
-
-  // Build a lookup from effective agent data
-  const liveMap = new Map(effectiveAgents.agents.map((a) => [a.name, a]));
+  const { agents, derivedAgents, isLive, lastUpdated } = useOps();
 
   return (
     <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px 64px" }}>
@@ -520,14 +92,7 @@ export default function AgentsPage() {
           const s = modelStyle(m);
           return (
             <div key={m} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span
-                style={{
-                  width: 8,
-                  height: 8,
-                  borderRadius: "50%",
-                  background: s.text,
-                }}
-              />
+              <span style={{ width: 8, height: 8, borderRadius: "50%", background: s.text }} />
               <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>
                 <strong style={{ color: s.text }}>{s.label}</strong>
                 {m === "opus" && " — Orchestration, complex reasoning"}
@@ -552,14 +117,20 @@ export default function AgentsPage() {
         }}
       >
         {AGENT_ROSTER.map((agent) => {
-          const live = liveMap.get(agent.name);
+          const driKey = ROSTER_TO_DRI[agent.name] ?? agent.name.toLowerCase();
+          const derived = derivedAgents.get(driKey);
+
+          // Thought stream comes from agents.json (live hook data)
+          const liveInstance = agents.agents.find(
+            (a) => a.name === agent.name || a.name.toLowerCase() === driKey,
+          );
+
           return (
             <AgentCard
               key={agent.name}
               agent={agent}
-              liveStatus={live?.status ?? "idle"}
-              currentTask={live?.currentTask}
-              thoughtStream={live?.thoughtStream ?? []}
+              derived={derived}
+              thoughtStream={liveInstance?.thoughtStream ?? []}
             />
           );
         })}
@@ -641,14 +212,8 @@ export default function AgentsPage() {
 
         /* ── T12: Thought entry slide-in ─────────────────────────────────── */
         @keyframes thoughtSlideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-6px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
 
         /* ── T12: Typewriter — width expands left→right, text reveals ────── */
@@ -663,12 +228,10 @@ export default function AgentsPage() {
           100% { stroke-dashoffset: 0;  }
         }
 
-        /* ── Active agent card breathe ───────────────────────────────────── */
         .agent-card--active {
           animation: agent-breathe 3s ease-in-out infinite;
         }
 
-        /* ── Status dot pulse + ripple ::after ──────────────────────────── */
         .agent-status-dot--active {
           animation: livePulse 2s ease-in-out infinite;
         }
@@ -681,12 +244,10 @@ export default function AgentsPage() {
           animation: agent-ripple 2s ease-out infinite;
         }
 
-        /* ── Thought entry slide-in ──────────────────────────────────────── */
         .thought-entry {
           animation: thoughtSlideIn 0.3s ease-out both;
         }
 
-        /* ── Typewriter on newest thought entry ──────────────────────────── */
         .thought-typewriter {
           overflow: hidden;
           white-space: nowrap;
@@ -694,7 +255,6 @@ export default function AgentsPage() {
           animation: typewriter 0.6s steps(40, end) 0.1s both;
         }
 
-        /* ── Connector line flowing dashes ───────────────────────────────── */
         .task-connector-line line {
           animation: connector-flow 0.6s linear infinite;
         }
@@ -709,7 +269,6 @@ export default function AgentsPage() {
           .task-connector-line line {
             animation: none !important;
           }
-          /* Ensure typewriter text is fully visible without animation */
           .thought-typewriter {
             width: auto;
             overflow: visible;

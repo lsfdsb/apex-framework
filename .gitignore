@@ -40,6 +40,7 @@ coverage/
 .claude/session-logs/
 .claude/worktrees/
 .claude/agent-memory/
+.claude/plans/
 
 # Debug
 *.log
