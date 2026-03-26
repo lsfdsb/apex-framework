@@ -7,6 +7,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **AgentsPage Live Animations** — Breathing pulse animations on active agents, thought stream with staggered slide-in transitions, current task links to /tasks route (#219)
+- **PipelinePage Phase Visualization** — Animated SVG connector lines between phases, active phase pulse glow effect, click-to-expand task cards, Apple EPM provenance badges on each phase (#219)
+- **QualityPage Enhanced Scoring** — Animated score ring via CSS keyframes, phase timing display, running phase shimmer effect (#219)
+- **Cross-Page Navigation System** — Task deeplinks from SubProject, Phase, and Agent cards via URL params (?project=, ?task=, ?phase=), TaskCard auto-expands from URL params (#219)
+- **agent-state-writer.sh Hook Script** — PostToolUse hook captures Agent/SendMessage tool calls, updates real-time agent state for UI polling (#219)
+- **session-state-writer.sh Hook Script** — SessionStart hook initializes session state file for state tracking across page lifecycle (#219)
+- **pipeline-state-writer.sh Hook Script** — PostToolUse hook infers pipeline phase from tool activity, updates phase state for animated phase indicators (#219)
 - **OpsContext Shared State Provider** — Centralizes useApexState polling for all OPS pages, eliminates redundant data fetching, enables real-time agent count updates (#218)
 - **Pipeline Visualization Page** — Phase timeline with gate indicators and team rosters (complete 7-phase APEX implementation page)
 - **Agents Management Page** — Team roster with live agent counts, roles, and Breathing Loop visualization
@@ -21,6 +28,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
 
 ### Changed
+- **settings.json Hook Registration** — Added 3 new hook scripts: agent-state-writer.sh (PostToolUse), session-state-writer.sh (SessionStart), pipeline-state-writer.sh (PostToolUse) for real-time state tracking across OPS pages (#219)
 - **ProjectsPage.tsx Extraction** — Refactored from 941 lines into 230-line index + 4 modular components (ProjectList, ProjectGroup, SubProjectCard, CompletionRing) for maintainability (#218)
 - **OpsLayout Sidebar Redesign** — Auto-expand on hover, persistent logo, 5 primary routes (Pipeline, Agents, Quality, Changelog, About) with active state indicators, live agent count badge (#218)
 - **hub-types Extended** — Added appleOrigin field to enable provenance tracking across all 7 pipeline phases and Apple EPM annotations (#218)
