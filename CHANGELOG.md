@@ -6,19 +6,38 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Added — Supabase OPS Migration + Real-Time State Sync (#223)
+- **migration-v3-ops.sql** — 6 Supabase tables: sessions, tasks, agents, pipeline_phases, quality_gates, changelog_entries with enums, RLS policies, indexes, updated_at triggers, and RPC functions (get_active_session, get_session_tasks) (#223)
+- **OpsContext.tsx derivedAgents field** — Merges agents.json data with task-derived activity for accurate agent status in real-time (#223)
+- **AgentCard.tsx** — Extracted component displaying agent with mini task cards inline (new in Phase 1 Agent Reality Fix) (#223)
+- **AgentTaskCard.tsx** — Compact clickable task links nested inside agent cards for task/agent association visibility (#223)
+
 ### Added — Task Tagging System
 - **Task tag badges** — `TaskTag` enum (feat/fix/refactor/docs/chore/perf/a11y/security/test), colored badge display on TaskCard adjacent to phase badge (7c09510)
 - **Tag resolution** — `resolveTag()` parses from task field or conventional commit prefix in title (e.g., "feat: ..." → feat tag) (7c09510)
 - **Accent color styles** — 9 tag types with semantic color-mix tokens (7c09510)
 
+### Changed — OPS Real-Time State Writers (#223)
+- **session-state-writer.sh** — Generates session UUID and dual-writes to Supabase sessions table (fixed: now reads hook JSON from STDIN via `INPUT=$(cat)` instead of missing CLAUDE_TOOL_NAME env vars) (#223)
+- **task-state-writer.sh** — Dual-writes to Supabase tasks table with session_id FK (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
+- **agent-state-writer.sh** — Dual-writes to Supabase agents table with session_id (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
+- **pipeline-state-writer.sh** — Dual-writes to Supabase pipeline_phases with session_id (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
+- **AgentsPage.tsx** — Refactored 722→281 lines, now uses derivedAgents for real-time status instead of static task lookup (#223)
 
 ### Fixed
+- **PostToolUse hooks critical bug** — All 3 state writers (task, agent, pipeline) were broken: they read from nonexistent `CLAUDE_TOOL_NAME` env vars instead of STDIN JSON. Claude Code passes hook data as JSON via stdin, not env vars. Fixed all 3 scripts to use `INPUT=$(cat)` + `jq -r '.tool_name'` pattern matching PreToolUse hook contract. This is why agents and tasks never appeared in OPS app in real-time (#223)
 - **task-state-writer.sh BSD sed compatibility** — Replaced sed alternation syntax with portable case statement for macOS (8f8eb0a)
 
 ### Fixed — OPS Rebuild (#216–#220)
 - **Fake demo agents removed** — AgentsPage no longer shows pretend "active" agents in demo mode (#220)
 - **QualityPage color bug** — Fixed broken `${color}18` concatenation, now uses `color-mix()` (#219)
 - **Theme polish** — All hardcoded rgba replaced with `color-mix()` tokens, light mode sidebar tuned (#219)
+
+### Changed
+- **.gitignore** — Added .claude/plans/ directory to ignore list (#223)
+
+### Fixed — Build Configuration (#223)
+- **pre-commit hook false positive** — Fixed incorrect flagging of .toml config files as Shell scripts (#223)
 
 ## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
 

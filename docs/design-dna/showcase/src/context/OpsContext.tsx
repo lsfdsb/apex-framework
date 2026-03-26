@@ -4,11 +4,13 @@
  * exactly once, regardless of how many pages consume it.
  */
 
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, useMemo, type ReactNode } from "react";
 import { useApexState } from "../hooks/useApexState";
 import type {
   TaskBoardState,
   AgentState,
+  AgentStatus,
+  TaskItem,
   PipelineState,
   QualityState,
   SessionState,
@@ -45,6 +47,14 @@ const DEFAULT_QUALITY: QualityState = {
   },
 };
 
+// ── Derived agent entry type ──────────────────────────────────────────────────
+
+export interface DerivedAgentEntry {
+  status: AgentStatus;
+  currentTask?: string;
+  tasks: TaskItem[];
+}
+
 // ── Context Shape ────────────────────────────────────────────────────────────
 
 interface OpsContextValue {
@@ -54,6 +64,9 @@ interface OpsContextValue {
   pipeline: PipelineState;
   quality: QualityState;
   session: SessionState;
+
+  // Agent activity derived from tasks (reliable — written by hooks)
+  derivedAgents: Map<string, DerivedAgentEntry>;
 
   // Connection status
   isLive: boolean;
@@ -76,6 +89,39 @@ export function OpsProvider({ children }: { children: ReactNode }) {
   const sessionState = useApexState<SessionState>("session.json", DEFAULT_SESSION);
 
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
+
+  // Derive agent activity from tasks — more reliable than agents.json
+  // which can be overwritten by a new session before the previous one ends.
+  const derivedAgents = useMemo((): Map<string, DerivedAgentEntry> => {
+    const map = new Map<string, DerivedAgentEntry>();
+
+    // Seed from live agents.json so status/currentTask from hooks is respected
+    for (const agent of agentsState.data.agents) {
+      map.set(agent.name, {
+        status: agent.status,
+        currentTask: agent.currentTask,
+        tasks: [],
+      });
+    }
+
+    // Overlay with task-derived activity — tasks.json is the ground truth
+    for (const task of tasksState.data.tasks) {
+      const dri = task.dri ?? "builder";
+      if (!map.has(dri)) {
+        map.set(dri, { status: "idle", tasks: [] });
+      }
+      const entry = map.get(dri)!;
+      entry.tasks.push(task);
+
+      // An in-progress task makes the DRI active; take the first one found
+      if (task.column === "in-progress" && entry.status !== "active") {
+        entry.status = "active";
+        entry.currentTask = task.title;
+      }
+    }
+
+    return map;
+  }, [agentsState.data, tasksState.data]);
 
   // Consider "live" if ANY state file is successfully fetched
   const isLive =
@@ -106,6 +152,7 @@ export function OpsProvider({ children }: { children: ReactNode }) {
         pipeline: pipelineState.data,
         quality: qualityState.data,
         session: sessionState.data,
+        derivedAgents,
         isLive,
         lastUpdated,
         selectedProject,
