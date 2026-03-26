@@ -39,7 +39,18 @@ if [ "$TOOL_NAME" = "TaskCreate" ] && [ -n "$TOOL_INPUT" ]; then
 
   if [ -n "$SUBJECT" ]; then
     # Extract tag from conventional prefix (feat:, fix:, refactor:, etc.)
-    TAG=$(echo "$SUBJECT" | sed -n 's/^\(feat\|fix\|refactor\|docs\|chore\|perf\|a11y\|security\|test\):.*/\1/p')
+    TAG=""
+    case "$SUBJECT" in
+      feat:*)     TAG="feat" ;;
+      fix:*)      TAG="fix" ;;
+      refactor:*) TAG="refactor" ;;
+      docs:*)     TAG="docs" ;;
+      chore:*)    TAG="chore" ;;
+      perf:*)     TAG="perf" ;;
+      a11y:*)     TAG="a11y" ;;
+      security:*) TAG="security" ;;
+      test:*)     TAG="test" ;;
+    esac
     TAG_JSON="null"
     [ -n "$TAG" ] && TAG_JSON="\"$TAG\""
 
