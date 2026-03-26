@@ -155,7 +155,7 @@ cd ~/your-project
 **One command.** The installer:
 
 1. Checks prerequisites (git, jq, claude)
-2. Copies all 22 skills, 6 agents, 21 hook scripts, 7 rules into `.claude/`
+2. Copies all 22 skills, 6 agents, 25 hook scripts, 7 rules into `.claude/`
 3. Installs `settings.json` with hooks, permissions, sandbox, statusline
 4. Installs git hooks (pre-commit + commit-msg)
 5. Copies `CLAUDE.md` (project constitution)
