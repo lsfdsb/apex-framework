@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Link } from "../router/Router";
 import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES } from "../data/routes";
+import { useAuth } from "../context/AuthContext";
 
 interface ShowcaseNavProps {
   activePath: string;
@@ -124,6 +125,7 @@ function NavDropdown({ label, isActive, children, glassBackground, glassBorder }
 /* ── Main Nav ─────────────────────────────────────────────────────────────── */
 
 export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
+  const { isAuthenticated, isDemoMode, user, signOut } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -233,27 +235,54 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
 
             <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 20%, transparent)", flexShrink: 0, margin: "0 6px", alignSelf: "center" }} />
 
-            <button
-              style={{
-                background: "var(--accent)",
-                border: "none",
-                cursor: "pointer",
-                color: "var(--bg)",
-                fontWeight: 600,
-                borderRadius: 8,
-                padding: "5px 14px",
-                fontSize: 11,
-                fontFamily: "'Inter', -apple-system, sans-serif",
-                letterSpacing: "0.01em",
-                marginLeft: 4,
-                transition: "opacity 0.2s",
-              }}
-              onMouseEnter={(e) => { e.currentTarget.style.opacity = "0.85"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.opacity = "1"; }}
-              onClick={() => alert("Authentication coming soon")}
-            >
-              Sign In
-            </button>
+            {isAuthenticated && !isDemoMode ? (
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: 4 }}>
+                <span style={{ fontSize: 11, color: "var(--text-muted)", maxWidth: 120, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {user?.email}
+                </span>
+                <button
+                  style={{
+                    background: "none",
+                    border: "1px solid var(--border)",
+                    cursor: "pointer",
+                    color: "var(--text-muted)",
+                    fontWeight: 600,
+                    borderRadius: 8,
+                    padding: "4px 10px",
+                    fontSize: 10,
+                    fontFamily: "var(--font-body)",
+                    transition: "all 0.2s",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--destructive)"; e.currentTarget.style.color = "var(--destructive)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-muted)"; }}
+                  onClick={() => signOut()}
+                >
+                  Sign Out
+                </button>
+              </div>
+            ) : isDemoMode ? null : (
+              <a
+                href="#/login"
+                style={{
+                  background: "var(--accent)",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "var(--bg)",
+                  fontWeight: 600,
+                  borderRadius: 8,
+                  padding: "5px 14px",
+                  fontSize: 11,
+                  fontFamily: "var(--font-body)",
+                  letterSpacing: "0.01em",
+                  marginLeft: 4,
+                  transition: "opacity 0.2s",
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
+              >
+                Sign In
+              </a>
+            )}
           </div>
 
           {/* Mobile burger */}

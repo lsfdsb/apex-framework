@@ -1,15 +1,17 @@
 import { Suspense, lazy, useState, useEffect } from "react";
 import { PaletteProvider } from "./context/PaletteContext";
 import { OpsProvider } from "./context/OpsContext";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
-import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, type RouteEntry } from "./data/routes";
+import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, HIDDEN_ROUTES, type RouteEntry } from "./data/routes";
 import TemplatePage from "./pages/TemplatePage";
 
 // Lazy-load pages
 const HubHome = lazy(() => import("./pages/HubHome"));
 const HomePage = lazy(() => import("./pages/HomePage"));
+const LoginPage = lazy(() => import("./pages/LoginPage"));
 
 // Lazy source imports — only loaded when user clicks "Source" on a template
 const rawModules = import.meta.glob("../../templates/*.tsx", { query: "?raw", import: "default" });
@@ -90,50 +92,69 @@ function TemplateWithSource({ route }: { route: RouteEntry }) {
   );
 }
 
-export default function App() {
+function AppRouter() {
   const hash = useHash();
+  const { isAuthenticated, isDemoMode, loading } = useAuth();
 
-  // Strip query params for route matching — params are consumed by page components
+  // Strip query params for route matching
   const hashPath = hash.split("?")[0];
 
   const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hashPath);
   const opsRoute = OPS_ROUTES.find((r) => r.path === hashPath);
-  const navRoute = NAV_ROUTES.find((r) => r.path === hashPath);
+  const navRoute = NAV_ROUTES.find((r) => r.path === hashPath) ?? HIDDEN_ROUTES.find((r) => r.path === hashPath);
 
-  // OPS routes get the sidebar layout — it's a full app
   const isOps = !!opsRoute;
 
-  return (
-    <PaletteProvider>
-      <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
-        <AnimatedBackground />
-        <ShowcaseNav activePath={hashPath} />
-        <div style={{ height: 56 }} />
+  // OPS routes require auth (unless demo mode — no Supabase configured)
+  const canAccessOps = isDemoMode || isAuthenticated;
 
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <Suspense fallback={<LoadingState />}>
-            {isOps && opsRoute ? (
+  return (
+    <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
+      <AnimatedBackground />
+      <ShowcaseNav activePath={hashPath} />
+      <div style={{ height: 56 }} />
+
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <Suspense fallback={<LoadingState />}>
+          {hashPath === "/login" ? (
+            <LoginPage />
+          ) : isOps && opsRoute ? (
+            canAccessOps ? (
               <OpsProvider>
                 <opsRoute.component />
               </OpsProvider>
-            ) : hash === "/" ? (
+            ) : !loading ? (
+              <LoginPage />
+            ) : null
+          ) : hash === "/" ? (
+            <OpsProvider>
               <HubHome />
-            ) : hash === "/dna" ? (
-              <HomePage />
-            ) : navRoute ? (
-              <navRoute.component />
-            ) : templateRoute ? (
-              <TemplateWithSource route={templateRoute} />
-            ) : (
-              <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
-                <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>
-              </div>
-            )}
-          </Suspense>
-        </div>
-
-        <PaletteSwitcher />
+            </OpsProvider>
+          ) : hash === "/dna" ? (
+            <HomePage />
+          ) : navRoute ? (
+            <navRoute.component />
+          ) : templateRoute ? (
+            <TemplateWithSource route={templateRoute} />
+          ) : (
+            <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
+              <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>
+            </div>
+          )}
+        </Suspense>
       </div>
+
+      <PaletteSwitcher />
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <PaletteProvider>
+      <AuthProvider>
+        <AppRouter />
+      </AuthProvider>
     </PaletteProvider>
   );
 }
