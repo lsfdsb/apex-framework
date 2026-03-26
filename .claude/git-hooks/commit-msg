@@ -20,19 +20,19 @@ if echo "$COMMIT_MSG" | grep -qE '^Merge'; then
 fi
 
 # Validate format: type(scope): description
-if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore)(\([a-z0-9._-]+\))?: .+'; then
+if ! echo "$COMMIT_MSG" | grep -qE '^(feat|fix|docs|refactor|test|perf|security|chore|a11y)(\([a-z0-9._-]+\))?: .+'; then
   echo ""
   if [ "$APEX_COLORS" = true ]; then
     printf "  ${ERR}Invalid commit message format${RST}\n\n"
     printf "  ${STEEL}Required${RST}  type(scope): description\n"
-    printf "  ${STEEL}Types${RST}     feat fix docs refactor test perf security chore\n"
+    printf "  ${STEEL}Types${RST}     feat fix docs refactor test perf security chore a11y\n"
     printf "  ${STEEL}Example${RST}   ${OK}feat(auth): add OAuth login with Google${RST}\n\n"
     printf "  ${STEEL}Got${RST}       ${ERR}%s${RST}\n" "$COMMIT_MSG"
   else
     echo "  Invalid commit message format"
     echo ""
     echo "  Required  type(scope): description"
-    echo "  Types     feat fix docs refactor test perf security chore"
+    echo "  Types     feat fix docs refactor test perf security chore a11y"
     echo "  Example   feat(auth): add OAuth login with Google"
     echo ""
     echo "  Got       $COMMIT_MSG"

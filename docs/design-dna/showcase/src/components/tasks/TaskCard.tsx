@@ -33,33 +33,39 @@ function displayTitle(task: TaskItem): string {
 const PHASE_COLOR: Record<TaskPhase, { text: string; bg: string; border: string }> = {
   P0: {
     text: "var(--destructive)",
-    bg: "rgba(var(--destructive-rgb, 239,68,68), 0.12)",
-    border: "rgba(var(--destructive-rgb, 239,68,68), 0.3)",
+    bg: "color-mix(in srgb, var(--destructive) 12%, transparent)",
+    border: "color-mix(in srgb, var(--destructive) 30%, transparent)",
   },
   P1: {
     text: "var(--warning)",
-    bg: "rgba(var(--warning-rgb, 234,179,8), 0.12)",
-    border: "rgba(var(--warning-rgb, 234,179,8), 0.3)",
+    bg: "color-mix(in srgb, var(--warning) 12%, transparent)",
+    border: "color-mix(in srgb, var(--warning) 30%, transparent)",
   },
   P2: {
     text: "var(--accent)",
-    bg: "var(--accent-glow)",
-    border: "rgba(var(--accent-rgb, 250,250,250), 0.2)",
+    bg: "color-mix(in srgb, var(--accent) 12%, transparent)",
+    border: "color-mix(in srgb, var(--accent) 20%, transparent)",
   },
 };
 
 const DRI_LABEL: Record<TaskDRI, string> = {
+  lead: "Lead",
   builder: "Builder",
   qa: "QA",
+  "design-reviewer": "Designer",
+  "project-manager": "PM",
+  watcher: "Watcher",
   "technical-writer": "Writer",
-  pm: "PM",
 };
 
 const DRI_COLOR: Record<TaskDRI, string> = {
+  lead: "color-mix(in srgb, var(--accent) 80%, #a855f7)",
   builder: "var(--accent)",
   qa: "var(--warning)",
+  "design-reviewer": "var(--accent)",
+  "project-manager": "var(--success)",
+  watcher: "var(--info, #60a5fa)",
   "technical-writer": "var(--info, #60a5fa)",
-  pm: "var(--success)",
 };
 
 // ── Icons ────────────────────────────────────────────────────────────────────

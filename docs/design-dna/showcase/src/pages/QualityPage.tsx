@@ -325,7 +325,7 @@ function AdditionalGatePill({
         flex: "1 1 160px",
         padding: "16px 18px",
         background: "var(--bg-elevated)",
-        border: `1px solid ${color}40`,
+        border: `1px solid color-mix(in srgb, ${color} 25%, transparent)`,
         borderRadius: 12,
         textAlign: "center",
       }}
