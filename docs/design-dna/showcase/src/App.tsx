@@ -5,7 +5,6 @@ import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
 import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, type RouteEntry } from "./data/routes";
-import { OpsLayout } from "./layout/OpsLayout";
 import TemplatePage from "./pages/TemplatePage";
 
 // Lazy-load pages
@@ -115,9 +114,7 @@ export default function App() {
           <Suspense fallback={<LoadingState />}>
             {isOps && opsRoute ? (
               <OpsProvider>
-                <OpsLayout>
-                  <opsRoute.component />
-                </OpsLayout>
+                <opsRoute.component />
               </OpsProvider>
             ) : hash === "/" ? (
               <HubHome />

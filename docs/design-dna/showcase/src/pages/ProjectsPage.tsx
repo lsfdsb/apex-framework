@@ -4,7 +4,7 @@
  */
 
 import { useState } from "react";
-import { GitBranch, Cpu, CheckCircle2, ChevronDown, ChevronUp, Users, LayoutGrid, Activity, Circle } from "lucide-react";
+import { GitBranch, Cpu, CheckCircle2, ChevronDown, ChevronUp, Users, LayoutGrid, Activity, Circle, Workflow } from "lucide-react";
 import { useOps } from "../context/OpsContext";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import { Link } from "../router/Router";
@@ -205,14 +205,23 @@ export default function ProjectsPage() {
         />
       </div>
 
-      {/* Demo mode note */}
-      {!isLive && (
-        <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "12px 16px", background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 10 }}>
-          <Users size={14} style={{ color: "var(--text-muted)", flexShrink: 0 }} />
-          <p style={{ margin: 0, fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.5 }}>
-            Showing demo data. Write state files to{" "}
-            <code style={{ fontFamily: "var(--font-mono,monospace)", fontSize: 11, color: "var(--accent)" }}>.apex/state/</code>
-            {" "}to see live data.
+      {/* No session — empty state */}
+      {!isLive && totalTasks === 0 && (
+        <div style={{
+          textAlign: "center", padding: "48px 24px",
+          background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: 16,
+        }}>
+          <div style={{ fontSize: 32, marginBottom: 12, opacity: 0.3 }} aria-hidden="true">
+            <Workflow size={32} style={{ color: "var(--text-muted)" }} />
+          </div>
+          <p style={{
+            fontFamily: "'Instrument Serif',Georgia,serif", fontStyle: "italic",
+            fontSize: 20, color: "var(--text)", marginBottom: 8,
+          }}>
+            No active session
+          </p>
+          <p style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, maxWidth: 400, margin: "0 auto" }}>
+            Start a Claude Code session to see live project data. Tasks, agents, and pipeline phases appear here in real time.
           </p>
         </div>
       )}
