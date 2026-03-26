@@ -122,6 +122,17 @@ When the user says "build me X", "create X", "new app", "new feature", or simila
 5. **Design DNA is mandatory for UI work.** Before building any user-facing component, read the matching DNA template. No exceptions.
 6. **Verify before integrate.** Before writing ANY code that calls an external API, run `/verify-api`. Before installing ANY new package, run `/verify-lib`.
 
+### ET Review Protocol (Periodic Checkpoint)
+
+At each milestone gate (M0, M1, M2 in the ANPP), the Lead conducts an ET Review:
+
+1. **PM reports**: Tasks completed, tasks blocked, scope changes, DRI performance
+2. **QA reports**: Automated gate results, Delight Check results, regression state, quality trend
+3. **Designer reports** (UI milestones): DNA compliance, visual direction holding, taste verdict
+4. **Lead decides**: PROCEED / PROCEED with scope adjustment / HOLD / STOP
+
+ET Review is NOT optional. The Lead does NOT proceed without QA data. Decisions update the ANPP.
+
 ### When NOT to run the pipeline:
 - Quick fixes, bug reports, questions → just do it directly
 - Single-file edits → no pipeline needed

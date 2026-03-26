@@ -283,11 +283,14 @@ Agent({
   run_in_background: true
 })
 
+// DRI Protocol: Every agent gets a unique instance name (builder-1, not "builder")
+// The PM's ANPP DRI Registry uses these names. Tasks say "DRI: builder-1".
 Agent({
   team_name: "feat-landing-page",
-  name: "builder",
+  name: "builder-1",
   subagent_type: "builder",
-  prompt: "Implement the landing page with hero, features grid, and CTA.
+  prompt: "You are builder-1. Your DRI name is builder-1. Use this in all messages.
+    Implement the landing page with hero, features grid, and CTA.
     DESIGN DNA: Read docs/design-dna/templates/LandingPage.tsx FIRST.
     Extract the palette, fonts, and patterns before writing ANY code.
     globals.css must match the DNA palette exactly."
