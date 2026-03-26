@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useHashParams } from "../router/Router";
 import { PhaseFilter } from "../components/tasks/PhaseFilter";
 import type { PhaseFilterValue } from "../components/tasks/PhaseFilter";
@@ -7,7 +7,7 @@ import { TaskCard } from "../components/tasks/TaskCard";
 import { MOCK_TASK_BOARD } from "../data/hub-mock";
 import { useApexState } from "../hooks/useApexState";
 import { LiveBadge } from "../components/hub/LiveBadge";
-import type { TaskColumn, TaskItem, TaskBoardState } from "../data/hub-types";
+import type { TaskColumn, TaskItem, TaskBoardState, TaskPhase } from "../data/hub-types";
 
 const SUB_PROJECT_NAMES: Record<string, string> = {
   "visual-hub": "Visual Pipeline HUB",
@@ -102,10 +102,14 @@ function KanbanColumn({
   column,
   tasks,
   filterKey,
+  targetTaskId,
+  targetTaskRef,
 }: {
   column: (typeof COLUMNS)[number];
   tasks: TaskItem[];
   filterKey: string;
+  targetTaskId: string | null;
+  targetTaskRef: React.RefObject<HTMLDivElement | null>;
 }) {
   return (
     <div
@@ -154,15 +158,24 @@ function KanbanColumn({
             No tasks
           </div>
         ) : (
-          tasks.map((task, i) => (
-            <div
-              key={`${filterKey}-${task.id}`}
-              className="task-card-enter"
-              style={{ animationDelay: `${i * 30}ms` }}
-            >
-              <TaskCard task={task} />
-            </div>
-          ))
+          tasks.map((task, i) => {
+            const isTarget = task.id === targetTaskId;
+            return (
+              <div
+                key={`${filterKey}-${task.id}`}
+                ref={isTarget ? (targetTaskRef as React.RefObject<HTMLDivElement>) : undefined}
+                className="task-card-enter"
+                style={{
+                  animationDelay: `${i * 30}ms`,
+                  outline: isTarget ? "2px solid var(--accent)" : "none",
+                  outlineOffset: 2,
+                  borderRadius: "var(--radius)",
+                }}
+              >
+                <TaskCard task={task} autoExpand={isTarget} />
+              </div>
+            );
+          })
         )}
       </div>
     </div>
@@ -258,11 +271,29 @@ export default function TaskBoardPage() {
   const { projectName, tasks, meta } = useLive ? liveBoard : MOCK_TASK_BOARD;
   const subProjectName = hashParams.project ? SUB_PROJECT_NAMES[hashParams.project] ?? null : null;
 
-  const [phase, setPhase] = useState<PhaseFilterValue>("all");
+  // Pre-select phase from ?phase= URL param (P0 / P1 / P2)
+  const urlPhase = hashParams.phase as TaskPhase | undefined;
+  const validPhases: PhaseFilterValue[] = ["all", "P0", "P1", "P2"];
+  const initialPhase: PhaseFilterValue =
+    urlPhase && validPhases.includes(urlPhase) ? urlPhase : "all";
+
+  const [phase, setPhase] = useState<PhaseFilterValue>(initialPhase);
   const [activeColumn, setActiveColumn] = useState<TaskColumn>("backlog");
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.matchMedia("(max-width: 767px)").matches : false
   );
+
+  // Deep-link: auto-scroll to ?task= and expand it
+  const targetTaskId = hashParams.task ?? null;
+  const targetTaskRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!targetTaskId || !targetTaskRef.current) return;
+    const timer = setTimeout(() => {
+      targetTaskRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 150);
+    return () => clearTimeout(timer);
+  }, [targetTaskId]);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 767px)");
@@ -387,7 +418,14 @@ export default function TaskBoardPage() {
         /* Mobile: single column view */
         <div style={{ flex: 1, minHeight: 0, overflowY: "auto" }}>
           {COLUMNS.filter((col) => col.id === activeColumn).map((col) => (
-            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} filterKey={phase} />
+            <KanbanColumn
+              key={col.id}
+              column={col}
+              tasks={byColumn(col.id)}
+              filterKey={phase}
+              targetTaskId={targetTaskId}
+              targetTaskRef={targetTaskRef}
+            />
           ))}
         </div>
       ) : (
@@ -407,7 +445,14 @@ export default function TaskBoardPage() {
           }}
         >
           {COLUMNS.map((col) => (
-            <KanbanColumn key={col.id} column={col} tasks={byColumn(col.id)} filterKey={phase} />
+            <KanbanColumn
+              key={col.id}
+              column={col}
+              tasks={byColumn(col.id)}
+              filterKey={phase}
+              targetTaskId={targetTaskId}
+              targetTaskRef={targetTaskRef}
+            />
           ))}
         </div>
       )}

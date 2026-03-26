@@ -144,6 +144,12 @@
             "command": "nohup bash $CLAUDE_PROJECT_DIR/docs/supabase-rag/rag-sync.sh --changed --quiet > /dev/null 2>&1 < /dev/null &",
             "timeout": 5,
             "statusMessage": "Syncing RAG knowledge base..."
+          },
+          {
+            "type": "command",
+            "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/session-state-writer.sh",
+            "timeout": 5,
+            "statusMessage": "Writing session state to HUB..."
           }
         ]
       }
@@ -240,6 +246,28 @@
             "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/task-state-writer.sh",
             "timeout": 5,
             "statusMessage": "Syncing task state to HUB..."
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|SendMessage",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/agent-state-writer.sh",
+            "timeout": 5,
+            "statusMessage": "Syncing agent state to HUB..."
+          }
+        ]
+      },
+      {
+        "matcher": "Agent|Skill|TaskCreate|TaskUpdate",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/pipeline-state-writer.sh",
+            "timeout": 5,
+            "statusMessage": "Updating pipeline state..."
           }
         ]
       }

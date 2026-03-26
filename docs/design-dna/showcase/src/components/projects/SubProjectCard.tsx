@@ -4,7 +4,7 @@
  * team task count, and expands to show TeamKanban.
  */
 
-import { GitBranch, GitPullRequest, Check, Clock } from "lucide-react";
+import { GitBranch, GitPullRequest, Check, Clock, ExternalLink } from "lucide-react";
 import { PIPELINE_PHASES, STATUS_CFG } from "../../data/projects-data";
 import type { SubProject } from "../../data/projects-data";
 import { TeamKanban } from "./TeamKanban";
@@ -83,9 +83,29 @@ export function SubProjectCard({ sub, isExpanded, onToggle }: SubProjectCardProp
           <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
             <Clock size={11} /> {sub.lastActive}
           </span>
-          <span style={{ marginLeft: "auto", fontWeight: 600, color: doneTasks === totalTasks ? "var(--success)" : "var(--text-secondary)" }}>
+          <span style={{ fontWeight: 600, color: doneTasks === totalTasks ? "var(--success)" : "var(--text-secondary)" }}>
             {doneTasks}/{totalTasks} tasks
           </span>
+          <a
+            href={`#/tasks?project=${sub.id}`}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 3,
+              marginLeft: "auto",
+              fontSize: 10,
+              fontWeight: 600,
+              color: "var(--accent)",
+              textDecoration: "none",
+              background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
+              borderRadius: 5,
+              padding: "2px 7px",
+            }}
+          >
+            View Tasks <ExternalLink size={9} />
+          </a>
         </div>
 
         {/* Pipeline progress bar */}

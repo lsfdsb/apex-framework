@@ -1,18 +1,83 @@
 /**
  * AgentsPage — APEX agent roster.
  * Shows all 7 agents with model badges, responsibilities, status from OpsContext,
- * and thought stream placeholders.
+ * and live thought streams with staggered animations.
  */
 
 import { useOps } from "../context/OpsContext";
 import { AGENT_ROSTER } from "../data/hub-data";
 import { LucideIcon } from "../components/hub/LucideIcon";
 import { LiveBadge } from "../components/hub/LiveBadge";
-import type { AgentModel, AgentStatus } from "../data/hub-types";
+import type { AgentModel, AgentStatus, AgentState } from "../data/hub-types";
+
+// ── Demo fallback data ────────────────────────────────────────────────────────
+
+const DEMO_AGENTS: AgentState = {
+  agents: [
+    {
+      name: "Lead",
+      status: "active",
+      model: "opus",
+      currentTask: "OPS-T1",
+      thoughtStream: [
+        {
+          timestamp: "2026-03-26T14:30:00Z",
+          action: "Reading ProjectsPage.tsx",
+          explanation: "Analyzing component structure before refactoring",
+        },
+        {
+          timestamp: "2026-03-26T14:29:30Z",
+          action: "Reviewed OpsContext.tsx",
+          explanation: "Verified shared state provider is correctly wired",
+        },
+      ],
+      startedAt: "2026-03-26T14:00:00Z",
+    },
+    {
+      name: "Builder",
+      status: "active",
+      model: "sonnet",
+      currentTask: "OPS-T3",
+      thoughtStream: [
+        {
+          timestamp: "2026-03-26T14:28:00Z",
+          action: "Writing PipelineTimeline.tsx",
+          explanation: "Extracting timeline component from monolith",
+        },
+      ],
+      startedAt: "2026-03-26T14:15:00Z",
+    },
+    {
+      name: "QA",
+      status: "idle",
+      model: "sonnet",
+      thoughtStream: [],
+    },
+    {
+      name: "Watcher",
+      status: "active",
+      model: "haiku",
+      currentTask: "monitoring",
+      thoughtStream: [
+        {
+          timestamp: "2026-03-26T14:27:00Z",
+          action: "TypeScript check passed",
+          explanation: "0 errors after latest edit",
+        },
+      ],
+      startedAt: "2026-03-26T14:00:00Z",
+    },
+  ],
+};
 
 // ── Model badge colors ────────────────────────────────────────────────────────
 
-function modelStyle(model: AgentModel): { bg: string; border: string; text: string; label: string } {
+function modelStyle(model: AgentModel): {
+  bg: string;
+  border: string;
+  text: string;
+  label: string;
+} {
   switch (model) {
     case "opus":
       return {
@@ -38,19 +103,23 @@ function modelStyle(model: AgentModel): { bg: string; border: string; text: stri
   }
 }
 
-// ── Status dot ────────────────────────────────────────────────────────────────
+// ── Status dot with breathing pulse ──────────────────────────────────────────
 
 function StatusDot({ status }: { status: AgentStatus }) {
   const color =
-    status === "active" ? "var(--success, #22c55e)"
-    : status === "failed" ? "var(--destructive, #ef4444)"
-    : status === "completed" ? "var(--success, #22c55e)"
-    : "var(--text-muted)";
+    status === "active"
+      ? "var(--success, #22c55e)"
+      : status === "failed"
+        ? "var(--destructive, #ef4444)"
+        : status === "completed"
+          ? "var(--success, #22c55e)"
+          : "var(--text-muted)";
 
   return (
     <span
       title={status}
       aria-label={`Status: ${status}`}
+      className={status === "active" ? "agent-status-dot--active" : undefined}
       style={{
         display: "inline-block",
         width: 10,
@@ -58,16 +127,79 @@ function StatusDot({ status }: { status: AgentStatus }) {
         borderRadius: "50%",
         background: color,
         flexShrink: 0,
-        animation: status === "active" ? "livePulse 2s ease-in-out infinite" : "none",
       }}
     />
+  );
+}
+
+// ── Thought Stream Entry ──────────────────────────────────────────────────────
+
+interface ThoughtEntryProps {
+  timestamp: string;
+  action: string;
+  explanation: string;
+  index: number;
+}
+
+function ThoughtEntry({ timestamp, action, explanation, index }: ThoughtEntryProps) {
+  return (
+    <div
+      className="thought-entry"
+      style={{
+        display: "flex",
+        gap: 10,
+        animationDelay: `${index * 100}ms`,
+      }}
+    >
+      <span
+        style={{
+          fontSize: 10,
+          color: "var(--text-muted)",
+          fontFamily: "'JetBrains Mono', monospace",
+          whiteSpace: "nowrap",
+          paddingTop: 2,
+          flexShrink: 0,
+        }}
+      >
+        {new Date(timestamp).toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        })}
+      </span>
+      <div style={{ minWidth: 0 }}>
+        <span
+          style={{
+            fontSize: 12,
+            fontWeight: 700,
+            color: "var(--text)",
+            display: "block",
+            lineHeight: 1.3,
+          }}
+        >
+          {action}
+        </span>
+        <span
+          style={{
+            fontSize: 11,
+            color: "var(--text-secondary)",
+            lineHeight: 1.4,
+            display: "block",
+            marginTop: 1,
+          }}
+        >
+          {explanation}
+        </span>
+      </div>
+    </div>
   );
 }
 
 // ── Agent Card ────────────────────────────────────────────────────────────────
 
 interface AgentCardProps {
-  agent: typeof AGENT_ROSTER[number];
+  agent: (typeof AGENT_ROSTER)[number];
   liveStatus: AgentStatus;
   currentTask?: string;
   thoughtStream: Array<{ timestamp: string; action: string; explanation: string }>;
@@ -76,9 +208,11 @@ interface AgentCardProps {
 function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardProps) {
   const badge = modelStyle(agent.model);
   const isActive = liveStatus === "active";
+  const entries = thoughtStream.slice(0, 5);
 
   return (
     <div
+      className={isActive ? "agent-card agent-card--active" : "agent-card"}
       style={{
         background: "var(--bg-elevated)",
         border: `1px solid ${isActive ? "var(--accent)" : "var(--border)"}`,
@@ -86,20 +220,21 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
         overflow: "hidden",
         position: "relative",
         transition: "border-color 0.3s ease, box-shadow 0.3s ease",
-        boxShadow: isActive ? "0 0 0 1px var(--accent), 0 8px 24px rgba(0,0,0,0.15)" : undefined,
       }}
     >
       {/* Accent bar */}
       <div
         style={{
           position: "absolute",
-          top: 0, left: 0, right: 0,
+          top: 0,
+          left: 0,
+          right: 0,
           height: 3,
           background: badge.text,
         }}
       />
 
-      <div style={{ padding: "24px 20px 20px", paddingTop: 28 }}>
+      <div style={{ padding: "28px 20px 20px" }}>
         {/* Header */}
         <div style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 14 }}>
           {/* Icon */}
@@ -121,7 +256,15 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
           </div>
 
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 3 }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                flexWrap: "wrap",
+                marginBottom: 3,
+              }}
+            >
               <span
                 style={{
                   fontSize: 15,
@@ -211,10 +354,14 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
           ))}
         </div>
 
-        {/* Current task (live mode) */}
+        {/* Current task badge — clickable */}
         {isActive && currentTask && (
-          <div
+          <a
+            href={`#/tasks?task=${encodeURIComponent(currentTask)}`}
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
               marginBottom: 12,
               padding: "8px 12px",
               background: "rgba(99,102,241,0.06)",
@@ -222,23 +369,43 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
               borderRadius: 8,
               fontSize: 12,
               color: "var(--text-secondary)",
+              textDecoration: "none",
+              transition: "background 0.15s ease, border-color 0.15s ease",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                "rgba(99,102,241,0.12)";
+              (e.currentTarget as HTMLAnchorElement).style.borderColor =
+                "rgba(99,102,241,0.4)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.background =
+                "rgba(99,102,241,0.06)";
+              (e.currentTarget as HTMLAnchorElement).style.borderColor =
+                "rgba(99,102,241,0.2)";
             }}
           >
-            <span style={{ color: "var(--accent)", fontWeight: 600 }}>Working: </span>
-            {currentTask}
-          </div>
+            <span
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                background: "var(--accent)",
+                flexShrink: 0,
+              }}
+            />
+            <span>
+              <span style={{ color: "var(--accent)", fontWeight: 600 }}>Working on: </span>
+              {currentTask}
+            </span>
+          </a>
         )}
 
         {/* Thought stream */}
-        <div
-          style={{
-            borderTop: "1px solid var(--border)",
-            paddingTop: 12,
-          }}
-        >
+        <div style={{ borderTop: "1px solid var(--border)", paddingTop: 12 }}>
           <p
             style={{
-              margin: "0 0 8px",
+              margin: "0 0 10px",
               fontSize: 10,
               fontWeight: 700,
               letterSpacing: "0.1em",
@@ -249,30 +416,16 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
             Thought Stream
           </p>
 
-          {thoughtStream.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-              {thoughtStream.slice(0, 2).map((t, i) => (
-                <div key={i} style={{ display: "flex", gap: 8 }}>
-                  <span
-                    style={{
-                      fontSize: 10,
-                      color: "var(--text-muted)",
-                      fontFamily: "'JetBrains Mono', monospace",
-                      whiteSpace: "nowrap",
-                      paddingTop: 1,
-                    }}
-                  >
-                    {new Date(t.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                  </span>
-                  <div>
-                    <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)" }}>
-                      {t.action}
-                    </span>
-                    <span style={{ fontSize: 11, color: "var(--text-muted)", marginLeft: 6 }}>
-                      {t.explanation}
-                    </span>
-                  </div>
-                </div>
+          {entries.length > 0 ? (
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {entries.map((t, i) => (
+                <ThoughtEntry
+                  key={`${t.timestamp}-${i}`}
+                  timestamp={t.timestamp}
+                  action={t.action}
+                  explanation={t.explanation}
+                  index={i}
+                />
               ))}
             </div>
           ) : (
@@ -284,7 +437,7 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
                 fontStyle: "italic",
               }}
             >
-              No active session — thoughts appear here during a live build.
+              Waiting for agent activity...
             </p>
           )}
         </div>
@@ -298,10 +451,11 @@ function AgentCard({ agent, liveStatus, currentTask, thoughtStream }: AgentCardP
 export default function AgentsPage() {
   const { agents, isLive, lastUpdated } = useOps();
 
-  // Build a lookup from live agent data
-  const liveMap = new Map(
-    agents.agents.map((a) => [a.name, a])
-  );
+  // Use live data if available, otherwise show demo data so the page looks alive
+  const effectiveAgents = agents.agents.length > 0 ? agents : DEMO_AGENTS;
+
+  // Build a lookup from effective agent data
+  const liveMap = new Map(effectiveAgents.agents.map((a) => [a.name, a]));
 
   return (
     <div style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px 64px" }}>
@@ -412,7 +566,7 @@ export default function AgentsPage() {
       <div
         style={{
           marginTop: 48,
-          padding: "28px 28px",
+          padding: "28px",
           background: "var(--bg-elevated)",
           border: "1px solid var(--border)",
           borderRadius: 16,
@@ -460,9 +614,41 @@ export default function AgentsPage() {
       </div>
 
       <style>{`
+        @keyframes agent-breathe {
+          0%, 100% {
+            box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+          }
+          50% {
+            box-shadow: 0 0 0 8px color-mix(in srgb, var(--accent) 0%, transparent);
+          }
+        }
+
         @keyframes livePulse {
           0%, 100% { opacity: 1; }
           50%       { opacity: 0.4; }
+        }
+
+        @keyframes thoughtSlideIn {
+          from {
+            opacity: 0;
+            transform: translateY(-6px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .agent-card--active {
+          animation: agent-breathe 3s ease-in-out infinite;
+        }
+
+        .agent-status-dot--active {
+          animation: livePulse 2s ease-in-out infinite;
+        }
+
+        .thought-entry {
+          animation: thoughtSlideIn 0.3s ease-out both;
         }
       `}</style>
     </div>
