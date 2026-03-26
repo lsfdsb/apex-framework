@@ -6,42 +6,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Added — Task Tagging & OPS Rebuild (#216–#220)
-- **Task tag system** — `TaskTag` enum (feat/fix/refactor/docs/chore/perf/a11y/security/test), optional `tag` field on tasks, colored badge display in TaskCard
-- **Tag parsing** — `resolveTag()` reads from task field or parses conventional commit prefix from title (e.g., "feat: ..." → feat tag)
-- **Tag styles** — Accent colors for 9 tag types, adjacent to phase badges on task cards (#221)
-- **Tag extraction script** — `task-state-writer.sh` parses subject line prefix, writes tag field to tasks.json state (#221)
+### Added — Task Tagging System
+- **Task tag badges** — `TaskTag` enum (feat/fix/refactor/docs/chore/perf/a11y/security/test), colored badge display on TaskCard adjacent to phase badge (7c09510)
+- **Tag resolution** — `resolveTag()` parses from task field or conventional commit prefix in title (e.g., "feat: ..." → feat tag) (7c09510)
+- **Accent color styles** — 9 tag types with semantic color-mix tokens (7c09510)
 
-### Added — OPS Rebuild (#216–#220)
-- **OpsContext shared state provider** — Centralizes useApexState polling for tasks, agents, pipeline, quality, session. All 5 OPS pages consume via `useOps()` (#217)
-- **3 new OPS pages** — PipelinePage (7-phase flow + Apple provenance), AgentsPage (live roster + thought streams), QualityPage (score ring + gate dashboard) (#217, #218)
-- **3 state hook scripts** — `agent-state-writer.sh`, `session-state-writer.sh`, `pipeline-state-writer.sh` emit live state to `.apex/state/` (#218)
-- **Cross-page navigation** — URL params `?project=`, `?task=`, `?phase=` link Projects, Tasks, Pipeline, and Agents pages together (#218)
-- **Agent animations** — Breathing pulse on active agents, typewriter thought streams, ripple on transitions, SVG connection lines (#218, #219)
-- **Apple EPM provenance** — Honest `appleOrigin` annotations on all 7 pipeline phases (#217)
-- **AboutPage expansion** — 14-section framework showcase: 22 skills, 7 agents, 14 hooks, Design DNA, security model (#216)
-- **Accessibility** — ARIA landmarks, `aria-live` on live regions, global `prefers-reduced-motion` block (#219)
 
-### Changed — OPS Rebuild (#216–#220)
-- **ProjectsPage rewritten** — Uses OpsContext exclusively, no hardcoded data. Live session banner, task progress, pipeline phase strip (#220)
-- **TaskBoardPage rewritten** — 966→324 lines. Clean kanban, OpsContext, phase filter + WIP indicators. Removed iteration bloat (#220)
-- **Mock data eliminated** — `hub-mock.ts` returns empty board. Real data only from `.apex/state/` hooks (#220)
-- **Sidebar removed** — OPS pages render directly, nav from top bar. Bundle -22KB (#220)
-- **5 dead files deleted** — PipelineTimeline, ProjectCard, SubProjectCard, TeamKanban, projects-data.ts (-833 lines) (#220)
-- **HubHome metrics** — Updated to v5.23: 215 PRs, 7 agents, 23 versions (#216)
-- **Timestamps** — All use America/Sao_Paulo timezone (UTC-3) (#220)
+### Fixed
+- **task-state-writer.sh BSD sed compatibility** — Replaced sed alternation syntax with portable case statement for macOS (8f8eb0a)
 
 ### Fixed — OPS Rebuild (#216–#220)
 - **Fake demo agents removed** — AgentsPage no longer shows pretend "active" agents in demo mode (#220)
 - **QualityPage color bug** — Fixed broken `${color}18` concatenation, now uses `color-mix()` (#219)
 - **Theme polish** — All hardcoded rgba replaced with `color-mix()` tokens, light mode sidebar tuned (#219)
-
-### Added — Apple EPM (#210)
-- **Apple EPM Honest Alignment** — Implement/Adapt/Aspire tables in CLAUDE.md (#210)
-- **ANPP separated from Rules of the Road** — PM generates ANPP, Tech Writer generates launch checklist (#210)
-- **Seven Elements exit criteria** — QA has concrete verification questions per element (#210)
-- **DRI decision ownership** — Agents own decisions, not just execution (#210)
-- **Tech Writer Rules of the Road template** — 12-point launch checklist in Phase 7 (#210)
 
 ## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
 
