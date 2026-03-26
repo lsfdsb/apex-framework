@@ -172,29 +172,29 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (5 agents + Lead)
+### The Championship Roster (6 agents + Lead)
 
-| Agent | Model | Role |
-|-------|-------|------|
-| **Lead** (you + Claude) | Opus | Orchestrates everything — not a spawned agent |
-| **Project Manager** | Sonnet | Decomposes PRD+Architecture into phased task board |
-| **Builder** | Sonnet | Writes production code and fixes bugs |
-| **QA** | Sonnet | 7-phase quality gate |
-| **Watcher** | Haiku | Continuous monitoring |
-| **Technical Writer** | Haiku | Documentation, CHANGELOG |
+| Agent | Model | Phase | Role |
+|-------|-------|-------|------|
+| **Lead** (you + Claude) | Opus | All | Orchestrates the pipeline — not a spawned agent |
+| **Project Manager** | Sonnet | 3 (Decompose) | Apple EPM task decomposition with DRI assignments |
+| **Design Reviewer** | Sonnet | 4, 6 (Verify, Quality) | DNA compliance — validates UI matches spec |
+| **Builder** | Sonnet | 5 (Build) | Writes production code, verifies APIs before integrating |
+| **Watcher** | Haiku | 5 (Build) | Continuous monitoring — errors, security, drift |
+| **QA** | Sonnet | 6 (Quality) | 7-phase quality gate — blocks bad code |
+| **Technical Writer** | Haiku | 7 (Ship) | CHANGELOG, README, docs ownership |
 
 ### Design DNA — Pixel-Perfect from Day One
 
-14 premium UI pattern pages + **65 production-ready files** you can copy directly into your project:
+14 premium UI pages + **57 production-ready files** you can copy directly into your project:
 
 | Layer | Files | What |
 |-------|-------|------|
-| **Tokens** | 7 CSS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 new animation keyframes (ripple, focus-glow, pop-in, shake, checkmark, stroke-draw, pulse-ring, slide-up, slide-down, counter-roll) + prefers-reduced-motion support + foundation |
-| **Starters** | 33 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) — 20 total primitives with enhanced animations |
-| **Templates** | 39 TSX | Landing, SaaS Dashboard, CRM Pipeline, E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase — full pages ready to customize |
-| **Recipes** | 13 MD | One per app type — tells the builder exactly which palette, background, and components to use |
+| **Tokens** | 10 CSS/JS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 animation keyframes + prefers-reduced-motion + foundation |
+| **Starters** | 33 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn, DnaBackground), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) |
+| **Templates** | 14 TSX | Landing, SaaS Dashboard, CRM Pipeline (+24 subcomponents), E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, Pattern Showcase, Animations Showcase |
 
-The builder reads the recipe, copies the starters and templates, and writes only business logic. Design is inherited, not translated.
+The builder reads the matching React template, extracts design values, and writes only business logic. Design is inherited, not translated.
 
 ---
 
@@ -365,7 +365,7 @@ The enforced workflow saves you from yourself:
 
 ### Step 5: Let the Agents Work for You
 
-APEX has 5 specialized agents — a championship roster. Use `/teams` for parallel work:
+APEX has 6 specialized agents — a championship roster. Use `/teams` for parallel work:
 
 | Agent | Model | Phase | Role |
 |-------|-------|-------|------|
@@ -451,7 +451,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 - **Design Principles (Taste Bible)** — 10 rules preventing generic AI output (#191)
 - **Prettier + Icons** — `.prettierrc` config, Lucide React as standard icon library (#191)
 - **Enhanced Gates** — QA bundle size limit, component duplication check, architecture audit tags (#191)
-- **Production Hooks** — 14 hooks across 12 lifecycle groups (#187, #190, #202)
+- **Production Hooks** — 15 hooks across 12 lifecycle groups (#187, #190, #202)
 - **Design DNA Oscar** — 10 animation keyframes, 5 new primitives, DnaBackground component (#187)
 - **E2E + Performance Tests** — 27 framework tests + hook performance profiler (#187)
 - **Mandalorian Startup Sound** — Session opens with Hero chime + "This is the Way" voice on macOS; disable via `APEX_SOUND=0` (#199)

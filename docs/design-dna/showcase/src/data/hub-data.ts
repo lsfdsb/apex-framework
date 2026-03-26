@@ -144,14 +144,23 @@ export const AGENT_ROSTER: AgentDefinition[] = [
     teachingPoint: "Documentation is not an afterthought — it's architecture that humans read. The Technical Writer owns CHANGELOG, README, and PRD status. Nothing ships undocumented.",
     responsibilities: ["CHANGELOG ownership", "README updates", "PRD status tracking", "API documentation"],
   },
+  {
+    name: "Design Reviewer",
+    role: "Design Compliance",
+    model: "sonnet",
+    icon: "palette",
+    tagline: "The Jony Ive. DNA compliance — no generic AI UI ships.",
+    teachingPoint: "Design review is not subjective. The DNA template is the spec. Font sizes within ±1px, padding within ±2px, same border radius, same transition curves. If it doesn't match, it doesn't ship.",
+    responsibilities: ["DNA extraction", "Visual compliance audit", "Palette verification", "Typography check"],
+  },
 ];
 
 // ── Framework Stats ────────────────────────────────────────────────────────────
 
 export const FRAMEWORK_STATS = [
-  { label: "Agents", value: 5 },
+  { label: "Agents", value: 6 },
   { label: "Skills", value: 22 },
-  { label: "Hooks", value: 14 },
+  { label: "Hooks", value: 15 },
   { label: "Phases", value: 7 },
   { label: "Templates", value: 14 },
 ] as const;
