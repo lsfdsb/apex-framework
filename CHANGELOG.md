@@ -6,57 +6,36 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Added
-- **AgentsPage Typewriter Effect** — Animated thought stream text revelation with staggered timing, ripple animation on state transitions, SVG connection lines linking agents to current task, theme-safe model badges (#219)
-- **TaskBoardPage Iteration Tracking** — Iteration/Ship sections with tab navigation, collapsible shipped iteration cards, live current-ship status banner, backward-compatible TaskBoard state (#219)
-- **Global Accessibility Block** — `prefers-reduced-motion: reduce` CSS block disables all animations site-wide for users with motion sensitivity, respects system accessibility preferences (#219)
-- **Animated Score Ring** — QualityPage score visualization with CSS keyframes and smooth rotation, phase timing display integration (#219)
-- **Theme-Safe Gate Badges** — PipelinePage gate badges use semantic color tokens instead of raw hex, light/dark mode compatible (#219)
-- **OpsLayout Light Theme Tuning** — Sidebar: reduced blur effect (8px→4px), increased opacity (0.8→0.95) for better readability in light mode (#219)
-- **ARIA Landmarks & Live Regions** — Full suite: nav/main/complementary landmarks, aria-live on state updates, aria-expanded on expandable cards, proper heading hierarchy (#219)
-- **AgentsPage Live Animations** — Breathing pulse animations on active agents, thought stream with staggered slide-in transitions, current task links to /tasks route (#219)
-- **PipelinePage Phase Visualization** — Animated SVG connector lines between phases, active phase pulse glow effect, click-to-expand task cards, Apple EPM provenance badges on each phase (#219)
-- **QualityPage Enhanced Scoring** — Animated score ring via CSS keyframes, phase timing display, running phase shimmer effect (#219)
-- **Cross-Page Navigation System** — Task deeplinks from SubProject, Phase, and Agent cards via URL params (?project=, ?task=, ?phase=), TaskCard auto-expands from URL params (#219)
-- **agent-state-writer.sh Hook Script** — PostToolUse hook captures Agent/SendMessage tool calls, updates real-time agent state for UI polling (#219)
-- **session-state-writer.sh Hook Script** — SessionStart hook initializes session state file for state tracking across page lifecycle (#219)
-- **pipeline-state-writer.sh Hook Script** — PostToolUse hook infers pipeline phase from tool activity, updates phase state for animated phase indicators (#219)
-- **OpsContext Shared State Provider** — Centralizes useApexState polling for all OPS pages, eliminates redundant data fetching, enables real-time agent count updates (#218)
-- **Pipeline Visualization Page** — Phase timeline with gate indicators and team rosters (complete 7-phase APEX implementation page)
-- **Agents Management Page** — Team roster with live agent counts, roles, and Breathing Loop visualization
-- **Quality Gates Page** — 7-phase QA acceptance criteria with visual gate status indicators
-- **Apple EPM Provenance Annotations** — All 7 pipeline phases annotated with origin references (Phase number, ANPP section, gate indicators) in code (#218)
-- **Apple EPM Honest Alignment** — CLAUDE.md now has honest tables: Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews, paired design), Aspire (10-to-3-to-1, comprehensive analytics) (#210)
-- **ANPP Separated from Rules of the Road** — PM generates ANPP (development plan). Tech Writer generates Rules of the Road (launch checklist). Clear distinction in PM and Tech Writer agents (#210)
-- **Seven Elements Concrete Exit Criteria** — QA agent now has explicit verification questions for each of 7 elements (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration), not just labels (#210)
-- **Builder Quality-During-Build** — Builders self-verify during build via demo-first protocol for complex features, not just pre-completion checklist (#210)
-- **DRI Decision Ownership** — All agents now explicitly own decisions, not just task execution; agent headers clarified (#210)
-- **Paired Design Review Protocol** — Designer does brainstorm pass + production pass (Apple's paired meetings adapted for remote) (#210)
-- **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
+### Added — OPS Rebuild (#216–#220)
+- **OpsContext shared state provider** — Centralizes useApexState polling for tasks, agents, pipeline, quality, session. All 5 OPS pages consume via `useOps()` (#217)
+- **3 new OPS pages** — PipelinePage (7-phase flow + Apple provenance), AgentsPage (live roster + thought streams), QualityPage (score ring + gate dashboard) (#217, #218)
+- **3 state hook scripts** — `agent-state-writer.sh`, `session-state-writer.sh`, `pipeline-state-writer.sh` emit live state to `.apex/state/` (#218)
+- **Cross-page navigation** — URL params `?project=`, `?task=`, `?phase=` link Projects, Tasks, Pipeline, and Agents pages together (#218)
+- **Agent animations** — Breathing pulse on active agents, typewriter thought streams, ripple on transitions, SVG connection lines (#218, #219)
+- **Apple EPM provenance** — Honest `appleOrigin` annotations on all 7 pipeline phases (#217)
+- **AboutPage expansion** — 14-section framework showcase: 22 skills, 7 agents, 14 hooks, Design DNA, security model (#216)
+- **Accessibility** — ARIA landmarks, `aria-live` on live regions, global `prefers-reduced-motion` block (#219)
 
-### Changed
-- **hub-types Extended** — Added Iteration interface (id, name, startDate, endDate, status, tasks) and iteration field on TaskItem, iterations array on TaskBoardState for full iteration lifecycle management (#219)
-- **settings.json Hook Registration** — Added 3 new hook scripts: agent-state-writer.sh (PostToolUse), session-state-writer.sh (SessionStart), pipeline-state-writer.sh (PostToolUse) for real-time state tracking across OPS pages (#219)
-- **ProjectsPage.tsx Extraction** — Refactored from 941 lines into 230-line index + 4 modular components (ProjectList, ProjectGroup, SubProjectCard, CompletionRing) for maintainability (#218)
-- **OpsLayout Sidebar Redesign** — Auto-expand on hover, persistent logo, 5 primary routes (Pipeline, Agents, Quality, Changelog, About) with active state indicators, live agent count badge (#218)
-- **hub-types Extended** — Added appleOrigin field to enable provenance tracking across all 7 pipeline phases and Apple EPM annotations (#218)
-- **ProjectsPage.tsx Redesign** — Full visual overhaul with collapsible ProjectGroup containers for APEX Framework and Supabase RAG, chevron rotation animation, and phase progress bars. Timeline reset to v5.23 with RAG shipped status and PRs #211-#215
-- **AboutPage.tsx Expansion** — Extended from 587→909 lines into comprehensive 14-section framework showcase: Hero, Origin, Two Apps, 7-Phase Pipeline, Agent Roster (7 agents), Skills Arsenal (22 skills in 8 categories), Hook System (14 hooks), Design DNA (14 templates, 5 palettes), Tech Stack, Security Model, Apple EPM, Values/Creed, By the Numbers, Footer
-- **HubHome.tsx Metrics Update** — Updated to accurate v5.23 values: 215 PRs, 7 agents, 23 versions, 210 QA gates. Updated changelog preview and DNA card stats
-- **hub-data.ts Statistics** — Synced FRAMEWORK_STATS to v5.23 release values
-- **Version Bump** — 5.22.0 → 5.23.0 across VERSION, README, CLAUDE.md, skills, agents (#210)
-- **Builder Agent Documentation** — Enhanced with quality-during-build guidance and demo-first protocol (#210)
-- **QA Agent Documentation** — Added concrete Seven Elements verification questions (#210)
-- **PM Agent Documentation** — Clarified ANPP scope (milestones/DRI/risk), separated from launch checklist (#210)
-- **Designer Agent (Design Reviewer) Documentation** — Added paired review protocol (brainstorm + production passes) (#210)
-- **All Agent Headers** — Reorganized to show Implement/Adapt/Aspire categories for Apple EPM alignment (#210)
-- **README Agent Roster** — No structural changes; version ref updated (#210)
+### Changed — OPS Rebuild (#216–#220)
+- **ProjectsPage rewritten** — Uses OpsContext exclusively, no hardcoded data. Live session banner, task progress, pipeline phase strip (#220)
+- **TaskBoardPage rewritten** — 966→324 lines. Clean kanban, OpsContext, phase filter + WIP indicators. Removed iteration bloat (#220)
+- **Mock data eliminated** — `hub-mock.ts` returns empty board. Real data only from `.apex/state/` hooks (#220)
+- **Sidebar removed** — OPS pages render directly, nav from top bar. Bundle -22KB (#220)
+- **5 dead files deleted** — PipelineTimeline, ProjectCard, SubProjectCard, TeamKanban, projects-data.ts (-833 lines) (#220)
+- **HubHome metrics** — Updated to v5.23: 215 PRs, 7 agents, 23 versions (#216)
+- **Timestamps** — All use America/Sao_Paulo timezone (UTC-3) (#220)
 
-### Fixed
-- **QualityPage Status Badge Colors** — Fixed broken color token concatenation in status badges, now properly renders light/dark theme colors (#219)
-- **Dead Reference Cleanup** — Removed health-check.sh references from README, CONTRIBUTING.md, Watcher agent (script deleted in #206) (#210)
-- **Stale HTML/CSS Reference** — Builder agent now correctly says "React/TSX reference implementations", not "HTML/CSS files" (#210)
-- **Memory File Cleanup** — Deleted 3 stale memory files from v5.22 audit; updated MEMORY.md index (#210)
+### Fixed — OPS Rebuild (#216–#220)
+- **Fake demo agents removed** — AgentsPage no longer shows pretend "active" agents in demo mode (#220)
+- **QualityPage color bug** — Fixed broken `${color}18` concatenation, now uses `color-mix()` (#219)
+- **Theme polish** — All hardcoded rgba replaced with `color-mix()` tokens, light mode sidebar tuned (#219)
+
+### Added — Apple EPM (#210)
+- **Apple EPM Honest Alignment** — Implement/Adapt/Aspire tables in CLAUDE.md (#210)
+- **ANPP separated from Rules of the Road** — PM generates ANPP, Tech Writer generates launch checklist (#210)
+- **Seven Elements exit criteria** — QA has concrete verification questions per element (#210)
+- **DRI decision ownership** — Agents own decisions, not just execution (#210)
+- **Tech Writer Rules of the Road template** — 12-point launch checklist in Phase 7 (#210)
 
 ## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
 
