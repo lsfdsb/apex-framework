@@ -28,7 +28,7 @@ export function LiveBadge({ isLive, lastUpdated }: LiveBadgeProps) {
       }}
       title={
         isLive && lastUpdated
-          ? `Last updated: ${lastUpdated.toLocaleTimeString()}`
+          ? `Last updated: ${lastUpdated.toLocaleTimeString("pt-BR", { timeZone: "America/Sao_Paulo" })}`
           : isLive
           ? "Connected to Claude Code session"
           : "No active session — showing demo data"

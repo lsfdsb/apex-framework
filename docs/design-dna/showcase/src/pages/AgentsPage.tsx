@@ -12,62 +12,10 @@ import type { AgentModel, AgentStatus, AgentState } from "../data/hub-types";
 
 // ── Demo fallback data ────────────────────────────────────────────────────────
 
+// Demo fallback: all agents idle, no fake activity.
+// Live data from .apex/state/agents.json replaces this when a session is active.
 const DEMO_AGENTS: AgentState = {
-  agents: [
-    {
-      name: "Lead",
-      status: "active",
-      model: "opus",
-      currentTask: "OPS-T1",
-      thoughtStream: [
-        {
-          timestamp: "2026-03-26T14:30:00Z",
-          action: "Reading ProjectsPage.tsx",
-          explanation: "Analyzing component structure before refactoring",
-        },
-        {
-          timestamp: "2026-03-26T14:29:30Z",
-          action: "Reviewed OpsContext.tsx",
-          explanation: "Verified shared state provider is correctly wired",
-        },
-      ],
-      startedAt: "2026-03-26T14:00:00Z",
-    },
-    {
-      name: "Builder",
-      status: "active",
-      model: "sonnet",
-      currentTask: "OPS-T3",
-      thoughtStream: [
-        {
-          timestamp: "2026-03-26T14:28:00Z",
-          action: "Writing PipelineTimeline.tsx",
-          explanation: "Extracting timeline component from monolith",
-        },
-      ],
-      startedAt: "2026-03-26T14:15:00Z",
-    },
-    {
-      name: "QA",
-      status: "idle",
-      model: "sonnet",
-      thoughtStream: [],
-    },
-    {
-      name: "Watcher",
-      status: "active",
-      model: "haiku",
-      currentTask: "monitoring",
-      thoughtStream: [
-        {
-          timestamp: "2026-03-26T14:27:00Z",
-          action: "TypeScript check passed",
-          explanation: "0 errors after latest edit",
-        },
-      ],
-      startedAt: "2026-03-26T14:00:00Z",
-    },
-  ],
+  agents: [],
 };
 
 // ── Model badge colors ────────────────────────────────────────────────────────
@@ -171,11 +119,12 @@ function ThoughtEntry({ timestamp, action, explanation, index }: ThoughtEntryPro
           flexShrink: 0,
         }}
       >
-        {new Date(timestamp).toLocaleTimeString([], {
+        {new Date(timestamp).toLocaleTimeString("pt-BR", {
           hour: "2-digit",
           minute: "2-digit",
           second: "2-digit",
           hour12: false,
+          timeZone: "America/Sao_Paulo",
         })}
       </span>
       <div style={{ minWidth: 0 }}>
