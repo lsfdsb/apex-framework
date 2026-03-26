@@ -114,9 +114,10 @@ export default function CanvasPage() {
         aria-label="APEX agent network canvas"
       >
         <Background
-          color="var(--border)"
-          gap={24}
-          size={1}
+          color="color-mix(in srgb, var(--text-muted) 30%, transparent)"
+          gap={20}
+          size={1.5}
+          variant={"dots" as never}
         />
         <MiniMap
           nodeColor={miniMapNodeColor}
