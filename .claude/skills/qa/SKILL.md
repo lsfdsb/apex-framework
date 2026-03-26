@@ -31,7 +31,7 @@ jq -r '.repo_type' .claude/.manifest.json 2>/dev/null || echo "unknown"
 **If repo_type=framework** (APEX Framework itself):
 - Phase 0: Skip package.json dependency checks — validate shell script syntax instead (`bash -n .claude/scripts/*.sh`)
 - Phase 1: Replace TypeScript checks with shell script and markdown frontmatter validation
-- Phase 3: Replace test suite checks with `bash .claude/scripts/health-check.sh`
+- Phase 3: Replace test suite checks with JSON validation and agent frontmatter checks
 - Phase 4-5: Skip UX and performance (not applicable to CLI framework)
 - Focus on: script syntax, JSON validity, agent frontmatter, cross-references, hook wiring
 

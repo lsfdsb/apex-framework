@@ -64,17 +64,17 @@ All contributors must read [`CLAUDE.md`](CLAUDE.md) before submitting code. It i
 
 When contributing UI components or Design DNA templates:
 
-1. **Read the matching DNA page** from `docs/design-dna/` for your page type
-2. **Run the DNA test suite** to verify new pages integrate correctly:
+1. **Read the matching React template** from `docs/design-dna/templates/` for your page type
+2. **Build the showcase app** to verify integration:
    ```bash
-   bash tests/test-design-dna.sh
+   cd docs/design-dna/showcase && npm run build
    ```
 3. **Verify these requirements** before submitting:
-   - Page loads `palette.js` and `svg-backgrounds.js`
-   - Persistent nav/footer are injected
-   - At least one SVG background or pattern is applied
-   - All DNA pages pass the palette integrity check
-4. **Side-by-side comparison**: Open your component next to the DNA reference page. Font sizes within ±1px, padding within ±2px, same border radius, same transition timing.
+   - Component uses CSS variables from the design token system (no hardcoded Tailwind palette colors)
+   - Responsive from 320px up (mobile-first)
+   - Dark and light mode work via semantic tokens
+   - Follows the 10 design principles in `docs/design-dna/principles.md`
+4. **Side-by-side comparison**: Open your component next to the DNA reference template. Font sizes within ±1px, padding within ±2px, same border radius, same transition timing.
 
 ## What We Accept
 
