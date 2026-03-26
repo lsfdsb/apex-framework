@@ -99,7 +99,7 @@ export default function DatePicker({ value, onChange, label, placeholder = "Sele
           {/* Footer */}
           <div style={{ display: "flex", justifyContent: "space-between", marginTop: 12, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
             <button onClick={() => { onChange?.(""); setOpen(false) }} style={{ fontSize: 12, color: "var(--text-muted)", background: "none", border: "none", cursor: "pointer" }}>Limpar</button>
-            <button onClick={() => { pick(today.getDate()); setViewMonth(today.getMonth()); setViewYear(today.getFullYear()) }} style={{ fontSize: 12, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontWeight: 500 }}>Hoje</button>
+            <button onClick={() => { pick(today.getDate()); setViewMonth(today.getMonth()); setViewYear(today.getFullYear()) }} style={{ fontSize: 12, color: "var(--accent)", background: "none", border: "none", cursor: "pointer", fontWeight: 500 }}>Today</button>
           </div>
         </div>
       )}

@@ -129,7 +129,7 @@ export default function HubHome() {
         <div style={{ fontSize: 12, fontWeight: 600, color: "var(--accent)", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 16 }}>
           Agent-Powered EXcellence
         </div>
-        <h1 style={{ marginBottom: 20, fontFamily: "var(--font-body)", lineHeight: 1.0 }}>
+        <h1 style={{ marginBottom: 20, fontFamily: "var(--font-display)", lineHeight: 1.0 }}>
           <span style={{ fontSize: "clamp(42px, 6vw, 60px)", fontWeight: 800, color: "var(--text)", letterSpacing: "-0.04em" }}>
             APEX
           </span>

@@ -24,7 +24,7 @@ const NOTES: Note[] = [
   },
   {
     initials: 'JP', name: 'Julia Park', time: 'Há 3 dias',
-    content: <>Análise competitiva: eles também estão conversando com a <strong>BuildCo</strong> — mas o prazo deles é 6+ meses. Nossa entrega em 8 semanas é o nosso diferencial mais forte. Lidere com velocidade.</>,
+    content: <>Competitive analysis: they're also talking to <strong>BuildCo</strong> — but their timeline is 6+ months. Our 8-week delivery is our strongest differentiator. Lead with speed.</>,
     tags: ['competitivo', 'estratégia'],
     avatarColor: 'var(--warning)', avatarBg: 'rgba(251,191,36,0.1)',
   },
@@ -89,7 +89,7 @@ export default function NotesPanel() {
           onChange={e => setValue(e.target.value)}
           rows={2}
         />
-        <button style={styles.submitBtn} aria-label="Enviar nota">
+        <button style={styles.submitBtn} aria-label="Submit note">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
           </svg>

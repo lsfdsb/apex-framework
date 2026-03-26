@@ -7,10 +7,10 @@ interface Message {
 }
 
 const INITIAL_MESSAGES: Message[] = [
-  { id: 1, role: 'agent', text: 'Olá! Como posso te ajudar hoje?' },
-  { id: 2, role: 'user', text: 'Não estou conseguindo encontrar o botão de exportação.' },
-  { id: 3, role: 'agent', text: 'Boa pergunta! Na nova versão, ele foi movido para o canto superior direito. Clique no menu de três pontos e você verá "Exportar dados".' },
-  { id: 4, role: 'user', text: 'Encontrei, obrigado!' },
+  { id: 1, role: 'agent', text: 'Hi! How can I help you today?' },
+  { id: 2, role: 'user', text: 'I can\'t find the export button.' },
+  { id: 3, role: 'agent', text: 'Great question! In the new version, it was moved to the top-right corner. Click the three-dot menu and you\'ll see "Export data".' },
+  { id: 4, role: 'user', text: 'Found it, thanks!' },
 ]
 
 const styles: Record<string, React.CSSProperties> = {
@@ -106,7 +106,7 @@ export default function ChatWidget() {
       </div>
       <div style={styles.inputBar}>
         <input value={input} onChange={e => setInput(e.target.value)} onKeyDown={handleKeyDown} placeholder="Digite uma mensagem..." style={{ flex: 1, background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 999, padding: '8px 16px', color: 'var(--text)', fontSize: 13, fontFamily: 'var(--font-body)', outline: 'none' }} aria-label="Mensagem" />
-        <button style={styles.sendBtn} onClick={handleSend} aria-label="Enviar">
+        <button style={styles.sendBtn} onClick={handleSend} aria-label="Send">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" /></svg>
         </button>
       </div>

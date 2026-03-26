@@ -87,7 +87,7 @@ function StatusBadge({ status }: { status: string }) {
 
 function Toggle({ defaultOn = false }: { defaultOn?: boolean }) {
   const [on, setOn] = useState(defaultOn);
-  return <div className={`saas-toggle${on ? " on" : ""}`} onClick={() => setOn(!on)} />;
+  return <button role="switch" aria-checked={on} className={`saas-toggle${on ? " on" : ""}`} onClick={() => setOn(!on)} style={{ border: "none", padding: 0, cursor: "pointer", background: "none" }} />;
 }
 
 export default function SaaSDashboard() {

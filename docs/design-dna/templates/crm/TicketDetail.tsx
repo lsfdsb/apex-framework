@@ -20,10 +20,10 @@ const STATUS_STYLE: Record<Status, React.CSSProperties> = {
 const STATUS_LABEL: Record<Status, string> = { open: 'Aberto', pending: 'Pendente', resolved: 'Resolvido' }
 
 const TIMELINE: TimelineEvent[] = [
-  { id: 1, time: 'Hoje, 09:14', text: 'Ticket criado por Marina Costa via chat', active: true },
-  { id: 2, time: 'Hoje, 09:17', text: 'Atribuído a Ana Souza (suporte nível 2)' },
-  { id: 3, time: 'Hoje, 09:31', text: 'Ana respondeu com instruções de depuração' },
-  { id: 4, time: 'Hoje, 10:02', text: 'Cliente confirmou resolução — aguardando fechamento' },
+  { id: 1, time: 'Today, 09:14', text: 'Ticket created by Marina Costa via chat', active: true },
+  { id: 2, time: 'Today, 09:17', text: 'Assigned to Ana Souza (support tier 2)' },
+  { id: 3, time: 'Today, 09:31', text: 'Ana replied with debugging instructions' },
+  { id: 4, time: 'Today, 10:02', text: 'Customer confirmed resolution — awaiting closure' },
 ]
 
 const s: Record<string, React.CSSProperties> = {

@@ -22,7 +22,7 @@ user-invocable: false
 
 ## Typography
 
-Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults as primary fonts.
+Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults as **display/primary** fonts. Inter and system fonts are acceptable for labels, captions, and UI chrome — but headlines and hero text must use a distinctive display font.
 
 - Display font: distinctive, characterful (for headings)
 - Body font: clean, readable (for content)
@@ -43,7 +43,7 @@ Choose distinctive fonts. **NEVER** use Inter, Roboto, Arial, or system defaults
 - **General Sans** — neo-grotesque with personality; works as both display and body at scale
 - **Switzer** — grotesque with warmth; excellent for long-form reading and app interfaces
 
-Load via Google Fonts or Fontsource. Never use Inter, Roboto, or system-ui as a primary font choice.
+Load via Google Fonts or Fontsource. Never use Inter, Roboto, or system-ui as a display/headline font. They are acceptable for body text and UI labels.
 
 ## Color
 
@@ -81,9 +81,10 @@ Load via Google Fonts or Fontsource. Never use Inter, Roboto, or system-ui as a 
 
 ## Animation Implementation
 
-- Use **framer-motion** for complex animations (page transitions, layout animations, gestures)
-- Use **CSS transitions** for simple hover/focus states (don't import a library for opacity changes)
-- `AnimatePresence` for enter/exit animations
+- **Prefer CSS transitions and @keyframes** for all animations (the DNA templates use zero JS animation libraries)
+- Use **CSS IntersectionObserver** for scroll-reveal animations (see `AnimationsShowcase.tsx` for patterns)
+- Only add **framer-motion** if the project already uses it or needs complex gesture handling (drag, spring physics)
+- `AnimatePresence` for enter/exit animations (only if framer-motion is already installed)
 - Always wrap in `motion.div` with `initial`, `animate`, `exit` props
 - **ALWAYS** check `prefers-reduced-motion` before any animation
 
@@ -205,7 +206,7 @@ When building a new page, start from these patterns:
 ## Anti-Patterns — NEVER
 
 - Purple-to-blue gradient backgrounds
-- Inter/Roboto/Arial as primary font
+- Inter/Roboto/Arial as display/headline font
 - Shadows from 2015 (huge, blurry, dark)
 - Centered text blocks wider than 40ch
 - Icon-only buttons without tooltips or aria-label

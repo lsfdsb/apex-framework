@@ -9,7 +9,7 @@ interface FilterDef {
 }
 
 const FILTERS: FilterDef[] = [
-  { id: 'stage', label: 'Estágio', options: ['Todos os estágios', 'Lead', 'Qualificado', 'Proposta', 'Fechado'] },
+  { id: 'stage', label: 'Stage', options: ['All stages', 'Lead', 'Qualified', 'Proposal', 'Closed'] },
   { id: 'owner', label: 'Responsável', options: ['Todos', 'Ana Souza', 'Marcus Chen', 'Julia Park'] },
   { id: 'source', label: 'Origem', options: ['Todas as origens', 'Inbound', 'Outbound', 'Indicação'] },
 ];
@@ -55,7 +55,7 @@ export default function FilterBar() {
 
       {active.length > 0 && (
         <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Filtros ativos:</span>
+          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>Active filters:</span>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             {active.map(label => (
               <span key={label} style={{
