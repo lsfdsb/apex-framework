@@ -16,6 +16,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
 
 ### Changed
+- **ProjectsPage.tsx Redesign** — Full visual overhaul with collapsible ProjectGroup containers for APEX Framework and Supabase RAG, chevron rotation animation, and phase progress bars. Timeline reset to v5.23 with RAG shipped status and PRs #211-#215
+- **AboutPage.tsx Expansion** — Extended from 587→909 lines into comprehensive 14-section framework showcase: Hero, Origin, Two Apps, 7-Phase Pipeline, Agent Roster (7 agents), Skills Arsenal (22 skills in 8 categories), Hook System (14 hooks), Design DNA (14 templates, 5 palettes), Tech Stack, Security Model, Apple EPM, Values/Creed, By the Numbers, Footer
+- **HubHome.tsx Metrics Update** — Updated to accurate v5.23 values: 215 PRs, 7 agents, 23 versions, 210 QA gates. Updated changelog preview and DNA card stats
+- **hub-data.ts Statistics** — Synced FRAMEWORK_STATS to v5.23 release values
 - **Version Bump** — 5.22.0 → 5.23.0 across VERSION, README, CLAUDE.md, skills, agents (#210)
 - **Builder Agent Documentation** — Enhanced with quality-during-build guidance and demo-first protocol (#210)
 - **QA Agent Documentation** — Added concrete Seven Elements verification questions (#210)
