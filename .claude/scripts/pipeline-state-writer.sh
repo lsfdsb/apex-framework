@@ -23,6 +23,9 @@ fi
 
 # Read hook input from stdin (Claude Code passes JSON via stdin)
 INPUT=$(cat)
+if [ -z "$INPUT" ] || ! echo "$INPUT" | jq . >/dev/null 2>&1; then
+  exit 0
+fi
 TOOL_NAME=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null || true)
 TOOL_INPUT_RAW=$(echo "$INPUT" | jq -c '.tool_input // {}' 2>/dev/null || true)
 
@@ -93,7 +96,7 @@ if [ "$PHASE" -gt 0 ]; then
   AGENTS_FILE="$STATE_DIR/agents.json"
   if [ -f "$AGENTS_FILE" ]; then
     jq --arg ts "$TIMESTAMP" --arg phase "$PHASE_NAME" \
-      'if (.agents | map(.name) | index("Lead")) then
+      'if ((.agents // []) | map(.name) | index("Lead")) then
         (.agents[] | select(.name == "Lead")) |= (
           .status = "active"
           | .currentTask = ("Phase: " + $phase)

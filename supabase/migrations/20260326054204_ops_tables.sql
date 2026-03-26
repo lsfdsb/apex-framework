@@ -8,6 +8,18 @@
 -- by Bueno & Claude · São Paulo, 2026
 
 -- ══════════════════════════════════════════════════════════════════════════════
+-- Prerequisite: updated_at trigger function (idempotent — safe if already exists from v1)
+-- ══════════════════════════════════════════════════════════════════════════════
+
+create or replace function public.set_updated_at()
+returns trigger language plpgsql as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
+
+-- ══════════════════════════════════════════════════════════════════════════════
 -- Enums
 -- ══════════════════════════════════════════════════════════════════════════════
 

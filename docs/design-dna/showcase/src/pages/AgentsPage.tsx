@@ -240,7 +240,7 @@ export default function AgentsPage() {
           position: absolute;
           inset: 0;
           border-radius: 50%;
-          background: var(--success, #22c55e);
+          background: var(--success);
           animation: agent-ripple 2s ease-out infinite;
         }
 

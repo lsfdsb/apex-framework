@@ -49,11 +49,11 @@ export function modelStyle(model: AgentModel): {
 function StatusDot({ status }: { status: AgentStatus }) {
   const color =
     status === "active"
-      ? "var(--success, #22c55e)"
+      ? "var(--success)"
       : status === "failed"
-        ? "var(--destructive, #ef4444)"
+        ? "var(--destructive)"
         : status === "completed"
-          ? "var(--success, #22c55e)"
+          ? "var(--success)"
           : "var(--text-muted)";
 
   return (
