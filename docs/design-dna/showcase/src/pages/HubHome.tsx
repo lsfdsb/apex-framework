@@ -204,7 +204,7 @@ export default function HubHome() {
         >
           <Sparkles size={16} style={{ color: "var(--accent)", flexShrink: 0 }} />
           <span style={{ fontSize: 13, color: "var(--text-secondary)", flex: 1 }}>
-            <strong style={{ color: "var(--text)" }}>v5.22</strong> — PM Agent, 7-phase pipeline, Visual HUB, CI upgrades
+            <strong style={{ color: "var(--text)" }}>v5.23</strong> — Apple EPM honest audit, ANPP/RoR separation, Seven Elements as exit criteria
           </span>
           <span style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600, flexShrink: 0, display: "flex", alignItems: "center", gap: 4 }}>
             Changelog <ArrowRight size={12} />

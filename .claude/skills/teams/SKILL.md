@@ -15,7 +15,7 @@ allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate
 /teams build   → PM + Watcher + Builder + QA + Tech Writer
 /teams fix     → Watcher + Builder + QA + Tech Writer
 /teams review  → QA + Tech Writer
-/teams full    → All 5 agents (championship roster)
+/teams full    → All 6 agents (championship roster)
 ```
 
 **How it works**: Lead spawns team → agents auto-claim tasks from TaskList → Breathing Loop runs:

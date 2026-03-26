@@ -95,9 +95,6 @@ done
 # Validate JSON config
 jq empty .claude/settings.json 2>/dev/null || echo "CRITICAL: settings.json is invalid JSON"
 
-# Run health check
-[ -f ".claude/scripts/health-check.sh" ] && bash .claude/scripts/health-check.sh 2>&1 | tail -20
-
 # Check agent frontmatter integrity
 for f in .claude/agents/*.md; do
   [ -f "$f" ] || continue
