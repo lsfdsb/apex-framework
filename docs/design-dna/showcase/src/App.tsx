@@ -1,5 +1,6 @@
 import { Suspense, lazy, useState, useEffect } from "react";
 import { PaletteProvider } from "./context/PaletteContext";
+import { OpsProvider } from "./context/OpsContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
@@ -113,9 +114,11 @@ export default function App() {
         <div style={{ position: "relative", zIndex: 1 }}>
           <Suspense fallback={<LoadingState />}>
             {isOps && opsRoute ? (
-              <OpsLayout>
-                <opsRoute.component />
-              </OpsLayout>
+              <OpsProvider>
+                <OpsLayout>
+                  <opsRoute.component />
+                </OpsLayout>
+              </OpsProvider>
             ) : hash === "/" ? (
               <HubHome />
             ) : hash === "/dna" ? (

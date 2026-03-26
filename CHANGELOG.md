@@ -7,6 +7,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+- **OpsContext Shared State Provider** — Centralizes useApexState polling for all OPS pages, eliminates redundant data fetching, enables real-time agent count updates (#218)
+- **Pipeline Visualization Page** — Phase timeline with gate indicators and team rosters (complete 7-phase APEX implementation page)
+- **Agents Management Page** — Team roster with live agent counts, roles, and Breathing Loop visualization
+- **Quality Gates Page** — 7-phase QA acceptance criteria with visual gate status indicators
+- **Apple EPM Provenance Annotations** — All 7 pipeline phases annotated with origin references (Phase number, ANPP section, gate indicators) in code (#218)
 - **Apple EPM Honest Alignment** — CLAUDE.md now has honest tables: Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews, paired design), Aspire (10-to-3-to-1, comprehensive analytics) (#210)
 - **ANPP Separated from Rules of the Road** — PM generates ANPP (development plan). Tech Writer generates Rules of the Road (launch checklist). Clear distinction in PM and Tech Writer agents (#210)
 - **Seven Elements Concrete Exit Criteria** — QA agent now has explicit verification questions for each of 7 elements (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration), not just labels (#210)
@@ -16,6 +21,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Tech Writer Rules of the Road Template** — Launch checklist template added to Phase 7 (ship) with 12-point verification matrix (#210)
 
 ### Changed
+- **ProjectsPage.tsx Extraction** — Refactored from 941 lines into 230-line index + 4 modular components (ProjectList, ProjectGroup, SubProjectCard, CompletionRing) for maintainability (#218)
+- **OpsLayout Sidebar Redesign** — Auto-expand on hover, persistent logo, 5 primary routes (Pipeline, Agents, Quality, Changelog, About) with active state indicators, live agent count badge (#218)
+- **hub-types Extended** — Added appleOrigin field to enable provenance tracking across all 7 pipeline phases and Apple EPM annotations (#218)
 - **ProjectsPage.tsx Redesign** — Full visual overhaul with collapsible ProjectGroup containers for APEX Framework and Supabase RAG, chevron rotation animation, and phase progress bars. Timeline reset to v5.23 with RAG shipped status and PRs #211-#215
 - **AboutPage.tsx Expansion** — Extended from 587→909 lines into comprehensive 14-section framework showcase: Hero, Origin, Two Apps, 7-Phase Pipeline, Agent Roster (7 agents), Skills Arsenal (22 skills in 8 categories), Hook System (14 hooks), Design DNA (14 templates, 5 palettes), Tech Stack, Security Model, Apple EPM, Values/Creed, By the Numbers, Footer
 - **HubHome.tsx Metrics Update** — Updated to accurate v5.23 values: 215 PRs, 7 agents, 23 versions, 210 QA gates. Updated changelog preview and DNA card stats

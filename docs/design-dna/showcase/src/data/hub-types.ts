@@ -138,6 +138,8 @@ export interface PipelinePhaseDefinition {
   skills: string[];
   teachingPoint: string;
   simulationDuration: number;
+  /** Honest annotation: which Apple EPM concept this phase maps to (if any). */
+  appleOrigin?: string;
 }
 
 export type AgentModel = "opus" | "sonnet" | "haiku";
