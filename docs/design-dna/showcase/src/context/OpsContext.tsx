@@ -87,7 +87,7 @@ function transformTasks(rows: TaskRow[]): TaskBoardState {
     column: (r.column ?? "todo") as TaskItem["column"],
     phase: (r.phase ?? "P0") as TaskItem["phase"],
     dri: (r.dri ?? "builder") as TaskItem["dri"],
-    acceptanceCriteria: (r.acceptance_criteria as TaskItem["acceptanceCriteria"]) ?? [],
+    acceptanceCriteria: (r.acceptance_criteria as unknown as TaskItem["acceptanceCriteria"]) ?? [],
     files: r.files ?? [],
     blockedBy: r.blocked_by ?? [],
     blocks: r.blocks ?? [],
@@ -109,7 +109,7 @@ function transformAgents(rows: AgentRow[]): AgentState {
       status: (r.status as AgentStatus) ?? "idle",
       model: r.model ?? "sonnet",
       currentTask: r.current_task ?? undefined,
-      thoughtStream: (r.thought_stream as AgentState["agents"][0]["thoughtStream"]) ?? [],
+      thoughtStream: (r.thought_stream as unknown as AgentState["agents"][0]["thoughtStream"]) ?? [],
       startedAt: r.started_at ?? undefined,
       completedAt: r.completed_at ?? undefined,
     })),
@@ -137,8 +137,8 @@ function transformQuality(rows: QualityRow[]): QualityState {
   if (!latest) return DEFAULT_QUALITY;
   return {
     score: latest.score ?? 0,
-    phases: (latest.phases as QualityState["phases"]) ?? [],
-    additionalGates: (latest.additional_gates as QualityState["additionalGates"]) ?? {
+    phases: (latest.phases as unknown as QualityState["phases"]) ?? [],
+    additionalGates: (latest.additional_gates as unknown as QualityState["additionalGates"]) ?? {
       security: "pending",
       accessibility: "pending",
       cxReview: "pending",
@@ -210,11 +210,24 @@ export function OpsProvider({ children }: { children: ReactNode }) {
   const [selectedProject, setSelectedProject] = useState<string | null>(null);
 
   // Derive agent activity from tasks — more reliable than agents.json
+  // Keys are DRI identifiers (lowercase-hyphenated) to align with useCanvasData lookups.
   const derivedAgents = useMemo((): Map<string, DerivedAgentEntry> => {
     const map = new Map<string, DerivedAgentEntry>();
 
+    // Map display names to DRI keys for consistent lookups
+    const nameToDri: Record<string, string> = {
+      Lead: "lead",
+      PM: "project-manager",
+      Builder: "builder",
+      QA: "qa",
+      "Design Reviewer": "design-reviewer",
+      Watcher: "watcher",
+      "Technical Writer": "technical-writer",
+    };
+
     for (const agent of agentsState.data.agents) {
-      map.set(agent.name, {
+      const key = nameToDri[agent.name] ?? agent.name.toLowerCase();
+      map.set(key, {
         status: agent.status,
         currentTask: agent.currentTask,
         tasks: [],

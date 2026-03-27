@@ -372,7 +372,7 @@ export default function QualityPage() {
   const { quality: liveQuality, isLive, lastUpdated } = useOps();
 
   // Use live data if available, otherwise demo
-  const quality = isLive && liveQuality.phases.length > 0 ? liveQuality : DEMO_QUALITY;
+  const quality = liveQuality.phases.length > 0 ? liveQuality : DEMO_QUALITY;
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "40px 24px 64px" }}>

@@ -1,4 +1,4 @@
-import { GitCommit, Tag, ArrowRight } from "lucide-react";
+import { GitCommit, Tag } from "lucide-react";
 
 const RELEASES = [
   {
