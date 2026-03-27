@@ -8,6 +8,7 @@ import { useMemo } from "react";
 import {
   ReactFlow,
   Background,
+  BackgroundVariant,
   MiniMap,
   Controls,
   type NodeTypes,
@@ -47,12 +48,21 @@ const canvasStyles = `
     border-radius: 10px !important;
     overflow: hidden;
   }
-  .react-flow__minimap-mask {
-    fill: rgba(100, 120, 255, 0.1) !important;
-  }
   .react-flow__minimap-node {
-    fill: #6b7280 !important;
     stroke: none !important;
+  }
+  @keyframes nodeStatusPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  @keyframes nodeBreathing {
+    0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+    50% { box-shadow: 0 0 16px 4px color-mix(in srgb, var(--accent) 20%, transparent); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .react-flow__node * {
+      animation: none !important;
+    }
   }
 `;
 
@@ -65,15 +75,19 @@ export default function CanvasPage() {
   // TaskLane height reservation (56px bar + up to 204px expanded)
   const TASK_LANE_HEIGHT = 56;
 
-  // MiniMap renders in SVG — CSS variables don't resolve there.
-  // Use computed colors from the DOM.
-  const miniMapNodeColor = useMemo(() => {
+  // MiniMap renders in SVG — CSS variables don't resolve in SVG fill attributes.
+  // Resolve computed colors once from DOM, then use in the node color callback.
+  const { nodeColor, maskColor } = useMemo(() => {
     const root = typeof document !== "undefined" ? getComputedStyle(document.documentElement) : null;
     const success = root?.getPropertyValue("--success")?.trim() || "#22c55e";
     const muted = root?.getPropertyValue("--text-muted")?.trim() || "#6b7280";
-    return (node: { data?: Record<string, unknown> }) => {
-      const status = node.data?.status as string | undefined;
-      return status === "active" ? success : muted;
+    const accent = root?.getPropertyValue("--accent")?.trim() || "#e87b35";
+    return {
+      nodeColor: (node: { data?: Record<string, unknown> }) => {
+        const status = node.data?.status as string | undefined;
+        return status === "active" ? success : muted;
+      },
+      maskColor: `${accent}18`, // ~10% opacity via hex alpha
     };
   }, []);
 
@@ -114,10 +128,9 @@ export default function CanvasPage() {
         edges={edges}
         nodeTypes={nodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.2 }}
+        fitViewOptions={{ padding: 0.3, minZoom: 0.4, maxZoom: 1.2 }}
         minZoom={0.4}
         maxZoom={1.5}
-        defaultViewport={{ x: 0, y: 0, zoom: 0.85 }}
         proOptions={{ hideAttribution: true }}
         style={{ paddingBottom: TASK_LANE_HEIGHT }}
         aria-label="APEX agent network canvas"
@@ -126,10 +139,12 @@ export default function CanvasPage() {
           color="color-mix(in srgb, var(--text-muted) 30%, transparent)"
           gap={20}
           size={1.5}
-          variant={"dots" as never}
+          variant={BackgroundVariant.Dots}
         />
         <MiniMap
-          nodeColor={miniMapNodeColor}
+          nodeColor={nodeColor}
+          nodeStrokeWidth={0}
+          maskColor={maskColor}
           style={{
             background: "var(--bg-elevated)",
             border: "1px solid var(--border)",

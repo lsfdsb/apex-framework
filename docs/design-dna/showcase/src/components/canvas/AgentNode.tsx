@@ -4,7 +4,7 @@
  */
 
 import { memo } from "react";
-import { Handle, Position, type NodeProps } from "@xyflow/react";
+import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import { modelStyle } from "../hub/AgentCard";
 import { LucideIcon } from "../hub/LucideIcon";
 import type { AgentModel, AgentStatus } from "../../data/hub-types";
@@ -47,12 +47,11 @@ interface ThoughtProps {
 }
 
 function ThoughtLine({ timestamp, action, explanation }: ThoughtProps) {
-  const time = new Date(timestamp).toLocaleTimeString("pt-BR", {
+  const time = new Date(timestamp).toLocaleTimeString(undefined, {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
     hour12: false,
-    timeZone: "America/Sao_Paulo",
   });
 
   return (
@@ -70,7 +69,7 @@ function ThoughtLine({ timestamp, action, explanation }: ThoughtProps) {
 
 // ── AgentNode ─────────────────────────────────────────────────────────────────
 
-interface AgentNodeData {
+interface AgentNodeData extends Record<string, unknown> {
   name: string;
   role: string;
   model: AgentModel;
@@ -82,26 +81,16 @@ interface AgentNodeData {
   isLead: boolean;
 }
 
-export const AgentNode = memo(function AgentNode({ data }: NodeProps) {
-  const nodeData = data as unknown as AgentNodeData;
-  const { name, role, model, icon, status, currentTask, thoughtStream, taskCount, isLead } = nodeData;
+type AgentFlowNode = Node<AgentNodeData, "agent">;
+
+export const AgentNode = memo(function AgentNode({ data }: NodeProps<AgentFlowNode>) {
+  const { name, role, model, icon, status, currentTask, thoughtStream, taskCount, isLead } = data;
   const badge = modelStyle(model);
   const isActive = status === "active";
   const width = isLead ? 240 : 200;
 
   return (
     <>
-      <style>{`
-        @keyframes nodeStatusPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-        @keyframes nodeBreathing {
-          0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
-          50% { box-shadow: 0 0 16px 4px color-mix(in srgb, var(--accent) 20%, transparent); }
-        }
-      `}</style>
-
       {/* Target handle — top (receives edges from Lead) */}
       {!isLead && (
         <Handle

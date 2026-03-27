@@ -90,6 +90,7 @@ export function useCanvasData(): {
         id: `${leadId}-${targetId}`,
         source: leadId,
         target: targetId,
+        type: "smoothstep",
         animated: bothActive || targetActive,
         style: {
           stroke: targetActive

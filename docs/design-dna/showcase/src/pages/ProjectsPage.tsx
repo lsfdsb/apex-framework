@@ -4,7 +4,7 @@
  */
 
 import { useState } from "react";
-import { GitBranch, Cpu, CheckCircle2, ChevronDown, ChevronUp, Users, LayoutGrid, Activity, Circle, Workflow } from "lucide-react";
+import { GitBranch, Cpu, CheckCircle2, ChevronDown, ChevronUp, LayoutGrid, Activity, Circle, Workflow } from "lucide-react";
 import { useOps } from "../context/OpsContext";
 import { LiveBadge } from "../components/hub/LiveBadge";
 import { Link } from "../router/Router";
@@ -133,7 +133,7 @@ function SessionBanner({ branch, model, contextUsed, contextMax }: { branch: str
 // ── Main Page ─────────────────────────────────────────────────────────────────
 
 export default function ProjectsPage() {
-  const { tasks, pipeline, agents, derivedAgents, session, isLive, lastUpdated } = useOps();
+  const { tasks, pipeline, derivedAgents, session, isLive, lastUpdated } = useOps();
 
   const allTasks = tasks.tasks;
   const totalTasks = allTasks.length;

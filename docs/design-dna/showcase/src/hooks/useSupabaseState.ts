@@ -32,10 +32,11 @@ interface UseSupabaseStateResult<T> {
  * @param transform Maps an array of raw rows → the shape the OPS app expects
  * @param filter   Optional Realtime filter (e.g. "session_id=eq.xxx")
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function useSupabaseState<T>(
   table: TableName,
   fallback: T,
-  transform: (rows: Record<string, unknown>[]) => T,
+  transform: (rows: any[]) => T,
   filter?: string,
 ): UseSupabaseStateResult<T> {
   const [data, setData] = useState<T>(fallback);
@@ -63,7 +64,7 @@ export function useSupabaseState<T>(
       return;
     }
 
-    setData(transformRef.current(rows as Record<string, unknown>[]));
+    setData(transformRef.current(rows));
     setIsLive(true);
     setLastUpdated(new Date());
   }, [table]);

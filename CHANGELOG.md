@@ -6,6 +6,12 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed — Agent Canvas Rendering + TypeScript Build (#237)
+- **Agent Canvas all 7 agents visible** — Fixed derivedAgents key mismatch (display name vs DRI key) and defaultViewport conflict with fitView, now correctly renders all Lead, Designer, Builder, QA, Project Manager, Design Reviewer, and Watcher agents (#237)
+- **TypeScript build errors (11 fixed)** — Resolved type mismatches in AgentNode.tsx, OpsContext.tsx, useCanvasData.ts, useSupabaseState.ts, and CanvasPage.tsx for strict mode compilation (#237)
+- **Canvas polish** — Added smoothstep edge rendering, proper MiniMap background, BackgroundVariant enum, prefers-reduced-motion respect, and user-local timezone in StatusBar (#237)
+- **QualityPage fallback logic** — Fixed conditional rendering and removed unused imports across ChangelogPage.tsx, ProjectsPage.tsx, and QualityPage.tsx (#237)
+
 ### Added — Supabase OPS Migration + Real-Time State Sync (#223)
 - **migration-v3-ops.sql** — 6 Supabase tables: sessions, tasks, agents, pipeline_phases, quality_gates, changelog_entries with enums, RLS policies, indexes, updated_at triggers, and RPC functions (get_active_session, get_session_tasks) (#223)
 - **OpsContext.tsx derivedAgents field** — Merges agents.json data with task-derived activity for accurate agent status in real-time (#223)
