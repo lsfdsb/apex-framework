@@ -86,14 +86,14 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 | `/claude-api` | "Build apps with the Claude API or Anthropic SDK. TRIGGER when: c... |
 | `/cx-review` | Review any user-facing feature from a Customer Experience perspec... |
 | `/design-system` | Our design system standards and UI/UX guidelines. Auto-loads when... |
-| `/dev` | Manage the dev server — check status, view logs, restart, or stop... |
+| `/dev` | Manage the dev server — check status, view logs, restart, or st... |
 | `/e2e` | Write and run end-to-end tests with Playwright. Use when the user... |
 | `/performance` | Analyze and optimize application performance. Use when the user m... |
 | `/prd` | Generates a comprehensive Product Requirements Document before bu... |
 | `/qa` | Runs comprehensive quality assurance on any feature, PR, or code ... |
 | `/security` | Runs a security audit on code handling authentication, authorizat... |
-| `/ship` | Fast-track branch → commit → push → PR → merge workflow. Use when... |
-| `/supabase` | Supabase integration helper — setup, auth, migrations, types, rea... |
+| `/ship` | Fast-track branch → commit → push → PR → merge workflow. ... |
+| `/supabase` | Supabase integration helper — setup, auth, migrations, types, r... |
 | `/teach` | Teach the user terminal commands, Claude Code usage, and software... |
 | `/teams` | Spawn and manage agent teams for parallel work. Auto-selects team... |
 | `/update` | Manually update the APEX Framework to the latest version. Use whe... |
