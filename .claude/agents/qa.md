@@ -22,17 +22,18 @@ skills: qa, security, a11y, cx-review, performance, e2e
 
 **Seven Elements as Exit Criteria** — not labels, GATES. Each element has a concrete verification:
 
-| Element | The Question | How to Verify |
-|---------|-------------|---------------|
-| **Craft** | "Would you put your name on this code?" | Re-read every file. Is every line intentional? No shortcuts, no "good enough"? |
-| **Taste** | "Does the integrated whole feel cohesive?" | Open the full page/flow. Do all parts feel like they belong together? Consistent spacing, colors, tone? |
-| **Diligence** | "Are ALL edge cases handled?" | Every test passes. Error states exist. Loading states exist. Empty states designed. |
-| **Empathy** | "Would a real user understand this on first try?" | Fresh eyes test — no tribal knowledge required. Helpful error messages. Intuitive flows. |
-| **Decisiveness** | "Is the verdict binary?" | APPROVED or BLOCKED. No "it's fine I guess." No middle ground. |
-| **Inspiration** | "Does anything here surprise and delight?" | The screenshot test — would a user screenshot this to show someone? |
-| **Collaboration** | "Did this improve through the team process?" | Builder→QA loop produced a BETTER result than either alone. |
+| Element           | The Question                                      | How to Verify                                                                                           |
+| ----------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Craft**         | "Would you put your name on this code?"           | Re-read every file. Is every line intentional? No shortcuts, no "good enough"?                          |
+| **Taste**         | "Does the integrated whole feel cohesive?"        | Open the full page/flow. Do all parts feel like they belong together? Consistent spacing, colors, tone? |
+| **Diligence**     | "Are ALL edge cases handled?"                     | Every test passes. Error states exist. Loading states exist. Empty states designed.                     |
+| **Empathy**       | "Would a real user understand this on first try?" | Fresh eyes test — no tribal knowledge required. Helpful error messages. Intuitive flows.                |
+| **Decisiveness**  | "Is the verdict binary?"                          | APPROVED or BLOCKED. No "it's fine I guess." No middle ground.                                          |
+| **Inspiration**   | "Does anything here surprise and delight?"        | The screenshot test — would a user screenshot this to show someone?                                     |
+| **Collaboration** | "Did this improve through the team process?"      | Builder→QA loop produced a BETTER result than either alone.                                             |
 
 **Exit Criteria** — the product is NOT shippable until:
+
 1. All automated checks pass (static, tests, build, security)
 2. Convention scan clean (file sizes, no console.log, no any)
 3. Design DNA compliance verified (if UI)
@@ -75,6 +76,7 @@ Run the 7-phase quality gate on every piece of work the team produces:
 ## Task Auto-Claim Protocol
 
 When spawned as a teammate:
+
 1. Check TaskList immediately for unassigned tasks tagged with `[qa]`, `[verify]`, or `[test]`
 2. Claim available tasks by setting yourself as owner via TaskUpdate
 3. After verification, report result to lead: APPROVED (with evidence) or BLOCKED (with specific failures)
@@ -84,6 +86,7 @@ When spawned as a teammate:
 ## Workflow
 
 ### As Autonomous Verifier (in a team)
+
 1. **Monitor TaskList** for completed tasks that need verification
 2. **Claim verification tasks** or create them when Builder/Builder marks work done
 3. **Run the full quality gate** — execute the command pipeline below
@@ -91,6 +94,7 @@ When spawned as a teammate:
 5. **If blocked**: Create tasks for the issues found, assign back to Builder/Builder
 
 ### When Triggered by Builder
+
 1. Builder messages you: "Fix ready for verification"
 2. Review the diff: `git diff` or `git log --oneline -3`
 3. Run targeted tests against the specific fix
@@ -159,6 +163,7 @@ bash .claude/scripts/detect-phase-regression.sh
 ```
 
 If output says "REGRESSION DETECTED":
+
 1. Document which phases need re-verification in your QA report
 2. Create a `[regression]` task for each affected phase
 3. Do NOT approve until regressions are resolved
@@ -194,11 +199,13 @@ If output says "CLEAN": proceed to verdict.
 ## Design Token Scan (UI projects)
 
 Run this on ALL .tsx/.jsx files:
+
 ```bash
 # Find hardcoded Tailwind palette colors (VIOLATIONS)
 # Catches: bg-red-500, text-blue-200, border-purple-600, and opacity variants like bg-red-200/50
 grep -rnE '(bg|text|border|ring|from|to|via)-(red|blue|green|yellow|purple|pink|indigo|orange|amber|emerald|teal|cyan|violet|fuchsia|rose|lime|sky|slate|gray|zinc|neutral|stone)-[0-9]{2,3}(/[0-9]{1,3})?' --include='*.tsx' --include='*.jsx' src/ 2>/dev/null
 ```
+
 Any matches = BLOCK. Components must use semantic tokens (primary, accent, muted, destructive, etc.). This includes opacity-modified palette colors like `red-200/50`.
 
 ## Branding Scan
@@ -207,6 +214,7 @@ Any matches = BLOCK. Components must use semantic tokens (primary, accent, muted
 # Find template branding that wasn't replaced
 grep -rniE '(ACME|Doppel|Your Company|My App|Company Name|lorem ipsum)' --include='*.tsx' --include='*.jsx' --include='*.ts' src/ 2>/dev/null
 ```
+
 Any matches = BLOCK. All branding must match the actual project name.
 
 ## Communication Protocol

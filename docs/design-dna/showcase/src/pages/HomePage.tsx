@@ -46,7 +46,12 @@ function parseChangelog(): ChangelogEntry[] {
   let match;
   const positions: { version: string; date: string; title: string; start: number }[] = [];
   while ((match = sectionRegex.exec(changelogRaw)) !== null) {
-    positions.push({ version: `v${match[1]}`, date: match[2], title: (match[3] || "").trim(), start: match.index + match[0].length });
+    positions.push({
+      version: `v${match[1]}`,
+      date: match[2],
+      title: (match[3] || "").trim(),
+      start: match.index + match[0].length,
+    });
   }
   for (let i = 0; i < positions.length; i++) {
     const end = i + 1 < positions.length ? positions[i + 1].start - 50 : changelogRaw.length;
@@ -66,8 +71,11 @@ export default function HomePage() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("visible"); }),
-      { threshold: 0.1 }
+      (entries) =>
+        entries.forEach((e) => {
+          if (e.isIntersecting) e.target.classList.add("visible");
+        }),
+      { threshold: 0.1 },
     );
     revealRef.current?.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -80,9 +88,13 @@ export default function HomePage() {
         <div className="hero">
           <div>
             <div className="hero-label reveal visible">APEX Framework</div>
-            <h1 className="reveal visible">Design <em>DNA</em></h1>
+            <h1 className="reveal visible">
+              Design <em>DNA</em>
+            </h1>
             <p className="reveal visible">
-              A living component library.<br />What you see is what you copy.
+              A living component library.
+              <br />
+              What you see is what you copy.
             </p>
             <p className="subtext reveal visible">
               14 templates &middot; 24 components &middot; 5 palettes &middot; Zero translation
@@ -104,7 +116,15 @@ export default function HomePage() {
               {templates.map((route, i) => (
                 <Link key={route.path} to={route.path} className={`glass-card reveal reveal-delay-${(i % 5) + 1}`}>
                   <div className="card-preview">
-                    <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.5" opacity="0.2">
+                    <svg
+                      width="80"
+                      height="80"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="0.5"
+                      opacity="0.2"
+                    >
                       <rect x="3" y="3" width="18" height="18" rx="2" />
                       <line x1="3" y1="9" x2="21" y2="9" />
                       <line x1="9" y1="21" x2="9" y2="9" />
@@ -114,13 +134,36 @@ export default function HomePage() {
                     <div className="card-label">{PALETTES[route.palette].name}</div>
                     <div className="card-title">{route.label}</div>
                     <div className="card-desc">
-                      {route.palette} palette &middot; {route.path === "/landing" ? "Header layout" : route.path === "/blog" || route.path === "/portfolio" || route.path === "/ecommerce" ? "Header layout" : "Sidebar layout"}
+                      {route.palette} palette &middot;{" "}
+                      {route.path === "/landing"
+                        ? "Header layout"
+                        : route.path === "/blog" || route.path === "/portfolio" || route.path === "/ecommerce"
+                          ? "Header layout"
+                          : "Sidebar layout"}
                     </div>
                     <div style={{ display: "flex", gap: 6, marginTop: 16 }}>
-                      <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 999, background: "var(--bg-surface)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          padding: "3px 10px",
+                          borderRadius: 999,
+                          background: "var(--bg-surface)",
+                          color: "var(--text-muted)",
+                          border: "1px solid var(--border)",
+                        }}
+                      >
                         {route.palette}
                       </span>
-                      <span style={{ fontSize: 11, padding: "3px 10px", borderRadius: 999, background: "var(--bg-surface)", color: "var(--text-muted)", border: "1px solid var(--border)" }}>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          padding: "3px 10px",
+                          borderRadius: 999,
+                          background: "var(--bg-surface)",
+                          color: "var(--text-muted)",
+                          border: "1px solid var(--border)",
+                        }}
+                      >
                         dark + light
                       </span>
                     </div>
@@ -145,7 +188,9 @@ export default function HomePage() {
                     <div className="card-label">System</div>
                     <div className="card-title">{route.label}</div>
                     <div className="card-desc">
-                      {route.path === "/design-system" ? "Tokens, typography, spacing, colors, motion — the foundation every component inherits" : "Interactive showcase of all 24 starters: primitives, patterns, and layout components"}
+                      {route.path === "/design-system"
+                        ? "Tokens, typography, spacing, colors, motion — the foundation every component inherits"
+                        : "Interactive showcase of all 24 starters: primitives, patterns, and layout components"}
                     </div>
                   </div>
                 </Link>
@@ -167,19 +212,27 @@ export default function HomePage() {
             <div className="glass-card reveal" style={{ padding: "48px 40px" }}>
               <div style={{ display: "flex", flexDirection: "column", gap: 40 }}>
                 <Step n={1} title="Tell APEX what to build">
-                  Say "Build me an LMS app" — APEX auto-generates a PRD and picks the right Design DNA recipe for your app type. No slash commands needed.
+                  Say "Build me an LMS app" — APEX auto-generates a PRD and picks the right Design DNA recipe for your
+                  app type. No slash commands needed.
                 </Step>
                 <Step n={2} title="APEX reads the recipe">
-                  Each app type has a recipe: palette, background, layout pattern, and starter components. The builder gets these values injected into its prompt automatically.
+                  Each app type has a recipe: palette, background, layout pattern, and starter components. The builder
+                  gets these values injected into its prompt automatically.
                 </Step>
                 <Step n={3} title="Components are copied, not translated">
-                  The builder copies TSX from <code style={{ color: "var(--accent)", fontFamily: "JetBrains Mono, monospace", fontSize: "0.85em" }}>starters/</code> directly into your project. What you see in this showcase is the actual code that ships.
+                  The builder copies TSX from{" "}
+                  <code style={{ color: "var(--accent)", fontFamily: "JetBrains Mono, monospace", fontSize: "0.85em" }}>
+                    starters/
+                  </code>{" "}
+                  directly into your project. What you see in this showcase is the actual code that ships.
                 </Step>
                 <Step n={4} title="Tokens drive the theme">
-                  Import one palette CSS file and all components inherit colors via CSS variables. Switch palettes by changing one import line.
+                  Import one palette CSS file and all components inherit colors via CSS variables. Switch palettes by
+                  changing one import line.
                 </Step>
                 <Step n={5} title="Dark + light from day one">
-                  Every palette has both variants. The ThemeToggle starter handles persistence. Both modes work out of the box. This is the Way.
+                  Every palette has both variants. The ThemeToggle starter handles persistence. Both modes work out of
+                  the box. This is the Way.
                 </Step>
               </div>
             </div>
@@ -199,10 +252,28 @@ export default function HomePage() {
                   <div className="code-dot" style={{ background: "#febc2e" }} />
                   <div className="code-dot" style={{ background: "#28c840" }} />
                 </div>
-                <span style={{ marginLeft: 12, fontSize: 12, color: "var(--text-muted)", fontFamily: "JetBrains Mono, monospace" }}>terminal</span>
+                <span
+                  style={{
+                    marginLeft: 12,
+                    fontSize: 12,
+                    color: "var(--text-muted)",
+                    fontFamily: "JetBrains Mono, monospace",
+                  }}
+                >
+                  terminal
+                </span>
               </div>
-              <pre style={{ padding: "24px 28px", fontSize: 13, lineHeight: 1.8, overflowX: "auto", color: "var(--text-secondary)", fontFamily: "JetBrains Mono, monospace" }}>
-{`# 1. Copy starters into your project
+              <pre
+                style={{
+                  padding: "24px 28px",
+                  fontSize: 13,
+                  lineHeight: 1.8,
+                  overflowX: "auto",
+                  color: "var(--text-secondary)",
+                  fontFamily: "JetBrains Mono, monospace",
+                }}
+              >
+                {`# 1. Copy starters into your project
 cp -r docs/design-dna/starters/ src/components/dna/
 
 # 2. Copy your palette tokens
@@ -233,7 +304,9 @@ import { PageShell } from "@/components/dna/layout/PageShell";`}
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
               {parseChangelog().map((entry) => (
                 <Entry key={entry.version} v={entry.version} d={entry.date} t={entry.title}>
-                  {entry.items.map((item, i) => <li key={i}>{item}</li>)}
+                  {entry.items.map((item, i) => (
+                    <li key={i}>{item}</li>
+                  ))}
                 </Entry>
               ))}
             </div>
@@ -245,7 +318,14 @@ import { PageShell } from "@/components/dna/layout/PageShell";`}
           <p style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 12 }}>
             Forged by Bueno & Claude &middot; S&atilde;o Paulo &middot; 2026
           </p>
-          <p style={{ fontFamily: "Instrument Serif, Georgia, serif", fontStyle: "italic", fontSize: 15, color: "var(--text-muted)" }}>
+          <p
+            style={{
+              fontFamily: "Instrument Serif, Georgia, serif",
+              fontStyle: "italic",
+              fontSize: 15,
+              color: "var(--text-muted)",
+            }}
+          >
             "The beskar is pure. This is the Way."
           </p>
         </div>
@@ -271,11 +351,25 @@ function Entry({ v, d, t, children }: { v: string; d: string; t: string; childre
     <div className="glass-card reveal">
       <div className="card-body">
         <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
-          <span style={{ fontSize: 12, fontFamily: "JetBrains Mono", fontWeight: 700, padding: "4px 12px", borderRadius: 8, background: "var(--accent-glow)", color: "var(--accent)" }}>{v}</span>
+          <span
+            style={{
+              fontSize: 12,
+              fontFamily: "JetBrains Mono",
+              fontWeight: 700,
+              padding: "4px 12px",
+              borderRadius: 8,
+              background: "var(--accent-glow)",
+              color: "var(--accent)",
+            }}
+          >
+            {v}
+          </span>
           <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{d}</span>
           <span style={{ fontSize: 14, fontWeight: 500, color: "var(--text-secondary)" }}>&mdash; {t}</span>
         </div>
-        <ul style={{ fontSize: 14, lineHeight: 1.8, marginLeft: 20, color: "var(--text-secondary)", listStyle: "disc" }}>
+        <ul
+          style={{ fontSize: 14, lineHeight: 1.8, marginLeft: 20, color: "var(--text-secondary)", listStyle: "disc" }}
+        >
           {children}
         </ul>
       </div>

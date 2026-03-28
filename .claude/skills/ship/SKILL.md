@@ -1,7 +1,7 @@
 ---
 name: ship
 description: Fast-track branch → commit → push → PR → merge workflow. Use when the user says "ship", "push and merge", "push pr merge", "ship it", or when changes are ready to go. Spawns Technical Writer automatically. Requires explicit user approval for merge.
-argument-hint: "[commit message or description of changes]"
+argument-hint: '[commit message or description of changes]'
 allowed-tools: Read, Grep, Glob, Bash, Agent, Skill, TaskCreate, TaskUpdate, TaskList, SendMessage
 ---
 
@@ -24,6 +24,7 @@ Recent: !`git log --oneline -3 2>/dev/null`
 ### Step 1: Pre-flight Check
 
 Before shipping, verify:
+
 ```bash
 git status --short
 git diff --stat
@@ -37,6 +38,7 @@ git diff --stat
 ### Step 2: Branch (if needed)
 
 If on `main`, create a branch based on the change type:
+
 - `feat/description` for new features
 - `fix/description` for bug fixes
 - `docs/description` for documentation
@@ -45,6 +47,7 @@ If on `main`, create a branch based on the change type:
 ### Step 3: Commit
 
 Stage changed files (specific files, never `git add -A` blindly) and commit with conventional format:
+
 ```
 type(scope): description (≤72 chars)
 
@@ -63,6 +66,7 @@ gh pr create --title "<commit subject>" --body "<summary + test plan>"
 **MANDATORY** — After PR is created, run these checks:
 
 **5a. Docs consistency (inline — no separate agent needed):**
+
 ```bash
 # VERSION matches README header?
 VERSION=$(cat VERSION 2>/dev/null | tr -d '[:space:]')
@@ -91,6 +95,7 @@ Code review happens through two channels — no separate code-review skill is ne
 ### Step 6: Review Gate
 
 Wait for review to complete:
+
 - **QA APPROVED + user approves** → proceed to merge
 - **QA BLOCKED or reviewer requests changes** → fix, push, re-review
 
@@ -101,6 +106,7 @@ The QA agent covers APEX convention compliance, security, type safety, and test 
 **NEVER merge without explicit user approval.** Show the PR URL and QA verdict first.
 
 If user says "merge", "merge it", "ship it":
+
 ```bash
 gh pr merge <number> --squash --delete-branch
 ```
@@ -112,6 +118,7 @@ Then commit and push any Technical Writer changes as a follow-up.
 After successful merge, auto-version the release:
 
 1. Switch to main and pull:
+
    ```bash
    git checkout main && git pull origin main
    ```
@@ -119,6 +126,7 @@ After successful merge, auto-version the release:
 2. Check if `[Unreleased]` in CHANGELOG.md has entries. If empty, skip.
 
 3. Invoke the changelog skill for version promotion:
+
    ```
    Skill("changelog", args: "promote")
    ```

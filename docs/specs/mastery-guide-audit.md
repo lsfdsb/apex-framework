@@ -29,6 +29,7 @@
 Skills are already on-demand. The output style is the framework's operational brain — it MUST load every session because it drives all behavior (pipeline phases, skill invocation discipline, Mandalorian tone). However, 411 lines is significant context.
 
 **Action**: Audit output style for sections that could move to on-demand skills:
+
 - The full skill map table (lines ~120-170) could be derived from skill descriptions at runtime
 - The "Knowledge Persistence" section could become a memory-management skill
 - The ET Review Protocol is only relevant during pipeline Phase 5-6
@@ -42,11 +43,13 @@ Skills are already on-demand. The output style is the framework's operational br
 **Guide says**: "Hooks are deterministic code that runs 100% of the time. Unlike CLAUDE.md instructions which are advisory (~80% compliance), hooks are deterministic."
 
 **APEX current**: 26 hooks across 11 events. But only 1 CLAUDE.md rule is hard-enforced by hook:
+
 - Rule 1 "PRD before code" → `enforce-workflow.sh` (PreToolUse on Write)
 
 Other hooks are lifecycle (session start/end, dev server) or quality (auto-test, stop-gate, security scan) — not CLAUDE.md rule enforcement.
 
 **Rules that are convention-only (no hook)**:
+
 - Rule 7: Read before editing
 - Rule 9: TDD for implementation
 - Rule 10: Spec before multi-file features
@@ -58,11 +61,11 @@ We should convert more critical rules to hooks where mechanically enforceable.
 
 **Action — candidates for new hooks**:
 
-| Rule | Hook Type | Feasibility |
-|------|-----------|-------------|
-| Rule 7: Read before edit | PreToolUse on Edit — check if file_path was Read in session | Medium — needs session state tracking |
-| Rule 13: Verify libs before install | PreToolUse on Bash — match `npm install\|pnpm add\|yarn add` | High — pattern match on command |
-| Rule 9: TDD for implementation | Hard to enforce mechanically | Low — rely on skill/agent discipline |
+| Rule                                | Hook Type                                                    | Feasibility                           |
+| ----------------------------------- | ------------------------------------------------------------ | ------------------------------------- |
+| Rule 7: Read before edit            | PreToolUse on Edit — check if file_path was Read in session  | Medium — needs session state tracking |
+| Rule 13: Verify libs before install | PreToolUse on Bash — match `npm install\|pnpm add\|yarn add` | High — pattern match on command       |
+| Rule 9: TDD for implementation      | Hard to enforce mechanically                                 | Low — rely on skill/agent discipline  |
 
 **Priority**: Add verify-lib-before-install hook (Rule 13) — highest impact, easiest to implement.
 
@@ -73,6 +76,7 @@ We should convert more critical rules to hooks where mechanically enforceable.
 **Guide says**: "unconstrained subagent = slower main session." Recommends: security-reviewer (read-only), TDD agents (isolated). Warns against "6+ parallel agents" and "elaborate multi-step orchestration."
 
 **APEX current**:
+
 - Builder: 11 tools, `permissionMode: dontAsk`, maxTurns: 50
 - TDD agents: Properly isolated (red can't write src/, green can't write tests, refactor can't modify tests)
 - QA, Designer, PM, Writer: Each has role-appropriate tool sets
@@ -80,6 +84,7 @@ We should convert more critical rules to hooks where mechanically enforceable.
 **Verdict: ADAPT (no change needed)**
 
 The guide's concern is about generic "do everything" agents. APEX Builder is NOT unconstrained — it has:
+
 - 24-item pre-completion checklist
 - TDD isolation protocol (must dispatch @tdd-red/@tdd-green/@tdd-refactor)
 - Design DNA requirement for UI work
@@ -100,6 +105,7 @@ Builder's high tool count is intentional — it's a DRI (Directly Responsible In
 **Verdict: DISAGREE**
 
 The guide targets day-1 over-configuration — installing a massive framework before understanding what you need. APEX is different:
+
 - Evolved organically over 5 versions (v5.19 → v5.24)
 - Skills load on-demand (only name+description at startup, ~1 line each)
 - Agent definitions only load when spawned
@@ -136,6 +142,7 @@ This is working as designed. The `/spec-create` skill produces disk specs. TDD a
 Session discipline is valuable but shouldn't be a hard rule. Some features span multiple sessions. Some sessions handle multiple small fixes. The principle is right: don't let context pollution from Feature A affect Feature B.
 
 **Action**: Add session discipline guidance to CLAUDE.md:
+
 ```
 ## Session Discipline
 - One major feature per session. `/clear` between unrelated tasks.
@@ -161,11 +168,13 @@ Auto-formatting is low-risk, high-reward. It prevents formatting drift without a
 ```json
 {
   "matcher": "Write|Edit|MultiEdit",
-  "hooks": [{
-    "type": "command",
-    "command": "npx prettier --write \"$TOOL_INPUT_FILE_PATH\" 2>/dev/null; exit 0",
-    "timeout": 10
-  }]
+  "hooks": [
+    {
+      "type": "command",
+      "command": "npx prettier --write \"$TOOL_INPUT_FILE_PATH\" 2>/dev/null; exit 0",
+      "timeout": 10
+    }
+  ]
 }
 ```
 
@@ -175,18 +184,19 @@ Auto-formatting is low-risk, high-reward. It prevents formatting drift without a
 
 ## Summary
 
-| # | Claim | Verdict | Action |
-|---|-------|---------|--------|
-| 1 | CLAUDE.md ~45 lines | AGREE (compliant at 61) | None |
-| 2 | Skills load on demand | ADAPT | Output style is intentional; no change |
-| 3 | Hooks > Rules | AGREE | Add verify-lib hook (Rule 13) |
-| 4 | Constrained subagents | ADAPT | No change — Builder is protocol-constrained |
-| 5 | 80/20 skill/agent count | DISAGREE | Focus on output style, not count |
-| 6 | Specs on disk | AGREE (implemented) | None |
-| 7 | /clear between features | ADAPT | Add session discipline to CLAUDE.md |
-| 8 | Auto-format hook | AGREE | Add PostToolUse Prettier hook |
+| #   | Claim                   | Verdict                 | Action                                      |
+| --- | ----------------------- | ----------------------- | ------------------------------------------- |
+| 1   | CLAUDE.md ~45 lines     | AGREE (compliant at 61) | None                                        |
+| 2   | Skills load on demand   | ADAPT                   | Output style is intentional; no change      |
+| 3   | Hooks > Rules           | AGREE                   | Add verify-lib hook (Rule 13)               |
+| 4   | Constrained subagents   | ADAPT                   | No change — Builder is protocol-constrained |
+| 5   | 80/20 skill/agent count | DISAGREE                | Focus on output style, not count            |
+| 6   | Specs on disk           | AGREE (implemented)     | None                                        |
+| 7   | /clear between features | ADAPT                   | Add session discipline to CLAUDE.md         |
+| 8   | Auto-format hook        | AGREE                   | Add PostToolUse Prettier hook               |
 
 **Actions to implement**:
+
 1. Add PostToolUse Prettier hook to settings.json
 2. Add session discipline guidance to CLAUDE.md
 3. Add verify-lib-before-install hook (future — needs script)

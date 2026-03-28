@@ -1,7 +1,7 @@
 ---
 name: prd
 description: Generates a comprehensive Product Requirements Document before building any new application or major feature. This skill should be used when the user says "new app", "new feature", "build me", "create an app", "let's build", "start a project", or explicitly asks for a PRD, spec, or requirements document. Must be invoked before implementation begins — no code without a PRD. Also activates for "plan", "scope", "requirements", "spec".
-argument-hint: "[feature-name]"
+argument-hint: '[feature-name]'
 context: fork
 agent: Plan
 ---
@@ -17,56 +17,71 @@ You are a senior product manager following Marty Cagan's "Inspired" methodology.
 ## Process
 
 ### Step 1: Discovery
+
 If $ARGUMENTS is provided, use it as the project brief. Otherwise, summarize what you know and note gaps.
 
 Gather or infer answers for:
+
 1. **Problem** — What pain are we solving? One sentence.
 2. **User** — Primary persona (role, goals, tech level).
 3. **Success** — Measurable outcomes.
 4. **Constraints** — Timeline, stack, integrations.
-5. **Feeling** — How should users *feel*? (Our CX philosophy demands this.)
+5. **Feeling** — How should users _feel_? (Our CX philosophy demands this.)
 6. **Communication channels** — Does the business use phone, email, WhatsApp, chat, SMS? If ANY communication channel is mentioned (call center, régua de comunicação, outbound, inbound, support, helpdesk), extract explicit requirements for a messaging/helpdesk module. Don't wait for the user to ask — CX-intensive businesses ALWAYS need this.
 7. **External integrations** — List every API, service, or platform mentioned (Twilio, Resend, WhatsApp, Stripe, etc.). Flag each for API verification via WebSearch before implementation.
 8. **Real business data** — If the user provides product names, prices, revenue figures, team sizes, or customer counts, record them exactly. Mock data MUST reflect these real values, not generic placeholders.
 
 ### Step 2: Research
+
 Search the codebase for existing patterns, schemas, and conventions that inform this PRD.
 
 ### Step 3: Write the PRD
+
 Create `docs/prd/$ARGUMENTS-prd.md` (slugified) with this structure:
 
 ```markdown
 # PRD: [Project Name]
+
 **Version**: 1.0 | **Date**: [date] | **Status**: Draft
 
 ## 1. Vision & Purpose
+
 One paragraph. Why this exists.
 
 ## 2. Problem Statement
+
 Pain points, impact, who's affected. Include quantified cost of inaction (revenue lost, time wasted, churn rate).
 
 ## 3. Competitive Landscape
+
 | Competitor | Strengths | Weaknesses | Our Differentiator |
-|------------|-----------|------------|-------------------|
+| ---------- | --------- | ---------- | ------------------ |
+
 Analyze 3-5 existing solutions. What do they get right? Where do they fail? Why build instead of buy?
 
 ## 4. User Personas
+
 For each persona include:
+
 - Name, role, goals, frustrations, tech comfort level
 - A day-in-the-life scenario showing their current workflow pain
 - Key metrics they care about
 
 ## 5. User Stories & Acceptance Criteria
+
 As a [persona], I want [action] so that [outcome].
 Priority: P0 (must) / P1 (should) / P2 (nice).
 Acceptance criteria for each (Given/When/Then format).
 
 ## 5.5. User Journey Maps
+
 For each primary persona, document the step-by-step flow:
 ```
+
 [Entry Point] → [Step 1] → [Decision Point] → [Step 2] → [Success State]
-                                    ↓
-                             [Error Recovery]
+↓
+[Error Recovery]
+
 ```
 Include: happy path, error paths, edge cases. Every screen referenced must exist in the persona→page mapping.
 
@@ -165,7 +180,9 @@ After writing the PRD, update the project's `README.md` to reflect the actual pr
 The README is the first thing users and contributors see — it must describe THIS project, not a template.
 
 ### Step 5: Mock Data Validation
+
 If the user provided real business data (product names, prices, metrics, team structure):
+
 1. List all real data points extracted from user input
 2. Verify mock data in the PRD reflects these values exactly
 3. Flag any placeholder data that should be replaced with real values
@@ -174,16 +191,21 @@ If the user provided real business data (product names, prices, metrics, team st
 **RULE**: Generic mock data (random names, round prices, lorem ipsum) is a red flag. If the user said "Adapta Gold at R$1,188", the mock must use "Adapta Gold at R$1,188" — not "Premium Plan at R$999".
 
 ### Step 6: Research Triggers
+
 List all external integrations identified and output a checklist:
+
 ```
 ⬜ WebSearch [integration] API docs — before implementation
 ```
+
 The lead MUST verify API docs via WebSearch for each item before any builder touches integration code.
 
 ### Step 7: Summary
+
 Return a brief summary of key decisions, open questions, research items needed, and the persona→page mapping for user review.
 
 ### Step 8: Phase Transition
+
 After presenting the PRD, ask the user: "Approve this contract?"
 
 On approval, invoke `/architecture` with the PRD as context. The output style drives pipeline sequencing — this skill focuses on HOW to write the PRD.

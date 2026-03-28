@@ -1,7 +1,7 @@
 ---
 name: execute
 description: Use when you have a written implementation plan to execute task-by-task with review checkpoints. Also use when the user says "execute plan", "run the plan", "implement this plan", "start building", or after /plan creates a plan document.
-argument-hint: "[plan file path]"
+argument-hint: '[plan file path]'
 allowed-tools: Read, Grep, Glob, Bash, Agent, TaskCreate, TaskUpdate, TaskList, SendMessage
 ---
 
@@ -51,6 +51,7 @@ After all tasks complete and verified:
 ## When to Stop and Ask
 
 **STOP immediately when:**
+
 - Hit a blocker (missing dependency, test fails, instruction unclear)
 - Plan has critical gaps preventing progress
 - You don't understand an instruction
@@ -61,6 +62,7 @@ After all tasks complete and verified:
 ## When 3+ Tasks Fail
 
 If the same kind of failure keeps happening:
+
 - STOP — this is a plan problem, not an execution problem
 - Return to `/plan` and revise the approach
 - Or use `/debug` to investigate the root cause

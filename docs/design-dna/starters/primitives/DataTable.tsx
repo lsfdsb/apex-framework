@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface Column<T> {
   key: keyof T & string;
@@ -21,7 +21,7 @@ export function DataTable<T extends Record<string, unknown>>({
   onRowClick,
 }: DataTableProps<T>) {
   function handleKeyDown(e: React.KeyboardEvent<HTMLTableRowElement>, row: T) {
-    if ((e.key === "Enter" || e.key === " ") && onRowClick) {
+    if ((e.key === 'Enter' || e.key === ' ') && onRowClick) {
       e.preventDefault();
       onRowClick(row);
     }
@@ -30,16 +30,16 @@ export function DataTable<T extends Record<string, unknown>>({
   return (
     <div
       className="w-full overflow-x-auto rounded-[var(--radius)] border"
-      style={{ borderColor: "var(--border)" }}
+      style={{ borderColor: 'var(--border)' }}
     >
       <table className="w-full border-collapse">
         <thead>
-          <tr style={{ background: "var(--bg-surface)" }}>
+          <tr style={{ background: 'var(--bg-surface)' }}>
             {columns.map((col) => (
               <th
                 key={col.key}
                 className="text-left text-[11px] uppercase tracking-[0.06em] font-medium px-4 py-3"
-                style={{ color: "var(--text-muted)", width: col.width }}
+                style={{ color: 'var(--text-muted)', width: col.width }}
               >
                 {col.label}
               </th>
@@ -51,9 +51,9 @@ export function DataTable<T extends Record<string, unknown>>({
             <tr
               key={String(row[rowKey])}
               className={`border-t transition-colors duration-[var(--duration-fast)] hover:bg-[var(--bg-surface)] ${
-                onRowClick ? "cursor-pointer" : ""
+                onRowClick ? 'cursor-pointer' : ''
               }`}
-              style={{ borderColor: "var(--border)" }}
+              style={{ borderColor: 'var(--border)' }}
               onClick={() => onRowClick?.(row)}
               {...(onRowClick
                 ? {
@@ -64,10 +64,12 @@ export function DataTable<T extends Record<string, unknown>>({
                 : {})}
             >
               {columns.map((col) => (
-                <td key={col.key} className="px-4 py-3 text-[13px]" style={{ color: "var(--text)" }}>
-                  {col.render
-                    ? col.render(row[col.key], row)
-                    : String(row[col.key] ?? "")}
+                <td
+                  key={col.key}
+                  className="px-4 py-3 text-[13px]"
+                  style={{ color: 'var(--text)' }}
+                >
+                  {col.render ? col.render(row[col.key], row) : String(row[col.key] ?? '')}
                 </td>
               ))}
             </tr>

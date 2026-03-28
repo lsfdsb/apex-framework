@@ -1,7 +1,7 @@
 ---
 name: verify
 description: Use when about to claim work is complete, fixed, or passing — before committing or creating PRs. Also use when the user says "verify", "prove it", "show me it works", or when expressing confidence about code state without evidence.
-argument-hint: "[what to verify]"
+argument-hint: '[what to verify]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -37,43 +37,48 @@ Skip any step = lying, not verifying
 
 ## What Each Claim Requires
 
-| Claim | Requires | Not Sufficient |
-|-------|----------|----------------|
-| Tests pass | Test output: 0 failures | Previous run, "should pass" |
-| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
-| Build succeeds | Build command: exit 0 | Linter passing, "looks good" |
-| Bug fixed | Original symptom: passes | Code changed, "assumed fixed" |
-| Regression test works | Red-green cycle verified | Test passes once |
-| Agent completed | VCS diff shows changes | Agent reports "success" |
-| Requirements met | Line-by-line checklist | Tests passing |
+| Claim                 | Requires                 | Not Sufficient                |
+| --------------------- | ------------------------ | ----------------------------- |
+| Tests pass            | Test output: 0 failures  | Previous run, "should pass"   |
+| Linter clean          | Linter output: 0 errors  | Partial check, extrapolation  |
+| Build succeeds        | Build command: exit 0    | Linter passing, "looks good"  |
+| Bug fixed             | Original symptom: passes | Code changed, "assumed fixed" |
+| Regression test works | Red-green cycle verified | Test passes once              |
+| Agent completed       | VCS diff shows changes   | Agent reports "success"       |
+| Requirements met      | Line-by-line checklist   | Tests passing                 |
 
 ## Key Patterns
 
 **Tests:**
+
 ```
 ✅ [Run test command] [See: 34/34 pass] "All tests pass"
 ❌ "Should pass now" / "Looks correct"
 ```
 
 **Regression tests (TDD Red-Green):**
+
 ```
 ✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
 ❌ "I've written a regression test" (without red-green verification)
 ```
 
 **Build:**
+
 ```
 ✅ [Run build] [See: exit 0] "Build passes"
 ❌ "Linter passed" (linter ≠ compiler)
 ```
 
 **Requirements:**
+
 ```
 ✅ Re-read plan → Create checklist → Verify each → Report gaps or completion
 ❌ "Tests pass, phase complete"
 ```
 
 **Agent delegation:**
+
 ```
 ✅ Agent reports success → Check VCS diff → Verify changes → Report actual state
 ❌ Trust agent report
@@ -82,6 +87,7 @@ Skip any step = lying, not verifying
 ## Red Flags — STOP
 
 If you catch yourself:
+
 - Using "should", "probably", "seems to"
 - Expressing satisfaction before verification ("Great!", "Perfect!", "Done!")
 - About to commit/push/PR without verification
@@ -92,18 +98,19 @@ If you catch yourself:
 
 ## Rationalization Prevention
 
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler |
-| "Agent said success" | Verify independently |
+| Excuse                    | Reality                |
+| ------------------------- | ---------------------- |
+| "Should work now"         | RUN the verification   |
+| "I'm confident"           | Confidence ≠ evidence  |
+| "Just this once"          | No exceptions          |
+| "Linter passed"           | Linter ≠ compiler      |
+| "Agent said success"      | Verify independently   |
 | "Partial check is enough" | Partial proves nothing |
 
 ## When to Apply
 
 **ALWAYS before:**
+
 - ANY success/completion claim
 - ANY expression of satisfaction
 - Committing, PR creation, task completion

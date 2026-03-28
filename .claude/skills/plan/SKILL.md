@@ -1,7 +1,7 @@
 ---
 name: plan
 description: Use when you have a spec, PRD, or requirements for a multi-step task and need to create an implementation plan before touching code. Also use when the user says "plan", "implementation plan", "break this down", "task list", or after /brainstorm or /prd approval.
-argument-hint: "[spec or PRD path]"
+argument-hint: '[spec or PRD path]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -60,6 +60,7 @@ Each step is ONE action (2-5 minutes):
 ### Task N: [Component Name]
 
 **Files:**
+
 - Create: `exact/path/to/file.ts`
 - Modify: `exact/path/to/existing.ts:123-145`
 - Test: `tests/exact/path/to/test.ts`
@@ -82,7 +83,7 @@ Expected: FAIL with "function not defined"
 
 ```typescript
 function myFunction(input: string): string {
-    return expected;
+  return expected;
 }
 ```
 

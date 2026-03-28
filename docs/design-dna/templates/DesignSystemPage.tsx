@@ -2,15 +2,15 @@
 // DNA source: docs/design-dna/design-system.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 
 function useReveal() {
   useEffect(() => {
-    const els = document.querySelectorAll(".reveal");
+    const els = document.querySelectorAll('.reveal');
     if (!els.length) return;
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add("visible")),
-      { threshold: 0.1 }
+      (entries) => entries.forEach((e) => e.isIntersecting && e.target.classList.add('visible')),
+      { threshold: 0.1 },
     );
     els.forEach((el) => io.observe(el));
     return () => io.disconnect();
@@ -51,172 +51,362 @@ const dnaStyles = `
 `;
 
 const motions = [
-  { name: "Fade", timing: "opacity 0→1", anim: "ds-fade 2s ease-in-out infinite" },
-  { name: "Slide", timing: "translateY", anim: "ds-slide 2s cubic-bezier(0.22,1,0.36,1) infinite" },
-  { name: "Scale", timing: "scale 0.7→1.1", anim: "ds-scale 2s cubic-bezier(0.22,1,0.36,1) infinite" },
-  { name: "Blur Focus", timing: "blur 6px→0", anim: "ds-blur 2.5s cubic-bezier(0.22,1,0.36,1) infinite" },
-  { name: "Bounce", timing: "spring physics", anim: "ds-bounce 1.5s cubic-bezier(0.22,1,0.36,1) infinite" },
-  { name: "Pulse", timing: "scale + glow", anim: "ds-pulse 2s ease-in-out infinite" },
-  { name: "Morph", timing: "radius 8→50%", anim: "ds-morph 3s cubic-bezier(0.22,1,0.36,1) infinite" },
-  { name: "Rotate", timing: "360° linear", anim: "ds-rotate 3s linear infinite" },
+  { name: 'Fade', timing: 'opacity 0→1', anim: 'ds-fade 2s ease-in-out infinite' },
+  { name: 'Slide', timing: 'translateY', anim: 'ds-slide 2s cubic-bezier(0.22,1,0.36,1) infinite' },
+  {
+    name: 'Scale',
+    timing: 'scale 0.7→1.1',
+    anim: 'ds-scale 2s cubic-bezier(0.22,1,0.36,1) infinite',
+  },
+  {
+    name: 'Blur Focus',
+    timing: 'blur 6px→0',
+    anim: 'ds-blur 2.5s cubic-bezier(0.22,1,0.36,1) infinite',
+  },
+  {
+    name: 'Bounce',
+    timing: 'spring physics',
+    anim: 'ds-bounce 1.5s cubic-bezier(0.22,1,0.36,1) infinite',
+  },
+  { name: 'Pulse', timing: 'scale + glow', anim: 'ds-pulse 2s ease-in-out infinite' },
+  {
+    name: 'Morph',
+    timing: 'radius 8→50%',
+    anim: 'ds-morph 3s cubic-bezier(0.22,1,0.36,1) infinite',
+  },
+  { name: 'Rotate', timing: '360° linear', anim: 'ds-rotate 3s linear infinite' },
 ];
 const radii = [0, 4, 8, 12, 16, 999];
 const shadows = [
-  { label: "xs", val: "0 1px 2px rgba(0,0,0,0.1)" }, { label: "sm", val: "0 2px 8px rgba(0,0,0,0.12)" },
-  { label: "md", val: "0 4px 16px rgba(0,0,0,0.15)" }, { label: "lg", val: "0 8px 32px rgba(0,0,0,0.18)" },
-  { label: "xl", val: "0 16px 48px rgba(0,0,0,0.22)" },
+  { label: 'xs', val: '0 1px 2px rgba(0,0,0,0.1)' },
+  { label: 'sm', val: '0 2px 8px rgba(0,0,0,0.12)' },
+  { label: 'md', val: '0 4px 16px rgba(0,0,0,0.15)' },
+  { label: 'lg', val: '0 8px 32px rgba(0,0,0,0.18)' },
+  { label: 'xl', val: '0 16px 48px rgba(0,0,0,0.22)' },
 ];
 const states = [
-  { label: "rest", chip: { background: "var(--accent)", color: "var(--accent-contrast, white)" } },
-  { label: ":hover", chip: { background: "var(--accent-hover)", color: "white", transform: "translateY(-2px)" } },
-  { label: ":focus", chip: { background: "var(--accent)", color: "var(--accent-contrast, white)", boxShadow: "0 0 0 3px var(--accent-glow)" } },
-  { label: ":active", chip: { background: "var(--accent-hover)", color: "white", transform: "scale(0.96)" } },
-  { label: "disabled", chip: { background: "var(--bg-surface)", color: "var(--text-muted)", opacity: 0.5 } },
+  { label: 'rest', chip: { background: 'var(--accent)', color: 'var(--accent-contrast, white)' } },
+  {
+    label: ':hover',
+    chip: { background: 'var(--accent-hover)', color: 'white', transform: 'translateY(-2px)' },
+  },
+  {
+    label: ':focus',
+    chip: {
+      background: 'var(--accent)',
+      color: 'var(--accent-contrast, white)',
+      boxShadow: '0 0 0 3px var(--accent-glow)',
+    },
+  },
+  {
+    label: ':active',
+    chip: { background: 'var(--accent-hover)', color: 'white', transform: 'scale(0.96)' },
+  },
+  {
+    label: 'disabled',
+    chip: { background: 'var(--bg-surface)', color: 'var(--text-muted)', opacity: 0.5 },
+  },
 ];
 const palettes = [
-  { name: "SaaS Dark", cells: [{ bg: "#09090b", c: "#666", t: "SaaS" },{ bg: "#18181b" },{ bg: "#27272a" },{ bg: "#3b82f6", c: "#fff", t: "accent" },{ bg: "#fafafa", c: "#000", t: "text" }] },
-  { name: "Editorial", cells: [{ bg: "#faf9f6", c: "#666", t: "Edit" },{ bg: "#ffffff", border: true },{ bg: "#f5f0eb" },{ bg: "#c45d3e", c: "#fff", t: "accent" },{ bg: "#1a1a1a", c: "#fff", t: "text" }] },
-  { name: "Fintech", cells: [{ bg: "#0c1222", c: "#666", t: "Fin" },{ bg: "#131c31" },{ bg: "#1a2540" },{ bg: "#00d4aa", c: "#000", t: "accent" },{ bg: "#e8edf5", c: "#000", t: "text" }] },
-  { name: "Startup", cells: [{ bg: "#ffffff", c: "#999", t: "Start", border: true },{ bg: "#f8f8f8" },{ bg: "#f0f0f0" },{ bg: "#0a0a0a", c: "#fff", t: "accent" },{ bg: "#0a0a0a", c: "#fff", t: "text" }] },
-  { name: "Creative", cells: [{ bg: "#1a1614", c: "#666", t: "Crea" },{ bg: "#242018" },{ bg: "#2e2820" },{ bg: "#e07850", c: "#fff", t: "accent" },{ bg: "#f5ebe0", c: "#000", t: "text" }] },
+  {
+    name: 'SaaS Dark',
+    cells: [
+      { bg: '#09090b', c: '#666', t: 'SaaS' },
+      { bg: '#18181b' },
+      { bg: '#27272a' },
+      { bg: '#3b82f6', c: '#fff', t: 'accent' },
+      { bg: '#fafafa', c: '#000', t: 'text' },
+    ],
+  },
+  {
+    name: 'Editorial',
+    cells: [
+      { bg: '#faf9f6', c: '#666', t: 'Edit' },
+      { bg: '#ffffff', border: true },
+      { bg: '#f5f0eb' },
+      { bg: '#c45d3e', c: '#fff', t: 'accent' },
+      { bg: '#1a1a1a', c: '#fff', t: 'text' },
+    ],
+  },
+  {
+    name: 'Fintech',
+    cells: [
+      { bg: '#0c1222', c: '#666', t: 'Fin' },
+      { bg: '#131c31' },
+      { bg: '#1a2540' },
+      { bg: '#00d4aa', c: '#000', t: 'accent' },
+      { bg: '#e8edf5', c: '#000', t: 'text' },
+    ],
+  },
+  {
+    name: 'Startup',
+    cells: [
+      { bg: '#ffffff', c: '#999', t: 'Start', border: true },
+      { bg: '#f8f8f8' },
+      { bg: '#f0f0f0' },
+      { bg: '#0a0a0a', c: '#fff', t: 'accent' },
+      { bg: '#0a0a0a', c: '#fff', t: 'text' },
+    ],
+  },
+  {
+    name: 'Creative',
+    cells: [
+      { bg: '#1a1614', c: '#666', t: 'Crea' },
+      { bg: '#242018' },
+      { bg: '#2e2820' },
+      { bg: '#e07850', c: '#fff', t: 'accent' },
+      { bg: '#f5ebe0', c: '#000', t: 'text' },
+    ],
+  },
 ];
 
 const colorGroups = [
-  { label: "Surfaces", tokens: [
-    { name: "bg", cssVar: "--bg", usage: "Page background" },
-    { name: "elevated", cssVar: "--bg-elevated", usage: "Cards, modals" },
-    { name: "surface", cssVar: "--bg-surface", usage: "Nested containers" },
-    { name: "border", cssVar: "--border", usage: "Default borders" },
-    { name: "border-hover", cssVar: "--border-hover", usage: "Hover borders" },
-  ]},
-  { label: "Text", tokens: [
-    { name: "text", cssVar: "--text", usage: "Primary content" },
-    { name: "secondary", cssVar: "--text-secondary", usage: "Descriptions" },
-    { name: "muted", cssVar: "--text-muted", usage: "Hints, timestamps" },
-  ]},
-  { label: "Semantic", tokens: [
-    { name: "accent", cssVar: "--accent", usage: "Brand, primary actions" },
-    { name: "success", cssVar: "--success", usage: "Confirmations" },
-    { name: "warning", cssVar: "--warning", usage: "Caution states" },
-    { name: "destructive", cssVar: "--destructive", usage: "Errors, delete" },
-    { name: "info", cssVar: "--info", usage: "Informational" },
-  ]},
+  {
+    label: 'Surfaces',
+    tokens: [
+      { name: 'bg', cssVar: '--bg', usage: 'Page background' },
+      { name: 'elevated', cssVar: '--bg-elevated', usage: 'Cards, modals' },
+      { name: 'surface', cssVar: '--bg-surface', usage: 'Nested containers' },
+      { name: 'border', cssVar: '--border', usage: 'Default borders' },
+      { name: 'border-hover', cssVar: '--border-hover', usage: 'Hover borders' },
+    ],
+  },
+  {
+    label: 'Text',
+    tokens: [
+      { name: 'text', cssVar: '--text', usage: 'Primary content' },
+      { name: 'secondary', cssVar: '--text-secondary', usage: 'Descriptions' },
+      { name: 'muted', cssVar: '--text-muted', usage: 'Hints, timestamps' },
+    ],
+  },
+  {
+    label: 'Semantic',
+    tokens: [
+      { name: 'accent', cssVar: '--accent', usage: 'Brand, primary actions' },
+      { name: 'success', cssVar: '--success', usage: 'Confirmations' },
+      { name: 'warning', cssVar: '--warning', usage: 'Caution states' },
+      { name: 'destructive', cssVar: '--destructive', usage: 'Errors, delete' },
+      { name: 'info', cssVar: '--info', usage: 'Informational' },
+    ],
+  },
 ];
 
 const contrastPairs = [
-  { fg: "--text", bg: "--bg", label: "--text on --bg" },
-  { fg: "--text", bg: "--bg-elevated", label: "--text on --bg-elevated" },
-  { fg: "--text-secondary", bg: "--bg", label: "--text-secondary on --bg" },
-  { fg: "--text-secondary", bg: "--bg-elevated", label: "--text-secondary on --bg-elevated" },
-  { fg: "--text-muted", bg: "--bg", label: "--text-muted on --bg" },
-  { fg: "--text-muted", bg: "--bg-elevated", label: "--text-muted on --bg-elevated" },
-  { fg: "--text-muted", bg: "--bg-surface", label: "--text-muted on --bg-surface" },
-  { fg: "--accent", bg: "--bg", label: "--accent on --bg" },
-  { fg: "--accent", bg: "--bg-elevated", label: "--accent on --bg-elevated" },
+  { fg: '--text', bg: '--bg', label: '--text on --bg' },
+  { fg: '--text', bg: '--bg-elevated', label: '--text on --bg-elevated' },
+  { fg: '--text-secondary', bg: '--bg', label: '--text-secondary on --bg' },
+  { fg: '--text-secondary', bg: '--bg-elevated', label: '--text-secondary on --bg-elevated' },
+  { fg: '--text-muted', bg: '--bg', label: '--text-muted on --bg' },
+  { fg: '--text-muted', bg: '--bg-elevated', label: '--text-muted on --bg-elevated' },
+  { fg: '--text-muted', bg: '--bg-surface', label: '--text-muted on --bg-surface' },
+  { fg: '--accent', bg: '--bg', label: '--accent on --bg' },
+  { fg: '--accent', bg: '--bg-elevated', label: '--accent on --bg-elevated' },
 ];
 
 const iconSizes = [
-  { px: 16, tw: "w-4 h-4", context: "Inline, badges" },
-  { px: 20, tw: "w-5 h-5", context: "Buttons, nav" },
-  { px: 24, tw: "w-6 h-6", context: "Section headers" },
-  { px: 32, tw: "w-8 h-8", context: "Feature cards" },
-  { px: 48, tw: "w-12 h-12", context: "Empty states, hero" },
+  { px: 16, tw: 'w-4 h-4', context: 'Inline, badges' },
+  { px: 20, tw: 'w-5 h-5', context: 'Buttons, nav' },
+  { px: 24, tw: 'w-6 h-6', context: 'Section headers' },
+  { px: 32, tw: 'w-8 h-8', context: 'Feature cards' },
+  { px: 48, tw: 'w-12 h-12', context: 'Empty states, hero' },
 ];
 
 const transitions = [
-  { duration: "0.2s", use: "Micro: hover, focus, toggle", css: "transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1)" },
-  { duration: "0.3s", use: "Standard: dropdowns, accordion", css: "transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" },
-  { duration: "0.5s", use: "Layout: panel slides, page shifts", css: "transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1)" },
-  { duration: "0.9s", use: "Reveal: scroll animations, hero", css: "transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1)" },
+  {
+    duration: '0.2s',
+    use: 'Micro: hover, focus, toggle',
+    css: 'transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+  {
+    duration: '0.3s',
+    use: 'Standard: dropdowns, accordion',
+    css: 'transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+  {
+    duration: '0.5s',
+    use: 'Layout: panel slides, page shifts',
+    css: 'transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
+  {
+    duration: '0.9s',
+    use: 'Reveal: scroll animations, hero',
+    css: 'transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1)',
+  },
 ];
 
 const zLayers = [
-  { z: 0, layer: "Base", use: "Content, cards, layout" },
-  { z: 10, layer: "Sticky", use: "Sticky headers, floating labels" },
-  { z: 20, layer: "Dropdown", use: "Popovers, menus, tooltips" },
-  { z: 50, layer: "Modal", use: "Dialogs, overlays, sheets" },
-  { z: 100, layer: "Chrome", use: "Navigation, fixed toolbars" },
-  { z: 999, layer: "Toast", use: "Notifications, urgent alerts" },
+  { z: 0, layer: 'Base', use: 'Content, cards, layout' },
+  { z: 10, layer: 'Sticky', use: 'Sticky headers, floating labels' },
+  { z: 20, layer: 'Dropdown', use: 'Popovers, menus, tooltips' },
+  { z: 50, layer: 'Modal', use: 'Dialogs, overlays, sheets' },
+  { z: 100, layer: 'Chrome', use: 'Navigation, fixed toolbars' },
+  { z: 999, layer: 'Toast', use: 'Notifications, urgent alerts' },
 ];
 
 const breakpoints = [
-  { px: 640, tw: "sm:", label: "Mobile landscape" },
-  { px: 768, tw: "md:", label: "Tablet portrait" },
-  { px: 1024, tw: "lg:", label: "Laptop" },
-  { px: 1280, tw: "xl:", label: "Desktop" },
-  { px: 1536, tw: "2xl:", label: "Wide desktop" },
+  { px: 640, tw: 'sm:', label: 'Mobile landscape' },
+  { px: 768, tw: 'md:', label: 'Tablet portrait' },
+  { px: 1024, tw: 'lg:', label: 'Laptop' },
+  { px: 1280, tw: 'xl:', label: 'Desktop' },
+  { px: 1536, tw: '2xl:', label: 'Wide desktop' },
 ];
 
 const combos = [
   {
-    name: "Card",
-    tokens: "--bg-elevated + --border + --radius + --shadow-sm",
-    css: "background: var(--bg-elevated);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 2px 8px rgba(0,0,0,0.12);",
+    name: 'Card',
+    tokens: '--bg-elevated + --border + --radius + --shadow-sm',
+    css: 'background: var(--bg-elevated);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 2px 8px rgba(0,0,0,0.12);',
     render: (
-      <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", padding: 20 }}>
+      <div
+        style={{
+          background: 'var(--bg-elevated)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius, 12px)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+          padding: 20,
+        }}
+      >
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Card title</div>
-        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Supporting text lives here.</div>
+        <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+          Supporting text lives here.
+        </div>
       </div>
     ),
   },
   {
-    name: "Input",
-    tokens: "--bg-surface + --border + --radius-sm + --text",
-    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius-sm, 8px);\npadding: 10px 14px;\ncolor: var(--text);",
+    name: 'Input',
+    tokens: '--bg-surface + --border + --radius-sm + --text',
+    css: 'background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius-sm, 8px);\npadding: 10px 14px;\ncolor: var(--text);',
     render: (
-      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", padding: "10px 14px", color: "var(--text)", fontSize: 13 }}>
-        <span style={{ color: "var(--text-muted)" }}>Enter something...</span>
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius-sm, 8px)',
+          padding: '10px 14px',
+          color: 'var(--text)',
+          fontSize: 13,
+        }}
+      >
+        <span style={{ color: 'var(--text-muted)' }}>Enter something...</span>
       </div>
     ),
   },
   {
-    name: "Badge",
-    tokens: "--accent-glow + --accent + 4px radius",
-    css: "background: var(--accent-glow);\ncolor: var(--accent);\nborder-radius: 4px;\npadding: 2px 8px;\nfont-weight: 600;",
+    name: 'Badge',
+    tokens: '--accent-glow + --accent + 4px radius',
+    css: 'background: var(--accent-glow);\ncolor: var(--accent);\nborder-radius: 4px;\npadding: 2px 8px;\nfont-weight: 600;',
     render: (
-      <span style={{ background: "var(--accent-glow)", color: "var(--accent)", borderRadius: 4, padding: "2px 8px", fontWeight: 600, fontSize: 11 }}>Badge</span>
+      <span
+        style={{
+          background: 'var(--accent-glow)',
+          color: 'var(--accent)',
+          borderRadius: 4,
+          padding: '2px 8px',
+          fontWeight: 600,
+          fontSize: 11,
+        }}
+      >
+        Badge
+      </span>
     ),
   },
   {
-    name: "Muted Block",
-    tokens: "--bg-surface + --text-muted + --border",
-    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\ncolor: var(--text-muted);",
+    name: 'Muted Block',
+    tokens: '--bg-surface + --text-muted + --border',
+    css: 'background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\ncolor: var(--text-muted);',
     render: (
-      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 16, color: "var(--text-muted)", fontSize: 12 }}>
+      <div
+        style={{
+          background: 'var(--bg-surface)',
+          border: '1px solid var(--border)',
+          borderRadius: 'var(--radius, 12px)',
+          padding: 16,
+          color: 'var(--text-muted)',
+          fontSize: 12,
+        }}
+      >
         Supplementary information or a subtle callout.
       </div>
     ),
   },
   {
-    name: "Glass Floating",
-    tokens: "--bg-elevated + --shadow-lg + backdrop-filter",
-    css: "background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);\nbackdrop-filter: blur(20px) saturate(1.4);\nborder: 1px solid color-mix(in srgb, var(--text-muted) 12%, transparent);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 8px 32px rgba(0,0,0,0.18);",
+    name: 'Glass Floating',
+    tokens: '--bg-elevated + --shadow-lg + backdrop-filter',
+    css: 'background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);\nbackdrop-filter: blur(20px) saturate(1.4);\nborder: 1px solid color-mix(in srgb, var(--text-muted) 12%, transparent);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 8px 32px rgba(0,0,0,0.18);',
     render: (
-      <div style={{ background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", borderRadius: "var(--radius, 12px)", boxShadow: "0 8px 32px rgba(0,0,0,0.18)", padding: 20 }}>
+      <div
+        style={{
+          background: 'color-mix(in srgb, var(--bg-elevated) 85%, transparent)',
+          backdropFilter: 'blur(20px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(20px) saturate(1.4)',
+          border: '1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)',
+          borderRadius: 'var(--radius, 12px)',
+          boxShadow: '0 8px 32px rgba(0,0,0,0.18)',
+          padding: 20,
+        }}
+      >
         <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Floating panel</div>
-        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Glass morphism with depth.</div>
+        <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
+          Glass morphism with depth.
+        </div>
       </div>
     ),
   },
 ];
 
 function Label({ children }: { children: string }) {
-  return <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>{children}</div>;
+  return (
+    <div
+      style={{
+        fontSize: 11,
+        textTransform: 'uppercase',
+        letterSpacing: '0.1em',
+        color: 'var(--accent)',
+        fontWeight: 500,
+        marginBottom: 12,
+      }}
+    >
+      {children}
+    </div>
+  );
 }
 function SH({ label, title, sub }: { label: string; title: string; sub?: string }) {
   return (
     <div style={{ marginBottom: 48 }}>
       <Label>{label}</Label>
-      <h2 style={{ fontFamily: "var(--font-display)", fontSize: "clamp(36px, 4vw, 52px)", fontWeight: 400, letterSpacing: "-0.03em", marginBottom: 12 }}>{title}</h2>
-      {sub && <p style={{ fontSize: 16, color: "var(--text-secondary)", fontWeight: 300 }}>{sub}</p>}
+      <h2
+        style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: 'clamp(36px, 4vw, 52px)',
+          fontWeight: 400,
+          letterSpacing: '-0.03em',
+          marginBottom: 12,
+        }}
+      >
+        {title}
+      </h2>
+      {sub && (
+        <p style={{ fontSize: 16, color: 'var(--text-secondary)', fontWeight: 300 }}>{sub}</p>
+      )}
     </div>
   );
 }
 function PLabel({ children }: { children: string }) {
-  return <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 12, color: "var(--text-secondary)" }}>{children}</div>;
+  return (
+    <div
+      style={{ fontSize: 13, fontWeight: 500, marginBottom: 12, color: 'var(--text-secondary)' }}
+    >
+      {children}
+    </div>
+  );
 }
 function Mono({ children }: { children: React.ReactNode }) {
-  return <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{children}</span>;
+  return (
+    <span style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
+      {children}
+    </span>
+  );
 }
 
 function CopyToken({ value, children }: { value: string; children?: React.ReactNode }) {
@@ -232,11 +422,18 @@ function CopyToken({ value, children }: { value: string; children?: React.ReactN
       onClick={copy}
       role="button"
       tabIndex={0}
-      onKeyDown={(e) => e.key === "Enter" && copy()}
-      style={{ cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, color: copied ? "var(--success)" : "var(--text-muted)", transition: "color 0.2s", userSelect: "none" }}
+      onKeyDown={(e) => e.key === 'Enter' && copy()}
+      style={{
+        cursor: 'pointer',
+        fontFamily: 'var(--font-mono)',
+        fontSize: 10,
+        color: copied ? 'var(--success)' : 'var(--text-muted)',
+        transition: 'color 0.2s',
+        userSelect: 'none',
+      }}
       title={`Copy: ${value}`}
     >
-      {copied ? "Copied!" : children ?? value}
+      {copied ? 'Copied!' : (children ?? value)}
     </span>
   );
 }
@@ -286,50 +483,115 @@ function ContrastCell({ fg, bg, label }: { fg: string; bg: string; label: string
   const pass = ratio !== null && ratio >= 4.5;
   const aaa = ratio !== null && ratio >= 7;
   return (
-    <div style={{ background: `var(${bg})`, border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+    <div
+      style={{
+        background: `var(${bg})`,
+        border: '1px solid var(--border)',
+        borderRadius: 'var(--radius, 12px)',
+        padding: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 8,
+      }}
+    >
       <span style={{ color: `var(${fg})`, fontSize: 16, fontWeight: 600 }}>Sample Text</span>
-      <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: `var(${fg})`, opacity: 0.7 }}>{label}</span>
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
-        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: `var(${fg})` }}>{ratio ? `${ratio.toFixed(1)}:1` : "..."}</span>
-        <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4, background: aaa ? "var(--warning)" : pass ? "var(--success)" : "var(--destructive)", color: aaa || pass ? "#000" : "#fff" }}>
-          {aaa ? "AAA" : pass ? "AA" : "FAIL"}
+      <span
+        style={{ fontSize: 10, fontFamily: 'var(--font-mono)', color: `var(${fg})`, opacity: 0.7 }}
+      >
+        {label}
+      </span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+        <span style={{ fontSize: 12, fontFamily: 'var(--font-mono)', color: `var(${fg})` }}>
+          {ratio ? `${ratio.toFixed(1)}:1` : '...'}
+        </span>
+        <span
+          style={{
+            fontSize: 9,
+            fontWeight: 700,
+            padding: '2px 6px',
+            borderRadius: 4,
+            background: aaa ? 'var(--warning)' : pass ? 'var(--success)' : 'var(--destructive)',
+            color: aaa || pass ? '#000' : '#fff',
+          }}
+        >
+          {aaa ? 'AAA' : pass ? 'AA' : 'FAIL'}
         </span>
       </div>
     </div>
   );
 }
 
-
 export default function DesignSystemPage() {
   useReveal();
   return (
-    <div style={{ color: "var(--text)", fontFamily: "var(--font-body)" }}>
+    <div style={{ color: 'var(--text)', fontFamily: 'var(--font-body)' }}>
       <style>{dnaStyles}</style>
 
       {/* ═══ HERO ═══ */}
-      <section style={{ padding: "140px 32px 100px", textAlign: "center" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <section style={{ padding: '140px 32px 100px', textAlign: 'center' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <Label>Foundation</Label>
-          <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
-            The system<br />behind the <em style={{ fontStyle: "italic", color: "var(--accent)" }}>soul.</em>
+          <h1
+            className="reveal reveal-delay-1"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(48px, 7vw, 80px)',
+              fontWeight: 400,
+              letterSpacing: '-0.04em',
+              lineHeight: 1,
+            }}
+          >
+            The system
+            <br />
+            behind the <em style={{ fontStyle: 'italic', color: 'var(--accent)' }}>soul.</em>
           </h1>
-          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Every token you need to build. Copy, compose, ship.</p>
+          <p
+            className="reveal reveal-delay-2"
+            style={{
+              fontSize: 18,
+              color: 'var(--text-secondary)',
+              fontWeight: 300,
+              maxWidth: 480,
+              margin: '24px auto 0',
+            }}
+          >
+            Every token you need to build. Copy, compose, ship.
+          </p>
         </div>
       </section>
 
       {/* ═══ COLOR ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Color" title="One accent. Infinite depth." sub="Restraint is the design. 90% neutrals, one accent for meaning." /></div>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Color"
+              title="One accent. Infinite depth."
+              sub="Restraint is the design. 90% neutrals, one accent for meaning."
+            />
+          </div>
           {colorGroups.map((group, gi) => (
-            <div key={group.label} className={`reveal reveal-delay-${gi + 1}`} style={{ marginBottom: 48 }}>
+            <div
+              key={group.label}
+              className={`reveal reveal-delay-${gi + 1}`}
+              style={{ marginBottom: 48 }}
+            >
               <PLabel>{group.label}</PLabel>
-              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                 {group.tokens.map(({ name, cssVar, usage }) => (
-                  <div key={cssVar} style={{ width: 100, textAlign: "center" }}>
+                  <div key={cssVar} style={{ width: 100, textAlign: 'center' }}>
                     <div className="ds-swatch-color" style={{ background: `var(${cssVar})` }} />
                     <CopyToken value={`var(${cssVar})`}>{name}</CopyToken>
-                    <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.3 }}>{usage}</div>
+                    <div
+                      style={{
+                        fontSize: 9,
+                        color: 'var(--text-muted)',
+                        marginTop: 2,
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {usage}
+                    </div>
                   </div>
                 ))}
               </div>
@@ -337,12 +599,22 @@ export default function DesignSystemPage() {
           ))}
           <div className="reveal" style={{ marginBottom: 48 }}>
             <PLabel>Curated Palettes</PLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
               {palettes.map((p) => (
                 <div key={p.name}>
                   <div className="ds-strip">
                     {p.cells.map((cell, i) => (
-                      <div key={i} className="ds-strip-cell" style={{ background: cell.bg, color: cell.c || "transparent", border: cell.border ? "1px solid #eee" : undefined }}>{cell.t || ""}</div>
+                      <div
+                        key={i}
+                        className="ds-strip-cell"
+                        style={{
+                          background: cell.bg,
+                          color: cell.c || 'transparent',
+                          border: cell.border ? '1px solid #eee' : undefined,
+                        }}
+                      >
+                        {cell.t || ''}
+                      </div>
                     ))}
                   </div>
                   <Mono>{p.name}</Mono>
@@ -354,10 +626,19 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ CONTRAST ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Contrast" title="Accessibility built in." sub="Every text/background combo verified against WCAG 2.1 AA (4.5:1)." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Contrast"
+              title="Accessibility built in."
+              sub="Every text/background combo verified against WCAG 2.1 AA (4.5:1)."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}
+          >
             {contrastPairs.map((p) => (
               <ContrastCell key={p.label} fg={p.fg} bg={p.bg} label={p.label} />
             ))}
@@ -366,34 +647,119 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ TYPOGRAPHY ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Typography" title="Type is the design." sub="Large display, weight contrast, letter-spacing precision." /></div>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Typography"
+              title="Type is the design."
+              sub="Large display, weight contrast, letter-spacing precision."
+            />
+          </div>
           {[
-            { name: "Display — Instrument Serif", sample: "The quick brown fox jumps.", style: { fontFamily: "'Instrument Serif', Georgia, serif", fontSize: 56, lineHeight: 1.05 }, meta: "400 weight · -0.04em tracking · 1.0 line-height" },
-            { name: "Body — Inter", sample: "Every pixel earns its place or it doesn't exist. Restraint is the design. Typography does the work. Whitespace isn't empty — it's the most powerful element on the page.", style: { fontFamily: "'Inter', sans-serif", fontSize: 16, lineHeight: 1.7, color: "var(--text-secondary)", maxWidth: 600 }, meta: "400 weight · 0em tracking · 1.7 line-height" },
+            {
+              name: 'Display — Instrument Serif',
+              sample: 'The quick brown fox jumps.',
+              style: {
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: 56,
+                lineHeight: 1.05,
+              },
+              meta: '400 weight · -0.04em tracking · 1.0 line-height',
+            },
+            {
+              name: 'Body — Inter',
+              sample:
+                "Every pixel earns its place or it doesn't exist. Restraint is the design. Typography does the work. Whitespace isn't empty — it's the most powerful element on the page.",
+              style: {
+                fontFamily: "'Inter', sans-serif",
+                fontSize: 16,
+                lineHeight: 1.7,
+                color: 'var(--text-secondary)',
+                maxWidth: 600,
+              },
+              meta: '400 weight · 0em tracking · 1.7 line-height',
+            },
           ].map((spec, i) => (
-            <div key={spec.name} className={`reveal reveal-delay-${i + 1}`} style={{ marginBottom: 48, padding: 32, background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)" }}>
+            <div
+              key={spec.name}
+              className={`reveal reveal-delay-${i + 1}`}
+              style={{
+                marginBottom: 48,
+                padding: 32,
+                background: 'var(--bg-elevated)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--radius, 12px)',
+              }}
+            >
               <Mono>{spec.name}</Mono>
-              <div style={{ ...spec.style, marginTop: 12, marginBottom: 8, letterSpacing: "-0.03em" }}>{spec.sample}</div>
+              <div
+                style={{ ...spec.style, marginTop: 12, marginBottom: 8, letterSpacing: '-0.03em' }}
+              >
+                {spec.sample}
+              </div>
               <Mono>{spec.meta}</Mono>
             </div>
           ))}
           <div className="reveal" style={{ marginTop: 48 }}>
             <PLabel>Type Scale</PLabel>
-            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {[
-                { label: "96px", sample: "Display", style: { fontFamily: "var(--font-display)", fontSize: 64, lineHeight: 1 } },
-                { label: "48px", sample: "Heading 1", style: { fontSize: 36, fontWeight: 700, lineHeight: 1.1 } },
-                { label: "32px", sample: "Heading 2", style: { fontSize: 28, fontWeight: 600, lineHeight: 1.2 } },
-                { label: "24px", sample: "Heading 3", style: { fontSize: 22, fontWeight: 600 } },
-                { label: "16px", sample: "Body text — the reading size.", style: { fontSize: 16 } },
-                { label: "14px", sample: "Secondary — labels, captions", style: { fontSize: 14, color: "var(--text-secondary)" } },
-                { label: "12px", sample: "OVERLINE — categories, timestamps", style: { fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase" as const, letterSpacing: "0.08em" } },
+                {
+                  label: '96px',
+                  sample: 'Display',
+                  style: { fontFamily: 'var(--font-display)', fontSize: 64, lineHeight: 1 },
+                },
+                {
+                  label: '48px',
+                  sample: 'Heading 1',
+                  style: { fontSize: 36, fontWeight: 700, lineHeight: 1.1 },
+                },
+                {
+                  label: '32px',
+                  sample: 'Heading 2',
+                  style: { fontSize: 28, fontWeight: 600, lineHeight: 1.2 },
+                },
+                { label: '24px', sample: 'Heading 3', style: { fontSize: 22, fontWeight: 600 } },
+                { label: '16px', sample: 'Body text — the reading size.', style: { fontSize: 16 } },
+                {
+                  label: '14px',
+                  sample: 'Secondary — labels, captions',
+                  style: { fontSize: 14, color: 'var(--text-secondary)' },
+                },
+                {
+                  label: '12px',
+                  sample: 'OVERLINE — categories, timestamps',
+                  style: {
+                    fontSize: 12,
+                    color: 'var(--text-muted)',
+                    textTransform: 'uppercase' as const,
+                    letterSpacing: '0.08em',
+                  },
+                },
               ].map((row) => (
-                <div key={row.label} style={{ display: "flex", alignItems: "baseline", gap: 24, padding: "12px 0", borderBottom: "1px solid var(--border)" }}>
-                  <span style={{ minWidth: 80, fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", flexShrink: 0 }}>{row.label}</span>
-                  <span style={{ letterSpacing: "-0.02em", ...row.style }}>{row.sample}</span>
+                <div
+                  key={row.label}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'baseline',
+                    gap: 24,
+                    padding: '12px 0',
+                    borderBottom: '1px solid var(--border)',
+                  }}
+                >
+                  <span
+                    style={{
+                      minWidth: 80,
+                      fontSize: 11,
+                      color: 'var(--text-muted)',
+                      fontFamily: 'var(--font-mono)',
+                      flexShrink: 0,
+                    }}
+                  >
+                    {row.label}
+                  </span>
+                  <span style={{ letterSpacing: '-0.02em', ...row.style }}>{row.sample}</span>
                 </div>
               ))}
             </div>
@@ -402,12 +768,21 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ SPACING ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Spacing" title="Space is intentional." sub="Every gap has a reason. Consistent rhythm creates calm." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "flex-end", gap: 16, flexWrap: "wrap" }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Spacing"
+              title="Space is intentional."
+              sub="Every gap has a reason. Consistent rhythm creates calm."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{ display: 'flex', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}
+          >
             {[4, 8, 12, 16, 24, 32, 48, 64, 96, 128].map((px) => (
-              <div key={px} style={{ textAlign: "center" }}>
+              <div key={px} style={{ textAlign: 'center' }}>
                 <div className="ds-space-box" style={{ width: px, height: px }} />
                 <Mono>{px}</Mono>
               </div>
@@ -417,18 +792,48 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ ICONS ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Icons" title="Size with purpose." sub="Every icon size maps to a context. Inherit color, never hardcode." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Icons"
+              title="Size with purpose."
+              sub="Every icon size maps to a context. Inherit color, never hardcode."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 48,
+              flexWrap: 'wrap',
+            }}
+          >
             {iconSizes.map(({ px, tw, context }) => (
-              <div key={px} style={{ textAlign: "center", width: 100 }}>
-                <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" style={{ marginBottom: 8, display: "block", margin: "0 auto 8px" }}>
-                  <circle cx="12" cy="12" r="10" /><path d="M12 8v4l2 2" />
+              <div key={px} style={{ textAlign: 'center', width: 100 }}>
+                <svg
+                  width={px}
+                  height={px}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="var(--accent)"
+                  strokeWidth="2"
+                  style={{ marginBottom: 8, display: 'block', margin: '0 auto 8px' }}
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 8v4l2 2" />
                 </svg>
-                <div><Mono>{px}px</Mono></div>
-                <div><CopyToken value={tw} /></div>
-                <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2 }}>{context}</div>
+                <div>
+                  <Mono>{px}px</Mono>
+                </div>
+                <div>
+                  <CopyToken value={tw} />
+                </div>
+                <div style={{ fontSize: 9, color: 'var(--text-muted)', marginTop: 2 }}>
+                  {context}
+                </div>
               </div>
             ))}
           </div>
@@ -436,12 +841,24 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ MOTION ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Motion" title="Movement with meaning." sub="Hover each card to see the animation. Apple easing: cubic-bezier(0.22, 1, 0.36, 1)." /></div>
-          <div className="ds-motion-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 16 }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Motion"
+              title="Movement with meaning."
+              sub="Hover each card to see the animation. Apple easing: cubic-bezier(0.22, 1, 0.36, 1)."
+            />
+          </div>
+          <div
+            className="ds-motion-grid"
+            style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}
+          >
             {motions.map((m, i) => (
-              <div key={m.name} className={`ds-motion-card reveal${i > 0 && i < 4 ? ` reveal-delay-${i}` : ""}`}>
+              <div
+                key={m.name}
+                className={`ds-motion-card reveal${i > 0 && i < 4 ? ` reveal-delay-${i}` : ''}`}
+              >
                 <div className="ds-motion-demo" style={{ animation: m.anim }} />
                 <div style={{ fontSize: 13, fontWeight: 500, marginBottom: 4 }}>{m.name}</div>
                 <Mono>{m.timing}</Mono>
@@ -450,16 +867,41 @@ export default function DesignSystemPage() {
           </div>
           <div className="reveal" style={{ marginTop: 48 }}>
             <PLabel>Copy-Paste Transitions</PLabel>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
               {transitions.map((t) => (
-                <div key={t.duration} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 20, display: "flex", alignItems: "center", gap: 16 }}>
+                <div
+                  key={t.duration}
+                  style={{
+                    background: 'var(--bg-elevated)',
+                    border: '1px solid var(--border)',
+                    borderRadius: 'var(--radius, 12px)',
+                    padding: 20,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 16,
+                  }}
+                >
                   <div
-                    style={{ width: 36, height: 36, borderRadius: 8, background: "var(--accent)", flexShrink: 0, transition: t.css.replace("transition: ", "") }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.3) rotate(8deg)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1) rotate(0deg)"; }}
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 8,
+                      background: 'var(--accent)',
+                      flexShrink: 0,
+                      transition: t.css.replace('transition: ', ''),
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'scale(1.3) rotate(8deg)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                    }}
                   />
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{t.duration} — <span style={{ fontWeight: 400, color: "var(--text-muted)" }}>{t.use}</span></div>
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>
+                      {t.duration} —{' '}
+                      <span style={{ fontWeight: 400, color: 'var(--text-muted)' }}>{t.use}</span>
+                    </div>
                     <CopyToken value={t.css} />
                   </div>
                 </div>
@@ -470,20 +912,80 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ STATES ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="States" title="Every state, considered." sub="Default, hover, focus, active, disabled, loading. No state left behind." /></div>
-          <div className="reveal reveal-delay-1" style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 48, textAlign: "center", marginBottom: 48 }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="States"
+              title="Every state, considered."
+              sub="Default, hover, focus, active, disabled, loading. No state left behind."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{
+              background: 'var(--bg-elevated)',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--radius, 12px)',
+              padding: 48,
+              textAlign: 'center',
+              marginBottom: 48,
+            }}
+          >
             <Mono>Try it — hover, click, tab to focus</Mono>
-            <div style={{ marginTop: 20 }}><button className="ds-live-btn">Interactive Button</button></div>
+            <div style={{ marginTop: 20 }}>
+              <button className="ds-live-btn">Interactive Button</button>
+            </div>
           </div>
           <div className="reveal reveal-delay-2">
             <PLabel>All States</PLabel>
-            <div className="ds-states-grid" style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gap: 12, textAlign: "center" }}>
-              {[...states, { label: "async", chip: { background: "var(--accent)", color: "transparent", position: "relative" as const, minWidth: 90 } }].map((s) => (
+            <div
+              className="ds-states-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(6, 1fr)',
+                gap: 12,
+                textAlign: 'center',
+              }}
+            >
+              {[
+                ...states,
+                {
+                  label: 'async',
+                  chip: {
+                    background: 'var(--accent)',
+                    color: 'transparent',
+                    position: 'relative' as const,
+                    minWidth: 90,
+                  },
+                },
+              ].map((s) => (
                 <div key={s.label}>
-                  <span className="ds-state-chip" style={s.chip}>{s.label === "async" ? "Loading" : s.label === "rest" ? "Default" : s.label === ":hover" ? "Hover" : s.label === ":focus" ? "Focus" : s.label === ":active" ? "Active" : "Disabled"}</span>
-                  <div style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", minWidth: 56, textAlign: "center", marginTop: 8 }}>{s.label}</div>
+                  <span className="ds-state-chip" style={s.chip}>
+                    {s.label === 'async'
+                      ? 'Loading'
+                      : s.label === 'rest'
+                        ? 'Default'
+                        : s.label === ':hover'
+                          ? 'Hover'
+                          : s.label === ':focus'
+                            ? 'Focus'
+                            : s.label === ':active'
+                              ? 'Active'
+                              : 'Disabled'}
+                  </span>
+                  <div
+                    style={{
+                      fontSize: 11,
+                      color: 'var(--text-muted)',
+                      fontFamily: 'var(--font-mono)',
+                      minWidth: 56,
+                      textAlign: 'center',
+                      marginTop: 8,
+                    }}
+                  >
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -492,26 +994,30 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ SHAPE + SHADOW ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Shape + Shadow" title="Soft edges. Quiet depth." /></div>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH label="Shape + Shadow" title="Soft edges. Quiet depth." />
+          </div>
           <div className="reveal reveal-delay-1" style={{ marginBottom: 48 }}>
             <PLabel>Border Radius</PLabel>
-            <div style={{ display: "flex", gap: 24, alignItems: "flex-end", flexWrap: "wrap" }}>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'flex-end', flexWrap: 'wrap' }}>
               {radii.map((r) => (
-                <div key={r} style={{ textAlign: "center" }}>
+                <div key={r} style={{ textAlign: 'center' }}>
                   <div className="ds-radius-box" style={{ borderRadius: r === 999 ? 999 : r }} />
-                  <Mono>{r === 999 ? "full" : `${r}px`}</Mono>
+                  <Mono>{r === 999 ? 'full' : `${r}px`}</Mono>
                 </div>
               ))}
             </div>
           </div>
           <div className="reveal reveal-delay-2">
             <PLabel>Shadows</PLabel>
-            <div style={{ display: "flex", gap: 24, flexWrap: "wrap" }}>
+            <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
               {shadows.map((s) => (
-                <div key={s.label} style={{ textAlign: "center" }}>
-                  <div className="ds-shadow-box" style={{ boxShadow: s.val }}>{s.label}</div>
+                <div key={s.label} style={{ textAlign: 'center' }}>
+                  <div className="ds-shadow-box" style={{ boxShadow: s.val }}>
+                    {s.label}
+                  </div>
                 </div>
               ))}
             </div>
@@ -520,32 +1026,54 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ Z-INDEX ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Z-Index" title="Layered with intent." sub="Six layers. No magic numbers. Every element knows its place." /></div>
-          <div className="reveal reveal-delay-1" style={{ position: "relative", height: 280, maxWidth: 600, margin: "0 auto" }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Z-Index"
+              title="Layered with intent."
+              sub="Six layers. No magic numbers. Every element knows its place."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{ position: 'relative', height: 280, maxWidth: 600, margin: '0 auto' }}
+          >
             {zLayers.map((l, i) => (
-              <div key={l.z} style={{
-                position: "absolute",
-                left: i * 20,
-                bottom: i * 40,
-                right: (5 - i) * 20,
-                height: 56,
-                background: "var(--bg-elevated)",
-                border: "1px solid var(--border)",
-                borderRadius: "var(--radius, 12px)",
-                padding: "0 16px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                boxShadow: `0 ${2 + i * 2}px ${8 + i * 4}px rgba(0,0,0,${0.08 + i * 0.04})`,
-                zIndex: l.z,
-              }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--accent)", minWidth: 32 }}>{l.z}</span>
+              <div
+                key={l.z}
+                style={{
+                  position: 'absolute',
+                  left: i * 20,
+                  bottom: i * 40,
+                  right: (5 - i) * 20,
+                  height: 56,
+                  background: 'var(--bg-elevated)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius, 12px)',
+                  padding: '0 16px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  boxShadow: `0 ${2 + i * 2}px ${8 + i * 4}px rgba(0,0,0,${0.08 + i * 0.04})`,
+                  zIndex: l.z,
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 700,
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--accent)',
+                      minWidth: 32,
+                    }}
+                  >
+                    {l.z}
+                  </span>
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{l.layer}</span>
                 </div>
-                <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.use}</span>
+                <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{l.use}</span>
               </div>
             ))}
           </div>
@@ -553,15 +1081,55 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ BREAKPOINTS ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Breakpoints" title="Responsive by design." sub="Mobile-first. Every layout starts at 320px and scales up." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Breakpoints"
+              title="Responsive by design."
+              sub="Mobile-first. Every layout starts at 320px and scales up."
+            />
+          </div>
+          <div
+            className="reveal reveal-delay-1"
+            style={{ display: 'flex', flexDirection: 'column', gap: 10 }}
+          >
             {breakpoints.map(({ px, tw, label }) => (
-              <div key={px} style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <span style={{ minWidth: 50, fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent)", fontWeight: 700, textAlign: "right" }}>{tw}</span>
-                <div style={{ flex: 1, position: "relative", height: 32, borderRadius: 8, overflow: "hidden", background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
-                  <div style={{ height: "100%", width: `${(px / 1536) * 100}%`, background: "color-mix(in srgb, var(--accent) 20%, transparent)", borderRadius: 8, display: "flex", alignItems: "center", paddingLeft: 12 }}>
+              <div key={px} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span
+                  style={{
+                    minWidth: 50,
+                    fontSize: 11,
+                    fontFamily: 'var(--font-mono)',
+                    color: 'var(--accent)',
+                    fontWeight: 700,
+                    textAlign: 'right',
+                  }}
+                >
+                  {tw}
+                </span>
+                <div
+                  style={{
+                    flex: 1,
+                    position: 'relative',
+                    height: 32,
+                    borderRadius: 8,
+                    overflow: 'hidden',
+                    background: 'var(--bg-surface)',
+                    border: '1px solid var(--border)',
+                  }}
+                >
+                  <div
+                    style={{
+                      height: '100%',
+                      width: `${(px / 1536) * 100}%`,
+                      background: 'color-mix(in srgb, var(--accent) 20%, transparent)',
+                      borderRadius: 8,
+                      display: 'flex',
+                      alignItems: 'center',
+                      paddingLeft: 12,
+                    }}
+                  >
                     <span style={{ fontSize: 11, fontWeight: 500 }}>{label}</span>
                   </div>
                 </div>
@@ -573,26 +1141,56 @@ export default function DesignSystemPage() {
       </section>
 
       {/* ═══ COMPOSITION ═══ */}
-      <section style={{ padding: "100px 32px" }}>
-        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Composition" title="Tokens in action." sub="Copy these combos to build faster. Each one is a production-ready pattern." /></div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+      <section style={{ padding: '100px 32px' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+          <div className="reveal">
+            <SH
+              label="Composition"
+              title="Tokens in action."
+              sub="Copy these combos to build faster. Each one is a production-ready pattern."
+            />
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
             {combos.map((c, i) => (
-              <div key={c.name} className={`reveal${i < 4 ? ` reveal-delay-${(i % 3) + 1}` : ""}`} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+              <div
+                key={c.name}
+                className={`reveal${i < 4 ? ` reveal-delay-${(i % 3) + 1}` : ''}`}
+                style={{
+                  background: 'var(--bg-elevated)',
+                  border: '1px solid var(--border)',
+                  borderRadius: 'var(--radius, 12px)',
+                  overflow: 'hidden',
+                }}
+              >
                 <div style={{ padding: 20 }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      marginBottom: 12,
+                    }}
+                  >
                     <span style={{ fontSize: 14, fontWeight: 600 }}>{c.name}</span>
                     <CopyToken value={c.css}>copy css</CopyToken>
                   </div>
                   <div style={{ marginBottom: 12 }}>{c.render}</div>
-                  <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", lineHeight: 1.6 }}>{c.tokens}</div>
+                  <div
+                    style={{
+                      fontSize: 10,
+                      fontFamily: 'var(--font-mono)',
+                      color: 'var(--text-muted)',
+                      lineHeight: 1.6,
+                    }}
+                  >
+                    {c.tokens}
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </section>
-
     </div>
   );
 }

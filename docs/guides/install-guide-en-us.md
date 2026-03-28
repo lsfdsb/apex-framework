@@ -7,11 +7,11 @@
 
 ## Prerequisites
 
-| Requirement | Why | Verify |
-|-------------|-----|--------|
-| macOS 13+ or Linux | Claude Code runs on macOS 13+ and Linux | Apple → About This Mac |
-| Claude Max ($100/200 month) | Claude Code + higher limits | claude.ai/settings |
-| ~15 minutes | One-time setup, then automatic | — |
+| Requirement                 | Why                                     | Verify                 |
+| --------------------------- | --------------------------------------- | ---------------------- |
+| macOS 13+ or Linux          | Claude Code runs on macOS 13+ and Linux | Apple → About This Mac |
+| Claude Max ($100/200 month) | Claude Code + higher limits             | claude.ai/settings     |
+| ~15 minutes                 | One-time setup, then automatic          | —                      |
 
 ---
 
@@ -19,7 +19,7 @@
 
 ### 1.1 Node.js — from the official website
 
-*What it is*: The engine that runs JavaScript outside the browser. Your Next.js apps need it.
+_What it is_: The engine that runs JavaScript outside the browser. Your Next.js apps need it.
 
 1. Open **https://nodejs.org**
 2. Click the green **LTS** button
@@ -40,7 +40,7 @@ Expected: `v22+` and `10+`.
 
 ### 1.2 jq — from the official GitHub repo
 
-*What it is*: A single binary that reads JSON. APEX hooks use it for parsing tool inputs. Zero dependencies.
+_What it is_: A single binary that reads JSON. APEX hooks use it for parsing tool inputs. Zero dependencies.
 
 Check your chip:
 
@@ -123,7 +123,7 @@ Browser opens. Login with Claude Max. Authorize. Return to Terminal. Type `/exit
 }
 ```
 
-*Tip*: Drag the terminal panel to the right side. Code on the left, Claude on the right. Changes appear in real-time. This is the way.
+_Tip_: Drag the terminal panel to the right side. Code on the left, Claude on the right. Changes appear in real-time. This is the way.
 
 ### 2.2 iTerm2 (optional, for Agent Teams)
 
@@ -131,7 +131,7 @@ Browser opens. Login with Claude Max. Authorize. Return to Terminal. Type `/exit
 2. Drag to Applications
 3. Preferences (`Cmd + ,`) → Profiles → Keys → Left Option key: **Esc+**
 
-*Why*: Agent Teams use split panes. iTerm2 handles this natively.
+_Why_: Agent Teams use split panes. iTerm2 handles this natively.
 
 ---
 
@@ -231,18 +231,18 @@ cd ~/your-project
 
 ## Official Sources (zero third-party)
 
-| Tool | Source | Verification |
-|------|--------|-------------|
-| Node.js | nodejs.org | OpenJS Foundation |
-| jq | github.com/jqlang/jq | MIT, official binary |
-| Claude Code | npmjs.com/@anthropic-ai/claude-code | Anthropic |
-| VS Code | code.visualstudio.com | Microsoft, MIT |
-| Claude extension | Anthropic (Marketplace) | Verified publisher |
-| iTerm2 | iterm2.com | GPLv2, 15+ years |
-| Git | Apple | Comes with macOS |
+| Tool             | Source                              | Verification         |
+| ---------------- | ----------------------------------- | -------------------- |
+| Node.js          | nodejs.org                          | OpenJS Foundation    |
+| jq               | github.com/jqlang/jq                | MIT, official binary |
+| Claude Code      | npmjs.com/@anthropic-ai/claude-code | Anthropic            |
+| VS Code          | code.visualstudio.com               | Microsoft, MIT       |
+| Claude extension | Anthropic (Marketplace)             | Verified publisher   |
+| iTerm2           | iterm2.com                          | GPLv2, 15+ years     |
+| Git              | Apple                               | Comes with macOS     |
 
 ---
 
-*Forged by Bueno & Claude · `/about` for the full story*
+_Forged by Bueno & Claude · `/about` for the full story_
 
 **This is the way.**

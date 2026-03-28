@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 interface AccordionItem {
   id: string;
@@ -31,7 +31,7 @@ export function Accordion({ items, defaultOpen = [], multiple = false }: Accordi
   };
 
   return (
-    <div className="divide-y" style={{ borderColor: "var(--border)" }}>
+    <div className="divide-y" style={{ borderColor: 'var(--border)' }}>
       {items.map((item) => {
         const isOpen = open.has(item.id);
         return (
@@ -39,7 +39,7 @@ export function Accordion({ items, defaultOpen = [], multiple = false }: Accordi
             <button
               onClick={() => toggle(item.id)}
               className="w-full flex items-center justify-between py-4 text-left transition-colors"
-              style={{ color: "var(--text)" }}
+              style={{ color: 'var(--text)' }}
               aria-expanded={isOpen}
               aria-controls={`accordion-${item.id}`}
             >
@@ -47,10 +47,14 @@ export function Accordion({ items, defaultOpen = [], multiple = false }: Accordi
               <div className="flex items-center gap-2">
                 {item.badge}
                 <svg
-                  width="16" height="16" viewBox="0 0 16 16" fill="none"
-                  stroke="currentColor" strokeWidth="1.5"
-                  className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
-                  style={{ color: "var(--text-muted)" }}
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                  className={`transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+                  style={{ color: 'var(--text-muted)' }}
                 >
                   <path d="M4 6l4 4 4-4" />
                 </svg>
@@ -58,9 +62,9 @@ export function Accordion({ items, defaultOpen = [], multiple = false }: Accordi
             </button>
             <div
               id={`accordion-${item.id}`}
-              className={`overflow-hidden transition-all duration-300 ease-[var(--ease-out)] ${isOpen ? "max-h-[500px] opacity-100 pb-4" : "max-h-0 opacity-0"}`}
+              className={`overflow-hidden transition-all duration-300 ease-[var(--ease-out)] ${isOpen ? 'max-h-[500px] opacity-100 pb-4' : 'max-h-0 opacity-0'}`}
             >
-              <div className="text-[13px]" style={{ color: "var(--text-secondary)" }}>
+              <div className="text-[13px]" style={{ color: 'var(--text-secondary)' }}>
                 {item.content}
               </div>
             </div>

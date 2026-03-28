@@ -1,4 +1,4 @@
-import type { CSSProperties } from "react";
+import type { CSSProperties } from 'react';
 
 interface ProgressBarProps {
   percentage: number;
@@ -8,22 +8,28 @@ interface ProgressBarProps {
   style?: CSSProperties;
 }
 
-export function ProgressBar({ percentage, height = 4, showLabel = false, color = "var(--accent)", style }: ProgressBarProps) {
+export function ProgressBar({
+  percentage,
+  height = 4,
+  showLabel = false,
+  color = 'var(--accent)',
+  style,
+}: ProgressBarProps) {
   return (
     <div className="w-full" style={style}>
       {showLabel && (
         <div className="flex justify-between mb-1">
-          <span className="text-[11px] font-medium" style={{ color: "var(--text-secondary)" }}>
+          <span className="text-[11px] font-medium" style={{ color: 'var(--text-secondary)' }}>
             Progress
           </span>
-          <span className="text-[11px] font-semibold" style={{ color: "var(--accent)" }}>
+          <span className="text-[11px] font-semibold" style={{ color: 'var(--accent)' }}>
             {percentage}%
           </span>
         </div>
       )}
       <div
         className="w-full rounded-full overflow-hidden"
-        style={{ height, background: "var(--bg-surface)" }}
+        style={{ height, background: 'var(--bg-surface)' }}
         role="progressbar"
         aria-valuenow={percentage}
         aria-valuemin={0}

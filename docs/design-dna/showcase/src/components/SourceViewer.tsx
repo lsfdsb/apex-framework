@@ -16,8 +16,13 @@ export function SourceViewer({ source, filename }: SourceViewerProps) {
 
   return (
     <div className="rounded-lg overflow-hidden" style={{ border: "1px solid var(--border)", background: "var(--bg)" }}>
-      <div className="flex items-center justify-between px-4 py-2" style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}>
-        <span className="text-sm font-mono" style={{ color: "var(--text-muted)" }}>{filename}</span>
+      <div
+        className="flex items-center justify-between px-4 py-2"
+        style={{ background: "var(--bg-surface)", borderBottom: "1px solid var(--border)" }}
+      >
+        <span className="text-sm font-mono" style={{ color: "var(--text-muted)" }}>
+          {filename}
+        </span>
         <button
           onClick={handleCopy}
           className="text-xs px-3 py-1 rounded-md font-medium transition-colors"

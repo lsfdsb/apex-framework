@@ -1,7 +1,7 @@
 ---
 name: brainstorm
 description: Use BEFORE any creative work — creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation. Also use when the user says "brainstorm", "let's think about", "explore ideas", "what should we build", "design this", or before any /prd.
-argument-hint: "[idea or feature to explore]"
+argument-hint: '[idea or feature to explore]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 

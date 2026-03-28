@@ -1,7 +1,7 @@
 ---
 name: worktree
 description: Use when starting feature work that needs isolation from current workspace, or before executing implementation plans in a separate branch. Also use when the user says "worktree", "isolated branch", "separate workspace", or when parallel work could conflict.
-argument-hint: "[branch-name]"
+argument-hint: '[branch-name]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -97,13 +97,13 @@ git worktree prune
 
 ## Quick Reference
 
-| Situation | Action |
-|-----------|--------|
-| `.worktrees/` exists | Use it (verify ignored) |
-| `worktrees/` exists | Use it (verify ignored) |
-| Neither exists | Check CLAUDE.md → Ask user |
+| Situation             | Action                     |
+| --------------------- | -------------------------- |
+| `.worktrees/` exists  | Use it (verify ignored)    |
+| `worktrees/` exists   | Use it (verify ignored)    |
+| Neither exists        | Check CLAUDE.md → Ask user |
 | Directory not ignored | Add to .gitignore + commit |
-| Tests fail baseline | Report failures + ask |
+| Tests fail baseline   | Report failures + ask      |
 
 ## Integration
 

@@ -2,26 +2,50 @@
    Use for: Landing pages, Presentations, minimal apps
    Accent: white/black (monochrome) | Pure dark backgrounds */
 :root {
-  --bg: #0a0a0a; --bg-elevated: #141414; --bg-surface: #1e1e1e;
-  --bg-rgb: 10,10,10;
-  --border: #282828; --border-hover: #383838;
-  --text: #fafafa; --text-secondary: #a3a3a3; --text-muted: #666666;
-  --accent: #fafafa; --accent-hover: #e0e0e0; --accent-glow: rgba(250,250,250,0.08);
-  --success: #22c55e; --success-rgb: 34,197,94;
-  --warning: #eab308; --warning-rgb: 234,179,8;
-  --destructive: #ef4444; --destructive-rgb: 239,68,68;
-  --info: #60a5fa; --info-rgb: 96,165,250;
-  --cta-bg: #ffffff; --cta-text: #0a0a0a;
+  --bg: #0a0a0a;
+  --bg-elevated: #141414;
+  --bg-surface: #1e1e1e;
+  --bg-rgb: 10, 10, 10;
+  --border: #282828;
+  --border-hover: #383838;
+  --text: #fafafa;
+  --text-secondary: #a3a3a3;
+  --text-muted: #666666;
+  --accent: #fafafa;
+  --accent-hover: #e0e0e0;
+  --accent-glow: rgba(250, 250, 250, 0.08);
+  --success: #22c55e;
+  --success-rgb: 34, 197, 94;
+  --warning: #eab308;
+  --warning-rgb: 234, 179, 8;
+  --destructive: #ef4444;
+  --destructive-rgb: 239, 68, 68;
+  --info: #60a5fa;
+  --info-rgb: 96, 165, 250;
+  --cta-bg: #ffffff;
+  --cta-text: #0a0a0a;
 }
-[data-theme="light"] {
-  --bg: #ffffff; --bg-elevated: #f8f8f8; --bg-surface: #f0f0f0;
-  --bg-rgb: 255,255,255;
-  --border: #e5e5e5; --border-hover: #d4d4d4;
-  --text: #0a0a0a; --text-secondary: #525252; --text-muted: #a3a3a3;
-  --accent: #0a0a0a; --accent-hover: #262626; --accent-glow: rgba(10,10,10,0.05);
-  --success: #16a34a; --success-rgb: 22,163,74;
-  --warning: #ca8a04; --warning-rgb: 202,138,4;
-  --destructive: #dc2626; --destructive-rgb: 220,38,38;
-  --info: #2563eb; --info-rgb: 37,99,235;
-  --cta-bg: #0a0a0a; --cta-text: #ffffff;
+[data-theme='light'] {
+  --bg: #ffffff;
+  --bg-elevated: #f8f8f8;
+  --bg-surface: #f0f0f0;
+  --bg-rgb: 255, 255, 255;
+  --border: #e5e5e5;
+  --border-hover: #d4d4d4;
+  --text: #0a0a0a;
+  --text-secondary: #525252;
+  --text-muted: #a3a3a3;
+  --accent: #0a0a0a;
+  --accent-hover: #262626;
+  --accent-glow: rgba(10, 10, 10, 0.05);
+  --success: #16a34a;
+  --success-rgb: 22, 163, 74;
+  --warning: #ca8a04;
+  --warning-rgb: 202, 138, 4;
+  --destructive: #dc2626;
+  --destructive-rgb: 220, 38, 38;
+  --info: #2563eb;
+  --info-rgb: 37, 99, 235;
+  --cta-bg: #0a0a0a;
+  --cta-text: #ffffff;
 }

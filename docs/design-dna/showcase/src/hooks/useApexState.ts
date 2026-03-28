@@ -11,10 +11,7 @@ interface UseApexStateResult<T> {
  * Claude Code and the HUB. Falls back to demo data when the file is absent
  * or the network request fails.
  */
-export function useApexState<T>(
-  filename: string,
-  fallback: T
-): UseApexStateResult<T> {
+export function useApexState<T>(filename: string, fallback: T): UseApexStateResult<T> {
   const [data, setData] = useState<T>(fallback);
   const [isLive, setIsLive] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);

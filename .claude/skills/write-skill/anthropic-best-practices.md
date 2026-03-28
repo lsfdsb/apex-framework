@@ -5,7 +5,9 @@
 ## Core Principles
 
 ### Concise is Key
+
 Context window is a public good. Only add context Claude doesn't already have.
+
 - "Does Claude really need this explanation?"
 - "Can I assume Claude knows this?"
 - "Does this paragraph justify its token cost?"
@@ -13,6 +15,7 @@ Context window is a public good. Only add context Claude doesn't already have.
 ### Degrees of Freedom
 
 **High freedom** (text instructions) — when multiple approaches are valid:
+
 ```markdown
 1. Analyze code structure
 2. Check for edge cases
@@ -20,6 +23,7 @@ Context window is a public good. Only add context Claude doesn't already have.
 ```
 
 **Low freedom** (exact scripts) — when operations are fragile:
+
 ```bash
 python scripts/migrate.py --verify --backup
 # Do not modify this command.
@@ -29,19 +33,21 @@ python scripts/migrate.py --verify --backup
 
 ### Test With All Target Models
 
-| Model | Consideration |
-|-------|--------------|
-| **Haiku** | Does the skill provide enough guidance? |
-| **Sonnet** | Is the skill clear and efficient? |
-| **Opus** | Does the skill avoid over-explaining? |
+| Model      | Consideration                           |
+| ---------- | --------------------------------------- |
+| **Haiku**  | Does the skill provide enough guidance? |
+| **Sonnet** | Is the skill clear and efficient?       |
+| **Opus**   | Does the skill avoid over-explaining?   |
 
 ## Structure
 
 ### Naming
+
 Use gerund form: "Processing PDFs", "Testing code", "Managing databases"
 Avoid: "Helper", "Utils", vague names.
 
 ### Description Field (Critical)
+
 - Write in **third person** (injected into system prompt)
 - Include WHAT it does AND WHEN to use it
 - Max 1024 characters
@@ -56,6 +62,7 @@ description: "I can help you with Excel files"
 ```
 
 ### SKILL.md Body
+
 - Lead with overview and core principle
 - Quick reference tables for scanning
 - Code examples: one excellent > many mediocre

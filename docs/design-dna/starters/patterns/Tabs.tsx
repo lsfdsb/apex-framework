@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 interface Tab {
   id: string;
@@ -20,7 +20,7 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
     <div>
       <div
         className="flex gap-1 border-b mb-4"
-        style={{ borderColor: "var(--border)" }}
+        style={{ borderColor: 'var(--border)' }}
         role="tablist"
       >
         {tabs.map((tab) => (
@@ -32,8 +32,8 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
             onClick={() => setActive(tab.id)}
             className="px-4 py-2.5 text-[13px] font-medium transition-all duration-[var(--duration-fast)] -mb-px border-b-2"
             style={{
-              color: active === tab.id ? "var(--accent)" : "var(--text-secondary)",
-              borderColor: active === tab.id ? "var(--accent)" : "transparent",
+              color: active === tab.id ? 'var(--accent)' : 'var(--text-secondary)',
+              borderColor: active === tab.id ? 'var(--accent)' : 'transparent',
             }}
           >
             {tab.label}
@@ -41,12 +41,7 @@ export function Tabs({ tabs, defaultTab }: TabsProps) {
         ))}
       </div>
       {tabs.map((tab) => (
-        <div
-          key={tab.id}
-          id={`panel-${tab.id}`}
-          role="tabpanel"
-          hidden={active !== tab.id}
-        >
+        <div key={tab.id} id={`panel-${tab.id}`} role="tabpanel" hidden={active !== tab.id}>
           {tab.content}
         </div>
       ))}

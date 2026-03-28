@@ -1,7 +1,7 @@
 ---
 name: teams
 description: Spawn and manage agent teams for parallel work. Auto-selects team composition based on the task. Use when the user says "team", "spawn team", "parallel", "agents work together", "swarm", or when a task is complex enough to benefit from multiple agents working simultaneously.
-argument-hint: "[task description or team preset: build, review, fix, full]"
+argument-hint: '[task description or team preset: build, review, fix, full]'
 allowed-tools: Read, Grep, Glob, Bash, Agent, TeamCreate, TeamDelete, TaskCreate, TaskUpdate, TaskList, SendMessage
 ---
 
@@ -39,21 +39,23 @@ Spawns a coordinated team of specialist agents that work in parallel — like a 
 
 Every agent is elite at one thing. No redundancy. Clear separation of concerns.
 
-| Role | Agent | Model | Mode | Purpose |
-|------|-------|-------|------|---------|
-| **Lead** | main session | opus | — | Orchestrates, delegates, makes final decisions |
-| **PM** | project-manager | sonnet | none | Decomposes PRD+Arch into phased task board |
-| **Builder** | builder | sonnet | **none** | Implements features — writes directly to project |
-| **Watcher** | watcher | haiku | background | Continuous monitoring — catches every error |
-| **QA** | qa | sonnet | none | Runs full quality gate, blocks bad code |
-| **Technical Writer** | technical-writer | haiku | background | Keeps CHANGELOG, README, docs in sync |
+| Role                 | Agent            | Model  | Mode       | Purpose                                          |
+| -------------------- | ---------------- | ------ | ---------- | ------------------------------------------------ |
+| **Lead**             | main session     | opus   | —          | Orchestrates, delegates, makes final decisions   |
+| **PM**               | project-manager  | sonnet | none       | Decomposes PRD+Arch into phased task board       |
+| **Builder**          | builder          | sonnet | **none**   | Implements features — writes directly to project |
+| **Watcher**          | watcher          | haiku  | background | Continuous monitoring — catches every error      |
+| **QA**               | qa               | sonnet | none       | Runs full quality gate, blocks bad code          |
+| **Technical Writer** | technical-writer | haiku  | background | Keeps CHANGELOG, README, docs in sync            |
 
 > **Worktree policy (v5.16+):** Default isolation is `none` — agents write directly to the project. Only use `isolation: worktree` when spawning 2+ builders that modify the SAME files in parallel. Worktrees have caused data loss in 6+ sessions. `isolation: none` eliminates this risk entirely.
 
 ## Team Presets
 
 ### `build` — Implementation Team
+
 Best for: New features, refactoring, migrations
+
 - **PM** (sonnet, none) — Decomposes PRD+Arch into phased task board
 - **Watcher** (haiku, background) — Monitors continuously
 - **Builder** (sonnet, none) — Implements the feature directly
@@ -61,19 +63,25 @@ Best for: New features, refactoring, migrations
 - **Technical Writer** (haiku, background) — Updates CHANGELOG, README when done
 
 ### `fix` — Bug Fix Team
+
 Best for: Bug reports, error resolution, production issues
+
 - **Watcher** (haiku, background) — Reproduces and monitors the issue
 - **Builder** (sonnet, none) — Root cause analysis and fix
 - **QA** (sonnet, none) — Verifies the fix is definitive
 - **Technical Writer** (haiku, background) — Documents the fix
 
 ### `review` — Review Team
+
 Best for: PR review, pre-merge checks, code audit
+
 - **QA** (sonnet, none) — Runs full quality gate
 - **Technical Writer** (haiku, background) — Verifies docs are current
 
 ### `full` — Championship Team
+
 Best for: Major features, end-to-end delivery, critical paths
+
 - **PM** (sonnet, none) — Decomposes PRD+Arch into phased task board
 - **Watcher** (haiku, background) — Continuous monitoring from first second
 - **Builder** (sonnet, none) — Implements the feature
@@ -82,7 +90,7 @@ Best for: Major features, end-to-end delivery, critical paths
 
 ## The Breathing Loop — Self-Maintaining Autonomy
 
-The framework *breathes* when the team operates as a continuous cycle without human intervention:
+The framework _breathes_ when the team operates as a continuous cycle without human intervention:
 
 ```
     ┌──────────────────────────────────────────────┐
@@ -132,11 +140,11 @@ This eliminates the gap where builders finish but QA never picks up.
 
 ### WIP Limits (Enforced by Lead)
 
-| Role | Max In-Progress | Why |
-|------|----------------|-----|
-| Builder | 2 | Prevents builder sprawl — finish before starting new work |
-| QA | 1 | QA must focus — one verification at a time |
-| Writer | 1 | Docs are sequential |
+| Role    | Max In-Progress | Why                                                       |
+| ------- | --------------- | --------------------------------------------------------- |
+| Builder | 2               | Prevents builder sprawl — finish before starting new work |
+| QA      | 1               | QA must focus — one verification at a time                |
+| Writer  | 1               | Docs are sequential                                       |
 
 **Before creating a new builder task**: Check TaskList. If 2+ builder tasks are `in_progress`, do NOT create another. Wait for one to complete.
 
@@ -145,6 +153,7 @@ This eliminates the gap where builders finish but QA never picks up.
 ### Auto-Retry
 
 If a builder task fails (BLOCKED by QA):
+
 1. First failure: Re-assign to same builder with QA feedback
 2. Second failure: Re-assign to a different builder (or lead writes directly)
 3. Track retry count in task metadata: `{ "retries": 1 }`
@@ -181,6 +190,7 @@ After ANY builder agent completes:
 ### Stale Worktree Cleanup
 
 Run periodically (or at session end):
+
 ```bash
 git worktree prune
 rm -rf .claude/worktrees/agent-*
@@ -191,6 +201,7 @@ rm -rf .claude/worktrees/agent-*
 **Builders NEVER create branches.** With `isolation: none`, the builder writes directly to whatever branch the lead has checked out. Branch creation, switching, and merging are the lead's responsibility.
 
 If a builder creates a branch anyway (bug or bad prompt), the lead must:
+
 1. `git checkout <builder-branch> -- <files>` to pull the files
 2. `git branch -D <builder-branch>` to clean up
 3. Commit on the correct branch
@@ -209,24 +220,24 @@ This prevents the cherry-pick-on-dirty-tree problem that occurs when builders cr
 
 Each check has ONE owner. No two agents scan the same thing.
 
-| Check | Owner | Others |
-|-------|-------|--------|
-| Build/compile errors | **Watcher** (continuous) | QA (final gate) |
-| Test failures | **Watcher** (continuous) | QA (final gate) |
-| console.log in production | **Watcher** | — |
-| Type `any` usage | **Watcher** | — |
-| File size > 300 lines | **Watcher** | — |
-| Function size > 30 lines | **Watcher** | — |
-| Hardcoded secrets | **Watcher** | Security hook (PreToolUse) |
-| Hardcoded Tailwind colors | **QA** (phase 1) | — |
-| Design DNA compliance | **QA** (phase 4) | — |
-| Branding sweep | **QA** (phase 1) | — |
-| Responsive/mobile-first | **QA** (phase 4) | — |
-| Accessibility (WCAG) | **QA** (phase 4) | — |
-| Performance (N+1, bundle) | **QA** (phase 5) | — |
-| Security (OWASP) | **QA** (phase 6) | — |
-| Logic correctness | **QA** (phase 2) | — |
-| Code quality/patterns | **QA** (phase 1) | — |
+| Check                     | Owner                    | Others                     |
+| ------------------------- | ------------------------ | -------------------------- |
+| Build/compile errors      | **Watcher** (continuous) | QA (final gate)            |
+| Test failures             | **Watcher** (continuous) | QA (final gate)            |
+| console.log in production | **Watcher**              | —                          |
+| Type `any` usage          | **Watcher**              | —                          |
+| File size > 300 lines     | **Watcher**              | —                          |
+| Function size > 30 lines  | **Watcher**              | —                          |
+| Hardcoded secrets         | **Watcher**              | Security hook (PreToolUse) |
+| Hardcoded Tailwind colors | **QA** (phase 1)         | —                          |
+| Design DNA compliance     | **QA** (phase 4)         | —                          |
+| Branding sweep            | **QA** (phase 1)         | —                          |
+| Responsive/mobile-first   | **QA** (phase 4)         | —                          |
+| Accessibility (WCAG)      | **QA** (phase 4)         | —                          |
+| Performance (N+1, bundle) | **QA** (phase 5)         | —                          |
+| Security (OWASP)          | **QA** (phase 6)         | —                          |
+| Logic correctness         | **QA** (phase 2)         | —                          |
+| Code quality/patterns     | **QA** (phase 1)         | —                          |
 
 **Rule**: Watcher does continuous delta monitoring. QA does the comprehensive final gate covering all dimensions. No overlap.
 
@@ -234,13 +245,13 @@ Each check has ONE owner. No two agents scan the same thing.
 
 If no preset is specified, analyze the task and auto-select:
 
-| Signal | Preset | Why |
-|--------|--------|-----|
-| "build", "implement", "create", "add", "feature" | `build` | Construction work |
-| "fix", "bug", "error", "broken", "debug" | `fix` | Defensive work |
-| "review", "PR", "check", "audit" | `review` | Verification work |
-| Multi-file, multi-concern, major feature | `full` | Championship game |
-| Simple, single-file, quick change | none | Don't over-staff |
+| Signal                                           | Preset   | Why               |
+| ------------------------------------------------ | -------- | ----------------- |
+| "build", "implement", "create", "add", "feature" | `build`  | Construction work |
+| "fix", "bug", "error", "broken", "debug"         | `fix`    | Defensive work    |
+| "review", "PR", "check", "audit"                 | `review` | Verification work |
+| Multi-file, multi-concern, major feature         | `full`   | Championship game |
+| Simple, single-file, quick change                | none     | Don't over-staff  |
 
 ## Orchestration Workflow
 
@@ -257,6 +268,7 @@ TeamCreate({ team_name: "feat-landing-page", description: "Build landing page" }
 ### Step 2: Create Tasks
 
 Break the work into discrete tasks using TaskCreate:
+
 - Each task should be completable by one agent
 - Set dependencies with addBlockedBy where needed
 - Include enough context for the agent to work independently
@@ -340,6 +352,7 @@ The key APEX principle: **don't wait unnecessarily.**
 ### Step 6: Shutdown
 
 When all tasks are complete and QA approved:
+
 1. Send shutdown_request to each teammate (Watcher last — it monitors until the end)
 2. Wait for confirmations
 3. Call TeamDelete to clean up
@@ -364,25 +377,25 @@ ALL agents must use this structure when messaging the lead:
 **Next**: [what should happen next]
 ```
 
-| Agent | Emoji | Action Examples |
-|-------|-------|----------------|
-| Watcher | 🔍 | Watcher Report, Issue Detected, All Clear |
-| Builder | ✅ | Task Complete, Bug Fix Complete, Blocked |
-| QA | 📋 | QA Report, APPROVED, BLOCKED |
-| Technical Writer | 📝 | Docs Updated, Breaking Change Detected |
+| Agent            | Emoji | Action Examples                           |
+| ---------------- | ----- | ----------------------------------------- |
+| Watcher          | 🔍    | Watcher Report, Issue Detected, All Clear |
+| Builder          | ✅    | Task Complete, Bug Fix Complete, Blocked  |
+| QA               | 📋    | QA Report, APPROVED, BLOCKED              |
+| Technical Writer | 📝    | Docs Updated, Breaking Change Detected    |
 
 ### Timeout and Escalation Rules
 
 Every teammate MUST follow these escalation rules:
 
-| Condition | Action |
-|-----------|--------|
-| **Stuck > 3 turns** on the same issue | Message lead: "Blocked on {issue}, tried {approaches}" |
-| **Stuck > 5 turns** | Stop work, message lead: "Need help, escalating" |
-| **Command hangs > 60s** | Kill it, report timeout, try alternative approach |
-| **Agent error / crash** | Lead detects via SubagentStop hook, respawns if needed |
-| **Conflicting instructions** | Ask lead for clarification, don't guess |
-| **Security issue found** | Immediately message lead, create CRITICAL task, do NOT continue |
+| Condition                             | Action                                                          |
+| ------------------------------------- | --------------------------------------------------------------- |
+| **Stuck > 3 turns** on the same issue | Message lead: "Blocked on {issue}, tried {approaches}"          |
+| **Stuck > 5 turns**                   | Stop work, message lead: "Need help, escalating"                |
+| **Command hangs > 60s**               | Kill it, report timeout, try alternative approach               |
+| **Agent error / crash**               | Lead detects via SubagentStop hook, respawns if needed          |
+| **Conflicting instructions**          | Ask lead for clarification, don't guess                         |
+| **Security issue found**              | Immediately message lead, create CRITICAL task, do NOT continue |
 
 ## Example: Full Championship Team
 
@@ -435,12 +448,12 @@ For each task:
 
 Implementers report one of four statuses:
 
-| Status | Action |
-|--------|--------|
-| **DONE** | Proceed to spec review |
-| **DONE_WITH_CONCERNS** | Read concerns, address if correctness/scope, then review |
-| **NEEDS_CONTEXT** | Provide missing context, re-dispatch |
-| **BLOCKED** | Context problem → provide more. Task too hard → re-dispatch with more capable model. Plan wrong → escalate to user |
+| Status                 | Action                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **DONE**               | Proceed to spec review                                                                                             |
+| **DONE_WITH_CONCERNS** | Read concerns, address if correctness/scope, then review                                                           |
+| **NEEDS_CONTEXT**      | Provide missing context, re-dispatch                                                                               |
+| **BLOCKED**            | Context problem → provide more. Task too hard → re-dispatch with more capable model. Plan wrong → escalate to user |
 
 **Never** ignore an escalation or force the same model to retry without changes.
 
@@ -448,11 +461,11 @@ Implementers report one of four statuses:
 
 Use the least powerful model that can handle each role:
 
-| Task Type | Model | Examples |
-|-----------|-------|---------|
-| Mechanical implementation | haiku/sonnet | Isolated functions, clear specs, 1-2 files |
-| Integration and judgment | sonnet | Multi-file coordination, pattern matching |
-| Architecture, design, review | opus | Design decisions, broad codebase understanding |
+| Task Type                    | Model        | Examples                                       |
+| ---------------------------- | ------------ | ---------------------------------------------- |
+| Mechanical implementation    | haiku/sonnet | Isolated functions, clear specs, 1-2 files     |
+| Integration and judgment     | sonnet       | Multi-file coordination, pattern matching      |
+| Architecture, design, review | opus         | Design decisions, broad codebase understanding |
 
 ### Spec Compliance Review Template
 
@@ -470,6 +483,7 @@ Report:
 ### Code Quality Review Template
 
 After spec compliance passes, review for:
+
 - Clean separation of concerns
 - Proper error handling and type safety
 - DRY, edge cases handled

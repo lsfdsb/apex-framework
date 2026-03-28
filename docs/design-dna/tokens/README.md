@@ -18,7 +18,17 @@ cp -r docs/design-dna/tokens/ your-project/src/tokens/
 ### TypeScript / ESM
 
 ```typescript
-import { palettes, semantic, spacing, typography, radii, shadows, breakpoints, zIndex, motion } from './tokens';
+import {
+  palettes,
+  semantic,
+  spacing,
+  typography,
+  radii,
+  shadows,
+  breakpoints,
+  zIndex,
+  motion,
+} from './tokens';
 import type { PaletteName, SemanticColor } from './tokens';
 
 // Access a palette value directly
@@ -64,12 +74,12 @@ console.log(palettes.saas.dark.accent); // '#3b82f6'
 ```html
 <!-- Dark mode (default) -->
 <html data-palette="saas">
-
-<!-- Light mode -->
-<html data-palette="saas" data-theme="light">
-
-<!-- No attribute = startup-mono dark (CSS :root fallback) -->
-<html>
+  <!-- Light mode -->
+  <html data-palette="saas" data-theme="light">
+    <!-- No attribute = startup-mono dark (CSS :root fallback) -->
+    <html></html>
+  </html>
+</html>
 ```
 
 Then use tokens anywhere in your CSS:
@@ -81,8 +91,9 @@ Then use tokens anywhere in your CSS:
   border-radius: var(--radius);
   padding: var(--space-4);
   box-shadow: var(--shadow);
-  transition: border-color var(--duration-normal) var(--ease-out),
-              transform var(--duration-normal) var(--ease-out);
+  transition:
+    border-color var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
 }
 
 .card:hover {
@@ -137,8 +148,8 @@ const config: Config = {
       },
       fontFamily: {
         display: ["'Instrument Serif'", 'Georgia', 'serif'],
-        body:    ["'Inter'", '-apple-system', 'sans-serif'],
-        mono:    ["'JetBrains Mono'", 'ui-monospace', 'monospace'],
+        body: ["'Inter'", '-apple-system', 'sans-serif'],
+        mono: ["'JetBrains Mono'", 'ui-monospace', 'monospace'],
       },
       borderRadius: {
         sm: '8px',
@@ -164,43 +175,44 @@ export default config;
 
 ### Palettes
 
-| Name | Accent (dark) | Accent (light) | Best for |
-|---|---|---|---|
-| `startup` | `#fafafa` (white) | `#0a0a0a` (black) | Landing pages, presentations, minimal apps |
-| `saas` | `#3b82f6` (blue) | `#2563eb` (blue) | SaaS dashboards, admin panels, backoffice |
-| `fintech` | `#00d4aa` (teal) | `#0d9488` (teal) | CRM, e-commerce, fintech apps |
-| `editorial` | `#c45d3e` (terracotta) | `#c45d3e` | Blogs, e-books, editorial/content |
-| `creative` | `#e07850` (coral) | `#d4603a` (coral) | LMS, portfolio, artistic apps |
+| Name        | Accent (dark)          | Accent (light)    | Best for                                   |
+| ----------- | ---------------------- | ----------------- | ------------------------------------------ |
+| `startup`   | `#fafafa` (white)      | `#0a0a0a` (black) | Landing pages, presentations, minimal apps |
+| `saas`      | `#3b82f6` (blue)       | `#2563eb` (blue)  | SaaS dashboards, admin panels, backoffice  |
+| `fintech`   | `#00d4aa` (teal)       | `#0d9488` (teal)  | CRM, e-commerce, fintech apps              |
+| `editorial` | `#c45d3e` (terracotta) | `#c45d3e`         | Blogs, e-books, editorial/content          |
+| `creative`  | `#e07850` (coral)      | `#d4603a` (coral) | LMS, portfolio, artistic apps              |
 
 ### Semantic tokens (CSS variables)
 
-| Variable | Purpose |
-|---|---|
-| `--bg` | Page background |
-| `--bg-elevated` | Cards, dropdowns, popovers |
-| `--bg-surface` | Inputs, table rows, recessed areas |
-| `--bg-rgb` | RGB values of `--bg` for `rgba()` overlays |
-| `--border` | Default border color |
-| `--border-hover` | Border on hover/focus |
-| `--text` | Primary text |
-| `--text-secondary` | Labels, secondary copy |
-| `--text-muted` | Placeholders, de-emphasized text |
-| `--accent` | Brand accent — buttons, links, icons |
-| `--accent-hover` | Accent on hover |
-| `--accent-glow` | Subtle accent fill / glow |
-| `--success` | Positive state |
-| `--warning` | Caution state |
-| `--destructive` | Danger / delete state |
-| `--info` | Informational state |
-| `--cta-bg` | CTA button background |
-| `--cta-text` | CTA button text |
-| `--nav-bg` | Frosted-glass navigation background |
+| Variable           | Purpose                                    |
+| ------------------ | ------------------------------------------ |
+| `--bg`             | Page background                            |
+| `--bg-elevated`    | Cards, dropdowns, popovers                 |
+| `--bg-surface`     | Inputs, table rows, recessed areas         |
+| `--bg-rgb`         | RGB values of `--bg` for `rgba()` overlays |
+| `--border`         | Default border color                       |
+| `--border-hover`   | Border on hover/focus                      |
+| `--text`           | Primary text                               |
+| `--text-secondary` | Labels, secondary copy                     |
+| `--text-muted`     | Placeholders, de-emphasized text           |
+| `--accent`         | Brand accent — buttons, links, icons       |
+| `--accent-hover`   | Accent on hover                            |
+| `--accent-glow`    | Subtle accent fill / glow                  |
+| `--success`        | Positive state                             |
+| `--warning`        | Caution state                              |
+| `--destructive`    | Danger / delete state                      |
+| `--info`           | Informational state                        |
+| `--cta-bg`         | CTA button background                      |
+| `--cta-text`       | CTA button text                            |
+| `--nav-bg`         | Frosted-glass navigation background        |
 
 ### Spacing
 
 4px base unit. Variables: `--space-1` (4px) through `--space-64` (256px).
 
 Key values:
+
 - `--space-4` = 16px (card padding, input padding)
 - `--space-6` = 24px (section gap)
 - `--space-8` = 32px (grid gap)
@@ -211,77 +223,68 @@ Key values:
 
 ```css
 /* Font families */
---font-body:    'Inter', -apple-system, system-ui, sans-serif
---font-display: 'Instrument Serif', Georgia, serif
---font-mono:    'JetBrains Mono', ui-monospace, monospace
-
-/* Section header pattern (mandatory for all DNA pages) */
---section-heading-size:     clamp(32px, 5vw, 56px)
---section-heading-weight:   400
---section-heading-tracking: -0.03em
---section-heading-leading:  1.1
-
---section-label-size:     11px
---section-label-tracking: 0.12em
+--font-body:
+  'Inter', -apple-system, system-ui, sans-serif --font-display: 'Instrument Serif', Georgia,
+  serif --font-mono: 'JetBrains Mono', ui-monospace,
+  monospace /* Section header pattern (mandatory for all DNA pages) */
+    --section-heading-size: clamp(32px, 5vw, 56px) --section-heading-weight: 400
+    --section-heading-tracking: -0.03em --section-heading-leading: 1.1 --section-label-size: 11px
+    --section-label-tracking: 0.12em;
 ```
 
 ### Border radius
 
-| Variable | Value | Use |
-|---|---|---|
-| `--radius-none` | `0` | Square elements |
-| `--radius-sm` | `8px` | Inputs, badges, small cards |
-| `--radius` | `12px` | Default cards, buttons |
-| `--radius-lg` | `16px` | Large cards, modals |
-| `--radius-xl` | `24px` | Featured cards, hero cards |
-| `--radius-full` | `9999px` | Pills, avatars, tags |
+| Variable        | Value    | Use                         |
+| --------------- | -------- | --------------------------- |
+| `--radius-none` | `0`      | Square elements             |
+| `--radius-sm`   | `8px`    | Inputs, badges, small cards |
+| `--radius`      | `12px`   | Default cards, buttons      |
+| `--radius-lg`   | `16px`   | Large cards, modals         |
+| `--radius-xl`   | `24px`   | Featured cards, hero cards  |
+| `--radius-full` | `9999px` | Pills, avatars, tags        |
 
 ### Shadows
 
-| Variable | Use |
-|---|---|
-| `--shadow-sm` | Subtle hover lift |
-| `--shadow` | Default card elevation |
-| `--shadow-md` | Modals, drawers |
-| `--shadow-lg` | High-elevation overlays |
-| `--shadow-glow` | Accent-colored glow (palette-aware) |
-| `--shadow-inner` | Pressed / inset states |
+| Variable         | Use                                 |
+| ---------------- | ----------------------------------- |
+| `--shadow-sm`    | Subtle hover lift                   |
+| `--shadow`       | Default card elevation              |
+| `--shadow-md`    | Modals, drawers                     |
+| `--shadow-lg`    | High-elevation overlays             |
+| `--shadow-glow`  | Accent-colored glow (palette-aware) |
+| `--shadow-inner` | Pressed / inset states              |
 
 ### Z-index
 
-| Variable | Value | Use |
-|---|---|---|
-| `--z-base` | `0` | Normal document flow |
-| `--z-raised` | `1` | Slightly elevated (cards) |
-| `--z-dropdown` | `10` | Dropdowns, tooltips |
-| `--z-sticky` | `20` | Sticky headers, sidebars |
-| `--z-overlay` | `30` | Backdrop overlays |
-| `--z-modal` | `40` | Modals, dialogs |
-| `--z-toast` | `50` | Toast notifications |
-| `--z-widget` | `200` | Design settings widget |
+| Variable       | Value | Use                       |
+| -------------- | ----- | ------------------------- |
+| `--z-base`     | `0`   | Normal document flow      |
+| `--z-raised`   | `1`   | Slightly elevated (cards) |
+| `--z-dropdown` | `10`  | Dropdowns, tooltips       |
+| `--z-sticky`   | `20`  | Sticky headers, sidebars  |
+| `--z-overlay`  | `30`  | Backdrop overlays         |
+| `--z-modal`    | `40`  | Modals, dialogs           |
+| `--z-toast`    | `50`  | Toast notifications       |
+| `--z-widget`   | `200` | Design settings widget    |
 
 ### Breakpoints
 
-| Variable | px | Use |
-|---|---|---|
-| `--bp-xs` | `320px` | Minimum supported width |
-| `--bp-sm` | `640px` | Mobile landscape |
-| `--bp-md` | `768px` | Tablet |
-| `--bp-lg` | `1024px` | Desktop |
-| `--bp-xl` | `1280px` | Wide desktop |
-| `--bp-2xl` | `1440px` | Max content width |
+| Variable   | px       | Use                     |
+| ---------- | -------- | ----------------------- |
+| `--bp-xs`  | `320px`  | Minimum supported width |
+| `--bp-sm`  | `640px`  | Mobile landscape        |
+| `--bp-md`  | `768px`  | Tablet                  |
+| `--bp-lg`  | `1024px` | Desktop                 |
+| `--bp-xl`  | `1280px` | Wide desktop            |
+| `--bp-2xl` | `1440px` | Max content width       |
 
 ### Motion
 
 ```css
---ease-out:    cubic-bezier(0.22, 1, 0.36, 1)   /* APEX default */
---ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1) /* spring/bounce */
---ease-in-out: ease-in-out
-
---duration-fast:   150ms   /* hover, focus rings */
---duration-normal: 300ms   /* default transitions */
---duration-slow:   500ms   /* page-level */
---duration-slower: 900ms   /* dramatic reveals */
+--ease-out: cubic-bezier(0.22, 1, 0.36, 1) /* APEX default */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1) /* spring/bounce */ --ease-in-out: ease-in-out
+  --duration-fast: 150ms /* hover, focus rings */ --duration-normal: 300ms /* default transitions */
+  --duration-slow: 500ms /* page-level */ --duration-slower: 900ms /* dramatic reveals */;
 ```
 
 ---
@@ -298,7 +301,7 @@ function applyPalette(name: PaletteName, mode: 'dark' | 'light') {
 }
 
 // Restore on load
-const saved = localStorage.getItem('apex-palette') as PaletteName ?? 'creative';
+const saved = (localStorage.getItem('apex-palette') as PaletteName) ?? 'creative';
 const savedMode = localStorage.getItem('apex-theme') ?? 'dark';
 applyPalette(saved, savedMode as 'dark' | 'light');
 ```
@@ -316,15 +319,15 @@ applyPalette(saved, savedMode as 'dark' | 'light');
 
 ## File index
 
-| File | Purpose |
-|---|---|
-| `index.ts` | TypeScript definitions with full types — for TS/React projects |
-| `index.js` | Plain JS (ESM + CJS dual) — for non-TS projects and CDN use |
-| `index.css` | CSS custom properties — import once at app root |
-| `foundation.css` | Foundation-only CSS (no palette) — used by individual palette files |
-| `animations.css` | APEX animation classes: `.apex-enter`, `.reveal`, `.skeleton`, etc. |
-| `palettes/startup-mono.css` | Startup Mono palette standalone |
-| `palettes/saas-blue.css` | SaaS Blue palette standalone |
-| `palettes/fintech-teal.css` | Fintech Teal palette standalone |
-| `palettes/editorial-warm.css` | Editorial Warm palette standalone |
-| `palettes/creative-warm.css` | Creative Warm palette standalone |
+| File                          | Purpose                                                             |
+| ----------------------------- | ------------------------------------------------------------------- |
+| `index.ts`                    | TypeScript definitions with full types — for TS/React projects      |
+| `index.js`                    | Plain JS (ESM + CJS dual) — for non-TS projects and CDN use         |
+| `index.css`                   | CSS custom properties — import once at app root                     |
+| `foundation.css`              | Foundation-only CSS (no palette) — used by individual palette files |
+| `animations.css`              | APEX animation classes: `.apex-enter`, `.reveal`, `.skeleton`, etc. |
+| `palettes/startup-mono.css`   | Startup Mono palette standalone                                     |
+| `palettes/saas-blue.css`      | SaaS Blue palette standalone                                        |
+| `palettes/fintech-teal.css`   | Fintech Teal palette standalone                                     |
+| `palettes/editorial-warm.css` | Editorial Warm palette standalone                                   |
+| `palettes/creative-warm.css`  | Creative Warm palette standalone                                    |

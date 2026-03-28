@@ -6,9 +6,9 @@ interface AvatarProps {
 
 export function Avatar({ name, src, size = 32 }: AvatarProps) {
   const initials = name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
-    .join("")
+    .join('')
     .toUpperCase()
     .slice(0, 2);
 
@@ -18,8 +18,8 @@ export function Avatar({ name, src, size = 32 }: AvatarProps) {
       style={{
         width: size,
         height: size,
-        background: src ? "transparent" : "var(--accent-glow)",
-        color: "var(--accent)",
+        background: src ? 'transparent' : 'var(--accent-glow)',
+        color: 'var(--accent)',
         fontSize: size * 0.35,
         fontWeight: 600,
       }}

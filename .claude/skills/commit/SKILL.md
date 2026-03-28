@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Creates a clean, conventional commit with pre-commit checks. This skill should be used when the user says "commit", "save my work", "checkpoint", or wants to commit changes. Runs lint, type check, and tests before committing. Claude should never auto-commit — the user decides when to save.
-argument-hint: "[commit message or leave blank for auto-generate]"
+argument-hint: '[commit message or leave blank for auto-generate]'
 disable-model-invocation: true
 allowed-tools: Read, Bash, Grep, Glob, Agent
 ---
@@ -66,10 +66,12 @@ If ANY check fails → **STOP**. Fix the issue first. Show the user the error an
 ## Commit Process
 
 ### Step 1: Stage changes
+
 Run `git status` and `git diff --staged` to see what's being committed.
 If nothing is staged, run `git add .` (or ask user what to stage).
 
 ### Step 2: Generate commit message
+
 **Format**: `type(scope): description`
 
 **Types**: feat, fix, docs, refactor, test, perf, security, chore
@@ -102,9 +104,11 @@ refactor(api): extract pagination into shared utility
 **If this is a docs-only change** (commit type `docs:`), skip the CHANGELOG update.
 
 ### Step 4: Commit
+
 Show the proposed commit message to the user for approval, then commit.
 
 ### Step 5: Post-commit
+
 - Show: `git log --oneline -3`
 - Remind about pushing: "Your changes are saved locally. Run `git push` when ready."
 - For multi-file changes or PRs, spawn Technical Writer for README updates:

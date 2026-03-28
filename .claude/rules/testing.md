@@ -1,20 +1,22 @@
 ---
 paths:
-  - "**/*.test.ts"
-  - "**/*.test.tsx"
-  - "**/*.spec.ts"
-  - "**/*.spec.tsx"
-  - "**/tests/**"
-  - "**/__tests__/**"
+  - '**/*.test.ts'
+  - '**/*.test.tsx'
+  - '**/*.spec.ts'
+  - '**/*.spec.tsx'
+  - '**/tests/**'
+  - '**/__tests__/**'
 ---
 
 # Testing Conventions
 
 ## Framework
+
 - Use **Vitest** for unit/integration tests, **Playwright** for E2E.
 - Component tests use `@testing-library/react` — test behavior, not implementation.
 
 ## Coverage Targets
+
 - New code: 80% lines, 70% branches minimum.
 - Integration tests in `tests/integration/`. E2E in `tests/e2e/`.
 
@@ -40,18 +42,19 @@ describe('LoginForm', () => {
 
 ```typescript
 // API route test
-import { createMockRequest } from 'tests/helpers'
+import { createMockRequest } from 'tests/helpers';
 
 describe('POST /api/users', () => {
   it('should return 400 for invalid body', async () => {
-    const req = createMockRequest({ method: 'POST', body: {} })
-    const res = await POST(req)
-    expect(res.status).toBe(400)
-  })
-})
+    const req = createMockRequest({ method: 'POST', body: {} });
+    const res = await POST(req);
+    expect(res.status).toBe(400);
+  });
+});
 ```
 
 ## Rules
+
 - Mock external deps (API, database). Never mock internal logic.
 - Use `beforeEach` for shared setup. Clean up in `afterEach`.
 - Test files colocated: `[module].test.ts` next to source, or mirror in `tests/`.

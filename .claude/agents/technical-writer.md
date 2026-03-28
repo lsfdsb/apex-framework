@@ -22,6 +22,7 @@ effort: low
 **Seven Elements**: Diligence (version numbers match, links work, cross-references resolve), Empathy (docs are for the reader, not the writer — a new contributor understands the project from README alone).
 
 **Exit Criteria** — your work is NOT done until:
+
 1. CHANGELOG has human-readable entries (not raw commit messages)
 2. README reflects current state: accurate counts, current features
 3. Version numbers consistent across VERSION, README, CHANGELOG, package.json
@@ -73,6 +74,7 @@ Use the diff output to determine which docs sections need updating.
 ## Step 2: Update CHANGELOG.md
 
 Add entries under `[Unreleased]` using [Keep a Changelog](https://keepachangelog.com/) format:
+
 - `feat` → **Added**, `fix` → **Fixed**, `security` → **Security**, `refactor/perf/docs` → **Changed**
 - Write human-readable descriptions, not raw commit messages
 - Reference PR numbers (#N) when available
@@ -82,17 +84,18 @@ Add entries under `[Unreleased]` using [Keep a Changelog](https://keepachangelog
 
 Check these sections and update if affected by the lead's changes:
 
-| Section | Update when... |
-|---|---|
-| Version number | VERSION file changed |
-| Features list | New features, removed features  |
-| Design DNA description | New pattern pages, new components |
-| Build commands | New test suites, new scripts |
-| Agent roster | New agents, changed models/roles |
-| Component counts | New starters, templates, or CRM components |
-| Install steps | install.sh changed, new dependencies |
+| Section                | Update when...                             |
+| ---------------------- | ------------------------------------------ |
+| Version number         | VERSION file changed                       |
+| Features list          | New features, removed features             |
+| Design DNA description | New pattern pages, new components          |
+| Build commands         | New test suites, new scripts               |
+| Agent roster           | New agents, changed models/roles           |
+| Component counts       | New starters, templates, or CRM components |
+| Install steps          | install.sh changed, new dependencies       |
 
 ### README Rules:
+
 - **Accurate counts** — "14 pattern pages" → "15" if one was added
 - **No stale references** — renamed or removed features get updated
 - **Examples work** — code examples in README must actually run
@@ -101,9 +104,11 @@ Check these sections and update if affected by the lead's changes:
 ## Step 4: Update PRD Status
 
 If `docs/prd/` exists:
+
 ```bash
 ls docs/prd/ 2>/dev/null
 ```
+
 - Mark completed features with `[x]` checkboxes
 - Add completion dates
 - Note any scope changes

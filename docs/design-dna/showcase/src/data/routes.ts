@@ -12,6 +12,18 @@ export interface RouteEntry {
 }
 
 export const TEMPLATE_ROUTES: RouteEntry[] = [
-  { path: "/design-system", label: "Tokens", component: lazy(() => import("@templates/DesignSystemPage")), palette: "saas", category: "system" },
-  { path: "/patterns", label: "Patterns", component: lazy(() => import("@templates/PatternShowcase")), palette: "creative", category: "system" },
+  {
+    path: "/design-system",
+    label: "Tokens",
+    component: lazy(() => import("@templates/DesignSystemPage")),
+    palette: "saas",
+    category: "system",
+  },
+  {
+    path: "/patterns",
+    label: "Patterns",
+    component: lazy(() => import("@templates/PatternShowcase")),
+    palette: "creative",
+    category: "system",
+  },
 ];

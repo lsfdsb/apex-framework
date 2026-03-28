@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface KanbanColumnProps {
   title: string;
@@ -9,15 +9,15 @@ interface KanbanColumnProps {
 }
 
 /** Kanban/pipeline column for CRM pipeline boards and task boards. */
-export function KanbanColumn({ title, count, color, children, className = "" }: KanbanColumnProps) {
+export function KanbanColumn({ title, count, color, children, className = '' }: KanbanColumnProps) {
   return (
     <div
       className={`flex flex-col w-[280px] flex-shrink-0 rounded-[var(--radius)] ${className}`}
-      style={{ background: "var(--bg-surface)" }}
+      style={{ background: 'var(--bg-surface)' }}
     >
       <div
         className="flex items-center gap-2 px-3 py-2.5 border-b"
-        style={{ borderColor: "var(--border)" }}
+        style={{ borderColor: 'var(--border)' }}
       >
         {color && (
           <span
@@ -29,7 +29,7 @@ export function KanbanColumn({ title, count, color, children, className = "" }: 
 
         <p
           className="text-[12px] font-semibold uppercase tracking-wider flex-1 truncate"
-          style={{ color: "var(--text-secondary)" }}
+          style={{ color: 'var(--text-secondary)' }}
         >
           {title}
         </p>
@@ -37,14 +37,17 @@ export function KanbanColumn({ title, count, color, children, className = "" }: 
         {count !== undefined && (
           <span
             className="text-[11px] font-medium px-1.5 py-0.5 rounded-full"
-            style={{ background: "var(--bg-elevated)", color: "var(--text-secondary)" }}
+            style={{ background: 'var(--bg-elevated)', color: 'var(--text-secondary)' }}
           >
             {count}
           </span>
         )}
       </div>
 
-      <div className="flex flex-col gap-2 p-2 overflow-y-auto flex-1" style={{ maxHeight: "calc(100vh - 200px)" }}>
+      <div
+        className="flex flex-col gap-2 p-2 overflow-y-auto flex-1"
+        style={{ maxHeight: 'calc(100vh - 200px)' }}
+      >
         {children}
       </div>
     </div>

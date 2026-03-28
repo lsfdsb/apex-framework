@@ -1,7 +1,7 @@
 ---
 name: verify-api
 description: Verify any external API before integration. Auto-invoked when code references supabase, stripe, openai, anthropic, vercel, firebase, auth0, twilio, sendgrid, cloudflare, aws, resend, clerk, planetscale, neon, upstash, or any fetch() call to an external domain. Checks current auth patterns, SDK versions, deprecated keys, and security requirements against live official documentation. Can also be invoked manually with /verify-api [api-name] to verify a specific API before starting integration work.
-argument-hint: "[api name or URL — e.g. supabase, stripe, openai]"
+argument-hint: '[api name or URL — e.g. supabase, stripe, openai]'
 allowed-tools: WebSearch, WebFetch, Read, Grep, Glob
 ---
 
@@ -37,6 +37,7 @@ WebSearch("[API name] security best practices API key rotation [current year]")
 ```
 
 For Supabase specifically, also run:
+
 ```
 WebSearch("supabase new API keys sb_publishable sb_secret migration 2025 2026")
 ```
@@ -52,14 +53,14 @@ WebFetch("https://[api-docs-url]/quickstart")       # quickstart shows current S
 
 Priority pages to fetch (SDK install + auth/keys section):
 
-| API | Docs URL to fetch |
-|-----|------------------|
-| Supabase | `https://supabase.com/docs/reference/javascript/installing` |
-| Stripe | `https://stripe.com/docs/api?lang=node` |
-| OpenAI | `https://platform.openai.com/docs/quickstart` |
-| Anthropic | `https://docs.anthropic.com/en/api/getting-started` |
-| Clerk | `https://clerk.com/docs/quickstarts/nextjs` |
-| Resend | `https://resend.com/docs/introduction` |
+| API       | Docs URL to fetch                                           |
+| --------- | ----------------------------------------------------------- |
+| Supabase  | `https://supabase.com/docs/reference/javascript/installing` |
+| Stripe    | `https://stripe.com/docs/api?lang=node`                     |
+| OpenAI    | `https://platform.openai.com/docs/quickstart`               |
+| Anthropic | `https://docs.anthropic.com/en/api/getting-started`         |
+| Clerk     | `https://clerk.com/docs/quickstarts/nextjs`                 |
+| Resend    | `https://resend.com/docs/introduction`                      |
 
 ### Step 4 — Compare Against Intent
 
@@ -83,6 +84,7 @@ Always produce this report before any integration code is written.
 **Security Notes**: [required configurations, scoping, restrictions]
 
 ### Verified Integration Template
+
 [Minimal, working code snippet using only current patterns]
 ```
 
@@ -107,40 +109,49 @@ These patterns were verified against official documentation. The "last verified"
 ---
 
 ### Supabase
+
 **Last verified**: 2026-03-24
 
 **SDK**: `@supabase/supabase-js` v2.99+ (check `https://www.npmjs.com/package/@supabase/supabase-js` for latest)
 **SSR/Next.js SDK**: `@supabase/ssr` (required for App Router — replaces deprecated `@supabase/auth-helpers-nextjs`)
 
 **Current key format (post-Nov 2025)**:
+
 - Client (browser-safe): `sb_publishable_[...]` — used as `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 - Server (secret): `sb_secret_[...]` — used as `SUPABASE_SECRET_KEY`, never in client code
 
 **REMOVED (Nov 2025) — DO NOT USE**:
+
 - `anon` JWT key (REMOVED Nov 2025) — previously `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 - `service_role` JWT key (REMOVED Nov 2025) — previously `SUPABASE_SERVICE_ROLE_KEY`
 
 These keys are no longer accepted by Supabase. Migration to `sb_publishable_`/`sb_secret_` is mandatory.
 
 **Current initialization pattern**:
+
 ```typescript
 // Client component (browser)
-import { createBrowserClient } from '@supabase/ssr'
+import { createBrowserClient } from '@supabase/ssr';
 const supabase = createBrowserClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-)
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
+);
 
 // Server component / Route Handler
-import { createServerClient } from '@supabase/ssr'
+import { createServerClient } from '@supabase/ssr';
 const supabase = createServerClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.SUPABASE_SECRET_KEY!,
-  { cookies: { /* Next.js cookie adapter */ } }
-)
+  {
+    cookies: {
+      /* Next.js cookie adapter */
+    },
+  },
+);
 ```
 
 **Security requirements**:
+
 - Row Level Security (RLS) must be enabled on all tables
 - `SUPABASE_SECRET_KEY` must never appear in client bundles or `NEXT_PUBLIC_` variables
 - Use `sb_secret_` key only in server-side code (Route Handlers, Server Actions, middleware)
@@ -148,27 +159,31 @@ const supabase = createServerClient(
 ---
 
 ### Stripe
+
 **Last verified**: 2026-03-24
 
 **SDK**: `stripe` (server) + `@stripe/stripe-js` (client) — check npm for latest
 **React**: `@stripe/react-stripe-js`
 
 **Key format**:
+
 - Client (browser-safe): `pk_live_[...]` or `pk_test_[...]` — used as `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`
 - Server (secret): `sk_live_[...]` or `sk_test_[...]` — used as `STRIPE_SECRET_KEY`, never in client code
 
 **Webhook signature verification — REQUIRED**:
+
 ```typescript
-import Stripe from 'stripe'
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
 // In webhook Route Handler
-const sig = request.headers.get('stripe-signature')!
-const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+const sig = request.headers.get('stripe-signature')!;
+const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!);
 // Never process webhook events without this check
 ```
 
 **Security requirements**:
+
 - Always verify webhook signatures with `constructEvent` — unverified webhooks are a critical vulnerability
 - `STRIPE_SECRET_KEY` server-only; never in `NEXT_PUBLIC_` variables
 - Use idempotency keys for payment creation to prevent duplicate charges
@@ -177,25 +192,28 @@ const event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHO
 ---
 
 ### OpenAI
+
 **Last verified**: 2026-03-24
 
 **SDK**: `openai` npm package — check for latest v4.x
 **Key format**: `sk-[...]` or `sk-proj-[...]` — `OPENAI_API_KEY`, server-only
 
 **Current initialization**:
+
 ```typescript
-import OpenAI from 'openai'
-const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+import OpenAI from 'openai';
+const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 // Streaming (current pattern)
 const stream = await client.chat.completions.create({
   model: 'gpt-4o',
   messages: [{ role: 'user', content: prompt }],
   stream: true,
-})
+});
 ```
 
 **Security requirements**:
+
 - API key is server-only — never expose in client code or `NEXT_PUBLIC_` variables
 - Implement rate limiting on your API routes that call OpenAI
 - Never pass raw user input directly to the model without sanitization or system prompt guardrails
@@ -203,15 +221,17 @@ const stream = await client.chat.completions.create({
 ---
 
 ### Anthropic
+
 **Last verified**: 2026-03-24
 
 **SDK**: `@anthropic-ai/sdk` — check npm for latest
 **Key format**: `sk-ant-[...]` — `ANTHROPIC_API_KEY`, server-only
 
 **Current initialization**:
+
 ```typescript
-import Anthropic from '@anthropic-ai/sdk'
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
+import Anthropic from '@anthropic-ai/sdk';
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
 // Streaming (current pattern)
 const stream = await client.messages.create({
@@ -219,29 +239,33 @@ const stream = await client.messages.create({
   max_tokens: 1024,
   messages: [{ role: 'user', content: prompt }],
   stream: true,
-})
+});
 ```
 
 **Security requirements**:
+
 - API key is server-only — never expose in client code
 - `max_tokens` is required — always set an explicit limit
 
 ---
 
 ### Vercel
+
 **Last verified**: 2026-03-24
 
 **SDK**: `@vercel/sdk` for programmatic API access
 **Key format**: Project tokens via `VERCEL_TOKEN` — server-only
 
 **Edge Config (current pattern)**:
+
 ```typescript
-import { createClient } from '@vercel/edge-config'
-const edgeConfig = createClient(process.env.EDGE_CONFIG)
-const value = await edgeConfig.get('feature-flag')
+import { createClient } from '@vercel/edge-config';
+const edgeConfig = createClient(process.env.EDGE_CONFIG);
+const value = await edgeConfig.get('feature-flag');
 ```
 
 **Security requirements**:
+
 - `VERCEL_TOKEN` is server-only
 - Edge Config connection strings (`ecfg_[...]`) are read-only by default — use separate tokens for write access
 - Never expose deployment tokens in client bundles
@@ -249,12 +273,14 @@ const value = await edgeConfig.get('feature-flag')
 ---
 
 ### Resend
+
 **Last verified**: 2026-03-24
 
 **SDK**: `resend` npm package
 **Key format**: `re_[...]` — `RESEND_API_KEY`, server-only
 
 **Current initialization**:
+
 ```typescript
 import { Resend } from 'resend'
 const resend = new Resend(process.env.RESEND_API_KEY)
@@ -268,6 +294,7 @@ await resend.emails.send({
 ```
 
 **Security requirements**:
+
 - Sending domain must be verified in Resend dashboard — unverified domains will be rejected
 - API key is server-only; use only in Route Handlers or Server Actions
 - Implement rate limiting on email-sending routes to prevent abuse
@@ -275,28 +302,33 @@ await resend.emails.send({
 ---
 
 ### Clerk
+
 **Last verified**: 2026-03-24
 
 **SDK**: `@clerk/nextjs` for Next.js App Router
 **Key format**:
+
 - Publishable: `pk_live_[...]` or `pk_test_[...]` — `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
 - Secret: `sk_live_[...]` or `sk_test_[...]` — `CLERK_SECRET_KEY`, server-only
 
 **Current initialization (App Router)**:
+
 ```typescript
 // middleware.ts
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
-const isProtectedRoute = createRouteMatcher(['/dashboard(.*)'])
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+const isProtectedRoute = createRouteMatcher(['/dashboard(.*)']);
 export default clerkMiddleware((auth, req) => {
-  if (isProtectedRoute(req)) auth().protect()
-})
+  if (isProtectedRoute(req)) auth().protect();
+});
 ```
 
 **Deprecated — DO NOT USE**:
+
 - `authMiddleware` (removed in `@clerk/nextjs` v6) — use `clerkMiddleware` instead
 - `withAuth` HOC pattern — use `auth()` from `@clerk/nextjs/server` in Server Components
 
 **Security requirements**:
+
 - `CLERK_SECRET_KEY` is server-only
 - Always use `clerkMiddleware` to protect routes — never rely solely on client-side redirects
 

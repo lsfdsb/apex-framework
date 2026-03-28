@@ -25,9 +25,7 @@ export function WipIndicator({ column, current }: WipIndicatorProps) {
 
   const atLimit = current >= config.limit;
   const color = atLimit ? "var(--destructive)" : "var(--success)";
-  const bg = atLimit
-    ? "rgba(var(--destructive-rgb, 239,68,68), 0.12)"
-    : "rgba(var(--success-rgb, 34,197,94), 0.12)";
+  const bg = atLimit ? "rgba(var(--destructive-rgb, 239,68,68), 0.12)" : "rgba(var(--success-rgb, 34,197,94), 0.12)";
 
   return (
     <span

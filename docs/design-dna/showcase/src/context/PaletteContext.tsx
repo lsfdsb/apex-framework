@@ -12,10 +12,10 @@ const PaletteCtx = createContext<PaletteState | null>(null);
 
 export function PaletteProvider({ children }: { children: ReactNode }) {
   const [palette, setPaletteState] = useState<PaletteName>(
-    () => (localStorage.getItem("apex-palette") as PaletteName) || "creative"
+    () => (localStorage.getItem("apex-palette") as PaletteName) || "creative",
   );
   const [mode, setMode] = useState<"dark" | "light">(
-    () => (localStorage.getItem("apex-theme") as "dark" | "light") || "dark"
+    () => (localStorage.getItem("apex-theme") as "dark" | "light") || "dark",
   );
 
   useEffect(() => {
@@ -25,11 +25,7 @@ export function PaletteProvider({ children }: { children: ReactNode }) {
   const setPalette = useCallback((name: PaletteName) => setPaletteState(name), []);
   const toggleMode = useCallback(() => setMode((m) => (m === "dark" ? "light" : "dark")), []);
 
-  return (
-    <PaletteCtx.Provider value={{ palette, mode, setPalette, toggleMode }}>
-      {children}
-    </PaletteCtx.Provider>
-  );
+  return <PaletteCtx.Provider value={{ palette, mode, setPalette, toggleMode }}>{children}</PaletteCtx.Provider>;
 }
 
 export function usePalette() {

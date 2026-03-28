@@ -4,13 +4,13 @@ The APEX Framework works fully offline. This integration is **optional** — it 
 
 ## What You Get
 
-| Feature | Without Supabase | With Supabase |
-|---|---|---|
-| Framework awareness | `.manifest.json` (session-scoped) | Persistent DB, queryable via REST |
-| Component search | `grep` on local files | Text + vector similarity search |
-| Cross-references | `manifest.json` snapshot | Live graph, queryable by component |
-| Session learnings | Agent memory files (per-machine) | Shared, searchable across machines |
-| Gate audit trail | None | Logged to `session_learnings` |
+| Feature             | Without Supabase                  | With Supabase                      |
+| ------------------- | --------------------------------- | ---------------------------------- |
+| Framework awareness | `.manifest.json` (session-scoped) | Persistent DB, queryable via REST  |
+| Component search    | `grep` on local files             | Text + vector similarity search    |
+| Cross-references    | `manifest.json` snapshot          | Live graph, queryable by component |
+| Session learnings   | Agent memory files (per-machine)  | Shared, searchable across machines |
+| Gate audit trail    | None                              | Logged to `session_learnings`      |
 
 ---
 
@@ -203,18 +203,18 @@ Session learnings are automatically persisted to Supabase when the session ends 
 
 ### What the function demonstrates
 
-| Pattern | Implementation |
-|---|---|
-| Modern entrypoint | `Deno.serve()` — current Supabase standard |
-| CORS preflight | `OPTIONS` handler before all other logic |
-| Authentication | Bearer token via `APEX_SECRET_KEY` with constant-time comparison |
-| Input validation | Schema validation with structured 400 error responses |
-| Error handling | Try/catch everywhere — no unhandled rejections |
-| Rate limiting | In-memory sliding window (replace with Upstash Redis for multi-region) |
+| Pattern            | Implementation                                                           |
+| ------------------ | ------------------------------------------------------------------------ |
+| Modern entrypoint  | `Deno.serve()` — current Supabase standard                               |
+| CORS preflight     | `OPTIONS` handler before all other logic                                 |
+| Authentication     | Bearer token via `APEX_SECRET_KEY` with constant-time comparison         |
+| Input validation   | Schema validation with structured 400 error responses                    |
+| Error handling     | Try/catch everywhere — no unhandled rejections                           |
+| Rate limiting      | In-memory sliding window (replace with Upstash Redis for multi-region)   |
 | Structured logging | JSON log entries with `timestamp`, `request_id`, `gate_type`, `decision` |
-| Health check | `GET /` returns `{ status, version, gates }` |
-| Supabase client | Service role client from injected env vars |
-| TypeScript | Full types for all request/response shapes, exhaustive switch guard |
+| Health check       | `GET /` returns `{ status, version, gates }`                             |
+| Supabase client    | Service role client from injected env vars                               |
+| TypeScript         | Full types for all request/response shapes, exhaustive switch guard      |
 
 ### Deploy
 
@@ -275,38 +275,38 @@ The default implementation auto-approves all gates and logs the events. For huma
 
 ### `components`
 
-| Column | Type | Notes |
-|---|---|---|
-| id | uuid | Primary key |
-| type | enum | `agent`, `skill`, `script`, `hook`, `rule` |
-| name | text | Unique per type |
-| description | text | From frontmatter or first comment |
-| metadata | jsonb | Arbitrary — version, file path, tags |
-| embedding | vector(1536) | Optional — for semantic search |
-| created_at | timestamptz | Auto-set |
-| updated_at | timestamptz | Auto-updated on change |
+| Column      | Type         | Notes                                      |
+| ----------- | ------------ | ------------------------------------------ |
+| id          | uuid         | Primary key                                |
+| type        | enum         | `agent`, `skill`, `script`, `hook`, `rule` |
+| name        | text         | Unique per type                            |
+| description | text         | From frontmatter or first comment          |
+| metadata    | jsonb        | Arbitrary — version, file path, tags       |
+| embedding   | vector(1536) | Optional — for semantic search             |
+| created_at  | timestamptz  | Auto-set                                   |
+| updated_at  | timestamptz  | Auto-updated on change                     |
 
 ### `cross_references`
 
-| Column | Type | Notes |
-|---|---|---|
-| id | uuid | Primary key |
-| source_type | enum | Component type of the source |
-| source_name | text | Component name of the source |
-| target_type | enum | Component type of the target |
-| target_name | text | Component name of the target |
+| Column       | Type | Notes                              |
+| ------------ | ---- | ---------------------------------- |
+| id           | uuid | Primary key                        |
+| source_type  | enum | Component type of the source       |
+| source_name  | text | Component name of the source       |
+| target_type  | enum | Component type of the target       |
+| target_name  | text | Component name of the target       |
 | relationship | enum | `uses`, `references`, `depends_on` |
 
 ### `session_learnings`
 
-| Column | Type | Notes |
-|---|---|---|
-| id | uuid | Primary key |
-| session_id | text | Caller-supplied (git hash, date, UUID) |
-| learning_type | enum | `error`, `correction`, `success`, `pattern` |
-| content | text | The learning |
-| embedding | vector(1536) | Optional — for semantic retrieval |
-| created_at | timestamptz | Auto-set |
+| Column        | Type         | Notes                                       |
+| ------------- | ------------ | ------------------------------------------- |
+| id            | uuid         | Primary key                                 |
+| session_id    | text         | Caller-supplied (git hash, date, UUID)      |
+| learning_type | enum         | `error`, `correction`, `success`, `pattern` |
+| content       | text         | The learning                                |
+| embedding     | vector(1536) | Optional — for semantic retrieval           |
+| created_at    | timestamptz  | Auto-set                                    |
 
 ---
 

@@ -32,11 +32,46 @@ function LoadingState() {
       <div style={{ textAlign: "center", animation: "apex-fade-in 0.6s cubic-bezier(0.22,1,0.36,1)" }}>
         <div style={{ width: 48, height: 48, margin: "0 auto 24px", position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "1px solid var(--border)" }} />
-          <div style={{ position: "absolute", inset: -2, borderRadius: "50%", border: "2px solid transparent", borderTopColor: "var(--accent)", animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite" }} />
-          <div style={{ position: "absolute", inset: 8, borderRadius: "50%", background: "var(--accent)", opacity: 0.15, animation: "apex-pulse 2s ease-in-out infinite" }} />
-          <div style={{ position: "absolute", inset: 16, borderRadius: "50%", background: "var(--accent)", opacity: 0.4, animation: "apex-pulse 2s ease-in-out 0.3s infinite" }} />
+          <div
+            style={{
+              position: "absolute",
+              inset: -2,
+              borderRadius: "50%",
+              border: "2px solid transparent",
+              borderTopColor: "var(--accent)",
+              animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 8,
+              borderRadius: "50%",
+              background: "var(--accent)",
+              opacity: 0.15,
+              animation: "apex-pulse 2s ease-in-out infinite",
+            }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              inset: 16,
+              borderRadius: "50%",
+              background: "var(--accent)",
+              opacity: 0.4,
+              animation: "apex-pulse 2s ease-in-out 0.3s infinite",
+            }}
+          />
         </div>
-        <p style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: "italic", fontSize: 16, color: "var(--text-muted)", letterSpacing: "-0.02em" }}>
+        <p
+          style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontStyle: "italic",
+            fontSize: 16,
+            color: "var(--text-muted)",
+            letterSpacing: "-0.02em",
+          }}
+        >
           Forging the beskar...
         </p>
       </div>
@@ -78,12 +113,7 @@ function TemplateWithSource({ route }: { route: RouteEntry }) {
   }, [templateName]);
 
   return (
-    <TemplatePage
-      component={route.component}
-      label={route.label}
-      defaultPalette={route.palette}
-      source={source}
-    />
+    <TemplatePage component={route.component} label={route.label} defaultPalette={route.palette} source={source} />
   );
 }
 
@@ -101,11 +131,7 @@ function AppRouter() {
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <Suspense fallback={<LoadingState />}>
-          {templateRoute ? (
-            <TemplateWithSource route={templateRoute} />
-          ) : (
-            <HomePage />
-          )}
+          {templateRoute ? <TemplateWithSource route={templateRoute} /> : <HomePage />}
         </Suspense>
       </div>
 

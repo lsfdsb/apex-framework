@@ -1,14 +1,14 @@
 ---
 name: security
 description: Runs a security audit on code handling authentication, authorization, payments, user data, file uploads, or external integrations. This skill should be used when the user mentions security, auth, login, password, token, API key, encryption, OWASP, vulnerability, injection, XSS, CSRF, or when reviewing sensitive code. Follows the Ionescu/Rutkowska philosophy — defense in depth, trust nothing.
-argument-hint: "[component or file to audit]"
+argument-hint: '[component or file to audit]'
 allowed-tools: Read, Grep, Glob, Bash
 hooks:
   PreToolUse:
-    - matcher: "Bash"
+    - matcher: 'Bash'
       hooks:
         - type: command
-          command: "$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh"
+          command: '$CLAUDE_PROJECT_DIR/.claude/scripts/block-dangerous-commands.sh'
           timeout: 5
 ---
 
@@ -64,10 +64,13 @@ For grep commands, security headers config, Next.js vulnerability patterns, and 
 
 ```markdown
 ## Security Audit: [Component]
+
 **Risk Level**: 🔴 CRITICAL / 🟡 ELEVATED / 🟢 LOW
 
 ### Vulnerabilities
+
 #### [VULN-001] [Title]
+
 - Severity: Critical/High/Medium/Low
 - Category: [OWASP category]
 - Location: file:line
@@ -75,6 +78,7 @@ For grep commands, security headers config, Next.js vulnerability patterns, and 
 - Fix: Exact remediation
 
 ### Posture Summary
+
 Auth: ✅/⚠️/❌ | Authorization: ✅/⚠️/❌ | Input Validation: ✅/⚠️/❌
 Data Protection: ✅/⚠️/❌ | Dependencies: ✅/⚠️/❌ | Config: ✅/⚠️/❌
 ```

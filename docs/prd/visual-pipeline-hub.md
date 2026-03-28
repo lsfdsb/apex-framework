@@ -15,7 +15,7 @@ The APEX Framework is the most complete vibe-coding framework ever built. 22 ski
 
 The APEX Visual Pipeline HUB is a web-based command center that makes the entire framework visible, interactive, and educational. It's not a dashboard — it's a **teaching machine**. Every screen answers a question. Every animation explains a concept. Every interaction teaches the user something they didn't know about building software the right way.
 
-When a user opens the HUB, they should feel what we felt building it: *"This is how software should be made."*
+When a user opens the HUB, they should feel what we felt building it: _"This is how software should be made."_
 
 ### The Three Promises
 
@@ -29,45 +29,49 @@ When a user opens the HUB, they should feel what we felt building it: *"This is 
 
 Every feature in this PRD is evaluated against Apple's software criteria:
 
-| Criterion | Question | Standard |
-|-----------|----------|----------|
-| **Clarity** | Does the user instantly understand what they're looking at? | Zero confusion. Labels, icons, and layout communicate intent without documentation. |
-| **Deference** | Does the UI get out of the way of the content? | Content is the interface. Chrome is minimal. Data speaks. |
-| **Depth** | Does interaction reveal more? | Every element has a deeper layer. Click to learn more. Hover for context. Expand for details. |
-| **Craft** | Would we be proud to demo this at WWDC? | Pixel-perfect alignment. Smooth 60fps animations. No placeholder text. No "lorem ipsum". Every string is real. |
-| **Teaching** | Does using this make the user better? | Every screen teaches a software engineering concept. Users leave knowing more than when they arrived. |
+| Criterion     | Question                                                    | Standard                                                                                                       |
+| ------------- | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Clarity**   | Does the user instantly understand what they're looking at? | Zero confusion. Labels, icons, and layout communicate intent without documentation.                            |
+| **Deference** | Does the UI get out of the way of the content?              | Content is the interface. Chrome is minimal. Data speaks.                                                      |
+| **Depth**     | Does interaction reveal more?                               | Every element has a deeper layer. Click to learn more. Hover for context. Expand for details.                  |
+| **Craft**     | Would we be proud to demo this at WWDC?                     | Pixel-perfect alignment. Smooth 60fps animations. No placeholder text. No "lorem ipsum". Every string is real. |
+| **Teaching**  | Does using this make the user better?                       | Every screen teaches a software engineering concept. Users leave knowing more than when they arrived.          |
 
 ---
 
 ## 3. Problem Statement
 
 ### For New Users (The Explorer)
-APEX has a 475-line README. 22 skills they've never heard of. 5 agents they don't understand. A 7-phase pipeline they can't visualize. The learning curve is not technical — it's conceptual. They need to *see* the system to believe in it.
+
+APEX has a 475-line README. 22 skills they've never heard of. 5 agents they don't understand. A 7-phase pipeline they can't visualize. The learning curve is not technical — it's conceptual. They need to _see_ the system to believe in it.
 
 **The HUB is their first session.** Before they ever type a command, they open localhost:3001 and understand — visually — what APEX does, why it matters, and how it's different from every other AI coding tool.
 
 ### For Active Builders (The Builder)
+
 Mid-session, a builder has 5 agents running, 16 tasks across 3 phases, and quality gates executing. All of this is happening in the terminal — text scrolling by. They lose context. They can't see the big picture.
 
 **The HUB is their mission control.** One browser tab, always open. Tasks moving across the Kanban. Agents showing active/idle. Quality gates lighting up. The terminal is for doing. The HUB is for seeing.
 
 ### For the Framework (Marketing)
+
 Every competitor has screenshots. Cursor has the IDE. Windsurf has the flow view. Devin has the plan viewer. APEX has... a README. The HUB gives APEX its visual identity — the screenshot that makes someone say "I want that."
 
 ---
 
 ## 4. Competitive Analysis
 
-| Tool | What They Show | What They Don't | APEX HUB Advantage |
-|------|---------------|-----------------|---------------------|
-| **Cursor** | AI suggestions inline | No pipeline, no quality gates, no multi-agent | Full pipeline visualization + quality enforcement |
-| **Windsurf** | Step-by-step flow preview | Single agent, no decomposition, no testing | Multi-agent war room + Apple EPM task board |
-| **Devin** | Plan + execution log | Opaque (you see output, not thinking) | **Agent Thought Stream** — see WHY agents make decisions |
-| **v0** | Component preview | No backend, no testing, no pipeline | Full-stack pipeline from PRD to PR |
-| **bolt.new** | Fast scaffold preview | No quality enforcement whatsoever | Quality gates as visual spectacle |
-| **GitHub Copilot Workspace** | Plan → implement → review | No live multi-agent, no design system | Live team coordination + Design DNA integration |
+| Tool                         | What They Show            | What They Don't                               | APEX HUB Advantage                                       |
+| ---------------------------- | ------------------------- | --------------------------------------------- | -------------------------------------------------------- |
+| **Cursor**                   | AI suggestions inline     | No pipeline, no quality gates, no multi-agent | Full pipeline visualization + quality enforcement        |
+| **Windsurf**                 | Step-by-step flow preview | Single agent, no decomposition, no testing    | Multi-agent war room + Apple EPM task board              |
+| **Devin**                    | Plan + execution log      | Opaque (you see output, not thinking)         | **Agent Thought Stream** — see WHY agents make decisions |
+| **v0**                       | Component preview         | No backend, no testing, no pipeline           | Full-stack pipeline from PRD to PR                       |
+| **bolt.new**                 | Fast scaffold preview     | No quality enforcement whatsoever             | Quality gates as visual spectacle                        |
+| **GitHub Copilot Workspace** | Plan → implement → review | No live multi-agent, no design system         | Live team coordination + Design DNA integration          |
 
 **Our unique features no competitor has:**
+
 1. Agent Thought Stream (see agent reasoning live)
 2. Apple EPM Kanban with real DRI assignments
 3. Quality Gate Theater (watch 7 phases execute visually)
@@ -103,20 +107,21 @@ Every competitor has screenshots. Cursor has the IDE. Windsurf has the flow view
 
 **Route**: `#/` | **Primary Persona**: Explorer | **Teaching Theme**: "What is APEX?"
 
-The first screen. Two paths diverge: the Framework (pipeline, agents, quality) and the DNA (design system showcase). This page answers one question: *"What can I do here?"*
+The first screen. Two paths diverge: the Framework (pipeline, agents, quality) and the DNA (design system showcase). This page answers one question: _"What can I do here?"_
 
 #### Elements
 
-| Element | Description | Teaching Moment |
-|---------|-------------|-----------------|
-| **Hero Banner** | APEX logo with tagline: "Agent-Powered EXcellence — Watch AI build software the right way" | Sets the vision |
+| Element            | Description                                                                                                                               | Teaching Moment                 |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| **Hero Banner**    | APEX logo with tagline: "Agent-Powered EXcellence — Watch AI build software the right way"                                                | Sets the vision                 |
 | **Framework Card** | Large card: "APEX Pipeline" — "See the 7-phase autonomous pipeline that turns ideas into production code" with miniature pipeline preview | Introduces the pipeline concept |
-| **DNA Card** | Large card: "Design DNA" — "14 premium UI templates, 33 starters, 39 components — the visual quality bar" with template thumbnail grid | Introduces the design system |
-| **Stats Bar** | Animated counters: 5 Agents, 22 Skills, 14 Hooks, 7 Phases, 14 Templates | Shows framework scale |
-| **Live Indicator** | Green pulse dot if Claude Code session detected, gray if demo mode | Connects HUB to terminal |
-| **The Creed** | Footer: "Never ship untested code. Never skip the PRD. Never break the build. This is the Way." | Sets the standard |
+| **DNA Card**       | Large card: "Design DNA" — "14 premium UI templates, 33 starters, 39 components — the visual quality bar" with template thumbnail grid    | Introduces the design system    |
+| **Stats Bar**      | Animated counters: 5 Agents, 22 Skills, 14 Hooks, 7 Phases, 14 Templates                                                                  | Shows framework scale           |
+| **Live Indicator** | Green pulse dot if Claude Code session detected, gray if demo mode                                                                        | Connects HUB to terminal        |
+| **The Creed**      | Footer: "Never ship untested code. Never skip the PRD. Never break the build. This is the Way."                                           | Sets the standard               |
 
 #### Acceptance Criteria
+
 - [ ] Two cards render with hover animations (scale + glow)
 - [ ] Stats bar counts animate up on page load (CountUp effect)
 - [ ] Live indicator checks `.apex/state/session.json` via polling
@@ -143,30 +148,31 @@ This is the flagship page. The 7-phase pipeline rendered as a living, breathing 
 
 #### Elements
 
-| Element | Description | Teaching Moment |
-|---------|-------------|-----------------|
-| **Phase Nodes** | 7 connected rounded cards, horizontal (desktop) / vertical (mobile) | Each phase name teaches the step |
-| **Connection Lines** | Animated dashed lines between phases, energy flowing left-to-right | Shows progression and flow |
-| **Gate Indicators** | Phases 1, 2, 7 have a lock/shield icon — "User Approval Required" | Teaches the 3-gate model |
-| **Phase Detail Panel** | Click any phase to expand: what happens, which agents activate, which skills invoke, estimated time | Deep learning about each phase |
-| **Agent Avatars** | Small agent icons appear on phases where they're active | Teaches which agents do what |
-| **Simulate Button** | "Run Pipeline" — animates all 7 phases sequentially with realistic timing | The wow moment — watch it flow |
-| **Live Mode** | When session active, shows REAL current phase with progress indicator | Builder sees where they are |
-| **Teaching Sidebar** | Collapsible panel: "Why 7 phases?" explaining autonomous pipeline vs. manual coding | Deep educational content |
+| Element                | Description                                                                                         | Teaching Moment                  |
+| ---------------------- | --------------------------------------------------------------------------------------------------- | -------------------------------- |
+| **Phase Nodes**        | 7 connected rounded cards, horizontal (desktop) / vertical (mobile)                                 | Each phase name teaches the step |
+| **Connection Lines**   | Animated dashed lines between phases, energy flowing left-to-right                                  | Shows progression and flow       |
+| **Gate Indicators**    | Phases 1, 2, 7 have a lock/shield icon — "User Approval Required"                                   | Teaches the 3-gate model         |
+| **Phase Detail Panel** | Click any phase to expand: what happens, which agents activate, which skills invoke, estimated time | Deep learning about each phase   |
+| **Agent Avatars**      | Small agent icons appear on phases where they're active                                             | Teaches which agents do what     |
+| **Simulate Button**    | "Run Pipeline" — animates all 7 phases sequentially with realistic timing                           | The wow moment — watch it flow   |
+| **Live Mode**          | When session active, shows REAL current phase with progress indicator                               | Builder sees where they are      |
+| **Teaching Sidebar**   | Collapsible panel: "Why 7 phases?" explaining autonomous pipeline vs. manual coding                 | Deep educational content         |
 
 #### Phase Detail Content (expandable)
 
-| Phase | Agents Active | Skills Used | Gate? | What Happens |
-|-------|--------------|-------------|-------|-------------|
-| 1. Plan | Lead | /prd | YES | PRD generated from user's description. Contract presented for approval. |
-| 2. Architect | Lead | /architecture | YES | System design: stack, schema, API contracts, component tree. Blueprint presented. |
-| 3. Decompose | PM | /teams | No | PM reads PRD+Arch, creates phased task board (P0/P1/P2). DRIs assigned. Dependencies wired. |
-| 4. Verify | Lead | /verify-api, /verify-lib | No | External APIs verified against live docs. Design DNA recipe loaded. Dependencies checked. |
-| 5. Build | Builder, Watcher | /teams | No | Builders implement tasks. Watcher monitors continuously. Breathing Loop runs. |
-| 6. Quality | QA, Lead | /qa, /security, /a11y, /cx-review | No (auto-fix) | 7-phase QA gate. Security scan. Accessibility audit. CX review. Auto-fix and re-run on failure. |
-| 7. Ship | Tech Writer, Lead | /ship, /changelog | YES | Docs updated. Commit + PR created. User approves merge. Release. |
+| Phase        | Agents Active     | Skills Used                       | Gate?         | What Happens                                                                                    |
+| ------------ | ----------------- | --------------------------------- | ------------- | ----------------------------------------------------------------------------------------------- |
+| 1. Plan      | Lead              | /prd                              | YES           | PRD generated from user's description. Contract presented for approval.                         |
+| 2. Architect | Lead              | /architecture                     | YES           | System design: stack, schema, API contracts, component tree. Blueprint presented.               |
+| 3. Decompose | PM                | /teams                            | No            | PM reads PRD+Arch, creates phased task board (P0/P1/P2). DRIs assigned. Dependencies wired.     |
+| 4. Verify    | Lead              | /verify-api, /verify-lib          | No            | External APIs verified against live docs. Design DNA recipe loaded. Dependencies checked.       |
+| 5. Build     | Builder, Watcher  | /teams                            | No            | Builders implement tasks. Watcher monitors continuously. Breathing Loop runs.                   |
+| 6. Quality   | QA, Lead          | /qa, /security, /a11y, /cx-review | No (auto-fix) | 7-phase QA gate. Security scan. Accessibility audit. CX review. Auto-fix and re-run on failure. |
+| 7. Ship      | Tech Writer, Lead | /ship, /changelog                 | YES           | Docs updated. Commit + PR created. User approves merge. Release.                                |
 
 #### Simulation Timing
+
 - Phase 1 (Plan): 2s active → gate pause 1s → complete
 - Phase 2 (Architect): 2s active → gate pause 1s → complete
 - Phase 3 (Decompose): 1.5s active → complete (no gate)
@@ -176,6 +182,7 @@ This is the flagship page. The 7-phase pipeline rendered as a living, breathing 
 - Phase 7 (Ship): 1.5s active → gate pause 1s → complete with confetti/glow effect
 
 #### Acceptance Criteria
+
 - [ ] All 7 phases render as connected nodes with labels and icons
 - [ ] 3 gates visually distinct (lock icon, different border treatment)
 - [ ] Click any phase opens detail panel with agents, skills, description
@@ -195,17 +202,18 @@ This is the Apple EPM Kanban. Not a toy Kanban — a real project management vie
 
 #### Columns (Apple EPM)
 
-| Column | Meaning | Visual | WIP Limit |
-|--------|---------|--------|-----------|
-| **Backlog** | PM decomposed, not yet started | Gray cards, dimmed | Unlimited |
-| **To Do** | Assigned to DRI, ready to start | White cards, phase badge | Per phase |
-| **In Progress** | Builder actively working | Accent glow, pulse animation | 2 per builder |
-| **Review** | QA verifying, or PR in review | Yellow border, review icon | 1 per QA |
-| **Done** | Accepted, shipped | Green checkmark, success state | Unlimited |
+| Column          | Meaning                         | Visual                         | WIP Limit     |
+| --------------- | ------------------------------- | ------------------------------ | ------------- |
+| **Backlog**     | PM decomposed, not yet started  | Gray cards, dimmed             | Unlimited     |
+| **To Do**       | Assigned to DRI, ready to start | White cards, phase badge       | Per phase     |
+| **In Progress** | Builder actively working        | Accent glow, pulse animation   | 2 per builder |
+| **Review**      | QA verifying, or PR in review   | Yellow border, review icon     | 1 per QA      |
+| **Done**        | Accepted, shipped               | Green checkmark, success state | Unlimited     |
 
 #### Task Card Content
 
 Each card shows:
+
 - **Title**: Brief description (e.g., "Build Pipeline Flow component")
 - **Phase Badge**: P0 (red), P1 (amber), P2 (blue) — color-coded priority
 - **DRI Avatar**: Builder/QA/Writer icon with name
@@ -216,14 +224,14 @@ Each card shows:
 
 #### Teaching Elements
 
-| Element | What It Teaches |
-|---------|----------------|
-| **Phase grouping** (P0/P1/P2 filters) | Why you ship in phases, not all at once |
-| **DRI assignment** | Why every task needs ONE owner (Apple's DRI model) |
-| **WIP limits** | Why limiting work-in-progress increases throughput |
-| **Acceptance criteria** | Why "done" needs a definition, not a feeling |
-| **Dependency arrows** | Why task ordering matters (DAG visualization) |
-| **Velocity indicator** | How many tasks completed per hour — teaches estimation |
+| Element                               | What It Teaches                                        |
+| ------------------------------------- | ------------------------------------------------------ |
+| **Phase grouping** (P0/P1/P2 filters) | Why you ship in phases, not all at once                |
+| **DRI assignment**                    | Why every task needs ONE owner (Apple's DRI model)     |
+| **WIP limits**                        | Why limiting work-in-progress increases throughput     |
+| **Acceptance criteria**               | Why "done" needs a definition, not a feeling           |
+| **Dependency arrows**                 | Why task ordering matters (DAG visualization)          |
+| **Velocity indicator**                | How many tasks completed per hour — teaches estimation |
 
 #### Live Sync — The API Bridge
 
@@ -245,6 +253,7 @@ Hook: TaskUpdate → updates .apex/state/tasks.json
 When no session active: shows demo data — a realistic build of "Phoenix CRM" decomposed into 14 tasks across 3 phases, showing what a real APEX build looks like.
 
 #### Acceptance Criteria
+
 - [ ] 5-column Kanban renders using DNA KanbanColumn starter
 - [ ] Task cards show all fields: title, phase, DRI, criteria progress, dependencies
 - [ ] Phase filter (P0/P1/P2/All) works
@@ -262,18 +271,18 @@ When no session active: shows demo data — a realistic build of "Phoenix CRM" d
 
 **Route**: `#/agents` | **Primary Persona**: Explorer | **Teaching Theme**: "Why multi-agent? Why these roles?"
 
-This page answers the question every developer asks: *"Why do you need 5 agents? Can't one AI do everything?"* The answer is specialization — and this page makes that viscerally clear.
+This page answers the question every developer asks: _"Why do you need 5 agents? Can't one AI do everything?"_ The answer is specialization — and this page makes that viscerally clear.
 
 #### Agent Cards (6 agents)
 
-| Agent | Model | Icon | Tagline | Teaching Point |
-|-------|-------|------|---------|---------------|
-| **Lead** (You) | Opus | Crown | "The architect. Orchestrates the team, makes final calls." | Why you need a decision-maker |
-| **PM** | Sonnet | Clipboard | "The Tim Cook. Turns vision into tasks." | Why planning before coding matters |
-| **Builder** | Sonnet | Hammer | "The craftsman. Writes the code, respects the architecture." | Why implementation needs structure |
-| **QA** | Sonnet | Shield | "The Steve Kerr. Nothing ships without approval." | Why testing is non-negotiable |
-| **Watcher** | Haiku | Eye | "The sentinel. Catches errors before they compound." | Why continuous monitoring prevents debt |
-| **Tech Writer** | Haiku | Pen | "The chronicler. Every change documented." | Why documentation is architecture |
+| Agent           | Model  | Icon      | Tagline                                                      | Teaching Point                          |
+| --------------- | ------ | --------- | ------------------------------------------------------------ | --------------------------------------- |
+| **Lead** (You)  | Opus   | Crown     | "The architect. Orchestrates the team, makes final calls."   | Why you need a decision-maker           |
+| **PM**          | Sonnet | Clipboard | "The Tim Cook. Turns vision into tasks."                     | Why planning before coding matters      |
+| **Builder**     | Sonnet | Hammer    | "The craftsman. Writes the code, respects the architecture." | Why implementation needs structure      |
+| **QA**          | Sonnet | Shield    | "The Steve Kerr. Nothing ships without approval."            | Why testing is non-negotiable           |
+| **Watcher**     | Haiku  | Eye       | "The sentinel. Catches errors before they compound."         | Why continuous monitoring prevents debt |
+| **Tech Writer** | Haiku  | Pen       | "The chronicler. Every change documented."                   | Why documentation is architecture       |
 
 #### The Breathing Loop (Animated SVG)
 
@@ -327,18 +336,19 @@ This is not just logging. It's narrated — the agent explains WHAT it's doing a
 
 Interactive table showing which agent owns which quality concern:
 
-| Concern | Builder | QA | Watcher | Writer |
-|---------|---------|-----|---------|--------|
-| TypeScript errors | Writes | Verifies | Detects | — |
-| Test coverage | Writes tests | Runs tests | — | — |
-| Security | Avoids vulns | Scans OWASP | — | — |
-| Performance | Optimizes | Benchmarks | Monitors | — |
-| Documentation | — | — | — | Owns |
-| CHANGELOG | — | — | — | Owns |
+| Concern           | Builder      | QA          | Watcher  | Writer |
+| ----------------- | ------------ | ----------- | -------- | ------ |
+| TypeScript errors | Writes       | Verifies    | Detects  | —      |
+| Test coverage     | Writes tests | Runs tests  | —        | —      |
+| Security          | Avoids vulns | Scans OWASP | —        | —      |
+| Performance       | Optimizes    | Benchmarks  | Monitors | —      |
+| Documentation     | —            | —           | —        | Owns   |
+| CHANGELOG         | —            | —           | —        | Owns   |
 
 Hover any cell to see a teaching tooltip explaining the responsibility.
 
 #### Acceptance Criteria
+
 - [ ] 6 agent cards render in 2x3 grid (desktop) / 1-col (mobile)
 - [ ] Each card shows: name, model badge, icon, tagline, teaching tooltip
 - [ ] Breathing Loop SVG animates with pulsing arrows
@@ -358,27 +368,28 @@ This page makes quality gates feel like a spectacle. When QA runs, the user watc
 
 #### The 7-Phase QA Gate
 
-| Phase | What It Checks | Icon | Teaching Point |
-|-------|---------------|------|---------------|
-| 1. Dependencies | Package versions, security advisories, license compliance | Package | "Your dependencies are your attack surface" |
-| 2. Code Quality | TypeScript strict, no `any`, ESLint, Prettier, conventional commits | Code | "Style consistency eliminates cognitive load" |
-| 3. Logic | Business logic correctness, edge cases, error handling | Brain | "Code that works is not the same as code that's correct" |
-| 4. Design DNA | Matches design tokens, responsive, dark/light, no hardcoded colors | Palette | "Design is how it works, not just how it looks" |
-| 5. Performance | Bundle size, lazy loading, no N+1, pagination, Lighthouse | Zap | "Speed is a feature, not an optimization" |
-| 6. Security | OWASP Top 10, auth patterns, input validation, secrets scan | Lock | "Security is not a feature — it's a constraint" |
-| 7. Polish | Spelling, version consistency, dead references, truncated text | Gem | "The last 10% is the other 90%" |
+| Phase           | What It Checks                                                      | Icon    | Teaching Point                                           |
+| --------------- | ------------------------------------------------------------------- | ------- | -------------------------------------------------------- |
+| 1. Dependencies | Package versions, security advisories, license compliance           | Package | "Your dependencies are your attack surface"              |
+| 2. Code Quality | TypeScript strict, no `any`, ESLint, Prettier, conventional commits | Code    | "Style consistency eliminates cognitive load"            |
+| 3. Logic        | Business logic correctness, edge cases, error handling              | Brain   | "Code that works is not the same as code that's correct" |
+| 4. Design DNA   | Matches design tokens, responsive, dark/light, no hardcoded colors  | Palette | "Design is how it works, not just how it looks"          |
+| 5. Performance  | Bundle size, lazy loading, no N+1, pagination, Lighthouse           | Zap     | "Speed is a feature, not an optimization"                |
+| 6. Security     | OWASP Top 10, auth patterns, input validation, secrets scan         | Lock    | "Security is not a feature — it's a constraint"          |
+| 7. Polish       | Spelling, version consistency, dead references, truncated text      | Gem     | "The last 10% is the other 90%"                          |
 
 #### Additional Gates
 
-| Gate | When It Runs | What It Checks |
-|------|-------------|---------------|
-| **Accessibility** | Always (UI components) | WCAG 2.2 AA, keyboard nav, screen readers, contrast |
-| **CX Review** | Always (user-facing) | Customer journey, onboarding, error messages, delight |
-| **Security Deep** | Auth/payments/PII code | Encryption, token storage, injection, CSRF |
+| Gate              | When It Runs           | What It Checks                                        |
+| ----------------- | ---------------------- | ----------------------------------------------------- |
+| **Accessibility** | Always (UI components) | WCAG 2.2 AA, keyboard nav, screen readers, contrast   |
+| **CX Review**     | Always (user-facing)   | Customer journey, onboarding, error messages, delight |
+| **Security Deep** | Auth/payments/PII code | Encryption, token storage, injection, CSRF            |
 
 #### Visual Execution
 
 When QA runs (live or simulation):
+
 1. Each phase appears as a horizontal bar
 2. Bar fills left-to-right over ~1s
 3. Icon at the end: green checkmark (pass) or red X (fail)
@@ -388,12 +399,14 @@ When QA runs (live or simulation):
 #### The Quality Score
 
 A computed score that makes quality tangible:
+
 - Each of the 7 phases contributes up to ~14 points
 - Bonus points for accessibility, security, CX
 - Visual: large number with color (green > 90, yellow > 70, red < 70)
 - **Teaching**: "A quality score below 90 means the build has gaps that will cost 10x more to fix after shipping."
 
 #### Acceptance Criteria
+
 - [ ] 7 QA phases render as expandable cards with icons and descriptions
 - [ ] Each phase has a teaching tooltip explaining WHY it matters
 - [ ] Additional gates (A11Y, CX, Security) render as separate section
@@ -412,27 +425,27 @@ A computed score that makes quality tangible:
 
 #### Teaching Mechanisms
 
-| Mechanism | Where | How | Example |
-|-----------|-------|-----|---------|
-| **Hover Tooltips** | Every icon, badge, phase node | 200ms delay, arrow tooltip | Hover "P0" badge → "P0 means Must-Ship: without this, the product doesn't work" |
-| **Expand Panels** | Phase details, task details, agent details | Click to expand | Click Pipeline Phase 3 → full explanation of PM decomposition |
-| **Teaching Sidebar** | Pipeline, Quality pages | Collapsible right panel | "Why 7 phases?" essay with before/after comparison |
-| **Concept Links** | Inline in descriptions | Underlined terms link to definitions | "DRI" links to explanation of Apple's Directly Responsible Individual model |
-| **Progress Breadcrumb** | Top of every page | Shows where user is in learning journey | "HUB > Pipeline > Phase 3: Decompose" |
-| **"Why?" Buttons** | On every major element | Opens explanation modal | "Why do we need a Watcher agent?" → 3-sentence answer |
+| Mechanism               | Where                                      | How                                     | Example                                                                         |
+| ----------------------- | ------------------------------------------ | --------------------------------------- | ------------------------------------------------------------------------------- |
+| **Hover Tooltips**      | Every icon, badge, phase node              | 200ms delay, arrow tooltip              | Hover "P0" badge → "P0 means Must-Ship: without this, the product doesn't work" |
+| **Expand Panels**       | Phase details, task details, agent details | Click to expand                         | Click Pipeline Phase 3 → full explanation of PM decomposition                   |
+| **Teaching Sidebar**    | Pipeline, Quality pages                    | Collapsible right panel                 | "Why 7 phases?" essay with before/after comparison                              |
+| **Concept Links**       | Inline in descriptions                     | Underlined terms link to definitions    | "DRI" links to explanation of Apple's Directly Responsible Individual model     |
+| **Progress Breadcrumb** | Top of every page                          | Shows where user is in learning journey | "HUB > Pipeline > Phase 3: Decompose"                                           |
+| **"Why?" Buttons**      | On every major element                     | Opens explanation modal                 | "Why do we need a Watcher agent?" → 3-sentence answer                           |
 
 #### Concepts the HUB Teaches
 
-| Concept | Where Taught | Why It Matters |
-|---------|-------------|----------------|
-| Autonomous Pipelines | Pipeline page | Why automation beats manual coding |
-| Quality Gates | Quality page | Why testing upfront saves 10x later |
-| Multi-Agent Coordination | Agents page | Why specialization beats generalism |
-| Apple EPM (DRI, Phases, WIP) | Task Board page | Why structure beats chaos |
-| Design Systems | DNA link + HUB integration | Why tokens beat hardcoded styles |
-| Conventional Commits | Quality Phase 2 detail | Why commit messages matter |
-| PRD-Driven Development | Pipeline Phase 1 detail | Why specs before code |
-| Architecture-First | Pipeline Phase 2 detail | Why design before implementation |
+| Concept                      | Where Taught               | Why It Matters                      |
+| ---------------------------- | -------------------------- | ----------------------------------- |
+| Autonomous Pipelines         | Pipeline page              | Why automation beats manual coding  |
+| Quality Gates                | Quality page               | Why testing upfront saves 10x later |
+| Multi-Agent Coordination     | Agents page                | Why specialization beats generalism |
+| Apple EPM (DRI, Phases, WIP) | Task Board page            | Why structure beats chaos           |
+| Design Systems               | DNA link + HUB integration | Why tokens beat hardcoded styles    |
+| Conventional Commits         | Quality Phase 2 detail     | Why commit messages matter          |
+| PRD-Driven Development       | Pipeline Phase 1 detail    | Why specs before code               |
+| Architecture-First           | Pipeline Phase 2 detail    | Why design before implementation    |
 
 ---
 
@@ -449,11 +462,11 @@ Written by: SessionStart hook. Deleted by: SessionEnd hook.
 ```typescript
 interface SessionState {
   active: boolean;
-  startedAt: string;       // ISO timestamp
+  startedAt: string; // ISO timestamp
   branch: string;
   model: string;
-  contextUsed: number;     // percentage
-  contextMax: number;      // tokens
+  contextUsed: number; // percentage
+  contextMax: number; // tokens
 }
 ```
 
@@ -463,11 +476,11 @@ Written by: Lead orchestrator (output style drives this).
 
 ```typescript
 interface PipelineState {
-  currentPhase: number;    // 1-7, 0 = idle
+  currentPhase: number; // 1-7, 0 = idle
   phases: {
     id: number;
     name: string;
-    status: "idle" | "active" | "complete" | "failed";
+    status: 'idle' | 'active' | 'complete' | 'failed';
     startedAt?: string;
     completedAt?: string;
     gateApproved?: boolean;
@@ -486,9 +499,9 @@ interface TaskBoardState {
     id: string;
     title: string;
     description: string;
-    column: "backlog" | "todo" | "in-progress" | "review" | "done";
-    phase: "P0" | "P1" | "P2";
-    dri: "builder" | "qa" | "technical-writer" | "pm";
+    column: 'backlog' | 'todo' | 'in-progress' | 'review' | 'done';
+    phase: 'P0' | 'P1' | 'P2';
+    dri: 'builder' | 'qa' | 'technical-writer' | 'pm';
     acceptanceCriteria: { text: string; met: boolean }[];
     files: string[];
     blockedBy: string[];
@@ -501,7 +514,7 @@ interface TaskBoardState {
     p1Count: number;
     p2Count: number;
     completedCount: number;
-    velocity: number;      // tasks/hour
+    velocity: number; // tasks/hour
   };
 }
 ```
@@ -514,13 +527,13 @@ Written by: SubagentStart hook + agent output hooks.
 interface AgentState {
   agents: {
     name: string;
-    status: "idle" | "active" | "completed" | "failed";
+    status: 'idle' | 'active' | 'completed' | 'failed';
     model: string;
     currentTask?: string;
     thoughtStream: {
       timestamp: string;
       action: string;
-      explanation: string;  // The teaching layer — WHY, not just WHAT
+      explanation: string; // The teaching layer — WHY, not just WHAT
     }[];
     startedAt?: string;
     completedAt?: string;
@@ -534,42 +547,45 @@ Written by: QA agent on completion.
 
 ```typescript
 interface QualityState {
-  score: number;           // 0-100
+  score: number; // 0-100
   phases: {
     name: string;
-    status: "pending" | "running" | "passed" | "failed";
+    status: 'pending' | 'running' | 'passed' | 'failed';
     details?: string;
     startedAt?: string;
     completedAt?: string;
   }[];
   additionalGates: {
-    security: "pending" | "passed" | "failed" | "skipped";
-    accessibility: "pending" | "passed" | "failed" | "skipped";
-    cxReview: "pending" | "passed" | "failed" | "skipped";
+    security: 'pending' | 'passed' | 'failed' | 'skipped';
+    accessibility: 'pending' | 'passed' | 'failed' | 'skipped';
+    cxReview: 'pending' | 'passed' | 'failed' | 'skipped';
   };
 }
 ```
 
 ### 7.2 Hook Integration
 
-| Hook Event | State File | What It Writes |
-|------------|-----------|---------------|
-| `SessionStart` | session.json | `{ active: true, startedAt, branch, model }` |
-| `SessionEnd` | session.json | Deletes the file (session over) |
-| `SubagentStart` | agents.json | Adds/updates agent entry with status: "active" |
-| `TaskCompleted` | agents.json | Updates agent thought stream |
-| `PostToolUse` (TaskCreate) | tasks.json | Adds new task to board |
-| `PostToolUse` (TaskUpdate) | tasks.json | Updates task column/status |
-| QA agent output | quality.json | Writes gate results as they complete |
+| Hook Event                 | State File   | What It Writes                                 |
+| -------------------------- | ------------ | ---------------------------------------------- |
+| `SessionStart`             | session.json | `{ active: true, startedAt, branch, model }`   |
+| `SessionEnd`               | session.json | Deletes the file (session over)                |
+| `SubagentStart`            | agents.json  | Adds/updates agent entry with status: "active" |
+| `TaskCompleted`            | agents.json  | Updates agent thought stream                   |
+| `PostToolUse` (TaskCreate) | tasks.json   | Adds new task to board                         |
+| `PostToolUse` (TaskUpdate) | tasks.json   | Updates task column/status                     |
+| QA agent output            | quality.json | Writes gate results as they complete           |
 
 ### 7.3 Client-Side Hook: `useApexState()`
 
 ```typescript
-function useApexState<T>(filename: string, fallback: T): {
+function useApexState<T>(
+  filename: string,
+  fallback: T,
+): {
   data: T;
-  isLive: boolean;  // true if reading from real state, false if using fallback
+  isLive: boolean; // true if reading from real state, false if using fallback
   lastUpdated: Date | null;
-}
+};
 ```
 
 Implementation: Vite's HMR for dev mode. Polling (1s interval) as fallback. The hook returns `isLive: false` when the state file doesn't exist, and the UI shows demo data with a "Demo Mode" badge.
@@ -586,13 +602,13 @@ The HUB is NOT a separate app. It extends `docs/design-dna/showcase/`. One app, 
 
 ### 8.2 Stack (Zero New Dependencies)
 
-| Technology | Version | Already In Showcase | Purpose |
-|-----------|---------|-------------------|---------|
-| React | 19 | Yes | UI framework |
-| Vite | 6 | Yes | Dev server + HMR + file watching |
-| Tailwind | 4 | Yes | Utility classes |
-| TypeScript | 5 | Yes | Type safety |
-| DNA Starters | — | Yes | KanbanColumn, Card, Badge, StatCard, Tabs, SectionHeader |
+| Technology   | Version | Already In Showcase | Purpose                                                  |
+| ------------ | ------- | ------------------- | -------------------------------------------------------- |
+| React        | 19      | Yes                 | UI framework                                             |
+| Vite         | 6       | Yes                 | Dev server + HMR + file watching                         |
+| Tailwind     | 4       | Yes                 | Utility classes                                          |
+| TypeScript   | 5       | Yes                 | Type safety                                              |
+| DNA Starters | —       | Yes                 | KanbanColumn, Card, Badge, StatCard, Tabs, SectionHeader |
 
 ### 8.3 New File Structure
 
@@ -660,15 +676,45 @@ docs/design-dna/showcase/src/
 
 ```typescript
 // New route categories
-type RouteCategory = "hub" | "template" | "system";
+type RouteCategory = 'hub' | 'template' | 'system';
 
 // HUB routes (new)
 export const HUB_ROUTES: RouteEntry[] = [
-  { path: "/pipeline", label: "Pipeline", component: lazy(() => import("../pages/PipelinePage")), palette: "saas", category: "hub" },
-  { path: "/tasks", label: "Tasks", component: lazy(() => import("../pages/TaskBoardPage")), palette: "saas", category: "hub" },
-  { path: "/agents", label: "Agents", component: lazy(() => import("../pages/AgentsPage")), palette: "saas", category: "hub" },
-  { path: "/quality", label: "Quality", component: lazy(() => import("../pages/QualityPage")), palette: "saas", category: "hub" },
-  { path: "/dna", label: "DNA Home", component: lazy(() => import("../pages/HomePage")), palette: "saas", category: "hub" },
+  {
+    path: '/pipeline',
+    label: 'Pipeline',
+    component: lazy(() => import('../pages/PipelinePage')),
+    palette: 'saas',
+    category: 'hub',
+  },
+  {
+    path: '/tasks',
+    label: 'Tasks',
+    component: lazy(() => import('../pages/TaskBoardPage')),
+    palette: 'saas',
+    category: 'hub',
+  },
+  {
+    path: '/agents',
+    label: 'Agents',
+    component: lazy(() => import('../pages/AgentsPage')),
+    palette: 'saas',
+    category: 'hub',
+  },
+  {
+    path: '/quality',
+    label: 'Quality',
+    component: lazy(() => import('../pages/QualityPage')),
+    palette: 'saas',
+    category: 'hub',
+  },
+  {
+    path: '/dna',
+    label: 'DNA Home',
+    component: lazy(() => import('../pages/HomePage')),
+    palette: 'saas',
+    category: 'hub',
+  },
 ];
 
 // Existing TEMPLATE_ROUTES unchanged
@@ -688,9 +734,11 @@ Two sections separated by visual dividers. HUB section uses the SaaS blue palett
 ## 9. Design Direction
 
 ### Visual Language
+
 Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Serif, accent-glow interactions. But the HUB pages have a more **dashboard** feel — data-dense, grid-based, with live indicators.
 
 ### Color Semantics (HUB-specific)
+
 - **Phase P0**: `var(--error)` / red — urgent, must-ship
 - **Phase P1**: `var(--warning)` / amber — important, should-ship
 - **Phase P2**: `var(--accent)` / blue — polish, nice-to-have
@@ -701,6 +749,7 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 - **Demo indicator**: Gray dot + "Demo" badge
 
 ### Animation Budget
+
 - Page transitions: 300ms fade
 - Card hover: 200ms scale(1.02) + shadow
 - Pipeline simulation: 15s total (2s per phase + gate pauses)
@@ -714,7 +763,9 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 ## 10. Milestones (Apple Product Development Phases)
 
 ### Phase 1: Foundation (P0 — Must Ship)
+
 **Goal**: HUB exists. Users can navigate between Framework and DNA. Pipeline is visible.
+
 - Infrastructure: routes, nav, state hook, data files
 - HUB Home page with cards + stats
 - Pipeline page with 7-phase flow + expandable details
@@ -722,14 +773,18 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 - **Gate**: All 3 pages render. Nav works. Existing DNA routes unbroken. Build passes.
 
 ### Phase 2: War Room (P0 — Must Ship)
+
 **Goal**: The killer features. Task board and agents are visible.
+
 - Task Board with Kanban + mock data
 - Agent Team with cards + Breathing Loop SVG
 - Demo data: Phoenix CRM build (14 tasks)
 - **Gate**: All 5 HUB pages render. Mock data realistic. Build passes.
 
 ### Phase 3: Live Bridge (P1 — Should Ship)
+
 **Goal**: Real-time sync between Claude Code and HUB.
+
 - `useApexState()` hook with polling
 - Hook updates: SessionStart/End write session.json
 - TaskCreate/Update write tasks.json
@@ -738,7 +793,9 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 - **Gate**: State file written → UI updates < 500ms. Fallback to demo works.
 
 ### Phase 4: Quality Theater + Teaching (P1 — Should Ship)
+
 **Goal**: Quality gates as spectacle. Teaching layer complete.
+
 - Quality Gates page with simulation
 - Quality Score computation
 - Teaching tooltips across all pages
@@ -748,7 +805,9 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 - **Gate**: Full teaching coverage. Every icon has a tooltip. Every phase has a "why."
 
 ### Phase 5: Polish + Ship (P2 — The Beskar)
+
 **Goal**: Apple-quality finish. Mind-blowing.
+
 - Pipeline simulation animation (full 15s spectacle)
 - Agent Thought Stream (live feed)
 - CountUp animation on stats
@@ -765,15 +824,15 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 
 ## 11. Success Metrics
 
-| Metric | Current | Target | How We Measure |
-|--------|---------|--------|---------------|
-| Time to understand APEX | ~15 min (README) | < 2 min (visual) | User testing |
-| Framework visual completeness | DNA only | DNA + Pipeline + Agents + Quality + Tasks | Page count |
-| Lighthouse score | 95+ | 95+ with HUB | Lighthouse audit |
-| Live sync latency | N/A | < 500ms | Automated test |
-| Teaching coverage | 0 tooltips | Every icon + badge + phase | Count |
-| Bundle size increase | 0 | < 50KB gzipped | Vite build |
-| "Mind-blown" reaction | 0 | Every demo | Human judgment |
+| Metric                        | Current          | Target                                    | How We Measure   |
+| ----------------------------- | ---------------- | ----------------------------------------- | ---------------- |
+| Time to understand APEX       | ~15 min (README) | < 2 min (visual)                          | User testing     |
+| Framework visual completeness | DNA only         | DNA + Pipeline + Agents + Quality + Tasks | Page count       |
+| Lighthouse score              | 95+              | 95+ with HUB                              | Lighthouse audit |
+| Live sync latency             | N/A              | < 500ms                                   | Automated test   |
+| Teaching coverage             | 0 tooltips       | Every icon + badge + phase                | Count            |
+| Bundle size increase          | 0                | < 50KB gzipped                            | Vite build       |
+| "Mind-blown" reaction         | 0                | Every demo                                | Human judgment   |
 
 ---
 
@@ -792,6 +851,7 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 **Last Updated**: 2026-03-25
 
 ### Completed Infrastructure (Phase 4: Ops Core)
+
 - ✅ **Output Style 7-State Machine** — Executable Pipeline Engine with explicit state transitions and automatic phase progression on approval (PR #204)
 - ✅ **Pipeline Phase Metadata** — All 5 core agents declare Pipeline Phase explicitly for orchestration awareness (PR #204)
 - ✅ **Design DNA React-First Consolidation** — React templates established as single source of truth; HTML templates deprecated (PR #204)
@@ -800,11 +860,13 @@ Inherits from DNA Showcase: dark-first, glassmorphism nav, Inter + Instrument Se
 - ✅ **Visual Pipeline HUB Core** — All 9 pages (Home, Pipeline, Tasks, Agents, Quality, Projects, Changelog, About, Settings) shipped at production quality (PR #203, v5.22.0)
 
 ### In Progress (Phase 5: Teaching Layer)
+
 - Teaching tooltips infrastructure exists; comprehensive coverage in progress
 - Agent Thought Stream visualization (Phase 6, Quality phase)
 - Concept links and interactive learning elements (next iteration)
 
 ### Deferred (Phase 6-7: Advanced Features)
+
 - Live multi-agent Thought Stream with agent decision narration (higher complexity, post-teaching layer)
 - Agent history timeline and reasoning audit trail (depends on agent telemetry hooks)
 
