@@ -172,7 +172,7 @@ One install. Everything in your project's `.claude/` directory.
 | **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
 | **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
 
-### The Championship Roster (6 agents + Lead)
+### The Championship Roster (9 agents + Lead)
 
 | Agent | Model | Phase | Role |
 |-------|-------|-------|------|
