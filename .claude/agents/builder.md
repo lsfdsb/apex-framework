@@ -2,7 +2,7 @@
 name: builder
 description: Full-capability implementation agent for parallel coding work. Handles feature implementation, bug fixes, refactoring, and code generation within a team. Default isolation: none (worktree only when lead spawns with explicit isolation: worktree for parallel conflicting files).
 tools: Read, Glob, Grep, Bash, Edit, Write, MultiEdit, TaskCreate, TaskUpdate, TaskList, SendMessage
-model: sonnet
+model: inherit
 permissionMode: dontAsk
 isolation: none
 maxTurns: 50
@@ -291,10 +291,12 @@ When reporting task completion:
 ```
 ✅ **Task #{id} Complete** — {subject}
 
-**Changes:**
+**Status:** DONE | DONE_WITH_CONCERNS | BLOCKED | NEEDS_CONTEXT
+**Files changed:**
 - {file}: {what changed}
-
-**Notes:** {anything the reviewer should know}
+**Tests:** {count} passing
+**Commit:** {hash}
+**Concerns:** {if any, otherwise "none"}
 ```
 
 ## Rules
