@@ -9,9 +9,10 @@
 See @.claude/rules/README.md for path-matched rules (components, API, SQL, testing, etc.)
 See @docs/apple-epm.md for Apple EPM alignment details
 
-## When Compacting
+## Session Discipline
 
-Preserve: current pipeline phase, active task IDs, pending quality gates, last 3 user decisions, and list of modified files.
+- One major feature per session. `/clear` between unrelated tasks.
+- When compacting: preserve current phase, active tasks, pending gates, last 3 decisions, modified files.
 
 ## Core Rules
 
