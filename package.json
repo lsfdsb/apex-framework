@@ -1,0 +1,41 @@
+{
+  "name": "apex-framework",
+  "version": "6.0.0",
+  "private": true,
+  "description": "APEX (Agent-Powered EXcellence) — Claude Code framework + APEX Ops monorepo",
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "check": "ultracite check",
+    "fix": "ultracite fix",
+    "test": "turbo test",
+    "analyze": "turbo analyze",
+    "migrate": "cd packages/database && npx prisma format && npx prisma generate && npx prisma migrate dev",
+    "migrate:deploy": "cd packages/database && npx prisma generate && npx prisma migrate deploy",
+    "db:push": "cd packages/database && npx prisma format && npx prisma generate && npx prisma db push",
+    "clean": "git clean -xdf node_modules"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.6",
+    "@repo/typescript-config": "*",
+    "@turbo/gen": "^2.8.14",
+    "@types/node": "^25.3.5",
+    "tsup": "^8.5.1",
+    "turbo": "^2.8.14",
+    "typescript": "^5.9.3",
+    "ultracite": "7.2.5",
+    "vitest": "^4.0.18"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.8.1",
+  "overrides": {
+    "parse5": "^7.2.1"
+  },
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
