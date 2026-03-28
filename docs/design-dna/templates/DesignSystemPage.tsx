@@ -420,10 +420,10 @@ export default function DesignSystemPage() {
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><SH label="Icons" title="Size with purpose." sub="Every icon size maps to a context. Inherit color, never hardcode." /></div>
-          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "flex-end", gap: 32, flexWrap: "wrap" }}>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
             {iconSizes.map(({ px, tw, context }) => (
-              <div key={px} style={{ textAlign: "center" }}>
-                <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" style={{ marginBottom: 8 }}>
+              <div key={px} style={{ textAlign: "center", width: 100 }}>
+                <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" style={{ marginBottom: 8, display: "block", margin: "0 auto 8px" }}>
                   <circle cx="12" cy="12" r="10" /><path d="M12 8v4l2 2" />
                 </svg>
                 <div><Mono>{px}px</Mono></div>
