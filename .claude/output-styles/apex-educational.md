@@ -67,10 +67,11 @@ All output in English (en-us). Code and commands also in English.
 
 ```
 User message received
-  → Is this a BUILD request? → Yes: Enter Pipeline (see State Machine below)
+  → Is this a BUILD request (new app, major feature)? → Enter Pipeline (State Machine below)
+  → Is this a medium feature (3-10 files)? → /spec-create first, then /tdd per task
   → Is this a BUG/ERROR? → Invoke /debug FIRST, then act
   → Is this creative work? → Invoke /brainstorm FIRST
-  → Is it an implementation task? → Invoke /tdd FIRST
+  → Is it an implementation task? → Invoke /tdd FIRST (isolated agents)
   → About to claim completion? → Invoke /verify FIRST
   → Receiving review feedback? → Invoke /code-review FIRST
   → Might any other skill apply? → Yes, even 1%: Invoke it
@@ -123,10 +124,11 @@ If you catch yourself thinking any of these — STOP and invoke the skill:
 
 | Situation | Skill | Phase |
 |-----------|-------|-------|
-| User wants to build something new | `/brainstorm` → `/prd` | Discovery |
+| User wants to build a new app or major feature | `/brainstorm` → `/prd` | Discovery |
+| Medium feature (3-10 files, not a full app) | `/spec-create` (lean spec) | Discovery |
 | Design decisions needed | `/architecture` | Architecture |
 | Need implementation breakdown | `/plan` | Planning |
-| Ready to write code | `/tdd` (test first!) | Building |
+| Ready to write code | `/tdd` (isolated agents: @tdd-red → @tdd-green → @tdd-refactor) | Building |
 | Executing a plan | `/execute` or `/teams` | Building |
 | Something broke | `/debug` (root cause first!) | Any |
 | About to claim "done" | `/verify` (evidence first!) | Any |
@@ -190,7 +192,7 @@ When the user says "build me X", "create X", "new app", "new feature", or simila
 → If simple (< 3 files) → use `/execute` to run the plan yourself.
 → Spawn Watcher in background: `Agent({ subagent_type: "watcher", run_in_background: true })`.
 → Inject Design DNA values into every builder prompt (palette, fonts, patterns).
-→ ALL implementation follows `/tdd`: failing test → minimal code → verify → commit.
+→ ALL implementation follows `/tdd` with **isolated TDD agents**: `@tdd-red` (writes failing tests, cannot see implementation) → `@tdd-green` (writes minimum code, cannot modify tests) → `@tdd-refactor` (cleans up, keeps tests green). This isolation prevents implementation from bleeding into test logic — the critical insight from the Mastery Guide.
 → When bugs arise, use `/debug`: root cause first, no guessing.
 → Use `/verify` before claiming ANY task complete: evidence, not "should work".
 → Build P0 tasks first, then P1, then P2.
@@ -265,10 +267,18 @@ For tasks that DON'T trigger the full pipeline:
 ```
 User asks to fix/change/investigate something
   → /debug if something's broken (root cause first)
-  → /tdd before writing any fix (failing test first)
+  → /tdd before writing any fix (isolated agents for business logic)
   → Implement the minimal fix
   → /verify before claiming done (evidence first)
   → /request-review if significant change
+  → /ship when ready
+
+User asks for a medium feature (3-10 files, new endpoint, component group)
+  → /spec-create first (lean spec, not full PRD)
+  → User approves spec
+  → /tdd per task in the spec (isolated agents: @tdd-red → @tdd-green → @tdd-refactor)
+  → /verify after each task
+  → /qa when all tasks complete
   → /ship when ready
 ```
 

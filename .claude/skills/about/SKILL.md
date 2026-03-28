@@ -24,7 +24,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
      ║   Forged by:  Lucas Bueno & Claude                        ║
      ║   Born:       March 13, 2026                              ║
      ║   Location:   São Paulo, BR → The World                   ║
-     ║   Version:    5.23.0                                    ║
+     ║   Version:    5.24.0                                    ║
      ║                                                           ║
      ║   "Simplicity is the ultimate sophistication"             ║
      ║                                    — Leonardo da Vinci    ║
@@ -38,7 +38,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 32 skills · 6 agents · 25 scripts · 7 rules · 28 hooks
+**Stats**: 32 skills (+1 internal) · 9 agents · 26 scripts · 7 rules · 28 hooks
 
 ---
 
@@ -49,32 +49,26 @@ You say "build me X". APEX runs the entire pipeline. You approve at 3 gates:
 ```
 "Build me X"
   │
-  ├─ PHASE 1: DISCOVER ── /brainstorm → /prd (iterative design + PRD)
+  ├─ PHASE 1: PLAN ────── /prd auto-generates requirements
   │   ⏸ GATE: Approve the PRD
   │
-  ├─ PHASE 2: ARCHITECT ─ /architecture + /verify-api + /verify-lib
+  ├─ PHASE 2: ARCHITECT ─ /architecture designs the system
   │   ⏸ GATE: Approve the blueprint
   │
-  ├─ PHASE 3: PLAN ────── /plan (bite-sized TDD tasks) + PM agent
+  ├─ PHASE 3: BUILD ───── Agent teams work in parallel
+  │   (Watcher monitors, Builders code, QA verifies)
   │
-  ├─ PHASE 4: VERIFY ──── Final API/lib checks + Design DNA extraction
+  ├─ PHASE 4: QUALITY ─── /qa + /security + /a11y + /cx-review
+  │   (Auto-fix and re-run if gates fail)
   │
-  ├─ PHASE 5: BUILD ───── /execute or /teams (SDD) + /tdd + /debug + /verify
-  │   (Watcher monitors, Builders code with TDD, QA verifies)
-  │
-  ├─ PHASE 6: QUALITY ─── /qa + /request-review + /code-review
-  │   + /security + /a11y + /cx-review (auto-fix and re-run)
-  │
-  ├─ PHASE 7: SHIP ────── /verify + Technical Writer + PR
+  ├─ PHASE 5: SHIP ────── Code review + Technical Writer
   │   Auto-version: [Unreleased] → semver after merge
   │   ⏸ GATE: Approve the merge
   │
   └─ DONE ─────────────── "The beskar is forged."
 ```
 
-**Cross-cutting skills** (active in all phases): `/debug` · `/tdd` · `/verify` · `/code-review`
-
-For quick fixes and bugs — `/debug` → `/tdd` → fix → `/verify` → `/ship`.
+For quick fixes and bugs — skip the pipeline, just do it directly.
 
 ---
 
@@ -82,56 +76,40 @@ For quick fixes and bugs — `/debug` → `/tdd` → fix → `/verify` → `/shi
 
 ### Skills
 
-**Pipeline Skills** (drive the 7-phase workflow):
-| Skill | Purpose |
-|-------|---------|
-| `/brainstorm` | Iterative design exploration — Q&A, 2-3 approaches, spec writing |
-| `/prd` | Product Requirements Document — full product spec |
-| `/architecture` | System design — stack, schema, API contracts |
-| `/plan` | Implementation plan — bite-sized TDD tasks, no placeholders |
-| `/execute` | Plan execution — task-by-task with checkpoints |
-| `/teams` | Agent team orchestration — SDD mode, breathing loop |
-| `/ship` | Branch → commit → push → PR → merge |
-
-**Discipline Skills** (cross-cutting, active in ALL phases):
-| Skill | Purpose |
-|-------|---------|
-| `/tdd` | RED-GREEN-REFACTOR — no production code without failing test |
-| `/debug` | Systematic root cause investigation — 4-phase methodology |
-| `/verify` | Evidence before claims — run command, read output, THEN claim |
-| `/code-review` | Technical rigor on feedback — verify, don't blindly agree |
-| `/request-review` | Dispatch code-reviewer agent for fresh-eyes review |
-
-**Quality Gates** (enforce standards):
-| Skill | Purpose |
-|-------|---------|
-| `/qa` | 7-phase quality gate + Apple-grade polish |
-| `/security` | OWASP audit on auth, payments, PII |
-| `/a11y` | WCAG 2.2 AA accessibility audit |
-| `/cx-review` | Customer Experience review |
-| `/performance` | Bundle size, rendering, Core Web Vitals |
-| `/e2e` | End-to-end Playwright tests |
-
-**Integration & Tooling:**
-| Skill | Purpose |
-|-------|---------|
-| `/verify-api` | Verify external APIs against live docs |
-| `/verify-lib` | Verify packages before installing |
-| `/supabase` | Supabase setup, auth, migrations, realtime |
-| `/claude-api` | Build with Claude API / Anthropic SDK |
-| `/cicd` | GitHub Actions + Vercel pipelines |
-| `/dev` | Dev server management |
-| `/worktree` | Git worktree isolation with safety checks |
-
-**Framework & Docs:**
-| Skill | Purpose |
-|-------|---------|
-| `/changelog` | CHANGELOG.md generation + PRD status |
-| `/write-skill` | Create new APEX skills (TDD for docs) |
-| `/teach` | Explain concepts and commands |
-| `/design-system` | UI/UX guidelines + Design DNA |
-| `/update` | Update APEX to latest version |
-| `/about` | This page |
+| Skill | Description |
+|-------|-------------|
+| `/a11y` | Runs an accessibility audit against WCAG 2.2 AA standards. This s... |
+| `/about` | Reveals the creators and philosophy behind the APEX Framework. Ac... |
+| `/architecture` | Design or review system architecture. Use when the user asks to a... |
+| `/brainstorm` | Use BEFORE any creative work — creating features, building compon... |
+| `/changelog` | Generates and maintains CHANGELOG.md and auto-updates PRD status.... |
+| `/cicd` | Sets up CI/CD pipelines with GitHub Actions and Vercel. This skil... |
+| `/claude-api` | "Build apps with the Claude API or Anthropic SDK. TRIGGER when: c... |
+| `/code-review` | Use when receiving code review feedback — from PR comments, QA re... |
+| `/cx-review` | Review any user-facing feature from a Customer Experience perspec... |
+| `/debug` | Use when encountering any bug, test failure, unexpected behavior,... |
+| `/design-system` | Our design system standards and UI/UX guidelines. Auto-loads when... |
+| `/dev` | Manage the dev server — check status, view logs, restart, or stop... |
+| `/e2e` | Write and run end-to-end tests with Playwright. Use when the user... |
+| `/execute` | Use when you have a written implementation plan to execute task-b... |
+| `/performance` | Analyze and optimize application performance. Use when the user m... |
+| `/plan` | Use when you have a spec, PRD, or requirements for a multi-step t... |
+| `/prd` | Generates a comprehensive Product Requirements Document before bu... |
+| `/qa` | Runs comprehensive quality assurance on any feature, PR, or code ... |
+| `/request-review` | Use when completing tasks, implementing major features, or before... |
+| `/security` | Runs a security audit on code handling authentication, authorizat... |
+| `/ship` | Fast-track branch → commit → push → PR → merge workflow. Use when... |
+| `/spec-create` | Create a lean feature spec before implementation. Use for feature... |
+| `/supabase` | Supabase integration helper — setup, auth, migrations, types, rea... |
+| `/tdd` | Use when implementing any feature or bugfix, before writing imple... |
+| `/teach` | Teach terminal commands, Claude Code usage, and engineering conce... |
+| `/teams` | Spawn and manage agent teams for parallel work. Auto-selects team... |
+| `/update` | Manually update the APEX Framework to the latest version. Use whe... |
+| `/verify-api` | Verify any external API before integration. Auto-invoked when cod... |
+| `/verify-lib` | Verify any library or package before installing it. Auto-invoked ... |
+| `/verify` | Use when about to claim work is complete, fixed, or passing — bef... |
+| `/worktree` | Use when starting feature work that needs isolation from current ... |
+| `/write-skill` | Use when creating new APEX skills, editing existing skills, or ve... |
 
 **You never need to type these.** The pipeline invokes them automatically.
 
@@ -139,10 +117,13 @@ For quick fixes and bugs — `/debug` → `/tdd` → fix → `/verify` → `/shi
 
 | Agent | Model | Role |
 |-------|-------|------|
-| **Builder** | Sonnet | Full-capability implementation agent for parallel coding wor... |
+| **Builder** | Inherit | Full-capability implementation agent for parallel coding wor... |
 | **Design Reviewer** | Sonnet | Design quality agent that validates UI implementations again... |
 | **Project Manager** | Sonnet | Project management agent that breaks PRD+Architecture into p... |
 | **QA** | Sonnet | Quality assurance agent that runs comprehensive tests, valid... |
+| **Tdd Green** | Sonnet | | |
+| **Tdd Red** | Sonnet | | |
+| **Tdd Refactor** | Sonnet | | |
 | **Technical Writer** | Haiku | Documentation specialist that keeps README, CHANGELOG, PRD s... |
 | **Watcher** | Haiku | Continuous monitoring agent that watches for errors, test fa... |
 
@@ -186,8 +167,6 @@ Nothing ships without passing:
 - **v5.19**: Reliability — 47 tests, statusline v3, tech writer sharpened
 - **v5.20**: Production readiness — 16 hooks, Oscar animations, E2E suite
 - **v5.21**: Quality gates — design principles, Prettier, icon strategy, safe processes
-- **v5.22**: Design DNA showcase — tokens page, 14 templates, ops hub, Canvas
-- **v5.23**: **Superpowers integration** — 10 new skills (TDD, debug, verify, brainstorm, plan, execute, code-review, request-review, worktree, write-skill). Methodology merged: 7-phase pipeline with cross-cutting discipline skills. 22→32 skills.
 
 ---
 
