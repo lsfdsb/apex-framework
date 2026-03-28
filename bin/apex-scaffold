@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+# apex-scaffold — Scaffold a new APEX + next-forge project
+# Usage: apex-scaffold <project-name>
+set -euo pipefail
+
+PROJECT_NAME="${1:?Usage: apex-scaffold <project-name>}"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+FRAMEWORK_DIR="$(dirname "$SCRIPT_DIR")"
+
+echo "⚔️  APEX Scaffold — Forging $PROJECT_NAME with next-forge..."
+echo ""
+
+# Step 1: Scaffold next-forge
+echo "📦 Running next-forge init..."
+npx next-forge@latest init "$PROJECT_NAME"
+cd "$PROJECT_NAME"
+
+# Step 2: Copy APEX framework files
+echo ""
+echo "🔧 Injecting APEX Framework..."
+cp -r "$FRAMEWORK_DIR/.claude" ./.claude
+cp "$FRAMEWORK_DIR/CLAUDE.md" ./CLAUDE.md
+echo "  ✓ .claude/ directory"
+echo "  ✓ CLAUDE.md"
+
+# Step 3: Generate app-level CLAUDE.md from template
+echo ""
+echo "📝 Generating app-level CLAUDE.md files..."
+TEMPLATE="$FRAMEWORK_DIR/.claude/templates/app-claudemd.md"
+
+for APP_DIR in apps/*/; do
+  APP_NAME=$(basename "$APP_DIR")
+
+  if [ -f "$TEMPLATE" ]; then
+    sed -e "s/{{APP_NAME}}/$APP_NAME/g" \
+        -e "s/{{PROJECT_NAME}}/$(basename "$(pwd)")/g" \
+        -e "s/{{APP_PURPOSE}}/TBD — update with app purpose/g" \
+        -e "s/{{APP_TITLE}}/$APP_NAME/g" \
+        -e "s/{{PERSONA}}/TBD/g" \
+        -e "s/{{PALETTE}}/saas-blue/g" \
+        -e "s/{{PORT}}/3000/g" \
+        "$TEMPLATE" > "$APP_DIR/CLAUDE.md"
+  else
+    cat > "$APP_DIR/CLAUDE.md" << CLAUDEMD
+# $APP_NAME — App Constitution
+
+> Part of $(basename "$(pwd)") monorepo. See root CLAUDE.md for framework rules.
+
+## Stack
+- Next.js 16 App Router + Turbopack
+- @apex/design-system (shared design system)
+
+## Rules
+- Server Components by default.
+- All request APIs async: \`await cookies()\`, \`await headers()\`.
+- Import from \`@apex/design-system\`, not local duplicates.
+- Design tokens only — never hardcode colors.
+CLAUDEMD
+  fi
+  echo "  ✓ $APP_DIR/CLAUDE.md"
+done
+
+# Step 4: Wire Design DNA tokens
+echo ""
+echo "🎨 Wiring Design DNA..."
+DNA_TOKENS="$FRAMEWORK_DIR/docs/design-dna/tokens"
+DS_TOKENS="packages/design-system/tokens"
+
+if [ -d "$DNA_TOKENS" ]; then
+  mkdir -p "$DS_TOKENS/palettes"
+  cp "$DNA_TOKENS/foundation.css" "$DS_TOKENS/" 2>/dev/null && echo "  ✓ foundation.css" || true
+  cp "$DNA_TOKENS/animations.css" "$DS_TOKENS/" 2>/dev/null && echo "  ✓ animations.css" || true
+  cp "$DNA_TOKENS/index.css" "$DS_TOKENS/" 2>/dev/null && echo "  ✓ index.css" || true
+  cp "$DNA_TOKENS/index.ts" "$DS_TOKENS/" 2>/dev/null && echo "  ✓ index.ts" || true
+  cp "$DNA_TOKENS/palettes/"*.css "$DS_TOKENS/palettes/" 2>/dev/null && echo "  ✓ palettes/" || true
+
+  # Copy bridge template
+  BRIDGE="$FRAMEWORK_DIR/.claude/templates/tailwind-dna-bridge.css"
+  if [ -f "$BRIDGE" ]; then
+    cp "$BRIDGE" "$DS_TOKENS/bridge.css"
+    echo "  ✓ bridge.css (DNA → shadcn mapping)"
+  fi
+else
+  echo "  ⚠ No Design DNA tokens found at $DNA_TOKENS"
+fi
+
+# Step 5: Rename @repo/ → @apex/ namespace
+echo ""
+echo "🏷️  Renaming @repo/ → @apex/..."
+find apps packages turbo -type f \( -name "*.ts" -o -name "*.tsx" -o -name "*.js" -o -name "*.jsx" -o -name "*.json" -o -name "*.mjs" -o -name "*.cjs" \) \
+  ! -path "*/node_modules/*" ! -name "package-lock.json" ! -name "bun.lock" \
+  -exec sed -i '' 's/@repo\//@apex\//g' {} + 2>/dev/null || true
+sed -i '' 's/@repo\//@apex\//g' package.json 2>/dev/null || true
+echo "  ✓ All packages renamed to @apex/*"
+
+echo ""
+echo "═══════════════════════════════════════════"
+echo "⚔️  APEX + next-forge scaffold complete!"
+echo ""
+echo "  cd $PROJECT_NAME"
+echo "  npm install"
+echo "  npx turbo dev"
+echo ""
+echo "  This is the Way."
+echo "═══════════════════════════════════════════"
