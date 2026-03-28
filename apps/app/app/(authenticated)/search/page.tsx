@@ -1,5 +1,5 @@
-import { auth } from '@repo/auth/server';
-import { database } from '@repo/database';
+import { auth } from '@apex/auth/server';
+import { database } from '@apex/database';
 import { notFound, redirect } from 'next/navigation';
 import { Header } from '../components/header';
 

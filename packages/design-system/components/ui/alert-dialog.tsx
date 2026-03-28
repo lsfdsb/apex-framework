@@ -3,8 +3,8 @@
 import * as React from 'react';
 import { AlertDialog as AlertDialogPrimitive } from 'radix-ui';
 
-import { cn } from '@repo/design-system/lib/utils';
-import { buttonVariants } from '@repo/design-system/components/ui/button';
+import { cn } from '@apex/design-system/lib/utils';
+import { buttonVariants } from '@apex/design-system/components/ui/button';
 
 function AlertDialog({ ...props }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
   return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;

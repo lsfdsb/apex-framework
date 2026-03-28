@@ -1,4 +1,4 @@
-import { Separator } from '@repo/design-system/components/ui/separator';
+import { Separator } from '@apex/design-system/components/ui/separator';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**

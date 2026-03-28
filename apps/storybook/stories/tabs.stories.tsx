@@ -1,4 +1,4 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@repo/design-system/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@apex/design-system/components/ui/tabs';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**

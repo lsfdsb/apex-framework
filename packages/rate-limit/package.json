@@ -1,5 +1,5 @@
 {
-  "name": "@repo/rate-limit",
+  "name": "@apex/rate-limit",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -13,7 +13,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
+    "@apex/typescript-config": "*",
     "typescript": "^5.9.3"
   }
 }

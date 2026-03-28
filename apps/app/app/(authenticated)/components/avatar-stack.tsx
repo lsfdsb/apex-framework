@@ -1,8 +1,8 @@
 'use client';
 
-import { useOthers, useSelf } from '@repo/collaboration/hooks';
-import { Avatar, AvatarFallback, AvatarImage } from '@repo/design-system/components/ui/avatar';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@repo/design-system/components/ui/tooltip';
+import { useOthers, useSelf } from '@apex/collaboration/hooks';
+import { Avatar, AvatarFallback, AvatarImage } from '@apex/design-system/components/ui/avatar';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@apex/design-system/components/ui/tooltip';
 
 interface PresenceAvatarProps {
   info?: Liveblocks['UserMeta']['info'];

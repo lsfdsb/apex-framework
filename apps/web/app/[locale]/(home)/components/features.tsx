@@ -1,4 +1,4 @@
-import type { Dictionary } from '@repo/internationalization';
+import type { Dictionary } from '@apex/internationalization';
 import { User } from 'lucide-react';
 
 interface FeaturesProps {

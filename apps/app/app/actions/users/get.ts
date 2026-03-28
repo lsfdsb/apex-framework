@@ -1,6 +1,6 @@
 'use server';
 
-import { auth, clerkClient, type OrganizationMembership } from '@repo/auth/server';
+import { auth, clerkClient, type OrganizationMembership } from '@apex/auth/server';
 
 const getName = (user: OrganizationMembership): string | undefined => {
   let name = user.publicUserData?.firstName;

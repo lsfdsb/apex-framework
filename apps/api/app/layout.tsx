@@ -1,4 +1,4 @@
-import { AnalyticsProvider } from '@repo/analytics/provider';
+import { AnalyticsProvider } from '@apex/analytics/provider';
 import type { ReactNode } from 'react';
 
 interface RootLayoutProperties {

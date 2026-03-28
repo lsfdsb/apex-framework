@@ -1,4 +1,4 @@
-import { Toolbar } from '@repo/cms/components/toolbar';
+import { Toolbar } from '@apex/cms/components/toolbar';
 import type { ReactNode } from 'react';
 
 interface LegalLayoutProps {

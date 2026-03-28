@@ -1,4 +1,4 @@
-import { Skeleton } from '@repo/design-system/components/ui/skeleton';
+import { Skeleton } from '@apex/design-system/components/ui/skeleton';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**

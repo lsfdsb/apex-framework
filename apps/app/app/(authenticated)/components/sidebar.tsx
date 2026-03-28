@@ -1,20 +1,20 @@
 'use client';
 
-import { OrganizationSwitcher, UserButton } from '@repo/auth/client';
-import { ModeToggle } from '@repo/design-system/components/mode-toggle';
-import { Button } from '@repo/design-system/components/ui/button';
+import { OrganizationSwitcher, UserButton } from '@apex/auth/client';
+import { ModeToggle } from '@apex/design-system/components/mode-toggle';
+import { Button } from '@apex/design-system/components/ui/button';
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from '@repo/design-system/components/ui/collapsible';
+} from '@apex/design-system/components/ui/collapsible';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@repo/design-system/components/ui/dropdown-menu';
+} from '@apex/design-system/components/ui/dropdown-menu';
 import {
   Sidebar,
   SidebarContent,
@@ -32,9 +32,9 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
   useSidebar,
-} from '@repo/design-system/components/ui/sidebar';
-import { cn } from '@repo/design-system/lib/utils';
-import { NotificationsTrigger } from '@repo/notifications/components/trigger';
+} from '@apex/design-system/components/ui/sidebar';
+import { cn } from '@apex/design-system/lib/utils';
+import { NotificationsTrigger } from '@apex/notifications/components/trigger';
 import {
   AnchorIcon,
   BookOpenIcon,

@@ -1,5 +1,5 @@
-import { auth } from '@repo/auth/server';
-import { database } from '@repo/database';
+import { auth } from '@apex/auth/server';
+import { database } from '@apex/database';
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import { notFound } from 'next/navigation';

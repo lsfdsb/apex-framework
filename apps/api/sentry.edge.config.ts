@@ -1,3 +1,3 @@
-import { initializeSentry } from '@repo/observability/edge';
+import { initializeSentry } from '@apex/observability/edge';
 
 initializeSentry();

@@ -1,9 +1,9 @@
-import { authMiddleware } from '@repo/auth/proxy';
+import { authMiddleware } from '@apex/auth/proxy';
 import {
   noseconeOptions,
   noseconeOptionsWithToolbar,
   securityMiddleware,
-} from '@repo/security/proxy';
+} from '@apex/security/proxy';
 import type { NextProxy } from 'next/server';
 import { env } from './env';
 

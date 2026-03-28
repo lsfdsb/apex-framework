@@ -1,11 +1,11 @@
-import { blog } from '@repo/cms';
-import { Feed } from '@repo/cms/components/feed';
-import { Image } from '@repo/cms/components/image';
-import { cn } from '@repo/design-system/lib/utils';
-import { getDictionary } from '@repo/internationalization';
-import type { Blog, WithContext } from '@repo/seo/json-ld';
-import { JsonLd } from '@repo/seo/json-ld';
-import { createMetadata } from '@repo/seo/metadata';
+import { blog } from '@apex/cms';
+import { Feed } from '@apex/cms/components/feed';
+import { Image } from '@apex/cms/components/image';
+import { cn } from '@apex/design-system/lib/utils';
+import { getDictionary } from '@apex/internationalization';
+import type { Blog, WithContext } from '@apex/seo/json-ld';
+import { JsonLd } from '@apex/seo/json-ld';
+import { createMetadata } from '@apex/seo/metadata';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 

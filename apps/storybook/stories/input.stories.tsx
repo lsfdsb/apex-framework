@@ -1,4 +1,4 @@
-import { Input } from '@repo/design-system/components/ui/input';
+import { Input } from '@apex/design-system/components/ui/input';
 import type { Meta, StoryObj } from '@storybook/react';
 
 /**

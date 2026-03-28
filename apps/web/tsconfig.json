@@ -1,10 +1,10 @@
 {
-  "extends": ["@repo/typescript-config/nextjs.json", "@repo/cms/typescript-config.json"],
+  "extends": ["@apex/typescript-config/nextjs.json", "@apex/cms/typescript-config.json"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["./*"],
-      "@repo/*": ["../../packages/*"]
+      "@apex/*": ["../../packages/*"]
     }
   },
   "include": ["next-env.d.ts", "next.config.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"]

@@ -1,6 +1,6 @@
 'use client';
 
-import { NotificationsProvider as RawNotificationsProvider } from '@repo/notifications/components/provider';
+import { NotificationsProvider as RawNotificationsProvider } from '@apex/notifications/components/provider';
 import { useTheme } from 'next-themes';
 import type { ReactNode } from 'react';
 

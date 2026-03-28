@@ -5,7 +5,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from '@repo/design-system/components/ui/command';
+} from '@apex/design-system/components/ui/command';
 import type { Meta, StoryObj } from '@storybook/react';
 import { CommandSeparator } from 'cmdk';
 
