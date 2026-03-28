@@ -115,6 +115,30 @@ const contrastPairs = [
   { fg: "--accent", bg: "--bg-elevated", label: "--accent on --bg-elevated" },
 ];
 
+const iconSizes = [
+  { px: 16, tw: "w-4 h-4", context: "Inline, badges" },
+  { px: 20, tw: "w-5 h-5", context: "Buttons, nav" },
+  { px: 24, tw: "w-6 h-6", context: "Section headers" },
+  { px: 32, tw: "w-8 h-8", context: "Feature cards" },
+  { px: 48, tw: "w-12 h-12", context: "Empty states, hero" },
+];
+
+const transitions = [
+  { duration: "0.2s", use: "Micro: hover, focus, toggle", css: "transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.3s", use: "Standard: dropdowns, accordion", css: "transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.5s", use: "Layout: panel slides, page shifts", css: "transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.9s", use: "Reveal: scroll animations, hero", css: "transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1)" },
+];
+
+const zLayers = [
+  { z: 0, layer: "Base", use: "Content, cards, layout" },
+  { z: 10, layer: "Sticky", use: "Sticky headers, floating labels" },
+  { z: 20, layer: "Dropdown", use: "Popovers, menus, tooltips" },
+  { z: 50, layer: "Modal", use: "Dialogs, overlays, sheets" },
+  { z: 100, layer: "Chrome", use: "Navigation, fixed toolbars" },
+  { z: 999, layer: "Toast", use: "Notifications, urgent alerts" },
+];
+
 function Label({ children }: { children: string }) {
   return <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>{children}</div>;
 }
@@ -331,6 +355,25 @@ export default function DesignSystemPage() {
         </div>
       </section>
 
+      {/* ═══ ICONS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Icons" title="Size with purpose." sub="Every icon size maps to a context. Inherit color, never hardcode." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "flex-end", gap: 32, flexWrap: "wrap" }}>
+            {iconSizes.map(({ px, tw, context }) => (
+              <div key={px} style={{ textAlign: "center" }}>
+                <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" style={{ marginBottom: 8 }}>
+                  <circle cx="12" cy="12" r="10" /><path d="M12 8v4l2 2" />
+                </svg>
+                <div><Mono>{px}px</Mono></div>
+                <div><CopyToken value={tw} /></div>
+                <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2 }}>{context}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ MOTION ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -343,6 +386,24 @@ export default function DesignSystemPage() {
                 <Mono>{m.timing}</Mono>
               </div>
             ))}
+          </div>
+          <div className="reveal" style={{ marginTop: 48 }}>
+            <PLabel>Copy-Paste Transitions</PLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+              {transitions.map((t) => (
+                <div key={t.duration} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 20, display: "flex", alignItems: "center", gap: 16 }}>
+                  <div
+                    style={{ width: 36, height: 36, borderRadius: 8, background: "var(--accent)", flexShrink: 0, transition: t.css.replace("transition: ", "") }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.3) rotate(8deg)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1) rotate(0deg)"; }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{t.duration} — <span style={{ fontWeight: 400, color: "var(--text-muted)" }}>{t.use}</span></div>
+                    <CopyToken value={t.css} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -393,6 +454,39 @@ export default function DesignSystemPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Z-INDEX ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Z-Index" title="Layered with intent." sub="Six layers. No magic numbers. Every element knows its place." /></div>
+          <div className="reveal reveal-delay-1" style={{ position: "relative", height: 280, maxWidth: 600, margin: "0 auto" }}>
+            {zLayers.map((l, i) => (
+              <div key={l.z} style={{
+                position: "absolute",
+                left: i * 20,
+                bottom: i * 40,
+                right: (5 - i) * 20,
+                height: 56,
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius, 12px)",
+                padding: "0 16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                boxShadow: `0 ${2 + i * 2}px ${8 + i * 4}px rgba(0,0,0,${0.08 + i * 0.04})`,
+                zIndex: l.z,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--accent)", minWidth: 32 }}>{l.z}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{l.layer}</span>
+                </div>
+                <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.use}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
