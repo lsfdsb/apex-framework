@@ -2,14 +2,7 @@
 // DNA source: docs/design-dna/design-system.html
 // Palette: bg=#08080a, elevated=#111114, accent=#636bf0, font=Inter + Instrument Serif
 
-import React, { useEffect, useState } from "react";
-import Select from "./crm/Select";
-import Toggle from "./crm/Toggle";
-import Textarea from "./crm/Textarea";
-import SearchInput from "./crm/SearchInput";
-import DatePicker from "./crm/DatePicker";
-import Tooltip from "./crm/Tooltip";
-import ConfirmDialog from "./crm/ConfirmDialog";
+import React, { useEffect, useState, useCallback } from "react";
 
 function useReveal() {
   useEffect(() => {
@@ -88,6 +81,125 @@ const palettes = [
   { name: "Creative", cells: [{ bg: "#1a1614", c: "#666", t: "Crea" },{ bg: "#242018" },{ bg: "#2e2820" },{ bg: "#e07850", c: "#fff", t: "accent" },{ bg: "#f5ebe0", c: "#000", t: "text" }] },
 ];
 
+const colorGroups = [
+  { label: "Surfaces", tokens: [
+    { name: "bg", cssVar: "--bg", usage: "Page background" },
+    { name: "elevated", cssVar: "--bg-elevated", usage: "Cards, modals" },
+    { name: "surface", cssVar: "--bg-surface", usage: "Nested containers" },
+    { name: "border", cssVar: "--border", usage: "Default borders" },
+    { name: "border-hover", cssVar: "--border-hover", usage: "Hover borders" },
+  ]},
+  { label: "Text", tokens: [
+    { name: "text", cssVar: "--text", usage: "Primary content" },
+    { name: "secondary", cssVar: "--text-secondary", usage: "Descriptions" },
+    { name: "muted", cssVar: "--text-muted", usage: "Hints, timestamps" },
+  ]},
+  { label: "Semantic", tokens: [
+    { name: "accent", cssVar: "--accent", usage: "Brand, primary actions" },
+    { name: "success", cssVar: "--success", usage: "Confirmations" },
+    { name: "warning", cssVar: "--warning", usage: "Caution states" },
+    { name: "destructive", cssVar: "--destructive", usage: "Errors, delete" },
+    { name: "info", cssVar: "--info", usage: "Informational" },
+  ]},
+];
+
+const contrastPairs = [
+  { fg: "--text", bg: "--bg", label: "--text on --bg" },
+  { fg: "--text", bg: "--bg-elevated", label: "--text on --bg-elevated" },
+  { fg: "--text-secondary", bg: "--bg", label: "--text-secondary on --bg" },
+  { fg: "--text-secondary", bg: "--bg-elevated", label: "--text-secondary on --bg-elevated" },
+  { fg: "--text-muted", bg: "--bg", label: "--text-muted on --bg" },
+  { fg: "--text-muted", bg: "--bg-elevated", label: "--text-muted on --bg-elevated" },
+  { fg: "--text-muted", bg: "--bg-surface", label: "--text-muted on --bg-surface" },
+  { fg: "--accent", bg: "--bg", label: "--accent on --bg" },
+  { fg: "--accent", bg: "--bg-elevated", label: "--accent on --bg-elevated" },
+];
+
+const iconSizes = [
+  { px: 16, tw: "w-4 h-4", context: "Inline, badges" },
+  { px: 20, tw: "w-5 h-5", context: "Buttons, nav" },
+  { px: 24, tw: "w-6 h-6", context: "Section headers" },
+  { px: 32, tw: "w-8 h-8", context: "Feature cards" },
+  { px: 48, tw: "w-12 h-12", context: "Empty states, hero" },
+];
+
+const transitions = [
+  { duration: "0.2s", use: "Micro: hover, focus, toggle", css: "transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.3s", use: "Standard: dropdowns, accordion", css: "transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.5s", use: "Layout: panel slides, page shifts", css: "transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1)" },
+  { duration: "0.9s", use: "Reveal: scroll animations, hero", css: "transition: all 0.9s cubic-bezier(0.22, 1, 0.36, 1)" },
+];
+
+const zLayers = [
+  { z: 0, layer: "Base", use: "Content, cards, layout" },
+  { z: 10, layer: "Sticky", use: "Sticky headers, floating labels" },
+  { z: 20, layer: "Dropdown", use: "Popovers, menus, tooltips" },
+  { z: 50, layer: "Modal", use: "Dialogs, overlays, sheets" },
+  { z: 100, layer: "Chrome", use: "Navigation, fixed toolbars" },
+  { z: 999, layer: "Toast", use: "Notifications, urgent alerts" },
+];
+
+const breakpoints = [
+  { px: 640, tw: "sm:", label: "Mobile landscape" },
+  { px: 768, tw: "md:", label: "Tablet portrait" },
+  { px: 1024, tw: "lg:", label: "Laptop" },
+  { px: 1280, tw: "xl:", label: "Desktop" },
+  { px: 1536, tw: "2xl:", label: "Wide desktop" },
+];
+
+const combos = [
+  {
+    name: "Card",
+    tokens: "--bg-elevated + --border + --radius + --shadow-sm",
+    css: "background: var(--bg-elevated);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 2px 8px rgba(0,0,0,0.12);",
+    render: (
+      <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Card title</div>
+        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Supporting text lives here.</div>
+      </div>
+    ),
+  },
+  {
+    name: "Input",
+    tokens: "--bg-surface + --border + --radius-sm + --text",
+    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius-sm, 8px);\npadding: 10px 14px;\ncolor: var(--text);",
+    render: (
+      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", padding: "10px 14px", color: "var(--text)", fontSize: 13 }}>
+        <span style={{ color: "var(--text-muted)" }}>Enter something...</span>
+      </div>
+    ),
+  },
+  {
+    name: "Badge",
+    tokens: "--accent-glow + --accent + 4px radius",
+    css: "background: var(--accent-glow);\ncolor: var(--accent);\nborder-radius: 4px;\npadding: 2px 8px;\nfont-weight: 600;",
+    render: (
+      <span style={{ background: "var(--accent-glow)", color: "var(--accent)", borderRadius: 4, padding: "2px 8px", fontWeight: 600, fontSize: 11 }}>Badge</span>
+    ),
+  },
+  {
+    name: "Muted Block",
+    tokens: "--bg-surface + --text-muted + --border",
+    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\ncolor: var(--text-muted);",
+    render: (
+      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 16, color: "var(--text-muted)", fontSize: 12 }}>
+        Supplementary information or a subtle callout.
+      </div>
+    ),
+  },
+  {
+    name: "Glass Floating",
+    tokens: "--bg-elevated + --shadow-lg + backdrop-filter",
+    css: "background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);\nbackdrop-filter: blur(20px) saturate(1.4);\nborder: 1px solid color-mix(in srgb, var(--text-muted) 12%, transparent);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 8px 32px rgba(0,0,0,0.18);",
+    render: (
+      <div style={{ background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", borderRadius: "var(--radius, 12px)", boxShadow: "0 8px 32px rgba(0,0,0,0.18)", padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Floating panel</div>
+        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Glass morphism with depth.</div>
+      </div>
+    ),
+  },
+];
+
 function Label({ children }: { children: string }) {
   return <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>{children}</div>;
 }
@@ -107,10 +219,86 @@ function Mono({ children }: { children: React.ReactNode }) {
   return <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)" }}>{children}</span>;
 }
 
-function SearchInputDemo() { const [v, setV] = useState(""); return <SearchInput value={v} onChange={setV} placeholder="Search anything..." /> }
-function ToggleDemo() { const [on, setOn] = useState(true); return <Toggle checked={on} onChange={setOn} label="Email notifications" description="Receive alerts for new updates" /> }
-function TextareaDemo() { const [v, setV] = useState(""); return <Textarea value={v} onChange={setV} label="Notes" placeholder="Add a note..." maxLength={280} /> }
-function ConfirmDialogDemo() { const [open, setOpen] = useState(false); return (<><button onClick={() => setOpen(true)} style={{ padding: "8px 16px", borderRadius: "var(--radius-sm, 8px)", border: "1px solid var(--destructive)", background: "rgba(248,113,113,0.08)", color: "var(--destructive)", cursor: "pointer", fontSize: 13 }}>Delete (dialog)</button><ConfirmDialog open={open} onConfirm={() => setOpen(false)} onCancel={() => setOpen(false)} title="Delete item?" description="This action cannot be undone. All data will be permanently removed." confirmText="Delete" variant="destructive" /></>) }
+function CopyToken({ value, children }: { value: string; children?: React.ReactNode }) {
+  const [copied, setCopied] = useState(false);
+  const copy = useCallback(() => {
+    navigator.clipboard.writeText(value).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }, [value]);
+  return (
+    <span
+      onClick={copy}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && copy()}
+      style={{ cursor: "pointer", fontFamily: "var(--font-mono)", fontSize: 10, color: copied ? "var(--success)" : "var(--text-muted)", transition: "color 0.2s", userSelect: "none" }}
+      title={`Copy: ${value}`}
+    >
+      {copied ? "Copied!" : children ?? value}
+    </span>
+  );
+}
+
+function parseColor(raw: string): [number, number, number] | null {
+  const s = raw.trim();
+  let m = s.match(/^#([0-9a-f]{6})$/i);
+  if (m) {
+    const h = m[1];
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
+  m = s.match(/^rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if (m) return [+m[1], +m[2], +m[3]];
+  return null;
+}
+
+function luminance(r: number, g: number, b: number): number {
+  const [rs, gs, bs] = [r, g, b].map((c) => {
+    const s = c / 255;
+    return s <= 0.04045 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+  });
+  return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
+}
+
+function contrastRatio(fg: string, bg: string): number | null {
+  const c1 = parseColor(fg);
+  const c2 = parseColor(bg);
+  if (!c1 || !c2) return null;
+  const l1 = luminance(...c1);
+  const l2 = luminance(...c2);
+  const lighter = Math.max(l1, l2);
+  const darker = Math.min(l1, l2);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function resolveVar(name: string): string {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+function ContrastCell({ fg, bg, label }: { fg: string; bg: string; label: string }) {
+  const [ratio, setRatio] = useState<number | null>(null);
+  useEffect(() => {
+    const fgVal = resolveVar(fg);
+    const bgVal = resolveVar(bg);
+    setRatio(contrastRatio(fgVal, bgVal));
+  }, [fg, bg]);
+  const pass = ratio !== null && ratio >= 4.5;
+  const aaa = ratio !== null && ratio >= 7;
+  return (
+    <div style={{ background: `var(${bg})`, border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 16, display: "flex", flexDirection: "column", gap: 8 }}>
+      <span style={{ color: `var(${fg})`, fontSize: 16, fontWeight: 600 }}>Sample Text</span>
+      <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: `var(${fg})`, opacity: 0.7 }}>{label}</span>
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
+        <span style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: `var(${fg})` }}>{ratio ? `${ratio.toFixed(1)}:1` : "..."}</span>
+        <span style={{ fontSize: 9, fontWeight: 700, padding: "2px 6px", borderRadius: 4, background: aaa ? "var(--warning)" : pass ? "var(--success)" : "var(--destructive)", color: aaa || pass ? "#000" : "#fff" }}>
+          {aaa ? "AAA" : pass ? "AA" : "FAIL"}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 
 export default function DesignSystemPage() {
   useReveal();
@@ -125,7 +313,7 @@ export default function DesignSystemPage() {
           <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
             The system<br />behind the <em style={{ fontStyle: "italic", color: "var(--accent)" }}>soul.</em>
           </h1>
-          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Tokens, type, color, space, motion. The invisible rules that make everything feel intentional.</p>
+          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Every token you need to build. Copy, compose, ship.</p>
         </div>
       </section>
 
@@ -133,18 +321,15 @@ export default function DesignSystemPage() {
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <div className="reveal"><SH label="Color" title="One accent. Infinite depth." sub="Restraint is the design. 90% neutrals, one accent for meaning." /></div>
-          {[
-            { label: "Surfaces", swatches: [["bg","--bg"],["elevated","--bg-elevated"],["surface","--bg-surface"],["border","--border"],["border-hover","--border-hover"]] },
-            { label: "Text", swatches: [["text","--text"],["secondary","--text-secondary"],["muted","--text-muted"]] },
-            { label: "Semantic", swatches: [["accent","--accent"],["success","--success"],["warning","--warning"],["destructive","--destructive"],["info","--info"]] },
-          ].map((group, gi) => (
+          {colorGroups.map((group, gi) => (
             <div key={group.label} className={`reveal reveal-delay-${gi + 1}`} style={{ marginBottom: 48 }}>
               <PLabel>{group.label}</PLabel>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {group.swatches.map(([name, cssVar]) => (
-                  <div key={cssVar} style={{ width: 80, textAlign: "center" }}>
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                {group.tokens.map(({ name, cssVar, usage }) => (
+                  <div key={cssVar} style={{ width: 100, textAlign: "center" }}>
                     <div className="ds-swatch-color" style={{ background: `var(${cssVar})` }} />
-                    <Mono>{name}</Mono>
+                    <CopyToken value={`var(${cssVar})`}>{name}</CopyToken>
+                    <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2, lineHeight: 1.3 }}>{usage}</div>
                   </div>
                 ))}
               </div>
@@ -164,6 +349,18 @@ export default function DesignSystemPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CONTRAST ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Contrast" title="Accessibility built in." sub="Every text/background combo verified against WCAG 2.1 AA (4.5:1)." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 12 }}>
+            {contrastPairs.map((p) => (
+              <ContrastCell key={p.label} fg={p.fg} bg={p.bg} label={p.label} />
+            ))}
           </div>
         </div>
       </section>
@@ -219,6 +416,25 @@ export default function DesignSystemPage() {
         </div>
       </section>
 
+      {/* ═══ ICONS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Icons" title="Size with purpose." sub="Every icon size maps to a context. Inherit color, never hardcode." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 48, flexWrap: "wrap" }}>
+            {iconSizes.map(({ px, tw, context }) => (
+              <div key={px} style={{ textAlign: "center", width: 100 }}>
+                <svg width={px} height={px} viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2" style={{ marginBottom: 8, display: "block", margin: "0 auto 8px" }}>
+                  <circle cx="12" cy="12" r="10" /><path d="M12 8v4l2 2" />
+                </svg>
+                <div><Mono>{px}px</Mono></div>
+                <div><CopyToken value={tw} /></div>
+                <div style={{ fontSize: 9, color: "var(--text-muted)", marginTop: 2 }}>{context}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ MOTION ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
@@ -231,6 +447,24 @@ export default function DesignSystemPage() {
                 <Mono>{m.timing}</Mono>
               </div>
             ))}
+          </div>
+          <div className="reveal" style={{ marginTop: 48 }}>
+            <PLabel>Copy-Paste Transitions</PLabel>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+              {transitions.map((t) => (
+                <div key={t.duration} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 20, display: "flex", alignItems: "center", gap: 16 }}>
+                  <div
+                    style={{ width: 36, height: 36, borderRadius: 8, background: "var(--accent)", flexShrink: 0, transition: t.css.replace("transition: ", "") }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "scale(1.3) rotate(8deg)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "scale(1) rotate(0deg)"; }}
+                  />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 2 }}>{t.duration} — <span style={{ fontWeight: 400, color: "var(--text-muted)" }}>{t.use}</span></div>
+                    <CopyToken value={t.css} />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -285,168 +519,80 @@ export default function DesignSystemPage() {
         </div>
       </section>
 
-      {/* ═══ FORM PRIMITIVES ═══ */}
+      {/* ═══ Z-INDEX ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Forms" title="Input primitives." sub="Select, toggle, textarea, search, date — the building blocks of every form." /></div>
-
-          {/* Primary row: Select + DatePicker with accent top border */}
-          <div className="reveal reveal-delay-1" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
-            {[
-              { label: "Select / Combobox", desc: "Searchable dropdown with keyboard navigation", el: <Select label="Status" options={[{ value: "active", label: "Active" }, { value: "pending", label: "Pending" }, { value: "completed", label: "Completed" }, { value: "archived", label: "Archived" }]} placeholder="Select status..." /> },
-              { label: "DatePicker", desc: "Calendar popup with glass morphism overlay", el: <DatePicker label="Due date" /> },
-            ].map((item) => (
-              <div key={item.label} className="ds-form-card" style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden", transition: "all .4s cubic-bezier(0.22,1,0.36,1)" }}>
-                <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent)" }} />
-                <div style={{ padding: "28px 28px 32px" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>{item.label}</span>
-                    <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
-                  </div>
-                  <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>{item.desc}</p>
-                  {item.el}
+          <div className="reveal"><SH label="Z-Index" title="Layered with intent." sub="Six layers. No magic numbers. Every element knows its place." /></div>
+          <div className="reveal reveal-delay-1" style={{ position: "relative", height: 280, maxWidth: 600, margin: "0 auto" }}>
+            {zLayers.map((l, i) => (
+              <div key={l.z} style={{
+                position: "absolute",
+                left: i * 20,
+                bottom: i * 40,
+                right: (5 - i) * 20,
+                height: 56,
+                background: "var(--bg-elevated)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius, 12px)",
+                padding: "0 16px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                boxShadow: `0 ${2 + i * 2}px ${8 + i * 4}px rgba(0,0,0,${0.08 + i * 0.04})`,
+                zIndex: l.z,
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, fontFamily: "var(--font-mono)", color: "var(--accent)", minWidth: 32 }}>{l.z}</span>
+                  <span style={{ fontSize: 13, fontWeight: 600 }}>{l.layer}</span>
                 </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Secondary row: Search + Toggle */}
-          <div className="reveal reveal-delay-2" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, marginTop: 16 }}>
-            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
-              <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
-              <div style={{ padding: "28px 28px 32px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>SearchInput</span>
-                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
-                </div>
-                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Debounced search with icon and clear button</p>
-                <SearchInputDemo />
-              </div>
-            </div>
-            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
-              <div style={{ height: 2, background: "linear-gradient(90deg, transparent, var(--accent), transparent)" }} />
-              <div style={{ padding: "28px 28px 32px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Toggle Switch</span>
-                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
-                </div>
-                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Boolean state with label and description</p>
-                <ToggleDemo />
-              </div>
-            </div>
-          </div>
-
-          {/* Textarea — full width */}
-          <div className="reveal reveal-delay-3" style={{ marginTop: 16 }}>
-            <div style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
-              <div style={{ height: 2, background: "linear-gradient(90deg, var(--accent), transparent 40%, transparent 60%, var(--accent))" }} />
-              <div style={{ padding: "28px 28px 32px" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Textarea</span>
-                  <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>interactive</span>
-                </div>
-                <p style={{ fontSize: 12, color: "var(--text-muted)", marginBottom: 20, lineHeight: 1.5 }}>Multi-line input with character counter</p>
-                <TextareaDemo />
-              </div>
-            </div>
-          </div>
-
-          {/* Utility row: Tooltip, Dialog, Toast */}
-          <div className="reveal" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 16, marginTop: 16 }}>
-            {[
-              { label: "Tooltip", desc: "Hover for contextual info", el: <Tooltip content="Additional info about this field"><span style={{ padding: "10px 20px", borderRadius: "var(--radius-sm, 8px)", background: "var(--bg-surface)", border: "1px solid var(--border)", color: "var(--text-secondary)", fontSize: 13, cursor: "default", transition: "all .3s" }}>Hover me</span></Tooltip> },
-              { label: "ConfirmDialog", desc: "Destructive action gate", el: <ConfirmDialogDemo /> },
-              { label: "Toast", desc: "Transient notification", el: <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent)", padding: "6px 14px", borderRadius: 8, background: "var(--accent-glow)" }}>useToast()</span> },
-            ].map((item) => (
-              <div key={item.label} style={{ background: "var(--bg-elevated)", borderRadius: "var(--radius, 12px)", padding: "32px 24px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>{item.label}</span>
-                <span style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 12 }}>{item.desc}</span>
-                {item.el}
+                <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.use}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ═══ LAYOUT PATTERNS ═══ */}
+      {/* ═══ BREAKPOINTS ═══ */}
       <section style={{ padding: "100px 32px" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-          <div className="reveal"><SH label="Layout" title="Headers & Sidebars." sub="Floating glass morphism. The app breathes with the background." /></div>
-
-          {/* Header demo with gradient background */}
-          <div className="reveal reveal-delay-1" style={{ marginBottom: 32 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Floating Header</span>
-              <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>glassmorphism</span>
-            </div>
-            <div style={{ position: "relative", height: 120, borderRadius: "var(--radius, 12px)", overflow: "hidden", background: "linear-gradient(135deg, var(--bg-surface) 0%, color-mix(in srgb, var(--accent) 8%, var(--bg)) 50%, var(--bg-surface) 100%)" }}>
-              {/* Subtle grid pattern */}
-              <div style={{ position: "absolute", inset: 0, opacity: 0.04, backgroundImage: "repeating-linear-gradient(0deg, var(--text) 0 1px, transparent 1px 48px), repeating-linear-gradient(90deg, var(--text) 0 1px, transparent 1px 48px)" }} />
-              <div style={{ position: "absolute", top: 16, left: 16, right: 16, height: 48, borderRadius: 14, background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(24px) saturate(1.4)", WebkitBackdropFilter: "blur(24px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", boxShadow: "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <span style={{ fontSize: 14, fontWeight: 700, letterSpacing: "-0.02em", color: "var(--accent)" }}>⚔</span>
-                  <div style={{ width: 1, height: 16, background: "var(--border)" }} />
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>Dashboard</span>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <div style={{ width: 160, height: 32, borderRadius: 10, border: "1px solid var(--border)", display: "flex", alignItems: "center", padding: "0 12px", gap: 8, background: "color-mix(in srgb, var(--bg) 50%, transparent)" }}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><circle cx="11" cy="11" r="8" /><path d="M21 21l-4.35-4.35" /></svg>
-                    <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Search...</span>
+          <div className="reveal"><SH label="Breakpoints" title="Responsive by design." sub="Mobile-first. Every layout starts at 320px and scales up." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {breakpoints.map(({ px, tw, label }) => (
+              <div key={px} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ minWidth: 50, fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent)", fontWeight: 700, textAlign: "right" }}>{tw}</span>
+                <div style={{ flex: 1, position: "relative", height: 32, borderRadius: 8, overflow: "hidden", background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                  <div style={{ height: "100%", width: `${(px / 1536) * 100}%`, background: "color-mix(in srgb, var(--accent) 20%, transparent)", borderRadius: 8, display: "flex", alignItems: "center", paddingLeft: 12 }}>
+                    <span style={{ fontSize: 11, fontWeight: 500 }}>{label}</span>
                   </div>
-                  <div style={{ width: 32, height: 32, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" strokeWidth="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" /></svg>
-                  </div>
-                  <div style={{ width: 32, height: 32, borderRadius: "50%", background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 600, color: "var(--accent)" }}>A</div>
                 </div>
+                <CopyToken value={`${px}px`} />
               </div>
-              <p style={{ position: "absolute", bottom: 14, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>backdrop-filter: blur(24px) saturate(1.4)</p>
-            </div>
-          </div>
-
-          {/* Sidebar demo with gradient background */}
-          <div className="reveal reveal-delay-2">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Floating Sidebar</span>
-              <span style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", padding: "3px 8px", borderRadius: 6, background: "var(--bg-surface)" }}>glassmorphism</span>
-            </div>
-            <div style={{ position: "relative", height: 360, borderRadius: "var(--radius, 12px)", overflow: "hidden", background: "linear-gradient(180deg, var(--bg-surface) 0%, color-mix(in srgb, var(--accent) 6%, var(--bg)) 60%, var(--bg-surface) 100%)", display: "flex" }}>
-              {/* Subtle dot pattern */}
-              <div style={{ position: "absolute", inset: 0, opacity: 0.03, backgroundImage: "radial-gradient(var(--text) 1px, transparent 1px)", backgroundSize: "24px 24px" }} />
-              <div style={{ position: "absolute", left: 16, top: 16, bottom: 16, width: 64, borderRadius: 18, background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(24px) saturate(1.4)", WebkitBackdropFilter: "blur(24px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", boxShadow: "0 4px 24px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.04)", display: "flex", flexDirection: "column", alignItems: "center", padding: "20px 0", gap: 4 }}>
-                <div style={{ marginBottom: 20, width: 32, height: 32, borderRadius: 10, background: "var(--accent-glow)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 16, fontWeight: 700, color: "var(--accent)" }}>⚔</span>
-                </div>
-                {[
-                  { icon: <><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /></>, active: true, label: "Dashboard" },
-                  { icon: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /></>, active: false, label: "Users" },
-                  { icon: <><rect x="2" y="7" width="20" height="14" rx="2" /><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16" /></>, active: false, label: "Billing" },
-                  { icon: <><circle cx="12" cy="12" r="3" /><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" /></>, active: false, label: "Settings" },
-                ].map((nav, i) => (
-                  <div key={i} title={nav.label} style={{ width: 40, height: 40, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: nav.active ? "var(--accent-glow)" : "transparent", color: nav.active ? "var(--accent)" : "var(--text-muted)", cursor: "default", transition: "all .3s" }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">{nav.icon}</svg>
-                  </div>
-                ))}
-              </div>
-              {/* Content area with mock UI */}
-              <div style={{ marginLeft: 96, padding: 32, flex: 1, display: "flex", flexDirection: "column", gap: 16, position: "relative", zIndex: 1 }}>
-                <div style={{ fontSize: 20, fontWeight: 600, letterSpacing: "-0.02em" }}>Dashboard</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
-                  {["Revenue", "Users", "Growth"].map((label) => (
-                    <div key={label} style={{ background: "color-mix(in srgb, var(--bg-elevated) 60%, transparent)", border: "1px solid var(--border)", borderRadius: 10, padding: "16px 14px" }}>
-                      <div style={{ fontSize: 10, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 6 }}>{label}</div>
-                      <div style={{ fontSize: 18, fontWeight: 600, color: "var(--text)" }}>{label === "Revenue" ? "$12.4k" : label === "Users" ? "847" : "+24%"}</div>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ flex: 1, background: "color-mix(in srgb, var(--bg-elevated) 40%, transparent)", border: "1px solid var(--border)", borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                  <span style={{ fontSize: 12, color: "var(--text-muted)", fontFamily: "var(--font-mono)" }}>Chart area</span>
-                </div>
-              </div>
-              <p style={{ position: "absolute", bottom: 14, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "var(--text-muted)", fontFamily: "var(--font-mono)", zIndex: 2 }}>sidebar: 64px · glass · 18px radius</p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* ═══ COMPOSITION ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Composition" title="Tokens in action." sub="Copy these combos to build faster. Each one is a production-ready pattern." /></div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+            {combos.map((c, i) => (
+              <div key={c.name} className={`reveal${i < 4 ? ` reveal-delay-${(i % 3) + 1}` : ""}`} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+                <div style={{ padding: 20 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600 }}>{c.name}</span>
+                    <CopyToken value={c.css}>copy css</CopyToken>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>{c.render}</div>
+                  <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", lineHeight: 1.6 }}>{c.tokens}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }

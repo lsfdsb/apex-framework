@@ -1,17 +1,13 @@
 import { Suspense, lazy, useState, useEffect } from "react";
 import { PaletteProvider } from "./context/PaletteContext";
-import { OpsProvider } from "./context/OpsContext";
-import { AuthProvider, useAuth } from "./context/AuthContext";
 import { useHash } from "./router/Router";
 import { ShowcaseNav } from "./layout/ShowcaseNav";
 import { PaletteSwitcher } from "./layout/PaletteSwitcher";
-import { TEMPLATE_ROUTES, OPS_ROUTES, NAV_ROUTES, HIDDEN_ROUTES, type RouteEntry } from "./data/routes";
+import { TEMPLATE_ROUTES, type RouteEntry } from "./data/routes";
 import TemplatePage from "./pages/TemplatePage";
 
 // Lazy-load pages
-const HubHome = lazy(() => import("./pages/HubHome"));
 const HomePage = lazy(() => import("./pages/HomePage"));
-const LoginPage = lazy(() => import("./pages/LoginPage"));
 
 // Lazy source imports — only loaded when user clicks "Source" on a template
 const rawModules = import.meta.glob("../../templates/*.tsx", { query: "?raw", import: "default" });
@@ -34,7 +30,6 @@ function LoadingState() {
     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh" }}>
       <style>{loadingStyles}</style>
       <div style={{ textAlign: "center", animation: "apex-fade-in 0.6s cubic-bezier(0.22,1,0.36,1)" }}>
-        {/* Orbital loader */}
         <div style={{ width: 48, height: 48, margin: "0 auto 24px", position: "relative" }}>
           <div style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "1px solid var(--border)" }} />
           <div style={{ position: "absolute", inset: -2, borderRadius: "50%", border: "2px solid transparent", borderTopColor: "var(--accent)", animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite" }} />
@@ -94,19 +89,9 @@ function TemplateWithSource({ route }: { route: RouteEntry }) {
 
 function AppRouter() {
   const hash = useHash();
-  const { isAuthenticated, isDemoMode, loading } = useAuth();
-
-  // Strip query params for route matching
   const hashPath = hash.split("?")[0];
 
   const templateRoute = TEMPLATE_ROUTES.find((r) => r.path === hashPath);
-  const opsRoute = OPS_ROUTES.find((r) => r.path === hashPath);
-  const navRoute = NAV_ROUTES.find((r) => r.path === hashPath) ?? HIDDEN_ROUTES.find((r) => r.path === hashPath);
-
-  const isOps = !!opsRoute;
-
-  // OPS routes require auth (unless demo mode — no Supabase configured)
-  const canAccessOps = isDemoMode || isAuthenticated;
 
   return (
     <div className="min-h-screen" style={{ background: "var(--bg)", color: "var(--text)" }}>
@@ -116,30 +101,10 @@ function AppRouter() {
 
       <div style={{ position: "relative", zIndex: 1 }}>
         <Suspense fallback={<LoadingState />}>
-          {hashPath === "/login" ? (
-            <LoginPage />
-          ) : isOps && opsRoute ? (
-            canAccessOps ? (
-              <OpsProvider>
-                <opsRoute.component />
-              </OpsProvider>
-            ) : !loading ? (
-              <LoginPage />
-            ) : null
-          ) : hash === "/" ? (
-            <OpsProvider>
-              <HubHome />
-            </OpsProvider>
-          ) : hash === "/dna" ? (
-            <HomePage />
-          ) : navRoute ? (
-            <navRoute.component />
-          ) : templateRoute ? (
+          {templateRoute ? (
             <TemplateWithSource route={templateRoute} />
           ) : (
-            <div className="flex items-center justify-center min-h-[60vh]" style={{ color: "var(--text-muted)" }}>
-              <p className="text-sm">Route not found. <a href="#/" style={{ color: "var(--accent)" }}>Go home</a></p>
-            </div>
+            <HomePage />
           )}
         </Suspense>
       </div>
@@ -152,29 +117,15 @@ function AppRouter() {
 export default function App() {
   return (
     <PaletteProvider>
-      <AuthProvider>
-        <AppRouter />
-      </AuthProvider>
+      <AppRouter />
     </PaletteProvider>
   );
 }
 
 function getTemplateName(path: string): string {
   const map: Record<string, string> = {
-    "/landing": "LandingPage",
-    "/saas": "SaaSDashboard",
-    "/crm": "CRMPipeline",
-    "/blog": "BlogLayout",
-    "/ecommerce": "EcommercePage",
-    "/backoffice": "BackofficePage",
-    "/portfolio": "PortfolioPage",
-    "/lms": "LMSDashboard",
-    "/social": "SocialFeed",
-    "/email": "EmailTemplate",
-    "/presentation": "PresentationSlide",
     "/design-system": "DesignSystemPage",
     "/patterns": "PatternShowcase",
-    "/animations": "AnimationsShowcase",
   };
   return map[path] ?? "";
 }

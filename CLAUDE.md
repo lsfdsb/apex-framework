@@ -26,10 +26,13 @@ git clone https://github.com/lsfdsb/apex-framework.git ~/.apex-framework && ~/.a
 5. **Security on sensitive code** — `/security` on auth, payments, PII.
 6. **CX review before users see it** — `/cx-review` before deploying user-facing changes.
 7. **Read before editing** — Always read existing files first. No blind changes.
-8. **Root cause only** — Never band-aid. Understand and fix the real issue.
+8. **Root cause only** — Never band-aid. Use `/debug` for systematic investigation. Understand and fix the real issue.
 9. **Impact analysis first** — Trace all dependencies before changing anything.
 10. **Adapt to existing stacks** — Don't force the APEX default stack on existing projects.
 11. **Only verified libraries** — Official publisher, maintained, no critical CVEs, proper license.
+12a. **TDD for all implementation** — `/tdd` before writing production code. RED-GREEN-REFACTOR. No production code without a failing test first. Tests-first = "what should this do?" Tests-after = "what does this do?" — fundamentally different.
+12b. **Verify before claiming** — `/verify` before any completion claim. Evidence before assertions. Run the command, read the output, THEN claim success. "Should work" is not verification.
+12c. **Technical rigor on reviews** — `/code-review` when receiving feedback. No performative agreement ("You're absolutely right!"). Verify against codebase reality, push back if wrong, implement one at a time.
 
 ### Practices — How We Build
 
@@ -133,17 +136,23 @@ APEX adapts Apple's Engineering Program Management for AI agent teams. We are ho
 
 The pipeline is a **state machine with 7 phases and 3 user gates**. When the user asks to build something new, execute all 7 phases in order. The user only decides at gates — everything else is autonomous.
 
-### The 7 Phases
+### The 7 Phases (APEX + Superpowers Merged)
 
-| Phase | Name | Apple Analog | Team | Action | Gate? |
+| Phase | Name | Skills Used | Team | Action | Gate? |
 |-------|------|-------------|------|--------|-------|
-| 1 | **Plan** | Product Brief | Lead | Invoke `/prd` → generate PRD | YES — user approves |
-| 2 | **Architect** | System Design | Lead | Invoke `/architecture` + `/verify-api` for each external API | YES — user approves |
-| 3 | **Decompose** | ANPP | PM | Spawn PM agent → ANPP with milestones (M0-M3) + DRI assignments | No |
-| 4 | **Verify** | 3→1 Exploration | Lead, Designer | Verify APIs + libs, Designer explores 3 directions, extracts visual spec | No |
-| 5 | **Build** | EVT→DVT→PVT | Builder, Watcher | Spawn team if complex, build directly if simple, Watcher in background | No |
-| 6 | **Quality** | Quality Bar | QA, Designer | `/qa` (mandatory) + Seven Elements Check + `/security` + `/a11y` + Design Review | No — auto-fix |
-| 7 | **Ship** | Rules of the Road | Tech Writer, Lead | Rules of the Road + CHANGELOG + commit + push + PR | YES — user approves merge |
+| 1 | **Discover** | `/brainstorm` → `/prd` | Lead | Explore idea (Q&A, 2-3 approaches) → write spec → generate PRD | YES — user approves |
+| 2 | **Architect** | `/architecture` + `/verify-api` + `/verify-lib` | Lead | System design + verify every API and dependency | YES — user approves |
+| 3 | **Plan** | `/plan` + PM agent | PM, Lead | Write bite-sized TDD implementation plan → PM creates ANPP task board | No |
+| 4 | **Verify** | `/verify-api` + `/verify-lib` + Design DNA | Lead, Designer | Final API/lib verification, Designer extracts visual spec | No |
+| 5 | **Build** | `/execute` or `/teams` (SDD) + `/tdd` + `/debug` + `/verify` | Builder, Watcher | Execute plan: TDD per task, systematic debugging on failures, verify before claiming done | No |
+| 6 | **Quality** | `/qa` + `/request-review` + `/code-review` + `/security` + `/a11y` | QA, Designer | Full quality gate + code review + verify evidence for all claims | No — auto-fix |
+| 7 | **Ship** | `/ship` + `/verify` | Tech Writer, Lead | Verify all tests pass → 4-option completion → docs → PR | YES — user approves merge |
+
+**Cross-cutting skills active throughout ALL phases:**
+- `/debug` — when anything breaks, root cause first
+- `/tdd` — no production code without a failing test first
+- `/verify` — evidence before any completion claim
+- `/code-review` — technical rigor when receiving any feedback
 
 ### Enforcement Rules
 
@@ -153,6 +162,10 @@ The pipeline is a **state machine with 7 phases and 3 user gates**. When the use
 - **Never build UI without Design DNA.** Before building any user-facing page, read the matching template from `docs/design-dna/`. Extract palette, fonts, spacing, patterns. Inject into builder prompts.
 - **Never mark a task complete without QA.** Run `/qa` on changed code. If auth/payments/PII, also run `/security`. If UI, also run `/a11y`. Only mark complete after gates pass.
 - **Quality throughout, not just Phase 6.** Builders self-verify against DNA during build. QA enforces Seven Elements as exit criteria, not just automated checks.
+- **Never guess at bugs.** Use `/debug` for systematic root cause investigation. No fixes without understanding WHY it broke. 3+ failed fixes = question the architecture.
+- **Never write production code without a failing test.** Use `/tdd` — RED (failing test) → GREEN (minimal code) → REFACTOR. Delete code written before tests.
+- **Never claim completion without evidence.** Use `/verify` — run the command, read the output, THEN claim success. "Should work" and "looks correct" are not verification.
+- **Never blindly accept review feedback.** Use `/code-review` — verify against codebase reality, push back with technical reasoning if wrong, implement one item at a time with tests.
 
 For quick fixes, bugs, and questions — skip the pipeline entirely. Just do it.
 
