@@ -61,6 +61,8 @@ esac
 echo "$MODEL_ID" | grep -qi "opusplan" 2>/dev/null && M="opus→sonnet"
 
 # ── Context size correction for known model limits ──
+# Fix display denominator only — the API's used_percentage is already correct
+# relative to the true window. Don't re-scale the percentage.
 EXPECTED_CTX=0
 case "$MODEL_ID" in
   *opus-4-6*)     EXPECTED_CTX=1000000 ;;
@@ -71,9 +73,6 @@ esac
 
 if [ "$EXPECTED_CTX" -gt 0 ] 2>/dev/null && [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
   if [ "$CTX_SIZE" -ne "$EXPECTED_CTX" ]; then
-    if command -v bc &>/dev/null; then
-      CTX_PCT=$(echo "scale=1; $CTX_PCT * $CTX_SIZE / $EXPECTED_CTX" | bc 2>/dev/null || echo "$CTX_PCT")
-    fi
     CTX_SIZE=$EXPECTED_CTX
   fi
 fi
