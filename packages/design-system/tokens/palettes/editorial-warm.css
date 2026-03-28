@@ -1,0 +1,51 @@
+/* APEX DNA Palette — Editorial Warm
+   Use for: Blog, E-book, editorial/content apps
+   Accent: terracotta #c45d3e | Warm sepia backgrounds */
+:root {
+  --bg: #0f0d0b;
+  --bg-elevated: #1a1714;
+  --bg-surface: #24201b;
+  --bg-rgb: 15, 13, 11;
+  --border: #2e2820;
+  --border-hover: #3d3428;
+  --text: #f5ebe0;
+  --text-secondary: #b8a898;
+  --text-muted: #7a6e60;
+  --accent: #c45d3e;
+  --accent-hover: #a8492d;
+  --accent-glow: rgba(196, 93, 62, 0.12);
+  --success: #6bc46b;
+  --success-rgb: 107, 196, 107;
+  --warning: #d4a843;
+  --warning-rgb: 212, 168, 67;
+  --destructive: #c45d3e;
+  --destructive-rgb: 196, 93, 62;
+  --info: #7cacbe;
+  --info-rgb: 124, 172, 190;
+  --cta-bg: #ffffff;
+  --cta-text: #0f0d0b;
+}
+[data-theme='light'] {
+  --bg: #faf9f6;
+  --bg-elevated: #ffffff;
+  --bg-surface: #f5f0eb;
+  --bg-rgb: 250, 249, 246;
+  --border: #e8e0d8;
+  --border-hover: #d4c8bc;
+  --text: #1a1a1a;
+  --text-secondary: #6b6560;
+  --text-muted: #9c9590;
+  --accent: #c45d3e;
+  --accent-hover: #a8492d;
+  --accent-glow: rgba(196, 93, 62, 0.06);
+  --success: #2d8659;
+  --success-rgb: 45, 134, 89;
+  --warning: #b8860b;
+  --warning-rgb: 184, 134, 11;
+  --destructive: #c42b2b;
+  --destructive-rgb: 196, 43, 43;
+  --info: #3a7ca5;
+  --info-rgb: 58, 124, 165;
+  --cta-bg: #1a1a1a;
+  --cta-text: #faf9f6;
+}

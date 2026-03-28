@@ -1,0 +1,51 @@
+/* APEX DNA Palette — Fintech Teal
+   Use for: CRM, E-commerce, fintech apps
+   Accent: teal #00d4aa | Deep navy backgrounds */
+:root {
+  --bg: #0c1222;
+  --bg-elevated: #131c31;
+  --bg-surface: #1a2540;
+  --bg-rgb: 12, 18, 34;
+  --border: #1e2d4a;
+  --border-hover: #2a3f66;
+  --text: #e8edf5;
+  --text-secondary: #8899b8;
+  --text-muted: #5c6e8f;
+  --accent: #00d4aa;
+  --accent-hover: #00b892;
+  --accent-glow: rgba(0, 212, 170, 0.12);
+  --success: #00d4aa;
+  --success-rgb: 0, 212, 170;
+  --warning: #ffb547;
+  --warning-rgb: 255, 181, 71;
+  --destructive: #ff5c5c;
+  --destructive-rgb: 255, 92, 92;
+  --info: #60a5fa;
+  --info-rgb: 96, 165, 250;
+  --cta-bg: #ffffff;
+  --cta-text: #0c1222;
+}
+[data-theme='light'] {
+  --bg: #f8fafc;
+  --bg-elevated: #ffffff;
+  --bg-surface: #f1f5f9;
+  --bg-rgb: 248, 250, 252;
+  --border: #e2e8f0;
+  --border-hover: #cbd5e1;
+  --text: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-glow: rgba(13, 148, 136, 0.08);
+  --success: #0d9488;
+  --success-rgb: 13, 148, 136;
+  --warning: #d97706;
+  --warning-rgb: 217, 119, 6;
+  --destructive: #dc2626;
+  --destructive-rgb: 220, 38, 38;
+  --info: #2563eb;
+  --info-rgb: 37, 99, 235;
+  --cta-bg: #0f172a;
+  --cta-text: #f8fafc;
+}
