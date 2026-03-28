@@ -1,6 +1,6 @@
 # PRD: APEX Ops
 
-**Version**: 1.0 | **Date**: 2026-03-28 | **Status**: Draft
+**Version**: 1.0 | **Date**: 2026-03-28 | **Status**: Approved
 
 ---
 
@@ -240,11 +240,15 @@ Migrate `apex-framework` to monorepo. All existing functionality preserved. CI/C
 
 ---
 
-## 17. Open Questions
+## 17. Resolved Decisions
 
-1. Agent reporting: REST (V1) or WebSocket (V2)? -- Recommend REST V1
-2. Git sync: Webhooks or polling? -- Recommend webhooks
-3. Multi-repo auth: GitHub App or per-repo OAuth? -- Recommend GitHub App
-4. Design DNA to @apex/ui mapping: CSS vars or build-time? -- Recommend CSS vars
-5. @apex/create-app: Fork or wrapper? -- Recommend wrapper around next-forge CLI
-6. Existing HUB: Absorb into apps/web/ or keep separate? -- Recommend absorb
+| Question                 | Decision                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------- |
+| Agent reporting protocol | REST API (V1). Fire-and-forget POST from hooks. WebSocket upgrade path for V2.              |
+| Git sync                 | GitHub webhooks via Vercel serverless function. Real-time, no polling.                      |
+| Multi-repo auth          | GitHub App installation. One auth per org covers all repos.                                 |
+| Design DNA to @apex/ui   | CSS custom properties referenced directly in Tailwind config. No build-time transform.      |
+| @apex/create-app         | Wrapper around next-forge CLI. Runs `next-forge init` then injects APEX. Lower maintenance. |
+| Existing HUB             | Absorb into apps/web/. One platform, not two.                                               |
+
+**Status**: Approved 2026-03-28. Proceed to `/architecture`.
