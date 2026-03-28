@@ -76,56 +76,56 @@ For quick fixes and bugs — skip the pipeline, just do it directly.
 
 ### Skills
 
-| Skill             | Description                                                          |
-| ----------------- | -------------------------------------------------------------------- |
-| `/a11y`           | Runs an accessibility audit against WCAG 2.2 AA standards. This s... |
-| `/about`          | Reveals the creators and philosophy behind the APEX Framework. Ac... |
-| `/architecture`   | Design or review system architecture. Use when the user asks to a... |
-| `/brainstorm`     | Use BEFORE any creative work — creating features, building compon... |
-| `/changelog`      | Generates and maintains CHANGELOG.md and auto-updates PRD status.... |
-| `/cicd`           | Sets up CI/CD pipelines with GitHub Actions and Vercel. This skil... |
-| `/claude-api`     | 'Build apps with the Claude API or Anthropic SDK. TRIGGER when: c... |
-| `/code-review`    | Use when receiving code review feedback — from PR comments, QA re... |
-| `/cx-review`      | Review any user-facing feature from a Customer Experience perspec... |
-| `/debug`          | Use when encountering any bug, test failure, unexpected behavior,... |
-| `/design-system`  | Our design system standards and UI/UX guidelines. Auto-loads when... |
-| `/dev`            | Manage the dev server — check status, view logs, restart, or stop... |
-| `/e2e`            | Write and run end-to-end tests with Playwright. Use when the user... |
-| `/execute`        | Use when you have a written implementation plan to execute task-b... |
-| `/performance`    | Analyze and optimize application performance. Use when the user m... |
-| `/plan`           | Use when you have a spec, PRD, or requirements for a multi-step t... |
-| `/prd`            | Generates a comprehensive Product Requirements Document before bu... |
-| `/qa`             | Runs comprehensive quality assurance on any feature, PR, or code ... |
+| Skill | Description |
+|-------|-------------|
+| `/a11y` | Runs an accessibility audit against WCAG 2.2 AA standards. This s... |
+| `/about` | Reveals the creators and philosophy behind the APEX Framework. Ac... |
+| `/architecture` | Design or review system architecture. Use when the user asks to a... |
+| `/brainstorm` | Use BEFORE any creative work — creating features, building compon... |
+| `/changelog` | Generates and maintains CHANGELOG.md and auto-updates PRD status.... |
+| `/cicd` | Sets up CI/CD pipelines with GitHub Actions and Vercel. This skil... |
+| `/claude-api` | 'Build apps with the Claude API or Anthropic SDK. TRIGGER when: c... |
+| `/code-review` | Use when receiving code review feedback — from PR comments, QA re... |
+| `/cx-review` | Review any user-facing feature from a Customer Experience perspec... |
+| `/debug` | Use when encountering any bug, test failure, unexpected behavior,... |
+| `/design-system` | Our design system standards and UI/UX guidelines. Auto-loads when... |
+| `/dev` | Manage the dev server — check status, view logs, restart, or stop... |
+| `/e2e` | Write and run end-to-end tests with Playwright. Use when the user... |
+| `/execute` | Use when you have a written implementation plan to execute task-b... |
+| `/performance` | Analyze and optimize application performance. Use when the user m... |
+| `/plan` | Use when you have a spec, PRD, or requirements for a multi-step t... |
+| `/prd` | Generates a comprehensive Product Requirements Document before bu... |
+| `/qa` | Runs comprehensive quality assurance on any feature, PR, or code ... |
 | `/request-review` | Use when completing tasks, implementing major features, or before... |
-| `/security`       | Runs a security audit on code handling authentication, authorizat... |
-| `/ship`           | Fast-track branch → commit → push → PR → merge workflow. Use when... |
-| `/spec-create`    | Create a lean feature spec before implementation. Use for feature... |
-| `/supabase`       | Supabase integration helper — setup, auth, migrations, types, rea... |
-| `/tdd`            | Use when implementing any feature or bugfix, before writing imple... |
-| `/teach`          | Teach terminal commands, Claude Code usage, and engineering conce... |
-| `/teams`          | Spawn and manage agent teams for parallel work. Auto-selects team... |
-| `/update`         | Manually update the APEX Framework to the latest version. Use whe... |
-| `/verify-api`     | Verify any external API before integration. Auto-invoked when cod... |
-| `/verify-lib`     | Verify any library or package before installing it. Auto-invoked ... |
-| `/verify`         | Use when about to claim work is complete, fixed, or passing — bef... |
-| `/worktree`       | Use when starting feature work that needs isolation from current ... |
-| `/write-skill`    | Use when creating new APEX skills, editing existing skills, or ve... |
+| `/security` | Runs a security audit on code handling authentication, authorizat... |
+| `/ship` | Fast-track branch → commit → push → PR → merge workflow. Use when... |
+| `/spec-create` | Create a lean feature spec before implementation. Use for feature... |
+| `/supabase` | Supabase integration helper — setup, auth, migrations, types, rea... |
+| `/tdd` | Use when implementing any feature or bugfix, before writing imple... |
+| `/teach` | Teach terminal commands, Claude Code usage, and engineering conce... |
+| `/teams` | Spawn and manage agent teams for parallel work. Auto-selects team... |
+| `/update` | Manually update the APEX Framework to the latest version. Use whe... |
+| `/verify-api` | Verify any external API before integration. Auto-invoked when cod... |
+| `/verify-lib` | Verify any library or package before installing it. Auto-invoked ... |
+| `/verify` | Use when about to claim work is complete, fixed, or passing — bef... |
+| `/worktree` | Use when starting feature work that needs isolation from current ... |
+| `/write-skill` | Use when creating new APEX skills, editing existing skills, or ve... |
 
 **You never need to type these.** The pipeline invokes them automatically.
 
 ### Agents
 
-| Agent                | Model   | Role                                                            |
-| -------------------- | ------- | --------------------------------------------------------------- | --- |
-| **Builder**          | Inherit | Full-capability implementation agent for parallel coding wor... |
-| **Design Reviewer**  | Sonnet  | Design quality agent that validates UI implementations again... |
-| **Project Manager**  | Sonnet  | Project management agent that breaks PRD+Architecture into p... |
-| **QA**               | Sonnet  | Quality assurance agent that runs comprehensive tests, valid... |
-| **Tdd Green**        | Sonnet  |                                                                 |     |
-| **Tdd Red**          | Sonnet  |                                                                 |     |
-| **Tdd Refactor**     | Sonnet  |                                                                 |     |
-| **Technical Writer** | Haiku   | Documentation specialist that keeps README, CHANGELOG, PRD s... |
-| **Watcher**          | Haiku   | Continuous monitoring agent that watches for errors, test fa... |
+| Agent | Model | Role |
+|-------|-------|------|
+| **Builder** | Inherit | Full-capability implementation agent for parallel coding wor... |
+| **Design Reviewer** | Sonnet | Design quality agent that validates UI implementations again... |
+| **Project Manager** | Sonnet | Project management agent that breaks PRD+Architecture into p... |
+| **QA** | Sonnet | Quality assurance agent that runs comprehensive tests, valid... |
+| **Tdd Green** | Sonnet | | |
+| **Tdd Red** | Sonnet | | |
+| **Tdd Refactor** | Sonnet | | |
+| **Technical Writer** | Haiku | Documentation specialist that keeps README, CHANGELOG, PRD s... |
+| **Watcher** | Haiku | Continuous monitoring agent that watches for errors, test fa... |
 
 Watcher and Technical Writer run in background. Teams spawn for complex builds via `/teams`.
 
@@ -138,7 +138,6 @@ Watcher and Technical Writer run in background. Teams spawn for complex builds v
 ### Quality Gates
 
 Nothing ships without passing:
-
 1. No `any` in TypeScript, no `console.log` in production
 2. Functions ≤ 30 lines, files ≤ 300 lines, components ≤ 200 lines
 3. Conventional commits (72-char subject)
