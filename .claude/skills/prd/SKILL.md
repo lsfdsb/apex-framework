@@ -186,16 +186,11 @@ Return a brief summary of key decisions, open questions, research items needed, 
 ### Step 8: Phase Transition
 After presenting the PRD, ask the user: "Approve this contract?"
 
-When the user approves, the Lead agent MUST immediately proceed to Phase 2 (Architect) by invoking the `/architecture` skill. Do NOT wait for the user to ask — the pipeline is autonomous. Announce:
-```
-⚔️ Phase 2: Architecture — "I have spoken."
-```
-Then invoke `/architecture` with the PRD as context.
+On approval, invoke `/architecture` with the PRD as context. The output style drives pipeline sequencing — this skill focuses on HOW to write the PRD.
 
 ## Integration
 
-- **Preceded by** `/brainstorm` for design exploration (iterative Q&A, 2-3 approaches)
-- **Followed by** `/architecture` (Phase 2) then `/plan` (Phase 3) for implementation breakdown
-- **References** `/verify-api` for each external integration identified
-- **References** `/verify-lib` for each dependency
-- **Uses** `/verify` before claiming the PRD is complete — check all sections are filled
+- **Preceded by** `/brainstorm` for design exploration
+- **Followed by** `/architecture` then `/plan`
+- **References** `/verify-api` and `/verify-lib` for each integration/dependency
+- **Uses** `/verify` before claiming the PRD is complete

@@ -114,8 +114,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$CLAUDE_PROJECT_DIR/.claude/scripts/auto-update.sh",
-            "timeout": 30
+            "command": "nohup bash $CLAUDE_PROJECT_DIR/.claude/scripts/auto-update.sh > /dev/null 2>&1 < /dev/null &",
+            "timeout": 5
           },
           {
             "type": "command",
@@ -239,30 +239,14 @@
         ]
       },
       {
-        "matcher": "TaskCreate|TaskUpdate",
+        "matcher": "TaskCreate|TaskUpdate|Agent|Skill|SendMessage",
         "hooks": [
           {
             "type": "command",
             "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/task-state-writer.sh",
             "timeout": 5,
-            "statusMessage": "Syncing task state to HUB..."
-          }
-        ]
-      },
-      {
-        "matcher": "Agent|SendMessage",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/agent-state-writer.sh",
-            "timeout": 5,
-            "statusMessage": "Syncing agent state to HUB..."
-          }
-        ]
-      },
-      {
-        "matcher": "Agent|Skill|TaskCreate|TaskUpdate",
-        "hooks": [
+            "statusMessage": "Syncing state to HUB..."
+          },
           {
             "type": "command",
             "command": "bash $CLAUDE_PROJECT_DIR/.claude/scripts/pipeline-state-writer.sh",

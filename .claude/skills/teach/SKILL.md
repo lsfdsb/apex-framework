@@ -1,6 +1,6 @@
 ---
 name: teach
-description: Teach the user terminal commands, Claude Code usage, and software engineering concepts. Use when the user asks "how do I", "what command", "explain", "teach me", "show me how", "what does this do", or seems confused about a terminal/coding concept. Also use proactively when running a command the user might not know. Goal is to make the user a senior-level engineer and reviewer over time.
+description: Teach terminal commands, Claude Code usage, and engineering concepts when user asks "how do I", "explain", "teach me", "show me how", or seems confused about a concept.
 ---
 
 # Terminal Teaching Mode
