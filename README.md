@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.23.0
+# ⚔️ APEX Framework v5.24.0
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.23.0           ║
+  ║         ⚔️  APEX Framework v5.24.0           ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -445,7 +445,7 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### Latest — v5.23.0 (2026-03-25)
+### Latest — v5.24.0 (2026-03-25)
 
 - **Apple EPM Honest Alignment** — CLAUDE.md now distinguishes between Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews), and Aspire (10-to-3-to-1) features (#210)
 - **ANPP vs Rules of the Road** — PM generates ANPP (development plan with milestones). Tech Writer generates Rules of the Road (launch checklist). Clear separation of concerns (#210)

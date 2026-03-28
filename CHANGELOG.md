@@ -6,52 +6,34 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Fixed — Agent Canvas Rendering + TypeScript Build (#237)
-- **Agent Canvas all 7 agents visible** — Fixed derivedAgents key mismatch (display name vs DRI key) and defaultViewport conflict with fitView, now correctly renders all Lead, Designer, Builder, QA, Project Manager, Design Reviewer, and Watcher agents (#237)
-- **TypeScript build errors (11 fixed)** — Resolved type mismatches in AgentNode.tsx, OpsContext.tsx, useCanvasData.ts, useSupabaseState.ts, and CanvasPage.tsx for strict mode compilation (#237)
-- **Canvas polish** — Added smoothstep edge rendering, proper MiniMap background, BackgroundVariant enum, prefers-reduced-motion respect, and user-local timezone in StatusBar (#237)
-- **QualityPage fallback logic** — Fixed conditional rendering and removed unused imports across ChangelogPage.tsx, ProjectsPage.tsx, and QualityPage.tsx (#237)
+## [5.24.0] — 2026-03-28 — Superpowers Integration + Mastery Guide Audit
 
-### Added — Supabase OPS Migration + Real-Time State Sync (#223)
-- **migration-v3-ops.sql** — 6 Supabase tables: sessions, tasks, agents, pipeline_phases, quality_gates, changelog_entries with enums, RLS policies, indexes, updated_at triggers, and RPC functions (get_active_session, get_session_tasks) (#223)
-- **OpsContext.tsx derivedAgents field** — Merges agents.json data with task-derived activity for accurate agent status in real-time (#223)
-- **AgentCard.tsx** — Extracted component displaying agent with mini task cards inline (new in Phase 1 Agent Reality Fix) (#223)
-- **AgentTaskCard.tsx** — Compact clickable task links nested inside agent cards for task/agent association visibility (#223)
-
-### Added — Task Tagging System
-- **Task tag badges** — `TaskTag` enum (feat/fix/refactor/docs/chore/perf/a11y/security/test), colored badge display on TaskCard adjacent to phase badge (7c09510)
-- **Tag resolution** — `resolveTag()` parses from task field or conventional commit prefix in title (e.g., "feat: ..." → feat tag) (7c09510)
-- **Accent color styles** — 9 tag types with semantic color-mix tokens (7c09510)
-
-### Changed — OPS Real-Time State Writers (#223)
-- **session-state-writer.sh** — Generates session UUID and dual-writes to Supabase sessions table (fixed: now reads hook JSON from STDIN via `INPUT=$(cat)` instead of missing CLAUDE_TOOL_NAME env vars) (#223)
-- **task-state-writer.sh** — Dual-writes to Supabase tasks table with session_id FK (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
-- **agent-state-writer.sh** — Dual-writes to Supabase agents table with session_id (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
-- **pipeline-state-writer.sh** — Dual-writes to Supabase pipeline_phases with session_id (fixed: stdin input pattern matching PostToolUse hook contract) (#223)
-- **AgentsPage.tsx** — Refactored 722→281 lines, now uses derivedAgents for real-time status instead of static task lookup (#223)
-
-### Fixed
-- **PostToolUse hooks critical bug** — All 3 state writers (task, agent, pipeline) were broken: they read from nonexistent `CLAUDE_TOOL_NAME` env vars instead of STDIN JSON. Claude Code passes hook data as JSON via stdin, not env vars. Fixed all 3 scripts to use `INPUT=$(cat)` + `jq -r '.tool_name'` pattern matching PreToolUse hook contract. This is why agents and tasks never appeared in OPS app in real-time (#223)
-- **task-state-writer.sh BSD sed compatibility** — Replaced sed alternation syntax with portable case statement for macOS (8f8eb0a)
-
-### Fixed — OPS Rebuild (#216–#220)
-- **Fake demo agents removed** — AgentsPage no longer shows pretend "active" agents in demo mode (#220)
-- **QualityPage color bug** — Fixed broken `${color}18` concatenation, now uses `color-mix()` (#219)
-- **Theme polish** — All hardcoded rgba replaced with `color-mix()` tokens, light mode sidebar tuned (#219)
-
-### Fixed — Audit Bug Fixes (#227)
-- **jq null crash in state writers** — agent-state-writer.sh, pipeline-state-writer.sh, and stop-gate.sh crashed when agents array was null/missing. Added `(.agents // [])` null guard pattern to all jq queries (#227)
-- **TaskDRI type incomplete** — Extended TaskDRI type to include all 7 agent DRI values: lead, designer, builder, qa, project-manager, design-reviewer, watcher (was missing 4 roles) (#227)
-- **migration-v3-ops.sql missing trigger function** — Migration would fail if run independently from v1 or v2. Added `set_updated_at()` function definition to migration for standalone execution (#227)
-- **PostToolUse hooks JSON validation** — Hooks crashed silently on empty or invalid stdin. Added JSON validation before parsing to provide clear error messages (#227)
-- **Hardcoded Tailwind palette colors in OPS** — AgentCard.tsx and AgentsPage.tsx used hardcoded hex colors (#22c55e green, #ef4444 red). Replaced with design tokens var(--success) and var(--destructive) for proper theming (#227)
+### Added
+- **10 new skills from Superpowers v5.0.6** — `/brainstorm`, `/plan`, `/execute`, `/debug`, `/tdd`, `/verify`, `/code-review`, `/request-review`, `/worktree`, `/write-skill` — all forked and adapted to APEX methodology (#238)
+- **Skill Discipline system** — output style merged with Superpowers skill-discovery methodology: decision flow, rationalization red flags, instruction priority, cross-cutting skills (#238)
+- **Companion files for /write-skill** — `persuasion-principles.md`, `testing-skills.md`, `anthropic-best-practices.md` (skill authoring references) (#240)
+- **find-polluter.sh** — bisection script for /debug to find which test creates state pollution (#240)
+- **Boxed APEX logo** — session intro now uses the framed logo from /about (#241)
 
 ### Changed
-- **.gitignore** — Added .claude/plans/ directory to ignore list (#223)
-- **OpsContext transformer types** — Updated to use generated Supabase Database types (SessionRow, TaskRow, AgentRow, etc.) instead of Record<string, unknown> for compile-time type safety (#227)
+- **CLAUDE.md rewritten** — 193 → 59 lines (-69%), added @import directives, compaction instruction, removed duplicated pipeline/EPM/agents sections (#242)
+- **Output style pipeline** — 7-phase state machine updated: Discover→Architect→Plan→Verify→Build→Quality→Ship with cross-cutting `/debug`, `/tdd`, `/verify`, `/code-review` (#238)
+- **Builder model** — `sonnet` → `inherit` (uses session model, typically Opus) (#242)
+- **Builder output format** — added structured completion template (Status/Files/Tests/Commit/Concerns) (#242)
+- **auto-update.sh** — now runs via nohup (non-blocking, 5s timeout instead of 30s) (#242)
+- **PostToolUse state writers** — consolidated 3 overlapping matchers into 1 (#242)
+- **4 existing skills enhanced** — `/prd`, `/qa`, `/ship`, `/teams` updated with integration sections referencing new skills (#238)
+- **About page** — 32 skills, 7-phase pipeline, categorized skill table, v5.22-5.24 history (#239)
+- **Skill count** — 22 → 32 skills. Framework fully self-sufficient from Superpowers plugin.
+- **teach skill description** — sharpened from 63 → 25 words (#242)
 
-### Fixed — Build Configuration (#223)
-- **pre-commit hook false positive** — Fixed incorrect flagging of .toml config files as Shell scripts (#223)
+### Fixed
+- **Agent Canvas all 7 agents visible** — Fixed derivedAgents key mismatch and defaultViewport conflict (#237)
+- **TypeScript build errors (11 fixed)** — Resolved type mismatches for strict mode (#237)
+- **Canvas MiniMap CSS vars** — proper background, smoothstep edges (#236)
+
+### Removed
+- **OPS showcase components** — removed Canvas, Hub, Pipeline, and 20+ unused components to focus on tokens page (#238)
 
 ## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
 
