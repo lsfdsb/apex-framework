@@ -78,6 +78,21 @@ When spawned as a teammate:
 4. Prefer tasks in ID order (lowest first) — earlier tasks set up context for later ones
 5. If no tasks are available, message the lead asking for assignment
 
+## TDD with Isolated Agents
+
+For **business logic tasks** (validation, calculations, state transitions, API handlers), you MUST use isolated TDD agents instead of writing tests and code in the same context:
+
+1. Dispatch `@tdd-red`: "Write failing tests for [behavior]. Spec: [requirements]."
+2. Review: Confirm tests FAIL for the expected reasons.
+3. Dispatch `@tdd-green`: "Make these failing tests pass: [test file path]."
+4. Review: Confirm ALL tests pass with minimal implementation.
+5. Dispatch `@tdd-refactor`: "Refactor [file paths] while keeping [test file] green."
+6. Review: Confirm tests still pass after cleanup.
+
+**Why isolation matters:** When test-writing and implementation happen in the same context, implementation "bleeds" into test logic — tests become rubber stamps. Isolated agents physically cannot see each other's work.
+
+**Skip agent isolation for:** UI-only components (styling, layout), configuration changes, documentation, and trivial one-line fixes. Even then, the Iron Law applies: failing test first.
+
 ## Workflow
 
 1. **Check TaskList** for assigned or available tasks

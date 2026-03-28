@@ -23,21 +23,22 @@ Preserve: current pipeline phase, active task IDs, pending quality gates, last 3
 6. CX review before users see it — `/cx-review` on user-facing changes
 7. Read before editing — always read existing files first
 8. Root cause only — `/debug` for systematic investigation, never band-aid
-9. TDD for all implementation — `/tdd` RED-GREEN-REFACTOR, no code without failing test
-10. Verify before claiming — `/verify` evidence before assertions
-11. Technical rigor on reviews — `/code-review` verify, don't agree blindly
-12. Only verified libraries — official publisher, maintained, no critical CVEs
+9. TDD for all implementation — `/tdd` RED-GREEN-REFACTOR with isolated agents (`@tdd-red` → `@tdd-green` → `@tdd-refactor`)
+10. Spec before multi-file features — `/spec-create` for lean specs, `/prd` for full apps. Specs persist in `docs/specs/`
+11. Verify before claiming — `/verify` evidence before assertions
+12. Technical rigor on reviews — `/code-review` verify, don't agree blindly
+13. Only verified libraries — official publisher, maintained, no critical CVEs
 
 ## Practices
 
-13. Design tokens only — never hardcode Tailwind palette colors, read design system first
-14. Branding sweep — grep for template branding after scaffolding, replace ALL instances
-15. Persona→page alignment — every page serves ONE primary persona
-16. Default isolation: none — worktrees only for 2+ parallel builders on SAME files
-17. Design DNA before UI — read matching template from `docs/design-dna/templates/`
-18. Reuse before create — search for existing components, 3 similar files = failure
-19. Mobile-first + dual theme — 320px up, dark AND light from day one
-20. Performance by default — lazy routes, virtualize 100+ lists, no N+1, paginate 20+
+14. Design tokens only — never hardcode Tailwind palette colors, read design system first
+15. Branding sweep — grep for template branding after scaffolding, replace ALL instances
+16. Persona→page alignment — every page serves ONE primary persona
+17. Default isolation: none — worktrees only for 2+ parallel builders on SAME files
+18. Design DNA before UI — read matching template from `docs/design-dna/templates/`
+19. Reuse before create — search for existing components, 3 similar files = failure
+20. Mobile-first + dual theme — 320px up, dark AND light from day one
+21. Performance by default — lazy routes, virtualize 100+ lists, no N+1, paginate 20+
 
 ## Code Standards
 

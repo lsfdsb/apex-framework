@@ -67,17 +67,44 @@ if echo "$RESPONSE" | grep -qiE '(documentation|readme|changelog|\.md|comment|ty
 fi
 
 if [ "$WROTE_CODE" = true ] && [ "$TESTS_RAN" = false ] && [ "$EXEMPT" = false ]; then
-  echo ""
-  echo "┌──────────────────────────────────────────────────────────────┐"
-  echo "│  APEX STOP GATE                                              │"
-  echo "│                                                              │"
-  echo "│  Code was written but no tests were run.                     │"
-  echo "│  Our rule: no code ships without tests.                      │"
-  echo "│                                                              │"
-  echo "│  Run 'npm run test' or '/qa' before continuing.              │"
-  echo "│  If tests aren't applicable, mention why explicitly.         │"
-  echo "└──────────────────────────────────────────────────────────────┘"
-  echo ""
+  # Check if the project has a test runner — hard gate only when tests are available
+  PROJECT_DIR="${CLAUDE_PROJECT_DIR:-$(git rev-parse --show-toplevel 2>/dev/null || pwd)}"
+  HAS_TEST_RUNNER=false
+  if [ -f "$PROJECT_DIR/package.json" ] && grep -q '"test"' "$PROJECT_DIR/package.json" 2>/dev/null; then
+    # Verify the test script isn't a no-op placeholder
+    TEST_SCRIPT=$(jq -r '.scripts.test // ""' "$PROJECT_DIR/package.json" 2>/dev/null)
+    if [ -n "$TEST_SCRIPT" ] && ! echo "$TEST_SCRIPT" | grep -qE '^(echo|exit|no test)'; then
+      HAS_TEST_RUNNER=true
+    fi
+  fi
+
+  if [ "$HAS_TEST_RUNNER" = true ]; then
+    # HARD GATE: Project has tests. Code was written without running them.
+    echo ""
+    echo "┌──────────────────────────────────────────────────────────────┐"
+    echo "│  ⛔ APEX STOP GATE — BLOCKED                                │"
+    echo "│                                                              │"
+    echo "│  Code was written but no tests were run.                     │"
+    echo "│  The Creed: never ship untested code. This is the Way.       │"
+    echo "│                                                              │"
+    echo "│  Run tests now. This gate will not open until you do.        │"
+    echo "│  If tests aren't applicable, explain why explicitly.         │"
+    echo "└──────────────────────────────────────────────────────────────┘"
+    echo ""
+    exit 2
+  else
+    # SOFT NUDGE: No test runner detected — remind but don't block
+    echo ""
+    echo "┌──────────────────────────────────────────────────────────────┐"
+    echo "│  APEX STOP GATE                                              │"
+    echo "│                                                              │"
+    echo "│  Code was written but no tests were run.                     │"
+    echo "│  Consider adding a test runner and writing tests.            │"
+    echo "│                                                              │"
+    echo "│  No test runner detected — allowing stop (soft nudge).       │"
+    echo "└──────────────────────────────────────────────────────────────┘"
+    echo ""
+  fi
 fi
 
 # Check if .claude/ files were changed but CHANGELOG was not updated
