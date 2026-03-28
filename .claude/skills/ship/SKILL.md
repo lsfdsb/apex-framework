@@ -132,6 +132,30 @@ After successful merge, auto-version the release:
 
 4. Report the new version to the user.
 
+## Pre-Ship Verification
+
+Before offering ship options, use `/verify`:
+
+1. **Run test suite** — all tests must pass. No exceptions.
+2. **Run linter** — zero errors.
+3. **Run build** — exits 0.
+4. If ANY check fails: fix first, don't proceed.
+
+## Branch Completion Options
+
+When implementation is complete and verified, present exactly these options:
+
+```
+Implementation complete and verified. What would you like to do?
+
+1. Push and create a Pull Request (recommended)
+2. Merge back to <base-branch> locally
+3. Keep the branch as-is (you'll handle it)
+4. Discard this work
+```
+
+**Option 4 requires typed confirmation:** "This will permanently delete branch and all commits. Type 'discard' to confirm."
+
 ## Rules
 
 1. **Never push to main directly** — always branch first
@@ -141,3 +165,12 @@ After successful merge, auto-version the release:
 5. **72-char subject lines** — enforced by commit-msg hook
 6. **Squash merge** — clean history, delete branch
 7. **Auto-version after merge** — `chore(release):` micro-PR promotes [Unreleased] to semver
+8. **Verify before ship** — use `/verify` to prove tests pass, build succeeds. Evidence before claims.
+9. **Review before merge** — use `/request-review` for code review on significant changes
+
+## Integration
+
+- **Preceded by** `/execute` or `/teams` build completion, then `/request-review`
+- **Uses** `/verify` for pre-ship verification
+- **Uses** `/code-review` when handling PR feedback
+- **Cleans up** `/worktree` if isolation was used

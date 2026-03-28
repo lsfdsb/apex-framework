@@ -191,3 +191,11 @@ When the user approves, the Lead agent MUST immediately proceed to Phase 2 (Arch
 ⚔️ Phase 2: Architecture — "I have spoken."
 ```
 Then invoke `/architecture` with the PRD as context.
+
+## Integration
+
+- **Preceded by** `/brainstorm` for design exploration (iterative Q&A, 2-3 approaches)
+- **Followed by** `/architecture` (Phase 2) then `/plan` (Phase 3) for implementation breakdown
+- **References** `/verify-api` for each external integration identified
+- **References** `/verify-lib` for each dependency
+- **Uses** `/verify` before claiming the PRD is complete — check all sections are filled

@@ -411,6 +411,73 @@ User: "Build the authentication flow with OAuth"
     all green → qa approves → lead ships
 ```
 
+## Subagent-Driven Development (SDD) Mode
+
+When tasks are mostly independent and you want maximum quality, use the SDD pattern:
+**Fresh subagent per task + two-stage review (spec compliance → code quality) = high quality, fast iteration.**
+
+### The SDD Loop
+
+```
+For each task:
+  1. Dispatch implementer subagent (builder)
+  2. Implementer implements, tests, commits, self-reviews
+  3. Dispatch spec reviewer → Does code match the spec? (nothing more, nothing less)
+  4. If spec issues → implementer fixes → re-review
+  5. Dispatch code quality reviewer → Is it well-built?
+  6. If quality issues → implementer fixes → re-review
+  7. Mark task complete
+```
+
+**Spec review BEFORE quality review.** Building the wrong thing well is still wrong.
+
+### Implementer Status Handling
+
+Implementers report one of four statuses:
+
+| Status | Action |
+|--------|--------|
+| **DONE** | Proceed to spec review |
+| **DONE_WITH_CONCERNS** | Read concerns, address if correctness/scope, then review |
+| **NEEDS_CONTEXT** | Provide missing context, re-dispatch |
+| **BLOCKED** | Context problem → provide more. Task too hard → re-dispatch with more capable model. Plan wrong → escalate to user |
+
+**Never** ignore an escalation or force the same model to retry without changes.
+
+### Model Selection for SDD
+
+Use the least powerful model that can handle each role:
+
+| Task Type | Model | Examples |
+|-----------|-------|---------|
+| Mechanical implementation | haiku/sonnet | Isolated functions, clear specs, 1-2 files |
+| Integration and judgment | sonnet | Multi-file coordination, pattern matching |
+| Architecture, design, review | opus | Design decisions, broad codebase understanding |
+
+### Spec Compliance Review Template
+
+```
+Verify implementation matches specification — nothing more, nothing less.
+
+DO NOT trust the implementer's report. Read the actual code.
+Compare actual implementation to requirements line by line.
+
+Report:
+- ✅ Spec compliant (after code inspection)
+- ❌ Issues: [what's missing or extra, with file:line references]
+```
+
+### Code Quality Review Template
+
+After spec compliance passes, review for:
+- Clean separation of concerns
+- Proper error handling and type safety
+- DRY, edge cases handled
+- Tests verify real behavior (not mocks)
+- No scope creep, no over-engineering
+
+Categorize: **Critical** (must fix) → **Important** (should fix) → **Minor** (nice to have)
+
 ## Rules
 
 1. **Watcher is always first** — Start monitoring before any changes
@@ -427,3 +494,6 @@ User: "Build the authentication flow with OAuth"
 12. **Design review on UI** — If the task creates .tsx/.jsx files, QA MUST check Design DNA compliance
 13. **QA is a gate, not optional** — No task is marked complete without QA verification. If QA wasn't invoked, the task is NOT done
 14. **Verify APIs before integration** — If a task involves external APIs, use WebSearch to verify docs BEFORE builder starts
+15. **Use `/tdd` for all implementation** — Builders follow RED-GREEN-REFACTOR. No production code without a failing test first
+16. **Use `/verify` before completion claims** — Evidence before assertions. Run the command, read the output, THEN claim success
+17. **Use `/debug` for systematic investigation** — When builds break, don't guess. Root cause first, fix second

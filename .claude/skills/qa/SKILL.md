@@ -224,3 +224,13 @@ Any count claim that differs from the actual file count = WARNING.
 ### Verdict
 [Summary and recommendation]
 ```
+
+## Integration
+
+- **Uses** `/verify` before claiming any phase passes — evidence before assertions
+- **Uses** `/tdd` — if test gaps found, suggest TDD approach for missing tests
+- **Uses** `/debug` — if a test failure is found during QA, use systematic debugging
+- **Triggers** `/security` automatically if code touches auth, payments, PII
+- **Triggers** `/a11y` automatically if code has UI components
+- **Preceded by** `/execute` or `/teams` build completion
+- **Followed by** `/request-review` then `/ship`
