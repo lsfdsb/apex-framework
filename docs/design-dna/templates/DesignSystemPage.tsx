@@ -139,6 +139,67 @@ const zLayers = [
   { z: 999, layer: "Toast", use: "Notifications, urgent alerts" },
 ];
 
+const breakpoints = [
+  { px: 640, tw: "sm:", label: "Mobile landscape" },
+  { px: 768, tw: "md:", label: "Tablet portrait" },
+  { px: 1024, tw: "lg:", label: "Laptop" },
+  { px: 1280, tw: "xl:", label: "Desktop" },
+  { px: 1536, tw: "2xl:", label: "Wide desktop" },
+];
+
+const combos = [
+  {
+    name: "Card",
+    tokens: "--bg-elevated + --border + --radius + --shadow-sm",
+    css: "background: var(--bg-elevated);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 2px 8px rgba(0,0,0,0.12);",
+    render: (
+      <div style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", boxShadow: "0 2px 8px rgba(0,0,0,0.12)", padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Card title</div>
+        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Supporting text lives here.</div>
+      </div>
+    ),
+  },
+  {
+    name: "Input",
+    tokens: "--bg-surface + --border + --radius-sm + --text",
+    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius-sm, 8px);\npadding: 10px 14px;\ncolor: var(--text);",
+    render: (
+      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-sm, 8px)", padding: "10px 14px", color: "var(--text)", fontSize: 13 }}>
+        <span style={{ color: "var(--text-muted)" }}>Enter something...</span>
+      </div>
+    ),
+  },
+  {
+    name: "Badge",
+    tokens: "--accent-glow + --accent + 4px radius",
+    css: "background: var(--accent-glow);\ncolor: var(--accent);\nborder-radius: 4px;\npadding: 2px 8px;\nfont-weight: 600;",
+    render: (
+      <span style={{ background: "var(--accent-glow)", color: "var(--accent)", borderRadius: 4, padding: "2px 8px", fontWeight: 600, fontSize: 11 }}>Badge</span>
+    ),
+  },
+  {
+    name: "Muted Block",
+    tokens: "--bg-surface + --text-muted + --border",
+    css: "background: var(--bg-surface);\nborder: 1px solid var(--border);\nborder-radius: var(--radius, 12px);\ncolor: var(--text-muted);",
+    render: (
+      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", padding: 16, color: "var(--text-muted)", fontSize: 12 }}>
+        Supplementary information or a subtle callout.
+      </div>
+    ),
+  },
+  {
+    name: "Glass Floating",
+    tokens: "--bg-elevated + --shadow-lg + backdrop-filter",
+    css: "background: color-mix(in srgb, var(--bg-elevated) 85%, transparent);\nbackdrop-filter: blur(20px) saturate(1.4);\nborder: 1px solid color-mix(in srgb, var(--text-muted) 12%, transparent);\nborder-radius: var(--radius, 12px);\nbox-shadow: 0 8px 32px rgba(0,0,0,0.18);",
+    render: (
+      <div style={{ background: "color-mix(in srgb, var(--bg-elevated) 85%, transparent)", backdropFilter: "blur(20px) saturate(1.4)", WebkitBackdropFilter: "blur(20px) saturate(1.4)", border: "1px solid color-mix(in srgb, var(--text-muted) 12%, transparent)", borderRadius: "var(--radius, 12px)", boxShadow: "0 8px 32px rgba(0,0,0,0.18)", padding: 20 }}>
+        <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 4 }}>Floating panel</div>
+        <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>Glass morphism with depth.</div>
+      </div>
+    ),
+  },
+];
+
 function Label({ children }: { children: string }) {
   return <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", fontWeight: 500, marginBottom: 12 }}>{children}</div>;
 }
@@ -252,7 +313,7 @@ export default function DesignSystemPage() {
           <h1 className="reveal reveal-delay-1" style={{ fontFamily: "var(--font-display)", fontSize: "clamp(48px, 7vw, 80px)", fontWeight: 400, letterSpacing: "-0.04em", lineHeight: 1 }}>
             The system<br />behind the <em style={{ fontStyle: "italic", color: "var(--accent)" }}>soul.</em>
           </h1>
-          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Tokens, type, color, space, motion. The invisible rules that make everything feel intentional.</p>
+          <p className="reveal reveal-delay-2" style={{ fontSize: 18, color: "var(--text-secondary)", fontWeight: 300, maxWidth: 480, margin: "24px auto 0" }}>Every token you need to build. Copy, compose, ship.</p>
         </div>
       </section>
 
@@ -485,6 +546,47 @@ export default function DesignSystemPage() {
                   <span style={{ fontSize: 13, fontWeight: 600 }}>{l.layer}</span>
                 </div>
                 <span style={{ fontSize: 11, color: "var(--text-muted)" }}>{l.use}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ BREAKPOINTS ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Breakpoints" title="Responsive by design." sub="Mobile-first. Every layout starts at 320px and scales up." /></div>
+          <div className="reveal reveal-delay-1" style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {breakpoints.map(({ px, tw, label }) => (
+              <div key={px} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <span style={{ minWidth: 50, fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--accent)", fontWeight: 700, textAlign: "right" }}>{tw}</span>
+                <div style={{ flex: 1, position: "relative", height: 32, borderRadius: 8, overflow: "hidden", background: "var(--bg-surface)", border: "1px solid var(--border)" }}>
+                  <div style={{ height: "100%", width: `${(px / 1536) * 100}%`, background: "color-mix(in srgb, var(--accent) 20%, transparent)", borderRadius: 8, display: "flex", alignItems: "center", paddingLeft: 12 }}>
+                    <span style={{ fontSize: 11, fontWeight: 500 }}>{label}</span>
+                  </div>
+                </div>
+                <CopyToken value={`${px}px`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ COMPOSITION ═══ */}
+      <section style={{ padding: "100px 32px" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+          <div className="reveal"><SH label="Composition" title="Tokens in action." sub="Copy these combos to build faster. Each one is a production-ready pattern." /></div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 16 }}>
+            {combos.map((c, i) => (
+              <div key={c.name} className={`reveal${i < 4 ? ` reveal-delay-${(i % 3) + 1}` : ""}`} style={{ background: "var(--bg-elevated)", border: "1px solid var(--border)", borderRadius: "var(--radius, 12px)", overflow: "hidden" }}>
+                <div style={{ padding: 20 }}>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                    <span style={{ fontSize: 14, fontWeight: 600 }}>{c.name}</span>
+                    <CopyToken value={c.css}>copy css</CopyToken>
+                  </div>
+                  <div style={{ marginBottom: 12 }}>{c.render}</div>
+                  <div style={{ fontSize: 10, fontFamily: "var(--font-mono)", color: "var(--text-muted)", lineHeight: 1.6 }}>{c.tokens}</div>
+                </div>
               </div>
             ))}
           </div>
