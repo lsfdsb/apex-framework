@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.24.0
+# ⚔️ APEX Framework v6.0.1
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.24.0           ║
+  ║         ⚔️  APEX Framework v6.0.1            ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -244,16 +244,15 @@ Layer 3: Hook scripts (runtime enforcement)
 The bar at the bottom of your terminal shows real-time session data:
 
 ```
-⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
+⚔️ APEX v6.0.1 ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% of 1.0M ┃ +150/-20 ┃ 15m
 ```
 
-| Segment             | What it means                                                                   |
-| ------------------- | ------------------------------------------------------------------------------- |
-| `opus MAX`          | Which AI model is active + your plan tier (MAX shown only after first API call) |
-| `🟢 ████░░░░░░ 42%` | How full the context window is (🟢 green / 🟡 yellow >60% / 🔴 red >80%)        |
-| `420.0K/1.0M`       | Tokens used / total available                                                   |
-| `+150/-20 (+130)`   | Lines of code added / removed (hidden until first change)                       |
-| `15m`               | Session duration                                                                |
+| Segment                     | What it means                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `opus MAX`                  | Which AI model is active + your plan tier (MAX shown only after first API call) |
+| `🟢 ████░░░░░░ 42% of 1.0M` | How full the context window is (🟢 green / 🟡 yellow >60% / 🔴 red >80%)        |
+| `+150/-20`                  | Lines of code added / removed (hidden until first change)                       |
+| `15m`                       | Session duration                                                                |
 
 When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space. At cold start (before first API call), context shows `🟢 ready` instead of zeros.
 
@@ -418,16 +417,15 @@ APEX has 3 layers of protection running automatically:
 The statusline at the bottom shows real-time session data:
 
 ```
-⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
+⚔️ APEX v6.0.1 ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% of 1.0M ┃ +150/-20 ┃ 15m
 ```
 
-| Segment             | Meaning                                  |
-| ------------------- | ---------------------------------------- |
-| `opus MAX`          | Current model + plan                     |
-| `🟢 ████░░░░░░ 42%` | Context window health (green/yellow/red) |
-| `420.0K/1.0M`       | Tokens used / total window               |
-| `+150/-20 (+130)`   | Lines added / removed (net change)       |
-| `15m`               | Session duration                         |
+| Segment                     | Meaning                                  |
+| --------------------------- | ---------------------------------------- |
+| `opus MAX`                  | Current model + plan                     |
+| `🟢 ████░░░░░░ 42% of 1.0M` | Context window health (green/yellow/red) |
+| `+150/-20`                  | Lines added / removed                    |
+| `15m`                       | Session duration                         |
 
 When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
@@ -452,15 +450,11 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Changelog
 
-### Latest — v5.24.0 (2026-03-25)
+### Latest — v6.0.1 (2026-03-29)
 
-- **Apple EPM Honest Alignment** — CLAUDE.md now distinguishes between Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews), and Aspire (10-to-3-to-1) features (#210)
-- **ANPP vs Rules of the Road** — PM generates ANPP (development plan with milestones). Tech Writer generates Rules of the Road (launch checklist). Clear separation of concerns (#210)
-- **Seven Elements as Real Exit Criteria** — QA agent verifies each element (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration) with concrete questions, not just labels (#210)
-- **Builder Quality-During-Build** — Builders self-verify with demo-first protocol during implementation, not just at pre-completion (#210)
-- **DRI Decision Ownership** — All agents own decisions transparently. Paired Design Review adds brainstorm + production passes (#210)
-- **Tech Writer Rules of the Road Template** — 12-point launch verification matrix in Phase 7 (#210)
-- **Dead Reference Cleanup** — Removed health-check.sh and stale HTML/CSS references; memory audit complete (#210)
+- **APEX Ops v6.0** — next-forge monorepo scaffold (7 apps + 7 packages), Design DNA bridge, app-level CLAUDE.md templates
+- **StatusLine v4** — removed token count display, cleaner context bar showing `% of [size]`
+- **Version sync** — all version references aligned to 6.0.1 (README, package.json, VERSION, about skill)
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 
