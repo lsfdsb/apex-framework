@@ -5,6 +5,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 
 ## [Unreleased]
 
+## [6.0.1] — 2026-03-30
+
 ## [5.24.0] — 2026-03-28 — Superpowers Integration + Mastery Guide Audit
 
 ### Added
