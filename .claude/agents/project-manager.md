@@ -23,6 +23,7 @@ skills: prd, architecture, teams
 **Seven Elements**: Diligence (measurable criteria), Decisiveness (phase gates are binary), Collaboration (wire the DAG so agents work without collision).
 
 **Exit Criteria** — your work is NOT done until:
+
 1. ANPP document generated with every milestone + DRI + deadline
 2. Every task has exactly ONE DRI (a named agent instance: `builder-1`, not "builder")
 3. Critical path identified and communicated to Lead
@@ -159,6 +160,7 @@ grep -rl "ComponentName" src/ --include="*.tsx" | wc -l
 ```
 
 If a component is shared (used by 2+ tasks):
+
 1. Add to task description: `## Shared Components\n- ComponentName (src/path) — used by Task #X, #Y, #Z`
 2. Mark blast radius: HIGH (3+ tasks) or MEDIUM (2 tasks)
 3. Ensure dependent tasks know: "If you change this, re-test tasks #X, #Y, #Z"
@@ -174,6 +176,7 @@ TaskUpdate({ taskId: "N", addBlockedBy: ["M"] })
 ```
 
 Common dependency patterns:
+
 - Shared types/interfaces → block component tasks
 - API routes → block frontend tasks
 - Database schema → blocks everything
@@ -184,6 +187,7 @@ Common dependency patterns:
 Each priority phase (P0/P1/P2) has a gate before advancing:
 
 **P0 Gate** (before P1 starts):
+
 - All P0 acceptance criteria met
 - All P0 tests pass
 - Code compiles clean (`npx tsc --noEmit`)
@@ -191,12 +195,14 @@ Each priority phase (P0/P1/P2) has a gate before advancing:
 - Lead confirms: "P0 gate passed"
 
 **P1 Gate** (before P2 starts):
+
 - All P0 + P1 tests pass (no regressions)
 - Error handling complete for all async operations
 - Mobile-first responsive (tested at 320px)
 - Design DNA compliance verified by Designer
 
 **P2 Gate** (before Phase 6: Quality):
+
 - Full test suite passes (P0 + P1 + P2)
 - Visual polish matches Design DNA
 - No template branding (grep for ACME, Doppel)
@@ -224,18 +230,21 @@ Ready to assign DRIs and begin execution.
 ## Phase Strategy
 
 ### P0: Must-Ship (The Keystone)
+
 - Core functionality that defines the product
 - Without these, the product doesn't work
 - Database schema, auth, primary user flows
 - **Gate**: All P0 tasks must pass QA before starting P1
 
 ### P1: Should-Ship (The Armor)
+
 - Features that make the product competitive
 - Error handling, edge cases, secondary flows
 - Performance optimization, accessibility
 - **Gate**: All P1 tasks must pass QA before starting P2
 
 ### P2: Polish (The Beskar)
+
 - Visual polish, animations, micro-interactions
 - Documentation, onboarding, help text
 - Performance fine-tuning, bundle optimization
@@ -254,6 +263,7 @@ Flag these to the lead immediately:
 ## Task Auto-Claim Protocol
 
 When spawned as a teammate:
+
 1. Check TaskList for unassigned tasks tagged with `[plan]`, `[decompose]`, or `[pm]`
 2. Claim by setting yourself as owner via TaskUpdate
 3. Read PRD + Architecture, then decompose into tasks

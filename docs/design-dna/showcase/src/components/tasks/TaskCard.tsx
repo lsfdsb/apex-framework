@@ -5,15 +5,23 @@ import { TaskDetail } from "./TaskDetail";
 // ── Tag badge colors ────────────────────────────────────────────────────────
 
 const TAG_STYLE: Record<TaskTag, { label: string; color: string; bg: string }> = {
-  feat:     { label: "feat",     color: "var(--accent)",                bg: "color-mix(in srgb, var(--accent) 12%, transparent)" },
-  fix:      { label: "fix",      color: "var(--destructive)",           bg: "color-mix(in srgb, var(--destructive) 12%, transparent)" },
-  refactor: { label: "refactor", color: "var(--warning)",               bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
-  docs:     { label: "docs",     color: "var(--info, #60a5fa)",         bg: "color-mix(in srgb, var(--info, #60a5fa) 12%, transparent)" },
-  chore:    { label: "chore",    color: "var(--text-muted)",            bg: "color-mix(in srgb, var(--text-muted) 12%, transparent)" },
-  perf:     { label: "perf",     color: "var(--success)",               bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
-  a11y:     { label: "a11y",     color: "var(--success)",               bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
-  security: { label: "security", color: "var(--destructive)",           bg: "color-mix(in srgb, var(--destructive) 12%, transparent)" },
-  test:     { label: "test",     color: "var(--warning)",               bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
+  feat: { label: "feat", color: "var(--accent)", bg: "color-mix(in srgb, var(--accent) 12%, transparent)" },
+  fix: { label: "fix", color: "var(--destructive)", bg: "color-mix(in srgb, var(--destructive) 12%, transparent)" },
+  refactor: { label: "refactor", color: "var(--warning)", bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
+  docs: {
+    label: "docs",
+    color: "var(--info, #60a5fa)",
+    bg: "color-mix(in srgb, var(--info, #60a5fa) 12%, transparent)",
+  },
+  chore: { label: "chore", color: "var(--text-muted)", bg: "color-mix(in srgb, var(--text-muted) 12%, transparent)" },
+  perf: { label: "perf", color: "var(--success)", bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
+  a11y: { label: "a11y", color: "var(--success)", bg: "color-mix(in srgb, var(--success) 12%, transparent)" },
+  security: {
+    label: "security",
+    color: "var(--destructive)",
+    bg: "color-mix(in srgb, var(--destructive) 12%, transparent)",
+  },
+  test: { label: "test", color: "var(--warning)", bg: "color-mix(in srgb, var(--warning) 12%, transparent)" },
 };
 
 /** Extract tag from title prefix (e.g., "feat: add X" → "feat") or use explicit tag field. */
@@ -140,9 +148,7 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
     overflow: "hidden",
     cursor: "pointer",
     transition: "all 0.25s cubic-bezier(0.22,1,0.36,1)",
-    boxShadow: isInProgress
-      ? "0 0 0 1px var(--accent), 0 0 16px var(--accent-glow)"
-      : "0 2px 8px rgba(0,0,0,0.12)",
+    boxShadow: isInProgress ? "0 0 0 1px var(--accent), 0 0 16px var(--accent-glow)" : "0 2px 8px rgba(0,0,0,0.12)",
   };
 
   return (
@@ -178,13 +184,7 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
               flexShrink: 0,
               letterSpacing: "0.06em",
             }}
-            title={
-              task.phase === "P0"
-                ? "P0 — Must ship"
-                : task.phase === "P1"
-                ? "P1 — Should ship"
-                : "P2 — Polish"
-            }
+            title={task.phase === "P0" ? "P0 — Must ship" : task.phase === "P1" ? "P1 — Should ship" : "P2 — Polish"}
           >
             {task.phase}
           </span>
@@ -248,11 +248,7 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
                   height: "100%",
                   width: `${progressPct}%`,
                   background:
-                    progressPct === 100
-                      ? "var(--success)"
-                      : isInProgress
-                      ? "var(--accent)"
-                      : "var(--text-muted)",
+                    progressPct === 100 ? "var(--success)" : isInProgress ? "var(--accent)" : "var(--text-muted)",
                   borderRadius: "var(--radius-full)",
                   transition: "width 0.4s ease",
                 }}
@@ -281,20 +277,20 @@ export function TaskCard({ task, autoExpand = false }: TaskCardProps) {
                     gate.status === "passed"
                       ? "color-mix(in srgb, var(--success) 12%, transparent)"
                       : gate.status === "failed"
-                      ? "color-mix(in srgb, var(--destructive) 12%, transparent)"
-                      : "color-mix(in srgb, var(--text-muted) 10%, transparent)",
+                        ? "color-mix(in srgb, var(--destructive) 12%, transparent)"
+                        : "color-mix(in srgb, var(--text-muted) 10%, transparent)",
                   color:
                     gate.status === "passed"
                       ? "var(--success)"
                       : gate.status === "failed"
-                      ? "var(--destructive)"
-                      : "var(--text-muted)",
+                        ? "var(--destructive)"
+                        : "var(--text-muted)",
                   border: `1px solid ${
                     gate.status === "passed"
                       ? "color-mix(in srgb, var(--success) 25%, transparent)"
                       : gate.status === "failed"
-                      ? "color-mix(in srgb, var(--destructive) 25%, transparent)"
-                      : "color-mix(in srgb, var(--text-muted) 15%, transparent)"
+                        ? "color-mix(in srgb, var(--destructive) 25%, transparent)"
+                        : "color-mix(in srgb, var(--text-muted) 15%, transparent)"
                   }`,
                   letterSpacing: "0.04em",
                 }}

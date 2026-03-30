@@ -15,6 +15,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Whitespace is not empty space — it's breathing room. It creates hierarchy, guides the eye, and signals quality. Cramped layouts signal "we had too much to say and not enough design skill to organize it."
 
 **How to apply**:
+
 - Cards: `p-6` minimum (24px). Never `p-2` or `p-3` for content cards
 - Sections: `py-12` to `py-16` between major sections (48-64px)
 - Page margins: `px-4` mobile, `px-8` desktop minimum
@@ -32,6 +33,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Typography hierarchy guides the eye. When everything is a different size, nothing stands out. The brain can process 3 levels of hierarchy instantly; beyond that, it scans randomly.
 
 **How to apply**:
+
 - **Display** (24-48px): Page title, hero headline. ONE per view
 - **Body** (14-16px): Content text, descriptions, form labels
 - **Caption** (11-12px): Metadata, timestamps, badges, labels
@@ -48,6 +50,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Accent color creates focal points. When everything is accented, nothing is. The power of accent comes from scarcity. A single amber button on a neutral page screams "click me." Ten amber elements on the same page scream "carnival."
 
 **How to apply**:
+
 - Primary CTA button: accent
 - Active nav item: accent
 - Important badge or indicator: accent
@@ -65,6 +68,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Motion guides attention. When everything moves, the eye doesn't know where to look. Continuous animations (pulse, spin, shimmer) are attention thieves — use them only for truly important state changes (loading, new notification).
 
 **How to apply**:
+
 - **Page load**: apex-enter + stagger delays. Fires once. This is free
 - **Hover**: Subtle transform (translateY -2px, scale 1.02). This is free — it's user-initiated
 - **Continuous**: Maximum 1 per viewport (e.g., a loading spinner OR a pulse notification dot, not both)
@@ -102,6 +106,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Empty states are the first thing new users see. "No data found" tells the user nothing. "You haven't added any contacts yet — import your first batch to get started" tells them what to do and makes the product feel alive.
 
 **How to apply**:
+
 ```tsx
 // GOOD
 <EmptyState
@@ -126,6 +131,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Inconsistent border-radius is the #1 tell that multiple people (or multiple AI sessions) built the UI. Some cards with 4px, others with 8px, buttons with 12px, badges with 999px — it looks assembled, not designed.
 
 **How to apply**:
+
 - **Small** (`--radius-sm`: 8px): Badges, inputs, small interactive elements
 - **Default** (`--radius`: 12px): Cards, panels, modals, dropdowns
 - **Full** (`--radius-full`: 9999px): Pills, avatar circles, toggle switches
@@ -142,6 +148,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: A CEO looking at revenue metrics has a fundamentally different mental model than an agent working through a contact queue. Mixing these creates cognitive overload — the CEO sees clutter they don't need, and the agent can't find their tools.
 
 **How to apply**:
+
 - Check the architecture's Persona → Page Map before building
 - Dashboard page → Leadership persona → KPIs, charts, trends
 - Pipeline page → Agent persona → Kanban, queue, contact cards
@@ -159,6 +166,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: Layout shifts during loading destroy perceived performance. When content "jumps" as it loads, users feel the app is broken even if it's fast. Skeleton screens preserve the layout and signal "content is coming" without jarring shifts.
 
 **How to apply**:
+
 - **Content areas**: Skeleton shimmer that matches the shape of what will load
 - **Buttons**: Disable + show spinner inside the button (same dimensions)
 - **Tables**: Skeleton rows with the same column widths as real data
@@ -167,19 +175,21 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 
 ```tsx
 // GOOD — skeleton matches final layout
-{isLoading ? (
-  <div className="space-y-3">
-    <Skeleton className="h-8 w-48" />
-    <Skeleton className="h-4 w-full" />
-    <Skeleton className="h-4 w-3/4" />
-  </div>
-) : (
-  <div className="space-y-3">
-    <h2 className="text-2xl font-bold">{title}</h2>
-    <p>{description}</p>
-    <p>{details}</p>
-  </div>
-)}
+{
+  isLoading ? (
+    <div className="space-y-3">
+      <Skeleton className="h-8 w-48" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-3/4" />
+    </div>
+  ) : (
+    <div className="space-y-3">
+      <h2 className="text-2xl font-bold">{title}</h2>
+      <p>{description}</p>
+      <p>{details}</p>
+    </div>
+  );
+}
 ```
 
 **Anti-pattern**: A full-page spinner that disappears and the entire layout renders at once, causing the page to "flash." Or a table that shows "Loading..." text, then replaces it with 20 rows, shifting everything below it.
@@ -193,6 +203,7 @@ These 10 principles are **mandatory reading** for every builder agent before wri
 **Why**: 60%+ of developers and power users prefer dark mode. If it's an afterthought, they'll notice immediately — washed-out text, invisible borders, blinding white surfaces that survived the theme switch.
 
 **How to apply**:
+
 - Use semantic tokens exclusively (`--bg`, `--text`, `--accent`, `--border`)
 - Never hardcode hex colors — they won't adapt to theme changes
 - Test BOTH themes at every checkpoint, not just at the end

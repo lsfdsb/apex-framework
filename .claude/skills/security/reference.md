@@ -49,14 +49,14 @@ const securityHeaders = [
 
 ## Common Vulnerability Patterns in Next.js
 
-| Vulnerability | Where to Look | Fix |
-|--------------|---------------|-----|
-| XSS | Client components with user input | Escape output, use textContent not innerHTML |
-| CSRF | API routes without token | Next.js Server Actions have built-in CSRF |
-| IDOR | API routes with user IDs | Always check `session.user.id === resource.userId` |
-| Open Redirect | Login redirect URLs | Validate against allowlist |
-| Info Leak | Error responses | Never return stack traces in production |
-| Rate Limit | Auth endpoints | Use upstash/ratelimit or similar |
+| Vulnerability | Where to Look                     | Fix                                                |
+| ------------- | --------------------------------- | -------------------------------------------------- |
+| XSS           | Client components with user input | Escape output, use textContent not innerHTML       |
+| CSRF          | API routes without token          | Next.js Server Actions have built-in CSRF          |
+| IDOR          | API routes with user IDs          | Always check `session.user.id === resource.userId` |
+| Open Redirect | Login redirect URLs               | Validate against allowlist                         |
+| Info Leak     | Error responses                   | Never return stack traces in production            |
+| Rate Limit    | Auth endpoints                    | Use upstash/ratelimit or similar                   |
 
 ## Environment Variable Security
 
@@ -76,4 +76,4 @@ STRIPE_WEBHOOK_SECRET=    # whsec_...
 RESEND_API_KEY=           # re_...
 ```
 
-NEVER: commit .env files, log env vars, expose server-side vars to client (use NEXT_PUBLIC_ prefix only for truly public values).
+NEVER: commit .env files, log env vars, expose server-side vars to client (use NEXT*PUBLIC* prefix only for truly public values).

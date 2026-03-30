@@ -76,7 +76,9 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
 
   useEffect(() => {
     if (!mobileOpen) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") closeMobile(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeMobile();
+    };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [mobileOpen, closeMobile]);
@@ -109,12 +111,28 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
             }}
           >
             APEX
-            <span style={{ color: "var(--text-muted)", fontWeight: 300, marginLeft: 4, fontSize: 10, letterSpacing: "0.04em" }}>
+            <span
+              style={{
+                color: "var(--text-muted)",
+                fontWeight: 300,
+                marginLeft: 4,
+                fontSize: 10,
+                letterSpacing: "0.04em",
+              }}
+            >
               DNA
             </span>
           </a>
 
-          <div style={{ width: 1, height: 14, background: "color-mix(in srgb, var(--text-muted) 25%, transparent)", flexShrink: 0, margin: "0 6px" }} />
+          <div
+            style={{
+              width: 1,
+              height: 14,
+              background: "color-mix(in srgb, var(--text-muted) 25%, transparent)",
+              flexShrink: 0,
+              margin: "0 6px",
+            }}
+          />
 
           {/* Desktop nav: flat links */}
           <div className="apex-nav-links">
@@ -132,19 +150,18 @@ export function ShowcaseNav({ activePath }: ShowcaseNavProps) {
           {/* Mobile burger */}
           <button
             className={`apex-nav-burger${mobileOpen && !closing ? " open" : ""}`}
-            onClick={() => mobileOpen ? closeMobile() : setMobileOpen(true)}
+            onClick={() => (mobileOpen ? closeMobile() : setMobileOpen(true))}
             aria-label="Toggle navigation"
           >
-            <span /><span /><span />
+            <span />
+            <span />
+            <span />
           </button>
         </div>
       </div>
 
       {/* Mobile backdrop */}
-      <div
-        className={`apex-nav-backdrop${mobileOpen ? " open" : ""}`}
-        onClick={closeMobile}
-      />
+      <div className={`apex-nav-backdrop${mobileOpen ? " open" : ""}`} onClick={closeMobile} />
 
       {/* Mobile menu */}
       <div

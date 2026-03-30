@@ -17,6 +17,7 @@ npm view [package] --json | jq '{name, version, publisher: .maintainers, reposit
 ```
 
 Then **WebFetch the npm page** to verify the publisher badge:
+
 ```
 WebFetch("https://www.npmjs.com/package/[package]")
 ```
@@ -44,6 +45,7 @@ npm audit --json 2>/dev/null | jq '.vulnerabilities | to_entries[] | select(.val
 ```
 
 Also WebSearch for recent CVEs:
+
 ```
 WebSearch("[package] CVE vulnerability 2025 2026")
 ```
@@ -53,21 +55,23 @@ WebSearch("[package] CVE vulnerability 2025 2026")
 ### 4. Bundle Size
 
 **WebFetch bundlephobia** to get real size data:
+
 ```
 WebFetch("https://bundlephobia.com/package/[package]@[version]")
 ```
 
 Also check via CLI as backup:
+
 ```bash
 npm view [package] --json | jq '.dist.unpackedSize'
 ```
 
-| Category | Acceptable | Warning | Block |
-|----------|-----------|---------|-------|
-| Utility (lodash-like) | <10KB gzip | 10-50KB | >50KB |
-| UI component lib | <30KB gzip | 30-100KB | >100KB |
-| Framework | <50KB gzip | 50-150KB | >150KB |
-| Full SDK | <150KB gzip | 150-400KB (acceptable if no alternative) | >400KB (needs justification) |
+| Category              | Acceptable  | Warning                                  | Block                        |
+| --------------------- | ----------- | ---------------------------------------- | ---------------------------- |
+| Utility (lodash-like) | <10KB gzip  | 10-50KB                                  | >50KB                        |
+| UI component lib      | <30KB gzip  | 30-100KB                                 | >100KB                       |
+| Framework             | <50KB gzip  | 50-150KB                                 | >150KB                       |
+| Full SDK              | <150KB gzip | 150-400KB (acceptable if no alternative) | >400KB (needs justification) |
 
 ### 5. License
 
@@ -75,12 +79,12 @@ npm view [package] --json | jq '.dist.unpackedSize'
 npm view [package] license
 ```
 
-| License | Status | Reason |
-|---------|--------|--------|
-| MIT, Apache-2.0, BSD-2, BSD-3, ISC | ALLOW | Permissive, no restrictions |
-| LGPL, MPL | WARN | Copyleft concerns, may require disclosure |
-| GPL, AGPL | BLOCK | Viral license, forces open-source on your code |
-| Unlicensed, WTFPL, no license | BLOCK | No legal protection |
+| License                            | Status | Reason                                         |
+| ---------------------------------- | ------ | ---------------------------------------------- |
+| MIT, Apache-2.0, BSD-2, BSD-3, ISC | ALLOW  | Permissive, no restrictions                    |
+| LGPL, MPL                          | WARN   | Copyleft concerns, may require disclosure      |
+| GPL, AGPL                          | BLOCK  | Viral license, forces open-source on your code |
+| Unlicensed, WTFPL, no license      | BLOCK  | No legal protection                            |
 
 ### 6. TypeScript Support
 
@@ -96,6 +100,7 @@ npm view @types/[package] version 2>/dev/null
 ### 7. Necessity Check
 
 Before approving, check if the functionality already exists:
+
 - Does the project already have a dependency that does this?
 - Can this be done with native Web APIs or Node built-ins?
 - Is the library a thin wrapper around something we could use directly?
@@ -106,19 +111,21 @@ Before approving, check if the functionality already exists:
 
 ```markdown
 ## Library Verification: [package@version]
+
 **Verdict**: ✅ APPROVED / ⚠️ CONDITIONAL / 🛑 BLOCKED
 
-| Check | Status | Detail |
-|-------|--------|--------|
-| Official | ✅/❌ | [publisher info, verified on npmjs.com] |
-| Maintained | ✅/❌ | [last publish: date, from npm registry] |
-| Secure | ✅/❌ | [audit results, CVE check] |
-| Size | ✅/⚠️ | [XKB min+gzip, from bundlephobia] |
-| License | ✅/❌ | [license type, from npm registry] |
-| TypeScript | ✅/⚠️ | [built-in / @types / none] |
-| Necessary | ✅/⚠️ | [alternatives if any] |
+| Check      | Status | Detail                                  |
+| ---------- | ------ | --------------------------------------- |
+| Official   | ✅/❌  | [publisher info, verified on npmjs.com] |
+| Maintained | ✅/❌  | [last publish: date, from npm registry] |
+| Secure     | ✅/❌  | [audit results, CVE check]              |
+| Size       | ✅/⚠️  | [XKB min+gzip, from bundlephobia]       |
+| License    | ✅/❌  | [license type, from npm registry]       |
+| TypeScript | ✅/⚠️  | [built-in / @types / none]              |
+| Necessary  | ✅/⚠️  | [alternatives if any]                   |
 
 **Sources checked:**
+
 - npmjs.com/package/[name] (fetched)
 - bundlephobia.com/package/[name] (fetched)
 - npm audit (ran)

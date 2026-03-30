@@ -3,12 +3,12 @@
 All notable changes to the APEX Framework will be documented in this file.
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-
 ## [Unreleased]
 
 ## [5.24.0] — 2026-03-28 — Superpowers Integration + Mastery Guide Audit
 
 ### Added
+
 - **10 new skills from Superpowers v5.0.6** — `/brainstorm`, `/plan`, `/execute`, `/debug`, `/tdd`, `/verify`, `/code-review`, `/request-review`, `/worktree`, `/write-skill` — all forked and adapted to APEX methodology (#238)
 - **Skill Discipline system** — output style merged with Superpowers skill-discovery methodology: decision flow, rationalization red flags, instruction priority, cross-cutting skills (#238)
 - **Companion files for /write-skill** — `persuasion-principles.md`, `testing-skills.md`, `anthropic-best-practices.md` (skill authoring references) (#240)
@@ -16,6 +16,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Boxed APEX logo** — session intro now uses the framed logo from /about (#241)
 
 ### Changed
+
 - **CLAUDE.md rewritten** — 193 → 59 lines (-69%), added @import directives, compaction instruction, removed duplicated pipeline/EPM/agents sections (#242)
 - **Output style pipeline** — 7-phase state machine updated: Discover→Architect→Plan→Verify→Build→Quality→Ship with cross-cutting `/debug`, `/tdd`, `/verify`, `/code-review` (#238)
 - **Builder model** — `sonnet` → `inherit` (uses session model, typically Opus) (#242)
@@ -28,16 +29,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **teach skill description** — sharpened from 63 → 25 words (#242)
 
 ### Fixed
+
 - **Agent Canvas all 7 agents visible** — Fixed derivedAgents key mismatch and defaultViewport conflict (#237)
 - **TypeScript build errors (11 fixed)** — Resolved type mismatches for strict mode (#237)
 - **Canvas MiniMap CSS vars** — proper background, smoothstep edges (#236)
 
 ### Removed
+
 - **OPS showcase components** — removed Canvas, Hub, Pipeline, and 20+ unused components to focus on tokens page (#238)
 
 ## [5.23.0] — 2026-03-25 — Apple EPM Honest Audit + Builder Quality Protocol
 
 ### Added
+
 - **7-State Pipeline Engine** — Output style rewritten as executable state machine with imperative actions, 3 user gates, autonomous phase transitions (#204)
 - **Design Reviewer Agent** — New agent (Phase 4 Verify + Phase 6 Quality). 10→3→1 design exploration, DNA compliance, screenshot test. The Jony Ive of the team (#206)
 - **Apple EPM Agent Headers** — All 6 agents now have: Pipeline Phase, Apple EPM Role, Seven Elements (Craft/Taste/Diligence/Empathy/Inspiration/Decisiveness/Collaboration), Exit Criteria, DRI Protocol (#208)
@@ -58,6 +62,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **HUB Layout Expansion** — Projects page maxWidth 960→1200 with center alignment (#204)
 
 ### Changed
+
 - **CLAUDE.md Pipeline Table** — Now shows Team column with agents per phase, 6 agents + Lead (#204, #207)
 - **CLAUDE.md Rule #16** — Design DNA routes to React templates (single source of truth), not HTML files (#204)
 - **Builder Agent** — Added verify-api + verify-lib skills, DRI protocol, craft standard (#204, #208)
@@ -72,6 +77,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **HUB Metrics** — PRs 203, Agents 6 (was 5) (#204, #207)
 
 ### Removed
+
 - **15 HTML DNA files** — landing.html, saas.html, crm.html, etc. React templates are now the only source (#206)
 - **2 JS modules** — palette.js, svg-backgrounds.js (superseded by React components) (#206)
 - **14 Recipe stubs** — docs/design-dna/recipes/ folder (superseded by React templates) (#206)
@@ -85,6 +91,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [5.22.0] — 2026-03-25
 
 ### Added
+
 - **Visual Pipeline HUB** — Web-based command center at localhost:3001 with interactive dashboard, pipeline visualization, and team management (#203)
 - **HUB Home page** — APEX OPS and APEX DNA cards with dynamic metrics and feature showcase
 - **Pipeline Overview** — Interactive 7-phase flow visualization with phase details and timeline
@@ -119,6 +126,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Session Log Rotation** — session-cleanup.sh now keeps last 10 session logs, deletes older ones (#202)
 
 ### Changed
+
 - **PaletteSwitcher** — Moved from bottom-left to top-right in navbar
 - **ShowcaseNav restructured** — Now includes About, Changelog, OPS dropdown, DNA dropdown, and Sign In button
 - **DNA Home navigation** — Moved from #/ to #/dna; HUB Home now serves as #/ landing
@@ -144,6 +152,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **README Component Counts** — Updated to 33 starters, 39 templates (accurate to current state) (#202)
 
 ### Fixed
+
 - **APEX Logo Alignment** — Consistent column padding in output style (#202)
 - **health-check.sh** — Removed erroneous `set -e` that caused CI failure; script manages own exit code (#202)
 - **CountUp Animation** — Now respects prefers-reduced-motion for accessibility
@@ -155,6 +164,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [5.21.0] — 2026-03-24 — Quality Gates & Safe Processes
 
 ### Added
+
 - **Design Principles (Taste Bible)** — 10 codified rules in `docs/design-dna/principles.md` preventing generic AI output: whitespace ratios, typography hierarchy, color discipline, motion budget, information density, empty state quality, consistent radius, persona alignment, loading states, dark mode parity (#191)
 - **Prettier Config** — `.prettierrc` + `.prettierignore` for consistent formatting across all APEX projects (#191)
 - **Icon Strategy** — Lucide React as standard icon library with sizing scale and usage rules (#191)
@@ -162,11 +172,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **New Hook Events** — TaskCompleted, TeammateIdle, ConfigChange hooks in settings.json (#190)
 
 ### Changed
+
 - **Builder Agent Enhanced** — Mandatory `principles.md` read before UI work, component search before create, expanded pre-completion checklist (#191)
 - **Architecture Skill** — Explicit component audit with `[exists/extend/promote/new]` classification (#191)
 - **Component Source-of-Truth Rule** — `src/components/` is truth after promotion; starters are scaffolding only (#191)
 
 ### Fixed
+
 - **Safe Hook Process Management** — session-cleanup now verifies PIDs are actual node/vite processes before killing; prevents disrupting Claude Code's process group (#190)
 - **Dev Server Detach** — Background processes fully detached with `< /dev/null` so hook stdin pipe closes cleanly (#190)
 - **Hook Health-Check** — Added `# safe-kill` annotation support for self-spawned subprocesses (#190)
@@ -175,6 +187,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [5.20.0] — 2026-03-24 — Production Readiness: Hooks, Oscar, Tests
 
 ### Added
+
 - **Complete Hook System** — 16 hooks across 6 groups (SessionStart, PreToolUse, PostToolUse, Stop, PostToolUseFailure, SessionEnd); all 20 scripts wired or confirmed as utilities (#187)
 - **Design DNA Oscar Push** — 10 new animation keyframes (ripple, focus-glow, pop-in, shake, checkmark, stroke-draw, pulse-ring, slides, counter-roll) with `prefers-reduced-motion` support (#187)
 - **5 New Primitives** — Toggle (spring physics), Tooltip (pop-in), AnimatedCheckmark (SVG stroke), NotificationDot (pulse ring), LoadingSpinner (SVG orbit) (#187)
@@ -184,6 +197,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Performance Profiler** — `tests/perf-hooks.sh` measuring all 16 hooks with budget thresholds (#187)
 
 ### Changed
+
 - **Button Enhanced** — Ripple effect on click via DOM span injection (#187)
 - **Input Enhanced** — Focus glow animation + error shake with `prefers-reduced-motion` (#187)
 - **Design System Page Redesigned** — Forms and Layout sections elevated with accent gradient bars, descriptions, and glass cards; genericized from CRM-specific Portuguese to universal English (#187)
@@ -191,6 +205,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Bundle Optimization** — Lazy-load HomePage (52KB CHANGELOG) and template sources (200KB+ raw TSX); main chunk stays at 210KB (#185)
 
 ### Fixed
+
 - **CI CHANGELOG Duplication** — `sed` now matches first occurrence only when stamping version sections (#187)
 - **Installer Skills Copy** — `cp -r` was flattening skill directories; now creates proper named subdirectories (#187)
 - **Nav Layout Shift** — Removed scroll-dependent transitions, forced `overflow-y: scroll`, constant glass styles (#187)
@@ -199,11 +214,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **PatternShowcase** — Boosted SVG pattern opacity for dark mode visibility (#187)
 
 ### Security
+
 - **settings.local.json Cleanup** — Removed hardcoded Supabase secret key and 60 accumulated cruft entries that were causing Claude Code to hang (#187)
 
 ## [5.19.0] — 2026-03-24 — Reliability: The Framework Tests Itself
 
 ### Added
+
 - **Showcase Test Infrastructure** — Vitest + React Testing Library with 12 tests covering Router, PaletteContext, and build smoke validation (#182)
 - **Showcase ESLint + Prettier** — ESLint 9 flat config with typescript-eslint, react-hooks, react-refresh plugins; Prettier with project conventions (#182)
 - **CI Showcase Pipeline** — GitHub Actions now runs typecheck → lint → test → build for the Design DNA React app (#182)
@@ -211,9 +228,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Starter Component Tests** — Card (11 tests), Tabs (13 tests), PageShell (9 tests) with full ARIA role coverage and slot composition testing (#182)
 
 ### Changed
+
 - **Technical Writer Agent** — Stripped CHANGELOG responsibility (owned by /commit + auto-changelog hook); now only owns README, PRD, and docs consistency (#182)
 
 ### Fixed
+
 - **Broken Showcase Build** — tsconfig `typeRoots` + `baseUrl` fix for React type resolution across sibling directories; `useRef` strict mode fixes in Toast/Tooltip (#182)
 - **ShowcaseNav setState-in-effect** — React 19 lint error replaced with derived state pattern (no effect, no ref-during-render) (#182)
 - **PaletteSwitcher Unused Import** — Removed dead `PaletteName` type import (#182)
@@ -224,15 +243,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 ## [5.18.0] — 2026-03-24 — Self-Awareness, Kanban, Supabase RAG
 
 ### Added
+
 - **Supabase RAG Setup Script** — One-command `setup.sh` validates keys, tests connection, runs migration, syncs manifest, verifies data (#181)
 - **Memory Autonomy Protocol** — Output style now mandates when to save memories: on correction, after merge, before session end. No lesson gets lost (#181)
 - **Dynamic About Roster** — About skill reads agents from `.claude/agents/` dynamically instead of hardcoded table (#181)
 
 ### Changed
+
 - **Ship Skill Docs Check** — Step 5 replaced Technical Writer spawn with inline docs consistency check (VERSION↔README, CHANGELOG entries, manifest freshness) (#181)
 - **/commit Skill** — CHANGELOG update moved to Step 3 (before commit), eliminating the recurring docs-gap failure (#181)
 
 ### Added (carried from v5.18.0)
+
 - **LICENSE** — MIT license for open-source distribution of the APEX Framework (#180)
 - **SECURITY.md** — Vulnerability disclosure process and patch timeline for responsible reporting (#180)
 - **CONTRIBUTING.md** — Contribution guidelines, code standards, and community review process (#180)
@@ -254,6 +276,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **Inline CHANGELOG in /commit** — CHANGELOG updates now happen BEFORE the commit (Step 3), not after. Eliminates the #1 recurring failure across 3+ APEX versions (#180)
 
 ### Changed
+
 - **Context-Aware Agents** — Watcher and QA agents now detect repository type (framework vs project) and adapt commands, output, and validation rules accordingly (#180)
 - **Teams Skill** — Streamlined roster to 4 core agents (Builder, Watcher, QA, Technical Writer) plus Lead; removed ALL references to dead agents across roster, breathing loop, scan matrix, spawn order, status table, and communication rules (#180)
 - **README.md** — Updated agent roster (8→4 agents), removed Observatory section, removed Researcher row, updated model strategy table (#180)
@@ -273,6 +296,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **.gitignore** — Added `.claude/.manifest.json` and `.claude/agent-memory/` (runtime-generated, not source) (#180)
 
 ### Removed
+
 - **3 Dead Agent Implementations** — Removed `code-reviewer.md`, `debugger.md`, `design-reviewer.md` (never spawned in practice, functionality migrated to plugins) (#180)
 - **Orphaned Agent Memory Directories** — Cleaned up unused memory folders: `framework-evolver/`, `sentinel/`, `code-reviewer/`, `design-reviewer/` (#180)
 - **claude-web/ Directory** — Removed 17 obsolete custom skill copies and 2 custom instruction files; Claude Code now handles skill discovery natively (#180)
@@ -280,11 +304,13 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 - **3 Stale Memory Records** — Removed `batman_session`, `changelog_every_pr`, `agent_teams` (superseded by CLAUDE.md rules and active policies) (#180)
 
 ### Removed
+
 - **docs/QUALITY-REVIEW.md** — Outdated v5.13 quality review referencing deleted agents and Framework Evolver (#180)
 - **docs/design-dna/showcase/.claude/** — Orphaned runtime directory from a dev session (#180)
 - **Root .DS_Store** — OS cruft removed from tracking (#180)
 
 ### Fixed
+
 - **health-check.sh** — Updated agent list reference from dead agents to current roster (#180)
 - **Stale Agent References** — Purged ALL remaining Debugger/Code Reviewer/Design Reviewer/Researcher/Sentinel references from 8 active files: about, teams, ship, design-system, qa agent, technical-writer agent, README, CLAUDE.md (#180)
 - **Builder Branch Bug** — Builders with `isolation: none` were creating orphan branches causing cherry-pick failures; added explicit "never create branches" rule (#180)
@@ -294,14 +320,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/).
 About skill rewritten as full onboarding guide, agent isolation defaulted to none (eliminating worktree file loss), Technical Writer perfected with showcase sync awareness.
 
 ### Added
+
 - **About Onboarding Guide** — Rewrote `/about` as full onboarding guide: pipeline diagram, skills table, agent roster, Design DNA overview, how-to section (#174)
 
 ### Changed
+
 - **Agent Isolation Default** — All agents now use `isolation: none` by default; worktrees only for 2+ parallel builders on conflicting files — eliminates 6+ sessions of file loss (#176)
 - **Technical Writer** — Added README↔VERSION sync check, showcase CHANGELOG awareness (Step 3.5), entry format rules for showcase parsing (#177)
 - **Teams Presets** — Updated all spawn examples and presets to reflect `isolation: none` default (#177)
 
 ### Fixed
+
 - **About Skill Output** — Added verbatim output instruction so `/about` renders the full guide instead of summarizing (#175)
 - **Stale Worktree References** — Cleaned 7 outdated worktree references from about, teams, and spawn examples (#177)
 
@@ -310,16 +339,19 @@ About skill rewritten as full onboarding guide, agent isolation defaulted to non
 Ship pipeline overhaul: official code-review plugin as single gate, auto-versioning after merge, responsive showcase nav, and Vite dev server.
 
 ### Added
+
 - **Auto-Versioning** — `/ship` now auto-promotes `[Unreleased]` to semver after merge: feat→MINOR, fix→PATCH, BREAKING→MAJOR (#173)
 - **Changelog Showcase Sync** — Showcase homepage now displays `[Unreleased]` entries with "next" badge (#171)
 
 ### Changed
+
 - **Statusline** — Removed custom PR/git tracking calls, added framework version display; relies on native Claude Code git indicator (#168)
 - **Dev Server** — Replaced static HTML server with Vite React showcase app from `docs/design-dna/showcase/` (#168)
 - **Ship Skill** — Single review gate via official `code-review` plugin; removed duplicate APEX code-reviewer, scoped to `/teams` only (#170)
 - **Technical Writer** — Added versioning rules: new changes go under `[Unreleased]`, released versions are frozen (#171)
 
 ### Fixed
+
 - **ShowcaseNav** — Responsive hamburger menu on screens below 640px with glass morphism dropdown, outside-click dismiss, Escape key, and slide-out animation (#172)
 
 ## [5.15.0] — 2026-03-23 — Design DNA Showcase Phase 2
@@ -327,6 +359,7 @@ Ship pipeline overhaul: official code-review plugin as single gate, auto-version
 Pixel-perfect template matching, component extraction, and self-contained showcase pages with 20+ commits completing the Design DNA showcase overhaul.
 
 ### Added
+
 - **React Page Templates** — 14 full-featured templates (Landing, SaaS, CRM, E-commerce, Blog, Portfolio, Social, LMS, Backoffice, Design System, Email, Presentation, E-book, Pattern Showcase) ready to copy into projects (#115)
 - **5 New Starter Components** — StatCard, ChartCard, ThemeToggle, EmptyState, KanbanColumn for richer dashboards and data flows (#115)
 - **RGB Tokens** — All 5 design palettes now include RGB values for dynamic theming and programmatic color manipulation (#115)
@@ -365,6 +398,7 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 - **Tokens/Design System Showcase Page** — Live demo page showcasing all P0 form primitives with interactive examples and design token documentation (#160)
 
 ### Changed
+
 - **ShowcaseNav** — Raised base opacity to 80%, border transparency to 15%, enhanced inset highlight for better visual hierarchy; floating glass design with scroll transparency (#139, #136, #134, #131)
 - **Code Reviewer Agent** — Expanded from 91 to 130 lines with enhanced security scanning, OWASP rules integration, and better error categorization (#115)
 - **Design Reviewer Agent** — Added task auto-claim for continuous design compliance, expanded DNA path scanning to catch hardcoded colors (#115)
@@ -377,6 +411,7 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 - **CHANGELOG Generation** — Documented all contributions through v5.13.2, properly formatted entries, no gaps (#113)
 
 ### Fixed
+
 - **Self-Contained Templates** — All 14 showcase pages now zero-import starters, every component inline or from src/components; removed PageShell/Sidebar wrappers (#141, #140)
 - **LandingPage.tsx** — Rewritten to match landing.html design: added Pricing, Dashboard, Auth sections; fixed Features to 3-column grid; added reveal animations with IntersectionObserver, glow-pulse, and lift hover effects; corrected CTA with bg-surface + gradient; rewrote footer with multi-column layout and 3 link columns
 - **BlogLayout.tsx** — Rewritten to match blog.html design: added hero section; removed sidebar (aligned with template); fixed article grid to 3-column layout; added reading experience section with blockquote styling; added standalone newsletter box
@@ -403,6 +438,7 @@ Pixel-perfect template matching, component extraction, and self-contained showca
 Comprehensive audit against Claude Code's native capabilities. Every feature must earn its place — if Claude Code does it natively, APEX doesn't duplicate it.
 
 ### Removed
+
 - **`/evolve` skill** — Removed self-evolution feature. Skill, agent (`framework-evolver`), scripts (`extract-session.sh`, `apex-sync.sh`) deleted
 - **`/debug` skill** — Claude Code has native `/debug` bundled skill
 - **`/research` skill** — Claude Code has native WebSearch + WebFetch tools
@@ -420,6 +456,7 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **31 stale local branches** — Accumulated feature/fix branches cleaned
 
 ### Changed
+
 - **Agent roster** — 10 → 7 agents (Framework Evolver, Researcher removed; code-reviewer replaced by official plugin)
 - **Agent skills** — Removed `code-standards`, `sql-practices`, `debug` from all agent frontmatter. Agents now reference only skills that still exist
 - **settings.json** — Removed 4 hook entries pointing to deleted scripts (UserPromptSubmit, PreToolUse verify-install, PostToolUse auto-format, SubagentStart track-agent-start)
@@ -430,11 +467,13 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 - **Installed `code-review` plugin** — Official Anthropic plugin replaces custom code-reviewer agent
 
 ### Fixed
+
 - **Builder/Debugger worktree file loss** — Root cause fix: `permissionMode: default` → `dontAsk` so worktree agents can commit. This was the actual cause of 6+ file loss incidents — not missing docs, not merge strategy.
 - **CLAUDE.md bloat** — Slimmed from 220 → 116 lines (-47%). Moved Agent Teams details to `/teams` skill. Under official 200-line recommendation.
 - **106 stale remote branches** deleted — only `main` remains
 
 ### Stats
+
 - Skills: 28 → 21 (-7)
 - Agents: 9 → 7 (-2)
 - Scripts: 22 → 18 (-4)
@@ -447,6 +486,7 @@ Comprehensive audit against Claude Code's native capabilities. Every feature mus
 The biggest quality improvement in APEX history. The framework audited itself, found 20+ issues, and fixed them in one session — with 659 tests proving the fixes work.
 
 ### Added
+
 - **Behavioral Test Suite v2** — 95 real behavioral tests: security payload scanning (Stripe/AWS/GitHub/OpenAI keys), PRD enforcement with temp directories, commit-msg format validation, Breathing Loop wiring verification, model assignment checks (#105)
 - **DNA Extraction Protocol** — Builders must extract palette/fonts/patterns into a checklist BEFORE writing any code. Prevents the "read DNA then ignore it" failure seen in real builds (#105)
 - **Rule Zero** — Commit protocol moved to TOP of builder agent prompt. Incremental commits every 3-4 files. Prevents worktree file loss (66% failure rate in Axel LMS build) (#105)
@@ -457,6 +497,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - **Steve Jobs** — Product vision added to framework philosophy. "Say no to 1000 things" (#105)
 
 ### Changed
+
 - **Code Reviewer → Opus** — Security gate gets the best model. Benchmark-backed: Opus catches 1-2 more vulnerabilities per 10 reviews than Sonnet (#105)
 - **Framework Evolver → Sonnet** — Architectural reasoning needs Sonnet, not Haiku (#105)
 - **Design Reviewer gets Bash** — Can now run automated design token compliance checks (#105)
@@ -469,9 +510,10 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - **Builder HTML→React translation** — 7-step guide for converting DNA HTML pages to React/Tailwind components (#105)
 
 ### Fixed
+
 - **GitHub repo reference** — `lfrfrfl` → `lsfdsb` in install.sh (broke first-time installs) (#105)
 - **Missing script warnings** — Removed `enforce-commit-msg`, `log-subagent`, `post-compact` from session-context hook check (#105)
-- **Security regex hardened** — GitHub tokens (ghp_30+ chars), OpenAI keys (sk-*-* with hyphens) now detected (#105)
+- **Security regex hardened** — GitHub tokens (ghp*30+ chars), OpenAI keys (sk-*-\_ with hyphens) now detected (#105)
 - **PRD detection simplified** — 2 canonical checks instead of 4 fragile fallbacks (#105)
 - **CLAUDE.md rules 1-19** — Fixed numbering (was 1-12, 16-19, 13-15) (#105)
 - **Stale counts everywhere** — README, about skill, init skill, install guide all now show correct numbers (29 skills, 9 agents, 23 scripts, 659 tests) (#105)
@@ -482,12 +524,14 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - **test-simulation.sh** — Replaced stale `enforce-commit-msg` assertion (#105)
 
 ### Removed
+
 - **CRM Patterns Expansion** — Moved to [Unreleased] in previous version, now part of v5.11.2 scope
 - remove fake testing — sentinel, self-test, observatory (#104)
 
 ## [5.11.2] — 2026-03-19 — Design DNA Distribution + Framework Tooling
 
 ### Added
+
 - **VERSION file** — Single source of truth for framework version, read dynamically by session-context.sh (was hardcoded 5.7.0 fallback)
 - **Design DNA installation** — install.sh now copies all 14 Design DNA pages (hub, design-system, landing, crm, ecommerce, saas, blog, portfolio, social, lms, presentation, ebook, email, backoffice) + 2 JS modules (palette.js, svg-backgrounds.js) to new projects at `docs/design-dna/`
 - **64 Design DNA tests** — Comprehensive validation suite covering page existence, palette integrity, CRM expansion (10+ patterns), rings fullscreen coverage, pipeline wiring, navigation persistence (352 total tests, all passing)
@@ -495,9 +539,11 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - **/ship skill** — Fast-track PR workflow: branch → commit → push → create PR → merge in single command; supports draft mode, auto-merge on approval, and configurable commit scopes
 
 ### Changed
+
 - README.md updated with v5.11 nomenclature
 
 ### Details
+
 - Tests validate all 14 DNA pages load palette.js and svg-backgrounds.js
 - CRM expansion verified: 18 component sections (10+ required)
 - Rings animated background tested for full-viewport vmax × 1.5 scale coverage
@@ -508,14 +554,17 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 ## [5.11.1] — 2026-03-19 — Design DNA Enforcement + Agent Hardening
 
 ### Added
+
 - **Watcher DNA Compliance** — Watcher scans new page/screen components for Design DNA references and flags hardcoded Tailwind palette colors as design token violations (#85)
 
 ### Fixed
+
 - **Technical Writer Rewrite** — Gap detection first: audits git log + merged PRs against CHANGELOG before writing. Self-verifies all PRs are documented. Lead spawn instructions now require specific change descriptions (#84)
 
 ## [5.11.0] — 2026-03-18 — Design DNA Integration
 
 ### Added
+
 - **CRM Patterns Expansion** — CRM page scaled from 5 to 15 components: deal detail drawer, contact profile, pipeline analytics + funnel, lead scoring with SVG progress rings, data table with search/filters/pagination, filter bar with active tags, task/follow-up list with due dates, 2 empty state variants, email composer, notes panel
 - **Design DNA Wired into Build Pipeline** — CLAUDE.md rule #16 enforces DNA page lookup; design-system SKILL.md routing table for all 14 pages + 2 JS modules; builder.md agent with mandatory DNA checks; design-reviewer.md agent with DNA compliance gate (BLOCK on violations); components.md and reference.md updated
 - **Design DNA Pattern Library** — 15-page premium UI showcase at `docs/design-dna/`
@@ -548,10 +597,12 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - **Unified Design Widget** — Merged palette switcher + background selector into single icon; palette dots, dark/light mode, 14 static patterns, 9 animated backgrounds all in one panel (#81)
 
 ### Fixed
+
 - **Rings background fills screen** — Rings animated background now uses `vmax × 1.5` + `transform: scale()` for full-viewport coverage; 5 rings staggered over 8s eliminates visible reset flash (#80)
 - **Worktree commit protocol** — Builders MUST `git commit` before reporting done to prevent file loss (4+ incidents). Lead never rewrites files — re-spawns builder with `isolation: none`. Added recovery protocol and stale worktree cleanup (#82)
 
 ### Changed
+
 - `bin/apex` — one-command launcher: auto-detects iTerm2 + tmux, launches Claude Code with split panes
 - `install.sh` now symlinks `bin/` tools to `~/.local/bin` and adds to PATH
 - Split pane prerequisites documented in CLAUDE.md
@@ -567,6 +618,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - `tests/test-agents.sh` — Golden Script: 137-test agent validation suite (frontmatter, tools, skills, conflicts, isolation, model fitness)
 
 ### Changed
+
 - Technical Writer agent: upgraded to `background: true` + `permissionMode: dontAsk`
 - Technical Writer agent: explicit instruction to MUST edit files (fix Haiku hallucination)
 - Code Reviewer and QA agents: `isolation: worktree` → `isolation: none` (need real project state)
@@ -580,6 +632,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Silent failure pattern fixed: 6 safety-critical scripts now emit `systemMessage` JSON when jq missing instead of silently exiting
 
 ### Fixed
+
 - ANSI escape code stripping in test runner API output
 - Hooks test parser — `Pass: N` format now correctly matched (was showing 0)
 - console.log replaced with process.stdout.write in server startup
@@ -592,7 +645,8 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - StatusLine PR timeout race condition — validates PR URLs must start with https://github.com/
 
 ### Removed
-- Custom agent tracking in statusline (abbrev_agent, /tmp/apex-agents*.json reading)
+
+- Custom agent tracking in statusline (abbrev_agent, /tmp/apex-agents\*.json reading)
 - StatusLine "This is the way." branding suffix
 - `auto-approve-safe.sh` — redundant with settings.json allow list
 - `enforce-commit-msg.sh` — redundant with git's native commit-msg hook
@@ -603,6 +657,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 ## [5.10.0] — 2026-03-18 — Agent Teams: The Championship Roster
 
 ### Added
+
 - **6 new agents**: watcher, builder, debugger, qa, technical-writer, sentinel (Batman)
 - `/teams` skill — orchestrated agent parallelism with 4 presets (build, fix, review, full)
 - `/self-test` skill (aka `/batman`) — summons the Sentinel for full framework verification
@@ -617,6 +672,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Knowledge base — Claude Code docs verified and stored in memory
 
 ### Changed
+
 - All agents upgraded to 9.5/10 championship level
 - Code Reviewer + Design Reviewer now team-aware (SendMessage, Task tools)
 - Builder: +3 skills (design-system, performance, security), 10-point pre-completion checklist
@@ -629,17 +685,20 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Statusline: locale fix (commas→dots), all agents abbreviated (W,B,D,QA,CR,DR,TW,R,🦇)
 
 ### Fixed
+
 - Statusline locale bug — numbers showed `0,0K` on pt-BR locale, now `0.0K`
 
 ## [5.9.2] — 2026-03-18 — Update Skill, Pre-Commit Fix, Agent Teams Prep
 
 ### Added
+
 - `/update` skill — manual framework update from within any Claude session (#49)
 - Update instructions in CLAUDE.md — works even on outdated APEX versions (#50)
 - Auto-update appends `## Update` section to CLAUDE.md if missing (#50)
 - Agent Teams architecture documented — Watcher, Builder, Reviewer roles (next: implementation)
 
 ### Fixed
+
 - Pre-commit hook skips TS/lint/prettier when only framework files staged (#49)
 - Pre-commit hook shows actual error output instead of hiding with 2>/dev/null (#49)
 - PR cache: sanitize branch names with `/` for valid file paths (#47)
@@ -647,6 +706,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 ## [5.9.1] — 2026-03-18 — Self-Improving Loop, No Silent Skips
 
 ### Added
+
 - Proactive `/evolve` suggestion — error counter tracks failures, suggests `/evolve` at 5/10/20 errors (#46)
 - `/prd` skill auto-generates README.md from PRD content after document creation (#46)
 - No silent skips — all hooks provide feedback for every exit path (#45)
@@ -670,15 +730,18 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Dev-server: skips startup when `node_modules` missing (fresh/from-scratch projects)
 
 ### Fixed
+
 - Auto-update: removed `timeout` command (not available on macOS) (#42)
 - Auto-update: errors now visible in chat instead of only in log file (#41)
 
 ### Removed
+
 - Temporary debug log from `log-subagent.sh` (#37)
 
 ## [5.9.0] — 2026-03-18 — UX Writing, Statusline PR Link, Extended Patterns
 
 ### Added
+
 - Statusline: clickable PR link with merge status (🟢 open, 🟣 merged, 🔴 closed) via OSC 8 hyperlinks
 - Statusline: agent tracking shows types — "🤖 3 (Explore, Plan, reviewer) 45.2K"
 - Agent tracking: `types` array in /tmp/apex-agents.json
@@ -710,6 +773,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - statusline PR link, UX writing, extended patterns (92c1336)
 
 ### Changed
+
 - StatusLine upgraded to Beskar Edition — gradient bar (`█▓▒░`), health indicator (`🟢🟡🔴`), correct context math (`PCT% USED/TOTAL`), net lines, smart duration (`8s/30m/1h30m`), Mandalorian sign-off
 - StatusLine output switched from echo to printf for OSC 8 escape sequence support
 - Supabase skill refactored — split 623-line SKILL.md into 49-line SKILL.md + 574-line reference.md (#34)
@@ -720,10 +784,12 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - simplify — English only, one output style (9b84b41)
 
 ### Fixed
+
 - outputStyle uses frontmatter `name` field, not file path (#32)
 - auto-detect TTY for git hook animations (77e76be)
 
 ### Removed
+
 - `apex-review` skill — functionality absorbed by `/evolve` and framework-evolver agent
 - `deploy` skill — deployment readiness absorbed by `/qa deploy` (Phase 6)
 - `workflow-enforcer` skill — workflow enforcement handled by deterministic hooks (`enforce-workflow.sh`, `guard-workflow-skip.sh`)
@@ -733,6 +799,7 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 ## [5.7.0] — 2026-03-17 — Animated UI, Prettier, Bug Fixes
 
 ### Added
+
 - Real animated intro banner on session startup (45ff479)
 - Braille Grogu ASCII art with animated poses and auto-intro (d60e752)
 - Animations, colors, and Grogu easter eggs in session context (f68daab)
@@ -741,17 +808,20 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Full hook coverage across all Claude Code lifecycle events (6096f79)
 
 ### Fixed
+
 - APEX Educational output style enforced from first message (a3d0b01)
 - `verify-install` no longer triggers false positives in quoted strings (76e1cbb)
 - `apex-init-project.sh` used instead of manual file creation (5688851)
 - Grogu art redesigned, borders and statusline fixed (47fcb94)
 
 ### Removed
+
 - Claude Code CI workflow removed (missing API key) (639714a)
 
 ## [5.6.0] — 2026-03-17 — Auto-Update, Self-Evolution & Definitive Debug
 
 ### Added
+
 - Auto-update system — APEX checks for GitHub updates on SessionStart (pulls latest skills, hooks, agents automatically)
 - Project-level auto-update on SessionStart — keeps project-installed APEX files in sync with the user-level source
 - `/evolve` skill — spawns framework-evolver agent to analyze session transcripts for gaps and improvements
@@ -769,11 +839,13 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Core rules "Definitive fixes only" (rule 8) and "Impact analysis before changes" (rule 9) added to CLAUDE.md
 
 ### Removed
+
 - `.github/workflows/claude-pr-review.yml` — replaced by official Claude Code GitHub Action
 
 ## [5.5.0] — 2026-03-16 — Supabase Integration & Skill Fixes
 
 ### Added
+
 - `/supabase` skill — comprehensive Supabase helper with subcommands: setup, auth, migration, types, realtime, storage, edge-functions
 - `supabase.md` rule — auto-loads when working with Supabase-related files
 - `/init` skill updated with Supabase scaffolding step
@@ -781,12 +853,14 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - `.mcp.json.template` updated with Supabase MCP server as primary option
 
 ### Fixed
+
 - Removed `disable-model-invocation` flag from 7 skills — was blocking `/slash` command invocation
 - Updated Opus context window from 200K to 1M in cost-management skill
 
 ## [5.4.0] — 2026-03-16 — Full Claude Code Integration
 
 ### Added
+
 - `guard-workflow-skip.sh` — UserPromptSubmit hook: nudges users when they try to skip PRD/tests/security
 - `handle-failure.sh` — PostToolUseFailure hook: diagnostic hints for TypeScript, test, npm, build, and permission errors
 - `post-compact.sh` — PostCompact hook: verifies critical context survived compaction
@@ -800,23 +874,27 @@ The biggest quality improvement in APEX history. The framework audited itself, f
 - Debug checkpointing section (git stash save/restore for debugging sessions)
 
 ### Fixed
+
 - `session-cleanup.sh` now warns when jq is missing
 - Test suite expanded from 68 to 83 tests (all passing)
 
 ## [5.3.0] — 2026-03-16 — Quality Hardening
 
 ### Added
+
 - `stop-gate.sh` — Stop hook that warns when code is written but tests aren't run
 - `enforce-workflow.sh` — Deterministic PRD enforcement
 - `install.sh` — One-command installer with language selection
 - `tests/test-hooks.sh` — 68-test suite for all hook scripts
 
 ### Fixed
+
 - All hook scripts now warn when jq is missing
 - `enforce-commit-msg.sh` — replaced `grep -oP` with POSIX-compatible `sed` for macOS
 - Language preference defaults to `"ask"` instead of hardcoded `pt-br`
 
 ### Removed
+
 - `.claude-plugin/plugin.json` — decorative, Claude Code has no plugin system
 
 ## [5.2.0] — 2026-03-13 — Initial Release

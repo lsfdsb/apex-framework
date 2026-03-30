@@ -1,16 +1,16 @@
 ---
 paths:
-  - "**/lib/**"
-  - "**/utils/**"
-  - "**/services/**"
-  - "**/actions/**"
+  - '**/lib/**'
+  - '**/utils/**'
+  - '**/services/**'
+  - '**/actions/**'
 ---
 
 # Error Handling Conventions
 
 - Return `Result<T>` from utility functions, never throw:
   ```typescript
-  type Result<T> = { data: T; error: null } | { data: null; error: AppError }
+  type Result<T> = { data: T; error: null } | { data: null; error: AppError };
   ```
 - Throw only at boundaries: API routes, server actions, React error boundaries.
 - Custom errors extend a base `AppError` with `code`, `message`, `statusCode`, `isOperational`.

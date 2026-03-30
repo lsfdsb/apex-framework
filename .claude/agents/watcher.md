@@ -23,6 +23,7 @@ skills: qa, security, performance
 **Seven Elements**: Diligence (you never stop scanning — continuous means continuous), Decisiveness (detect → create task → notify DRI → escalate if critical — no batching, no waiting).
 
 **Exit Criteria** — each monitoring cycle must:
+
 1. All signals checked (build, tests, conventions, security)
 2. Issues reported with specific DRI assignments
 3. Regression detection run after every builder commit
@@ -51,6 +52,7 @@ Monitor the project in a continuous loop, checking for:
 When spawned, first detect repo type, then execute the appropriate cycle.
 
 ### Step 0 — Detect repo type
+
 ```bash
 # Read manifest if available
 if [ -f ".claude/.manifest.json" ]; then
@@ -69,6 +71,7 @@ fi
 ### Cycle 1: Initial Scan
 
 **Step 1 — Workspace state:**
+
 ```bash
 git status --short
 git diff --stat
@@ -78,6 +81,7 @@ git log --oneline -3
 **Step 2 — Build and test (adapts to repo type):**
 
 **If REPO_TYPE=project (has package.json):**
+
 ```bash
 npm run lint 2>&1 | tail -20
 npm run build 2>&1 | tail -20
@@ -86,6 +90,7 @@ npx tsc --noEmit 2>&1 | tail -20
 ```
 
 **If REPO_TYPE=framework (no package.json):**
+
 ```bash
 # Validate all shell scripts
 for f in .claude/scripts/*.sh; do
@@ -114,6 +119,7 @@ done
 **Step 3 — Convention scan (adapts to repo type):**
 
 **If REPO_TYPE=project:**
+
 ```bash
 # Files over 300 lines
 git diff --name-only | xargs wc -l 2>/dev/null | awk '$1 > 300 {print "OVER 300 LINES:", $0}'
@@ -135,6 +141,7 @@ done
 ```
 
 **If REPO_TYPE=framework:**
+
 ```bash
 # Cross-reference validation: agent skills must exist
 for f in .claude/agents/*.md; do
@@ -164,17 +171,21 @@ grep -rnE '(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36})' .claude/ 2>/dev/null | hea
 After the initial scan, enter a monitoring loop. On each cycle:
 
 1. **Check for new changes** since last scan:
+
 ```bash
 CHANGED=$(git diff --name-only HEAD 2>/dev/null; git diff --name-only --cached 2>/dev/null)
 ```
 
 2. **Run regression detector** to check if changes invalidate prior phases:
+
 ```bash
 bash .claude/scripts/detect-phase-regression.sh 2>/dev/null
 ```
+
 If "REGRESSION DETECTED" — immediately report to Lead with affected phases and create `[regression]` tasks.
 
 3. **If changes detected**, re-run relevant checks ONLY on changed files:
+
 ```bash
 for f in $(echo "$CHANGED" | grep -E '\.(ts|tsx|js|jsx)$'); do
   [ -f "$f" ] || continue
@@ -185,6 +196,7 @@ done
 ```
 
 3. **Re-run build/test** if source files changed:
+
 ```bash
 if echo "$CHANGED" | grep -qE '\.(ts|tsx|js|jsx)$'; then
   npm run build 2>&1 | tail -10
@@ -197,6 +209,7 @@ fi
 5. **Check TaskList** for tasks assigned to you, then **sleep between cycles** — wait for new changes or assignments.
 
 **CRITICAL — CONTINUOUS MONITORING PROTOCOL:**
+
 - Do NOT stop after one scan. You run until shutdown.
 - After each cycle, check TaskList for new work, then run another cycle.
 - If the initial scan finds zero source files (empty project), report "no files yet" and WAIT — don't exit. Files will appear as builders work. Re-scan every cycle.
@@ -206,9 +219,11 @@ fi
 
 **PERIODIC HEALTH CHECKS (CronCreate):**
 When monitoring long builds, use CronCreate to schedule periodic checks:
+
 ```
 CronCreate({ schedule: "*/5 * * * *", prompt: "Run health check cycle on all changed files" })
 ```
+
 This ensures monitoring continues even during extended builder work. CronCreate is session-scoped — expires when the session ends, no cleanup needed.
 
 ## Communication Protocol

@@ -15,27 +15,27 @@ export function AnimatedCheckmark({ size = 24, color, strokeWidth = 2.5 }: Anima
       viewBox="0 0 24 24"
       fill="none"
       aria-hidden="true"
-      style={{ display: "inline-block" }}
+      style={{ display: 'inline-block' }}
     >
       {/* Circle */}
       <circle
         cx="12"
         cy="12"
         r="10"
-        stroke={color ?? "var(--accent)"}
+        stroke={color ?? 'var(--accent)'}
         strokeWidth={strokeWidth}
         fill="none"
         strokeDasharray="63"
         strokeDashoffset="63"
         style={{
-          animation: "apex-stroke-draw 0.6s var(--ease-out) forwards",
-          ["--path-length" as string]: "63",
+          animation: 'apex-stroke-draw 0.6s var(--ease-out) forwards',
+          ['--path-length' as string]: '63',
         }}
       />
       {/* Checkmark */}
       <polyline
         points="7 12 10.5 15.5 17 9"
-        stroke={color ?? "var(--accent)"}
+        stroke={color ?? 'var(--accent)'}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"

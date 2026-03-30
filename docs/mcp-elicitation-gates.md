@@ -14,10 +14,10 @@ This is different from a tool call. Elicitation is initiated by the **server**, 
 
 APEX has three hard gates in the autonomous pipeline:
 
-| Gate | Current behavior | With Elicitation |
-|---|---|---|
-| PRD Approval | Claude presents markdown, waits for "yes/no" reply | Structured form: Approve / Reject / Request changes (with field for notes) |
-| Architecture Approval | Claude presents markdown, waits for "yes/no" reply | Structured form: Approve / Reject / with optional dependency checklist |
+| Gate                  | Current behavior                                      | With Elicitation                                                              |
+| --------------------- | ----------------------------------------------------- | ----------------------------------------------------------------------------- |
+| PRD Approval          | Claude presents markdown, waits for "yes/no" reply    | Structured form: Approve / Reject / Request changes (with field for notes)    |
+| Architecture Approval | Claude presents markdown, waits for "yes/no" reply    | Structured form: Approve / Reject / with optional dependency checklist        |
 | Ship (Merge) Approval | Claude presents PR URL, waits for user to say "merge" | Structured form: Approve with merge strategy (squash / rebase / merge commit) |
 
 The key benefit is precision. "Approve with squash" is unambiguous. A free-text reply of "yeah go ahead with squash merge" requires parsing. Elicitation eliminates that ambiguity.
@@ -110,43 +110,45 @@ MCP Elicitation uses two hook events: `Elicitation` (server initiates a request)
 
 ```typescript
 // gate-server.ts — reference pattern, not production code
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { z } from "zod";
+import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
+import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { z } from 'zod';
 
-const server = new McpServer({ name: "apex-gates", version: "1.0.0" });
+const server = new McpServer({ name: 'apex-gates', version: '1.0.0' });
 
 server.tool(
-  "request_prd_approval",
+  'request_prd_approval',
   { prd_summary: z.string() },
   async ({ prd_summary }, { elicit }) => {
     // elicit() pauses Claude and presents the form to the user
     const result = await elicit({
       message: `Review the PRD before implementation begins:\n\n${prd_summary}`,
       requestedSchema: {
-        type: "object",
+        type: 'object',
         properties: {
           decision: {
-            type: "string",
-            enum: ["approve", "reject", "request_changes"],
+            type: 'string',
+            enum: ['approve', 'reject', 'request_changes'],
           },
-          notes: { type: "string" },
+          notes: { type: 'string' },
         },
-        required: ["decision"],
+        required: ['decision'],
       },
     });
 
-    if (result.action === "cancel") {
-      return { content: [{ type: "text", text: "Gate cancelled by user." }] };
+    if (result.action === 'cancel') {
+      return { content: [{ type: 'text', text: 'Gate cancelled by user.' }] };
     }
 
     return {
-      content: [{
-        type: "text",
-        text: JSON.stringify({ gate: "prd", ...result.content }),
-      }],
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify({ gate: 'prd', ...result.content }),
+        },
+      ],
     };
-  }
+  },
 );
 
 const transport = new StdioServerTransport();
@@ -209,6 +211,7 @@ Build the server in `./mcp-servers/apex-gates/` following the pattern above. The
 ## When to Use This
 
 Use MCP Elicitation gates when:
+
 - The project has strict change control (regulated industries, multi-team orgs)
 - You want an audit trail of gate decisions (log via `ElicitationResult` hook)
 - The pipeline runs in a context where free-text parsing is unreliable

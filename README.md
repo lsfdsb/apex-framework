@@ -1,8 +1,8 @@
-# ⚔️ APEX Framework v5.24.0
+# ⚔️ APEX Framework v6.0.1
 
 ```
   ╔══════════════════════════════════════════════╗
-  ║         ⚔️  APEX Framework v5.24.0           ║
+  ║         ⚔️  APEX Framework v6.0.1            ║
   ║     Agent-Powered EXcellence for Claude      ║
   ║                                              ║
   ║  Product vision like Steve Jobs              ║
@@ -19,7 +19,7 @@
   ╚══════════════════════════════════════════════╝
 ```
 
-> *"People don't know what they want until you show it to them."* — Steve Jobs
+> _"People don't know what they want until you show it to them."_ — Steve Jobs
 
 ---
 
@@ -83,11 +83,11 @@ This validates every shell script in your APEX installation. If everything passe
 
 ### Requirements
 
-| Tool | Why you need it | Install |
-|------|----------------|---------|
-| **git** | Version control — tracks every change you make | Comes with macOS (`xcode-select --install`) |
-| **jq** | JSON parser — APEX hooks use it to read Claude's tool data | [jqlang.github.io/jq](https://jqlang.github.io/jq/download/) |
-| **Claude Code** | The AI coding assistant that APEX configures | [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code) |
+| Tool            | Why you need it                                            | Install                                                                          |
+| --------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **git**         | Version control — tracks every change you make             | Comes with macOS (`xcode-select --install`)                                      |
+| **jq**          | JSON parser — APEX hooks use it to read Claude's tool data | [jqlang.github.io/jq](https://jqlang.github.io/jq/download/)                     |
+| **Claude Code** | The AI coding assistant that APEX configures               | [docs.anthropic.com/claude-code](https://docs.anthropic.com/en/docs/claude-code) |
 
 ---
 
@@ -131,14 +131,14 @@ When you say `/prd my LMS app`, APEX:
 
 ### The Philosophy
 
-| Master | Domain | Principle |
-|--------|--------|-----------|
-| **Steve Jobs** | Product | Say no to 1000 things — focus on what matters |
-| **Jony Ive** | Design | Radical simplicity — every element earns its place |
-| **Torvalds & Dean** | Code | Every line has purpose — no waste |
-| **Ionescu & Rutkowska** | Security | Defense in depth — trust nothing |
-| **Dario Amodei** | Business | Build what matters, ship with intention |
-| **Walt Disney** | Experience | Magic in every interaction |
+| Master                  | Domain     | Principle                                          |
+| ----------------------- | ---------- | -------------------------------------------------- |
+| **Steve Jobs**          | Product    | Say no to 1000 things — focus on what matters      |
+| **Jony Ive**            | Design     | Radical simplicity — every element earns its place |
+| **Torvalds & Dean**     | Code       | Every line has purpose — no waste                  |
+| **Ionescu & Rutkowska** | Security   | Defense in depth — trust nothing                   |
+| **Dario Amodei**        | Business   | Build what matters, ship with intention            |
+| **Walt Disney**         | Experience | Magic in every interaction                         |
 
 ---
 
@@ -148,51 +148,51 @@ One install. Everything in your project's `.claude/` directory.
 
 ### The Visible Layer (what you use)
 
-| Command | When | What happens |
-|---------|------|-------------|
-| `/prd` | Start of any new feature | Generates requirements, blocks code without one |
-| `/architecture` | After PRD approval | Plans system design, picks DNA recipe |
-| `/ship` | When ready to deploy | Commit → push → PR → code review → merge |
-| `/teach` | When you're learning | Explains concepts at your level |
-| `/qa` | Manual quality check | 7-phase gate (also runs automatically) |
-| `/teams` | Complex features | Spawns parallel agent team |
-| `/commit` | Save a checkpoint | Clean conventional commit + changelog |
+| Command         | When                     | What happens                                    |
+| --------------- | ------------------------ | ----------------------------------------------- |
+| `/prd`          | Start of any new feature | Generates requirements, blocks code without one |
+| `/architecture` | After PRD approval       | Plans system design, picks DNA recipe           |
+| `/ship`         | When ready to deploy     | Commit → push → PR → code review → merge        |
+| `/teach`        | When you're learning     | Explains concepts at your level                 |
+| `/qa`           | Manual quality check     | 7-phase gate (also runs automatically)          |
+| `/teams`        | Complex features         | Spawns parallel agent team                      |
+| `/commit`       | Save a checkpoint        | Clean conventional commit + changelog           |
 
 ### The Invisible Army (works automatically)
 
-| What | How |
-|------|-----|
-| **Code standards** | Auto-enforced when you write code (TypeScript strict, no `any`, ≤30-line functions) |
-| **Security scanning** | Hook blocks hardcoded API keys, SQL injection, `eval()` on every file write |
-| **Design compliance** | QA checks token usage, DNA patterns, branding |
-| **Library verification** | Auto-checks every `npm install` for CVEs, maintenance, license |
-| **Dangerous command blocking** | `rm -rf`, force push, `DROP TABLE` blocked deterministically |
-| **Commit format** | Conventional commits enforced by git hook (72-char, `type(scope): desc`) |
-| **Documentation** | Technical Writer updates CHANGELOG/README on every commit |
-| **Performance** | Auto-checks for N+1 queries, bundle size, unnecessary renders |
-| **Accessibility** | WCAG 2.2 AA audit runs before shipping UI |
+| What                           | How                                                                                 |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| **Code standards**             | Auto-enforced when you write code (TypeScript strict, no `any`, ≤30-line functions) |
+| **Security scanning**          | Hook blocks hardcoded API keys, SQL injection, `eval()` on every file write         |
+| **Design compliance**          | QA checks token usage, DNA patterns, branding                                       |
+| **Library verification**       | Auto-checks every `npm install` for CVEs, maintenance, license                      |
+| **Dangerous command blocking** | `rm -rf`, force push, `DROP TABLE` blocked deterministically                        |
+| **Commit format**              | Conventional commits enforced by git hook (72-char, `type(scope): desc`)            |
+| **Documentation**              | Technical Writer updates CHANGELOG/README on every commit                           |
+| **Performance**                | Auto-checks for N+1 queries, bundle size, unnecessary renders                       |
+| **Accessibility**              | WCAG 2.2 AA audit runs before shipping UI                                           |
 
 ### The Championship Roster (9 agents + Lead)
 
-| Agent | Model | Phase | Role |
-|-------|-------|-------|------|
-| **Lead** (you + Claude) | Opus | All | Orchestrates the pipeline — not a spawned agent |
-| **Project Manager** | Sonnet | 3 (Decompose) | Apple EPM task decomposition with DRI assignments |
-| **Design Reviewer** | Sonnet | 4, 6 (Verify, Quality) | DNA compliance — validates UI matches spec |
-| **Builder** | Sonnet | 5 (Build) | Writes production code, verifies APIs before integrating |
-| **Watcher** | Haiku | 5 (Build) | Continuous monitoring — errors, security, drift |
-| **QA** | Sonnet | 6 (Quality) | 7-phase quality gate — blocks bad code |
-| **Technical Writer** | Haiku | 7 (Ship) | CHANGELOG, README, docs ownership |
+| Agent                   | Model  | Phase                  | Role                                                     |
+| ----------------------- | ------ | ---------------------- | -------------------------------------------------------- |
+| **Lead** (you + Claude) | Opus   | All                    | Orchestrates the pipeline — not a spawned agent          |
+| **Project Manager**     | Sonnet | 3 (Decompose)          | Apple EPM task decomposition with DRI assignments        |
+| **Design Reviewer**     | Sonnet | 4, 6 (Verify, Quality) | DNA compliance — validates UI matches spec               |
+| **Builder**             | Sonnet | 5 (Build)              | Writes production code, verifies APIs before integrating |
+| **Watcher**             | Haiku  | 5 (Build)              | Continuous monitoring — errors, security, drift          |
+| **QA**                  | Sonnet | 6 (Quality)            | 7-phase quality gate — blocks bad code                   |
+| **Technical Writer**    | Haiku  | 7 (Ship)               | CHANGELOG, README, docs ownership                        |
 
 ### Design DNA — Pixel-Perfect from Day One
 
 14 premium UI pages + **57 production-ready files** you can copy directly into your project:
 
-| Layer | Files | What |
-|-------|-------|------|
-| **Tokens** | 10 CSS/JS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 animation keyframes + prefers-reduced-motion + foundation |
-| **Starters** | 33 TSX | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn, DnaBackground), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) |
-| **Templates** | 14 TSX | Landing, SaaS Dashboard, CRM Pipeline (+24 subcomponents), E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, Pattern Showcase, Animations Showcase |
+| Layer         | Files     | What                                                                                                                                                                                                                                                                                                                                                                      |
+| ------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Tokens**    | 10 CSS/JS | 5 palettes (creative-warm, saas-blue, editorial, fintech, startup) with RGB tokens + 10 animation keyframes + prefers-reduced-motion + foundation                                                                                                                                                                                                                         |
+| **Starters**  | 33 TSX    | Layout (Sidebar, Header, PageShell, MobileNav), Patterns (Accordion, Modal, Tabs, Pagination, KanbanColumn, DnaBackground), Primitives (Card, Badge, Button, Input, DataTable, StatCard, ChartCard, ThemeToggle, EmptyState, Avatar, ProgressBar, ProgressRing, Skeleton, SectionHeader, PageReveal, Toggle, Tooltip, AnimatedCheckmark, NotificationDot, LoadingSpinner) |
+| **Templates** | 14 TSX    | Landing, SaaS Dashboard, CRM Pipeline (+24 subcomponents), E-commerce, Blog, Portfolio, Social Feed, LMS Dashboard, Backoffice, Design System, Email, Presentation, Pattern Showcase, Animations Showcase                                                                                                                                                                 |
 
 The builder reads the matching React template, extracts design values, and writes only business logic. Design is inherited, not translated.
 
@@ -219,23 +219,23 @@ Layer 3: Hook scripts (runtime enforcement)
 
 **What's deterministic (cannot be bypassed):**
 
-| Hook | What it catches | Why it matters |
-|------|----------------|----------------|
-| `block-dangerous-commands.sh` | `rm -rf`, force push, `DROP TABLE` | Prevents irreversible data loss |
-| `scan-security-patterns.sh` | Hardcoded secrets, API keys, SQL injection | Catches vulnerabilities before they enter the codebase |
-| `protect-files.sh` | Direct edits to `.env`, lock files, `node_modules` | Protects secrets and generated files |
-| `enforce-workflow.sh` | New app/component files without a PRD | Prevents building without a plan |
-| `stop-gate.sh` | Code written but tests not run | Reminds you to verify your work |
+| Hook                          | What it catches                                    | Why it matters                                         |
+| ----------------------------- | -------------------------------------------------- | ------------------------------------------------------ |
+| `block-dangerous-commands.sh` | `rm -rf`, force push, `DROP TABLE`                 | Prevents irreversible data loss                        |
+| `scan-security-patterns.sh`   | Hardcoded secrets, API keys, SQL injection         | Catches vulnerabilities before they enter the codebase |
+| `protect-files.sh`            | Direct edits to `.env`, lock files, `node_modules` | Protects secrets and generated files                   |
+| `enforce-workflow.sh`         | New app/component files without a PRD              | Prevents building without a plan                       |
+| `stop-gate.sh`                | Code written but tests not run                     | Reminds you to verify your work                        |
 
 ---
 
 ## Model Strategy (Benchmark-Backed)
 
-| Tier | Model | Agents | Why |
-|------|-------|--------|-----|
-| **Decision** | Opus | Lead | Best reasoning for orchestration and architectural decisions. |
-| **Build + Analyze** | Sonnet | Builder, QA, PM | SWE-bench 79.6% — near-Opus code quality at 40% lower cost. |
-| **Monitor + Document** | Haiku | Watcher, Technical Writer | Fast, cheap, excellent for reading/monitoring/docs tasks. |
+| Tier                   | Model  | Agents                    | Why                                                           |
+| ---------------------- | ------ | ------------------------- | ------------------------------------------------------------- |
+| **Decision**           | Opus   | Lead                      | Best reasoning for orchestration and architectural decisions. |
+| **Build + Analyze**    | Sonnet | Builder, QA, PM           | SWE-bench 79.6% — near-Opus code quality at 40% lower cost.   |
+| **Monitor + Document** | Haiku  | Watcher, Technical Writer | Fast, cheap, excellent for reading/monitoring/docs tasks.     |
 
 ---
 
@@ -244,16 +244,15 @@ Layer 3: Hook scripts (runtime enforcement)
 The bar at the bottom of your terminal shows real-time session data:
 
 ```
-⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
+⚔️ APEX v6.0.1 ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% of 1.0M ┃ +150/-20 ┃ 15m
 ```
 
-| Segment | What it means |
-|---------|--------------|
-| `opus MAX` | Which AI model is active + your plan tier (MAX shown only after first API call) |
-| `🟢 ████░░░░░░ 42%` | How full the context window is (🟢 green / 🟡 yellow >60% / 🔴 red >80%) |
-| `420.0K/1.0M` | Tokens used / total available |
-| `+150/-20 (+130)` | Lines of code added / removed (hidden until first change) |
-| `15m` | Session duration |
+| Segment                     | What it means                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `opus MAX`                  | Which AI model is active + your plan tier (MAX shown only after first API call) |
+| `🟢 ████░░░░░░ 42% of 1.0M` | How full the context window is (🟢 green / 🟡 yellow >60% / 🔴 red >80%)        |
+| `+150/-20`                  | Lines of code added / removed (hidden until first change)                       |
+| `15m`                       | Session duration                                                                |
 
 When context hits 80%, you'll see `⚠️ CTX` — that means type `/compact` to free up space. At cold start (before first API call), context shows `🟢 ready` instead of zeros.
 
@@ -291,6 +290,7 @@ APEX is designed to teach you engineering while you build. Here's how to get the
 
 - Write features with less hand-holding
 - Set up CI/CD pipelines (`/cicd`)
+
 ---
 
 ## Step-by-Step Guide
@@ -333,33 +333,37 @@ APEX will **automatically block code** until you have a PRD. Say `/prd` to gener
 
 The enforced workflow saves you from yourself:
 
-| Step | Command | What It Does |
-|------|---------|-------------|
-| 1 | `/prd` | Define what you're building — scope, features, constraints |
-| 2 | `/architecture` | Plan the system — database schema, API design, component tree |
-| 3 | WebSearch | Verify APIs and libraries exist — never hallucinate an endpoint |
-| 4 | Build | Write code — APEX auto-formats, enforces standards, validates types |
-| 5 | `/qa` | Run 7-phase quality gate — deps, lint, types, tests, security, review, polish |
-| 6 | `/security` | OWASP audit on auth, payments, PII handling |
-| 7 | `/a11y` | WCAG 2.2 AA accessibility check |
-| 8 | `/cx-review` | Customer experience review — is this good enough to ship? |
-| 9 | `/commit` | Clean conventional commit with pre-commit hooks |
+| Step | Command         | What It Does                                                                  |
+| ---- | --------------- | ----------------------------------------------------------------------------- |
+| 1    | `/prd`          | Define what you're building — scope, features, constraints                    |
+| 2    | `/architecture` | Plan the system — database schema, API design, component tree                 |
+| 3    | WebSearch       | Verify APIs and libraries exist — never hallucinate an endpoint               |
+| 4    | Build           | Write code — APEX auto-formats, enforces standards, validates types           |
+| 5    | `/qa`           | Run 7-phase quality gate — deps, lint, types, tests, security, review, polish |
+| 6    | `/security`     | OWASP audit on auth, payments, PII handling                                   |
+| 7    | `/a11y`         | WCAG 2.2 AA accessibility check                                               |
+| 8    | `/cx-review`    | Customer experience review — is this good enough to ship?                     |
+| 9    | `/commit`       | Clean conventional commit with pre-commit hooks                               |
 
 ### Step 4: Use the Right Skill for the Job
 
 **While building:**
+
 - `/e2e` — Write Playwright end-to-end tests for critical flows
 - `/teach` — Ask Claude to explain what it's doing and why
 
 **Before installing anything:**
+
 - Use WebSearch to verify API docs before integrating
 - Libraries are auto-verified before install (security, license, maintenance)
 
 **For database work:**
+
 - `/supabase` — Full Supabase integration (auth, RLS, migrations, edge functions)
 - SQL rules auto-load when writing queries — prevents N+1, enforces indexes
 
 **For design work:**
+
 - Design system rules auto-load on `.tsx` files — mobile-first, radical simplicity
 - `/cx-review` before users see it — Walt Disney level of polish
 
@@ -367,13 +371,13 @@ The enforced workflow saves you from yourself:
 
 APEX has 6 specialized agents — a championship roster. Use `/teams` for parallel work:
 
-| Agent | Model | Phase | Role |
-|-------|-------|-------|------|
-| **project-manager** | Sonnet | 3 (Decompose) | Apple EPM task decomposition — DRI assignments |
-| **builder** | Sonnet | 5 (Build) | Implements features, verifies APIs, follows DNA |
-| **watcher** | Haiku | 5 (Build) | Continuous monitoring — catches errors, security, drift |
-| **qa** | Sonnet | 6 (Quality) | 7-phase quality gate — blocks bad code |
-| **technical-writer** | Haiku | 7 (Ship) | Keeps CHANGELOG, README, docs in sync |
+| Agent                | Model  | Phase         | Role                                                    |
+| -------------------- | ------ | ------------- | ------------------------------------------------------- |
+| **project-manager**  | Sonnet | 3 (Decompose) | Apple EPM task decomposition — DRI assignments          |
+| **builder**          | Sonnet | 5 (Build)     | Implements features, verifies APIs, follows DNA         |
+| **watcher**          | Haiku  | 5 (Build)     | Continuous monitoring — catches errors, security, drift |
+| **qa**               | Sonnet | 6 (Quality)   | 7-phase quality gate — blocks bad code                  |
+| **technical-writer** | Haiku  | 7 (Ship)      | Keeps CHANGELOG, README, docs in sync                   |
 
 Use `/teams` and Claude auto-selects the right roster.
 
@@ -392,6 +396,7 @@ The HUB includes interactive 7-phase pipeline flow, 5-column Kanban board with W
 APEX has 3 layers of protection running automatically:
 
 **You can't accidentally:**
+
 - Push directly to main (hook blocks it)
 - Commit with bad message format (hook blocks it)
 - Delete files with `rm -rf` (hook blocks it)
@@ -400,6 +405,7 @@ APEX has 3 layers of protection running automatically:
 - Forget to run tests (stop-gate warns you)
 
 **You get automatically:**
+
 - Code formatted with Prettier after every edit
 - Changelog updated after every commit
 - Dev server managed (auto-start, auto-monitor, auto-cleanup)
@@ -411,16 +417,15 @@ APEX has 3 layers of protection running automatically:
 The statusline at the bottom shows real-time session data:
 
 ```
-⚔️ APEX ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% 420.0K/1.0M ┃ +150/-20 (+130) ┃ 15m
+⚔️ APEX v6.0.1 ┃ opus MAX ┃ 🟢 ████░░░░░░ 42% of 1.0M ┃ +150/-20 ┃ 15m
 ```
 
-| Segment | Meaning |
-|---------|---------|
-| `opus MAX` | Current model + plan |
-| `🟢 ████░░░░░░ 42%` | Context window health (green/yellow/red) |
-| `420.0K/1.0M` | Tokens used / total window |
-| `+150/-20 (+130)` | Lines added / removed (net change) |
-| `15m` | Session duration |
+| Segment                     | Meaning                                  |
+| --------------------------- | ---------------------------------------- |
+| `opus MAX`                  | Current model + plan                     |
+| `🟢 ████░░░░░░ 42% of 1.0M` | Context window health (green/yellow/red) |
+| `+150/-20`                  | Lines added / removed                    |
+| `15m`                       | Session duration                         |
 
 When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
@@ -437,23 +442,19 @@ When context hits 80%, you'll see `⚠️ CTX` — time to `/compact`.
 
 ## Guides
 
-| Guide | Language |
-|-------|----------|
-| [Install Guide](docs/guides/install-guide-en-us.md) | English |
+| Guide                                               | Language |
+| --------------------------------------------------- | -------- |
+| [Install Guide](docs/guides/install-guide-en-us.md) | English  |
 
 ---
 
 ## Changelog
 
-### Latest — v5.24.0 (2026-03-25)
+### Latest — v6.0.1 (2026-03-29)
 
-- **Apple EPM Honest Alignment** — CLAUDE.md now distinguishes between Implement faithfully (ANPP, DRI, 7 Elements), Adapt (3→1 design, ET Reviews), and Aspire (10-to-3-to-1) features (#210)
-- **ANPP vs Rules of the Road** — PM generates ANPP (development plan with milestones). Tech Writer generates Rules of the Road (launch checklist). Clear separation of concerns (#210)
-- **Seven Elements as Real Exit Criteria** — QA agent verifies each element (Diligence/Empathy/Craft/Taste/Inspiration/Decisiveness/Collaboration) with concrete questions, not just labels (#210)
-- **Builder Quality-During-Build** — Builders self-verify with demo-first protocol during implementation, not just at pre-completion (#210)
-- **DRI Decision Ownership** — All agents own decisions transparently. Paired Design Review adds brainstorm + production passes (#210)
-- **Tech Writer Rules of the Road Template** — 12-point launch verification matrix in Phase 7 (#210)
-- **Dead Reference Cleanup** — Removed health-check.sh and stale HTML/CSS references; memory audit complete (#210)
+- **APEX Ops v6.0** — next-forge monorepo scaffold (7 apps + 7 packages), Design DNA bridge, app-level CLAUDE.md templates
+- **StatusLine v4** — removed token count display, cleaner context bar showing `% of [size]`
+- **Version sync** — all version references aligned to 6.0.1 (README, package.json, VERSION, about skill)
 
 See [CHANGELOG.md](CHANGELOG.md) for full version history.
 

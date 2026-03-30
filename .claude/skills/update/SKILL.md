@@ -1,7 +1,7 @@
 ---
 name: update
 description: Manually update the APEX Framework to the latest version. Use when auto-update can't self-update, when you want to force an update, or when starting a new project. Triggers on "update apex", "update framework", "pull latest", "sync framework", "/update".
-argument-hint: "[force]"
+argument-hint: '[force]'
 allowed-tools: Bash, Read, Grep, Glob
 ---
 
@@ -12,12 +12,14 @@ Manual update command — pulls the latest APEX from GitHub and installs it into
 ## Process
 
 ### Step 1: Check current version
+
 ```bash
 echo "Current: $(cat .claude/.apex-version 2>/dev/null || echo 'unknown')"
 echo "Cache: $(cat ~/.apex-framework/VERSION 2>/dev/null || echo 'not cached')"
 ```
 
 ### Step 2: Pull latest from GitHub
+
 ```bash
 # Fetch + force reset (handles divergent branches on macOS)
 if [ -d ~/.apex-framework/.git ]; then
@@ -28,11 +30,13 @@ fi
 ```
 
 ### Step 3: Install into current project
+
 ```bash
 ~/.apex-framework/install.sh
 ```
 
 ### Step 4: Verify
+
 ```bash
 echo "Updated to: $(cat .claude/.apex-version 2>/dev/null || cat ~/.apex-framework/VERSION)"
 ```

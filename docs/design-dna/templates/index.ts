@@ -23,18 +23,18 @@
  */
 
 // Core templates (7 requested)
-export { default as LandingPage } from "./LandingPage";
-export { default as SaaSDashboard } from "./SaaSDashboard";
-export { default as CRMPipeline } from "./CRMPipeline";
-export { default as BlogLayout } from "./BlogLayout";
-export { default as EcommercePage } from "./EcommercePage";
-export { default as BackofficePage } from "./BackofficePage";
-export { default as PortfolioPage } from "./PortfolioPage";
+export { default as LandingPage } from './LandingPage';
+export { default as SaaSDashboard } from './SaaSDashboard';
+export { default as CRMPipeline } from './CRMPipeline';
+export { default as BlogLayout } from './BlogLayout';
+export { default as EcommercePage } from './EcommercePage';
+export { default as BackofficePage } from './BackofficePage';
+export { default as PortfolioPage } from './PortfolioPage';
 
 // Extended templates
-export { default as LMSDashboard } from "./LMSDashboard";
-export { default as SocialFeed } from "./SocialFeed";
-export { default as EmailTemplate } from "./EmailTemplate";
-export { default as PresentationSlide } from "./PresentationSlide";
-export { default as DesignSystemPage } from "./DesignSystemPage";
-export { default as PatternShowcase } from "./PatternShowcase";
+export { default as LMSDashboard } from './LMSDashboard';
+export { default as SocialFeed } from './SocialFeed';
+export { default as EmailTemplate } from './EmailTemplate';
+export { default as PresentationSlide } from './PresentationSlide';
+export { default as DesignSystemPage } from './DesignSystemPage';
+export { default as PatternShowcase } from './PatternShowcase';

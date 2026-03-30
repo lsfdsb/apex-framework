@@ -9,10 +9,10 @@ interface PageRevealProps {
   className?: string;
 }
 
-export function PageReveal({ children, delay = 0, className = "" }: PageRevealProps) {
+export function PageReveal({ children, delay = 0, className = '' }: PageRevealProps) {
   return (
     <div
-      className={`reveal ${delay > 0 ? `reveal-delay-${Math.min(Math.ceil(delay / 100), 4)}` : ""} ${className}`}
+      className={`reveal ${delay > 0 ? `reveal-delay-${Math.min(Math.ceil(delay / 100), 4)}` : ''} ${className}`}
     >
       {children}
     </div>

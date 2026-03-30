@@ -22,7 +22,7 @@ export function ProgressRing({ percentage, size = 64, strokeWidth = 4, label }: 
           r={radius}
           fill="none"
           strokeWidth={strokeWidth}
-          style={{ stroke: "var(--border)" }}
+          style={{ stroke: 'var(--border)' }}
         />
         <circle
           cx={size / 2}
@@ -32,16 +32,16 @@ export function ProgressRing({ percentage, size = 64, strokeWidth = 4, label }: 
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           style={{
-            stroke: "var(--accent)",
+            stroke: 'var(--accent)',
             strokeDasharray: circumference,
             strokeDashoffset: offset,
-            transition: "stroke-dashoffset 1s var(--ease-out)",
+            transition: 'stroke-dashoffset 1s var(--ease-out)',
           }}
         />
       </svg>
       <span
         className="absolute text-[11px] font-semibold"
-        style={{ color: "var(--text)" }}
+        style={{ color: 'var(--text)' }}
         aria-label={label ?? `${percentage}% complete`}
       >
         {percentage}%

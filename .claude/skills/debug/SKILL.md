@@ -1,7 +1,7 @@
 ---
 name: debug
 description: Use when encountering any bug, test failure, unexpected behavior, or error — before proposing fixes. Also use when the user says "debug", "broken", "not working", "investigate", "root cause", "flaky", or when previous fixes haven't worked.
-argument-hint: "[error description or symptom]"
+argument-hint: '[error description or symptom]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -30,6 +30,7 @@ Test status: !`npm test 2>&1 | tail -5 2>/dev/null || echo "No test runner found
 Use for ANY technical issue: test failures, bugs, unexpected behavior, performance problems, build failures, integration issues, flaky tests.
 
 **Use ESPECIALLY when:**
+
 - Under time pressure (emergencies make guessing tempting)
 - "Just one quick fix" seems obvious
 - You've already tried multiple fixes
@@ -111,11 +112,13 @@ Complete each phase before proceeding to the next.
 ### When 3+ Fixes Fail: Question Architecture
 
 **Pattern indicating architectural problem:**
+
 - Each fix reveals new shared state/coupling/problem in different place
 - Fixes require "massive refactoring" to implement
 - Each fix creates new symptoms elsewhere
 
 **STOP and question fundamentals:**
+
 - Is this pattern fundamentally sound?
 - Are we sticking with it through sheer inertia?
 - Should we refactor architecture vs. continue fixing symptoms?
@@ -126,12 +129,12 @@ Discuss with the user before attempting more fixes.
 
 After fixing a root cause, validate at EVERY layer data passes through:
 
-| Layer | Purpose | Example |
-|-------|---------|---------|
-| **Entry Point** | Reject invalid input at API boundary | `if (!dir) throw new Error('dir required')` |
-| **Business Logic** | Ensure data makes sense for operation | `if (!projectDir) throw 'projectDir required'` |
-| **Environment Guard** | Prevent dangerous operations in context | Refuse git init outside tmpdir in tests |
-| **Debug Instrumentation** | Capture context for forensics | Log directory, cwd, stack before operation |
+| Layer                     | Purpose                                 | Example                                        |
+| ------------------------- | --------------------------------------- | ---------------------------------------------- |
+| **Entry Point**           | Reject invalid input at API boundary    | `if (!dir) throw new Error('dir required')`    |
+| **Business Logic**        | Ensure data makes sense for operation   | `if (!projectDir) throw 'projectDir required'` |
+| **Environment Guard**     | Prevent dangerous operations in context | Refuse git init outside tmpdir in tests        |
+| **Debug Instrumentation** | Capture context for forensics           | Log directory, cwd, stack before operation     |
 
 Single validation: "We fixed the bug." Multiple layers: "We made the bug impossible."
 
@@ -141,24 +144,25 @@ Replace arbitrary delays with condition polling:
 
 ```typescript
 // ❌ Guessing at timing
-await new Promise(r => setTimeout(r, 50));
+await new Promise((r) => setTimeout(r, 50));
 
 // ✅ Waiting for actual condition
 await waitFor(() => getResult() !== undefined);
 ```
 
-| Scenario | Pattern |
-|----------|---------|
+| Scenario       | Pattern                                              |
+| -------------- | ---------------------------------------------------- |
 | Wait for event | `waitFor(() => events.find(e => e.type === 'DONE'))` |
-| Wait for state | `waitFor(() => machine.state === 'ready')` |
-| Wait for count | `waitFor(() => items.length >= 5)` |
+| Wait for state | `waitFor(() => machine.state === 'ready')`           |
+| Wait for count | `waitFor(() => items.length >= 5)`                   |
 
 Generic polling implementation:
+
 ```typescript
 async function waitFor<T>(
   condition: () => T | undefined | null | false,
   description: string,
-  timeoutMs = 5000
+  timeoutMs = 5000,
 ): Promise<T> {
   const startTime = Date.now();
   while (true) {
@@ -166,7 +170,7 @@ async function waitFor<T>(
     if (result) return result;
     if (Date.now() - startTime > timeoutMs)
       throw new Error(`Timeout: ${description} after ${timeoutMs}ms`);
-    await new Promise(r => setTimeout(r, 10));
+    await new Promise((r) => setTimeout(r, 10));
   }
 }
 ```
@@ -174,6 +178,7 @@ async function waitFor<T>(
 ## Red Flags — STOP and Follow Process
 
 If you catch yourself thinking:
+
 - "Quick fix for now, investigate later"
 - "Just try changing X and see if it works"
 - "Add multiple changes, run tests"
@@ -186,22 +191,22 @@ If you catch yourself thinking:
 
 ## Common Rationalizations
 
-| Excuse | Reality |
-|--------|---------|
-| "Issue is simple, don't need process" | Simple issues have root causes too. Process is fast for simple bugs. |
-| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check thrashing. |
-| "Just try this first, then investigate" | First fix sets the pattern. Do it right from the start. |
-| "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
+| Excuse                                     | Reality                                                                 |
+| ------------------------------------------ | ----------------------------------------------------------------------- |
+| "Issue is simple, don't need process"      | Simple issues have root causes too. Process is fast for simple bugs.    |
+| "Emergency, no time for process"           | Systematic debugging is FASTER than guess-and-check thrashing.          |
+| "Just try this first, then investigate"    | First fix sets the pattern. Do it right from the start.                 |
+| "I see the problem, let me fix it"         | Seeing symptoms ≠ understanding root cause.                             |
 | "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
 
 ## Quick Reference
 
-| Phase | Key Activities | Success Criteria |
-|-------|---------------|------------------|
-| **1. Root Cause** | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY |
-| **2. Pattern** | Find working examples, compare | Identify differences |
-| **3. Hypothesis** | Form theory, test minimally | Confirmed or new hypothesis |
-| **4. Implementation** | Create test, fix, verify | Bug resolved, tests pass |
+| Phase                 | Key Activities                                         | Success Criteria            |
+| --------------------- | ------------------------------------------------------ | --------------------------- |
+| **1. Root Cause**     | Read errors, reproduce, check changes, gather evidence | Understand WHAT and WHY     |
+| **2. Pattern**        | Find working examples, compare                         | Identify differences        |
+| **3. Hypothesis**     | Form theory, test minimally                            | Confirmed or new hypothesis |
+| **4. Implementation** | Create test, fix, verify                               | Bug resolved, tests pass    |
 
 ## Integration
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 const TrendUp = () => (
   <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -16,29 +16,46 @@ interface MetricCardProps {
   label: string;
   value: string;
   change: string;
-  trend: "up" | "down";
+  trend: 'up' | 'down';
 }
 
 function MetricCard({ label, value, change, trend }: MetricCardProps) {
-  const changeColor = trend === "up"
-    ? "var(--success, #34d399)"
-    : "var(--destructive, #f87171)";
+  const changeColor = trend === 'up' ? 'var(--success, #34d399)' : 'var(--destructive, #f87171)';
 
   return (
-    <div style={{
-      background: "var(--bg-elevated, #1e1e2e)",
-      border: "1px solid var(--border, rgba(255,255,255,0.08))",
-      borderRadius: "var(--radius, 12px)",
-      padding: "24px",
-    }}>
-      <div style={{ fontSize: 12, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", marginBottom: 8 }}>
+    <div
+      style={{
+        background: 'var(--bg-elevated, #1e1e2e)',
+        border: '1px solid var(--border, rgba(255,255,255,0.08))',
+        borderRadius: 'var(--radius, 12px)',
+        padding: '24px',
+      }}
+    >
+      <div
+        style={{
+          fontSize: 12,
+          color: 'var(--text-muted)',
+          textTransform: 'uppercase',
+          letterSpacing: '0.06em',
+          marginBottom: 8,
+        }}
+      >
         {label}
       </div>
-      <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1 }}>
+      <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: '-0.03em', lineHeight: 1 }}>
         {value}
       </div>
-      <div style={{ fontSize: 12, marginTop: 8, display: "flex", alignItems: "center", gap: 4, color: changeColor }}>
-        {trend === "up" ? <TrendUp /> : <TrendDown />}
+      <div
+        style={{
+          fontSize: 12,
+          marginTop: 8,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 4,
+          color: changeColor,
+        }}
+      >
+        {trend === 'up' ? <TrendUp /> : <TrendDown />}
         {change}
       </div>
     </div>
@@ -54,23 +71,41 @@ interface FunnelStageProps {
 
 function FunnelStage({ label, count, width, color }: FunnelStageProps) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
-      <span style={{ fontSize: 13, color: "var(--text-secondary, #a0a0b8)", width: 80, textAlign: "right", flexShrink: 0 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 12 }}>
+      <span
+        style={{
+          fontSize: 13,
+          color: 'var(--text-secondary, #a0a0b8)',
+          width: 80,
+          textAlign: 'right',
+          flexShrink: 0,
+        }}
+      >
         {label}
       </span>
-      <div style={{ flex: 1, position: "relative" }}>
-        <div style={{
-          width,
-          height: 40,
-          borderRadius: "var(--radius-sm, 6px)",
-          background: color,
-          display: "flex",
-          alignItems: "center",
-          paddingLeft: 16,
-          transition: "width 1.5s cubic-bezier(0.22,1,0.36,1)",
-          overflow: "hidden",
-        }}>
-          <span style={{ fontSize: 13, fontWeight: 600, color: "white", position: "relative", zIndex: 1 }}>
+      <div style={{ flex: 1, position: 'relative' }}>
+        <div
+          style={{
+            width,
+            height: 40,
+            borderRadius: 'var(--radius-sm, 6px)',
+            background: color,
+            display: 'flex',
+            alignItems: 'center',
+            paddingLeft: 16,
+            transition: 'width 1.5s cubic-bezier(0.22,1,0.36,1)',
+            overflow: 'hidden',
+          }}
+        >
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 600,
+              color: 'white',
+              position: 'relative',
+              zIndex: 1,
+            }}
+          >
             {count}
           </span>
         </div>
@@ -85,14 +120,16 @@ interface ConversionArrowProps {
 
 function ConversionArrow({ pct }: ConversionArrowProps) {
   return (
-    <div style={{ textAlign: "center", padding: "4px 0" }}>
-      <span style={{
-        fontSize: 11,
-        color: "var(--text-muted, #666680)",
-        background: "var(--bg-surface, #16161e)",
-        padding: "2px 10px",
-        borderRadius: 999,
-      }}>
+    <div style={{ textAlign: 'center', padding: '4px 0' }}>
+      <span
+        style={{
+          fontSize: 11,
+          color: 'var(--text-muted, #666680)',
+          background: 'var(--bg-surface, #16161e)',
+          padding: '2px 10px',
+          borderRadius: 999,
+        }}
+      >
         ↓ {pct}
       </span>
     </div>
@@ -101,19 +138,45 @@ function ConversionArrow({ pct }: ConversionArrowProps) {
 
 export function PipelineAnalytics() {
   return (
-    <section style={{ padding: "80px 0" }}>
-      <div style={{ maxWidth: 960, margin: "0 auto", padding: "0 32px" }}>
+    <section style={{ padding: '80px 0' }}>
+      <div style={{ maxWidth: 960, margin: '0 auto', padding: '0 32px' }}>
         <div style={{ marginBottom: 48 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "var(--accent, #a78bfa)", marginBottom: 12 }}>
+          <div
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              color: 'var(--accent, #a78bfa)',
+              marginBottom: 12,
+            }}
+          >
             Analytics
           </div>
-          <h2 style={{ fontSize: 36, fontWeight: 700, letterSpacing: "-0.03em", lineHeight: 1.1, margin: 0 }}>
-            Numbers that<br />drive decisions.
+          <h2
+            style={{
+              fontSize: 36,
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.1,
+              margin: 0,
+            }}
+          >
+            Numbers that
+            <br />
+            drive decisions.
           </h2>
         </div>
 
         {/* 4-column KPI grid */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 16, marginBottom: 48 }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: '1fr 1fr 1fr 1fr',
+            gap: 16,
+            marginBottom: 48,
+          }}
+        >
           <MetricCard label="Pipeline Value" value="$284k" change="+18% this month" trend="up" />
           <MetricCard label="Win Rate" value="68%" change="+5% vs Q4" trend="up" />
           <MetricCard label="Avg. Deal Size" value="$32k" change="-3% vs Q4" trend="down" />
@@ -121,12 +184,27 @@ export function PipelineAnalytics() {
         </div>
 
         {/* Pipeline funnel */}
-        <div style={{ maxWidth: 640, margin: "0 auto" }}>
-          <FunnelStage label="New Leads" count={248} width="100%" color="var(--pipeline-lead, #60a5fa)" />
+        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <FunnelStage
+            label="New Leads"
+            count={248}
+            width="100%"
+            color="var(--pipeline-lead, #60a5fa)"
+          />
           <ConversionArrow pct="52%" />
-          <FunnelStage label="Qualified" count={129} width="52%" color="var(--pipeline-qualified, #a78bfa)" />
+          <FunnelStage
+            label="Qualified"
+            count={129}
+            width="52%"
+            color="var(--pipeline-qualified, #a78bfa)"
+          />
           <ConversionArrow pct="64%" />
-          <FunnelStage label="Proposal" count={83} width="33%" color="var(--pipeline-proposal, #fbbf24)" />
+          <FunnelStage
+            label="Proposal"
+            count={83}
+            width="33%"
+            color="var(--pipeline-proposal, #fbbf24)"
+          />
           <ConversionArrow pct="78%" />
           <FunnelStage label="Won" count={65} width="26%" color="var(--pipeline-won, #34d399)" />
         </div>

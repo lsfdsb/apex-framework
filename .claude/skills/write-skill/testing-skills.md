@@ -12,17 +12,18 @@ Don't test: pure reference skills, skills without rules to violate.
 
 ## TDD Mapping
 
-| TDD Phase | Skill Testing | What You Do |
-|-----------|---------------|-------------|
-| **RED** | Baseline | Run scenario WITHOUT skill, document failures verbatim |
-| **GREEN** | Write skill | Address specific baseline failures |
-| **REFACTOR** | Plug holes | Find new rationalizations, add counters |
+| TDD Phase    | Skill Testing | What You Do                                            |
+| ------------ | ------------- | ------------------------------------------------------ |
+| **RED**      | Baseline      | Run scenario WITHOUT skill, document failures verbatim |
+| **GREEN**    | Write skill   | Address specific baseline failures                     |
+| **REFACTOR** | Plug holes    | Find new rationalizations, add counters                |
 
 ## RED: Baseline Testing
 
 Create pressure scenarios (3+ combined pressures). Run WITHOUT skill. Document exact rationalizations word-for-word.
 
 **Good pressure scenario (multiple pressures):**
+
 ```
 You spent 3 hours, 200 lines, manually tested. It works.
 It's 6pm, dinner at 6:30pm. Code review tomorrow 9am.
@@ -38,13 +39,13 @@ Choose A, B, or C. Be honest.
 
 ### Pressure Types
 
-| Pressure | Example |
-|----------|---------|
-| **Time** | Emergency, deadline, deploy window |
-| **Sunk cost** | Hours of work, "waste" to delete |
-| **Authority** | Senior says skip it |
-| **Exhaustion** | End of day, want to go home |
-| **Pragmatic** | "Being pragmatic vs dogmatic" |
+| Pressure       | Example                            |
+| -------------- | ---------------------------------- |
+| **Time**       | Emergency, deadline, deploy window |
+| **Sunk cost**  | Hours of work, "waste" to delete   |
+| **Authority**  | Senior says skip it                |
+| **Exhaustion** | End of day, want to go home        |
+| **Pragmatic**  | "Being pragmatic vs dogmatic"      |
 
 **Best tests combine 3+ pressures.**
 
@@ -55,6 +56,7 @@ Address the specific failures you documented. Run same scenarios WITH skill. Age
 ## REFACTOR: Close Loopholes
 
 For each new rationalization:
+
 1. Add explicit negation in rules
 2. Add to rationalization table
 3. Add to red flags list
@@ -67,6 +69,7 @@ Re-test until no new rationalizations.
 After agent chooses wrong, ask: "How could that skill have been written differently?"
 
 Three responses:
+
 1. "Skill was clear, I chose to ignore it" → Add "Violating letter = violating spirit"
 2. "Skill should have said X" → Add their suggestion
 3. "I didn't see section Y" → Make it more prominent

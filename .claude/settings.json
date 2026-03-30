@@ -78,11 +78,7 @@
         "~/.gnupg/**",
         "~/.claude/settings.json"
       ],
-      "denyRead": [
-        "~/.ssh/id_*",
-        "~/.aws/credentials",
-        "~/.gnupg/private-keys-v1.d/**"
-      ]
+      "denyRead": ["~/.ssh/id_*", "~/.aws/credentials", "~/.gnupg/private-keys-v1.d/**"]
     },
     "network": {
       "allowedDomains": [
@@ -98,13 +94,7 @@
     }
   },
   "worktree": {
-    "symlinkDirectories": [
-      "node_modules",
-      ".next",
-      ".cache",
-      "dist",
-      ".turbo"
-    ]
+    "symlinkDirectories": ["node_modules", ".next", ".cache", "dist", ".turbo"]
   },
   "outputStyle": "APEX Educational",
   "hooks": {

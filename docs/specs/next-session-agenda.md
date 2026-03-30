@@ -11,20 +11,21 @@ We added TDD/SDD enforcement but skipped an honest comparison. The Mastery Guide
 
 ### Claims to Verify
 
-| # | Mastery Guide Claim | APEX Current | Verdict Needed |
-|---|---|---|---|
-| 1 | CLAUDE.md should be ~45 lines (compliance drops after ~150 instructions) | Framework CLAUDE.md is 60 lines. But apps built with APEX have NO CLAUDE.md yet | **Decision**: Add app-level CLAUDE.md generation to pipeline |
-| 2 | Skills should load on demand, not every session | Output style loads every session (~400 lines). 33 skills load by description match | **Measure**: Is 400-line output style past the compliance budget? |
-| 3 | Hooks > Rules for enforcement (100% vs ~80%) | We added auto-test hook + hard stop gate. But CLAUDE.md still has rules that should be hooks | **Audit**: Which CLAUDE.md rules should become hooks? |
-| 4 | Subagents should be constrained — "unconstrained subagent = slower main session" | Builder has ALL tools + `permissionMode: dontAsk` | **Evaluate**: Should builder be more constrained? |
-| 5 | 80/20 rule — too many agents/skills bloat past compliance | 9 agents, 33 skills. Is this past the threshold? | **Test**: Does Claude follow all rules? Spot-check compliance |
-| 6 | Specs survive context — specs on disk > agent memory | We have `docs/specs/` convention but no enforcement | **Verify**: Does the pipeline actually write specs there? |
-| 7 | `/clear` between features — one feature per session | APEX doesn't enforce this | **Decide**: Should we add session discipline guidance? |
-| 8 | Auto-format hook (PostToolUse Prettier) | We said "not doing it" without testing | **Test**: Would it conflict with our existing hooks? |
+| #   | Mastery Guide Claim                                                              | APEX Current                                                                                 | Verdict Needed                                                    |
+| --- | -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| 1   | CLAUDE.md should be ~45 lines (compliance drops after ~150 instructions)         | Framework CLAUDE.md is 60 lines. But apps built with APEX have NO CLAUDE.md yet              | **Decision**: Add app-level CLAUDE.md generation to pipeline      |
+| 2   | Skills should load on demand, not every session                                  | Output style loads every session (~400 lines). 33 skills load by description match           | **Measure**: Is 400-line output style past the compliance budget? |
+| 3   | Hooks > Rules for enforcement (100% vs ~80%)                                     | We added auto-test hook + hard stop gate. But CLAUDE.md still has rules that should be hooks | **Audit**: Which CLAUDE.md rules should become hooks?             |
+| 4   | Subagents should be constrained — "unconstrained subagent = slower main session" | Builder has ALL tools + `permissionMode: dontAsk`                                            | **Evaluate**: Should builder be more constrained?                 |
+| 5   | 80/20 rule — too many agents/skills bloat past compliance                        | 9 agents, 33 skills. Is this past the threshold?                                             | **Test**: Does Claude follow all rules? Spot-check compliance     |
+| 6   | Specs survive context — specs on disk > agent memory                             | We have `docs/specs/` convention but no enforcement                                          | **Verify**: Does the pipeline actually write specs there?         |
+| 7   | `/clear` between features — one feature per session                              | APEX doesn't enforce this                                                                    | **Decide**: Should we add session discipline guidance?            |
+| 8   | Auto-format hook (PostToolUse Prettier)                                          | We said "not doing it" without testing                                                       | **Test**: Would it conflict with our existing hooks?              |
 
 ### How to Audit
 
 For each claim:
+
 1. Read the Mastery Guide section (file: `~/Downloads/claude-code-mastery-guide-unified.md`)
 2. Read the corresponding APEX file
 3. Run a real test if applicable (e.g., does Claude actually follow the rule?)
@@ -50,11 +51,11 @@ next-forge is a production SaaS monorepo starter by Hayden Bleasel. We need to u
 
 ### Decision to Make
 
-| Option | Pros | Cons |
-|---|---|---|
-| **Scaffold from next-forge** (`npx next-forge@latest init`) | Pre-wired monorepo, battle-tested, maintained | May include things we don't need, learning their conventions |
-| **Custom Turborepo monorepo** | Full control, APEX conventions from start | More setup work, reinventing solved problems |
-| **Hybrid**: next-forge scaffold + APEX customization | Best of both, fast start, our conventions on top | Must understand next-forge deeply to customize well |
+| Option                                                      | Pros                                             | Cons                                                         |
+| ----------------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------ |
+| **Scaffold from next-forge** (`npx next-forge@latest init`) | Pre-wired monorepo, battle-tested, maintained    | May include things we don't need, learning their conventions |
+| **Custom Turborepo monorepo**                               | Full control, APEX conventions from start        | More setup work, reinventing solved problems                 |
+| **Hybrid**: next-forge scaffold + APEX customization        | Best of both, fast start, our conventions on top | Must understand next-forge deeply to customize well          |
 
 ---
 
@@ -63,6 +64,7 @@ next-forge is a production SaaS monorepo starter by Hayden Bleasel. We need to u
 ### What Is APEX Ops?
 
 A monorepo that serves as the **home for all APEX apps**. Starting with:
+
 - **Design System** — shared UI components, tokens, patterns (the DNA made real)
 - **Hub/Dashboard** — central place to see all apps, their status, the framework
 

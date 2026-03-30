@@ -18,11 +18,7 @@ function CheckIcon({ met }: { met: boolean }) {
       aria-hidden="true"
       style={{ flexShrink: 0 }}
     >
-      {met ? (
-        <polyline points="20 6 9 17 4 12" />
-      ) : (
-        <circle cx="12" cy="12" r="9" />
-      )}
+      {met ? <polyline points="20 6 9 17 4 12" /> : <circle cx="12" cy="12" r="9" />}
     </svg>
   );
 }

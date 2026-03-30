@@ -12,64 +12,129 @@ interface Note {
 
 const NOTES: Note[] = [
   {
-    initials: 'AS', name: 'Ana Souza', time: 'Há 2 horas',
-    content: <>Liguei para Elena para discutir a proposta revisada. Ela está animada com o <strong>módulo de analytics em tempo real</strong> — disse que era a peça que faltava. A revisão do conselho está agendada para quinta. Ela vai pressionar por uma decisão até sexta.</>,
+    initials: 'AS',
+    name: 'Ana Souza',
+    time: 'Há 2 horas',
+    content: (
+      <>
+        Liguei para Elena para discutir a proposta revisada. Ela está animada com o{' '}
+        <strong>módulo de analytics em tempo real</strong> — disse que era a peça que faltava. A
+        revisão do conselho está agendada para quinta. Ela vai pressionar por uma decisão até sexta.
+      </>
+    ),
     tags: ['ligação', 'proposta', 'decisão pendente'],
   },
   {
-    initials: 'MC', name: 'Marcus Chen', time: 'Ontem',
-    content: <>Revisão técnica concluída. O time deles usa stack <strong>PostgreSQL + Redis</strong>. A integração vai precisar de uma ponte webhook personalizada para o sistema legado de estoque. Estimativa de mais 2 sprints.</>,
+    initials: 'MC',
+    name: 'Marcus Chen',
+    time: 'Ontem',
+    content: (
+      <>
+        Revisão técnica concluída. O time deles usa stack <strong>PostgreSQL + Redis</strong>. A
+        integração vai precisar de uma ponte webhook personalizada para o sistema legado de estoque.
+        Estimativa de mais 2 sprints.
+      </>
+    ),
     tags: ['técnico', 'integração'],
-    avatarColor: 'var(--success)', avatarBg: 'rgba(52,211,153,0.1)',
+    avatarColor: 'var(--success)',
+    avatarBg: 'rgba(52,211,153,0.1)',
   },
   {
-    initials: 'JP', name: 'Julia Park', time: 'Há 3 dias',
-    content: <>Competitive analysis: they're also talking to <strong>BuildCo</strong> — but their timeline is 6+ months. Our 8-week delivery is our strongest differentiator. Lead with speed.</>,
+    initials: 'JP',
+    name: 'Julia Park',
+    time: 'Há 3 dias',
+    content: (
+      <>
+        Competitive analysis: they're also talking to <strong>BuildCo</strong> — but their timeline
+        is 6+ months. Our 8-week delivery is our strongest differentiator. Lead with speed.
+      </>
+    ),
     tags: ['competitivo', 'estratégia'],
-    avatarColor: 'var(--warning)', avatarBg: 'rgba(251,191,36,0.1)',
+    avatarColor: 'var(--warning)',
+    avatarBg: 'rgba(251,191,36,0.1)',
   },
 ];
 
 const styles: Record<string, React.CSSProperties> = {
   panel: { maxWidth: 480, margin: '0 auto' },
   noteInput: {
-    background: 'var(--bg-elevated)', border: '1px solid var(--border)',
-    borderRadius: 'var(--radius)', padding: 16, display: 'flex',
-    gap: 12, alignItems: 'flex-start', marginBottom: 16,
+    background: 'var(--bg-elevated)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
+    padding: 16,
+    display: 'flex',
+    gap: 12,
+    alignItems: 'flex-start',
+    marginBottom: 16,
   },
   textarea: {
-    flex: 1, border: 'none', background: 'none', color: 'var(--text)',
-    fontSize: 13, outline: 'none', resize: 'none', minHeight: 48, lineHeight: 1.5,
+    flex: 1,
+    border: 'none',
+    background: 'none',
+    color: 'var(--text)',
+    fontSize: 13,
+    outline: 'none',
+    resize: 'none',
+    minHeight: 48,
+    lineHeight: 1.5,
     fontFamily: 'var(--font-body)',
   },
   submitBtn: {
-    background: 'var(--accent)', color: 'white', border: 'none', width: 32, height: 32,
-    borderRadius: 'var(--radius-sm)', cursor: 'pointer', display: 'flex',
-    alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+    background: 'var(--accent)',
+    color: 'white',
+    border: 'none',
+    width: 32,
+    height: 32,
+    borderRadius: 'var(--radius-sm)',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
   },
   note: {
-    background: 'var(--bg-elevated)', border: '1px solid var(--border)',
-    borderRadius: 'var(--radius)', padding: 20, marginBottom: 12,
+    background: 'var(--bg-elevated)',
+    border: '1px solid var(--border)',
+    borderRadius: 'var(--radius)',
+    padding: 20,
+    marginBottom: 12,
     transition: 'all 0.3s cubic-bezier(0.22,1,0.36,1)',
   },
-  noteHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  noteHeader: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
   noteAuthor: { display: 'flex', alignItems: 'center', gap: 8 },
   noteContent: { fontSize: 14, color: 'var(--text-secondary)', lineHeight: 1.6 },
   noteTags: { display: 'flex', gap: 6, marginTop: 12, flexWrap: 'wrap' as const },
   noteTag: {
-    fontSize: 10, padding: '2px 8px', borderRadius: 999,
-    background: 'var(--bg-surface)', color: 'var(--text-muted)',
+    fontSize: 10,
+    padding: '2px 8px',
+    borderRadius: 999,
+    background: 'var(--bg-surface)',
+    color: 'var(--text-muted)',
   },
 };
 
 function Avatar({ initials, color, bg }: { initials: string; color?: string; bg?: string }) {
   return (
-    <div style={{
-      width: 24, height: 24, borderRadius: '50%',
-      background: bg ?? 'var(--accent-glow)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      fontSize: 9, fontWeight: 600, color: color ?? 'var(--accent)', flexShrink: 0,
-    }}>
+    <div
+      style={{
+        width: 24,
+        height: 24,
+        borderRadius: '50%',
+        background: bg ?? 'var(--accent-glow)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: 9,
+        fontWeight: 600,
+        color: color ?? 'var(--accent)',
+        flexShrink: 0,
+      }}
+    >
       {initials}
     </div>
   );
@@ -86,11 +151,18 @@ export default function NotesPanel() {
           style={styles.textarea}
           placeholder="Adicione uma nota sobre este contato ou deal..."
           value={value}
-          onChange={e => setValue(e.target.value)}
+          onChange={(e) => setValue(e.target.value)}
           rows={2}
         />
         <button style={styles.submitBtn} aria-label="Submit note">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
             <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z" />
           </svg>
         </button>
@@ -107,7 +179,11 @@ export default function NotesPanel() {
           </div>
           <div style={styles.noteContent}>{note.content}</div>
           <div style={styles.noteTags}>
-            {note.tags.map(tag => <span key={tag} style={styles.noteTag}>{tag}</span>)}
+            {note.tags.map((tag) => (
+              <span key={tag} style={styles.noteTag}>
+                {tag}
+              </span>
+            ))}
           </div>
         </div>
       ))}

@@ -1,6 +1,6 @@
 ---
 paths:
-  - "**/components/**"
+  - '**/components/**'
 ---
 
 # Component Conventions
@@ -78,13 +78,13 @@ export function MyForm() {
 
 ## State Management
 
-| State type | Tool | When |
-|-----------|------|------|
-| **Server state** | TanStack Query | API data, cached data, background refetching |
-| **Client global** | zustand | Auth, UI preferences, cart |
-| **Client local** | useState | Toggle, form field, component-scoped |
-| **URL state** | nuqs or useSearchParams | Filters, pagination, sort, search |
-| **Form state** | react-hook-form | Any form with validation |
+| State type        | Tool                    | When                                         |
+| ----------------- | ----------------------- | -------------------------------------------- |
+| **Server state**  | TanStack Query          | API data, cached data, background refetching |
+| **Client global** | zustand                 | Auth, UI preferences, cart                   |
+| **Client local**  | useState                | Toggle, form field, component-scoped         |
+| **URL state**     | nuqs or useSearchParams | Filters, pagination, sort, search            |
+| **Form state**    | react-hook-form         | Any form with validation                     |
 
 - NEVER manually fetch in `useEffect` — use TanStack Query or server components
 - URL state (filters, pagination) must be shareable — use query params

@@ -1,19 +1,21 @@
 ---
 name: e2e
 description: Write and run end-to-end tests with Playwright. Use when the user says "e2e", "end to end", "playwright", "browser test", "integration test", "test the flow", "test the page", or when testing complete user journeys. Every critical user flow needs an E2E test before shipping.
-argument-hint: "[user-flow]"
+argument-hint: '[user-flow]'
 allowed-tools: Read, Write, Edit, Bash, Grep, Glob
 ---
 
 # E2E Testing — Test What Users Do
 
 ## Setup (if not installed)
+
 ```bash
 npm install -D @playwright/test
 npx playwright install
 ```
 
 ## Test Structure
+
 ```
 tests/
 └── e2e/
@@ -25,6 +27,7 @@ tests/
 ```
 
 ## Writing Tests
+
 ```typescript
 import { test, expect } from '@playwright/test';
 
@@ -49,6 +52,7 @@ test.describe('User Authentication', () => {
 ```
 
 ## Key Patterns
+
 - Use `getByRole`, `getByLabel`, `getByText` — NOT CSS selectors. Accessible selectors = resilient tests.
 - Test mobile viewport: `test.use({ viewport: { width: 375, height: 667 } })`
 - Wait for network: `await page.waitForResponse('**/api/users')`
@@ -56,6 +60,7 @@ test.describe('User Authentication', () => {
 - Parallel execution: Playwright runs tests in parallel by default
 
 ## Critical Flows to Test (minimum before shipping)
+
 1. **Auth**: Login, logout, register, password reset
 2. **Core Action**: The #1 thing users do in your app
 3. **Payment** (if applicable): Checkout flow with Stripe test mode
@@ -98,6 +103,7 @@ test('should complete checkout on desktop', async ({ page }) => {
 Always test: navigation (hamburger vs sidebar), forms (stacked vs inline), tables (cards vs rows), and modals (bottom sheet vs centered).
 
 ## Running
+
 ```bash
 npx playwright test                    # All tests
 npx playwright test auth.spec.ts       # Single file

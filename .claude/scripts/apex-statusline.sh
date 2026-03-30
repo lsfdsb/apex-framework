@@ -1,14 +1,13 @@
 #!/bin/bash
-# apex-statusline.sh — APEX Framework Status Line v3
+# apex-statusline.sh — APEX Framework Status Line v4
 # by Bueno & Claude · São Paulo, 2026
 #
 # Philosophy: Glance, don't read. Hide zeros. Earn every character.
 #
-# v3 changes:
-#   - TOK_TOTAL = total_input + total_output (session-wide SUM, includes agents)
-#   - Context bar still shows main thread % (that's the overflow constraint)
-#   - Added session cost (total_cost_usd)
-#   - Added rate limit indicator (five_hour.used_percentage)
+# v4 changes:
+#   - Removed token count (Σ) — context bar + % is sufficient
+#   - Context bar shows main thread % (the overflow constraint)
+#   - Session cost (total_cost_usd), rate limit indicator remain
 #
 # JSON schema (docs.anthropic.com/en/docs/claude-code):
 #   .model.id / .model.display_name
@@ -48,8 +47,7 @@ PARSED=$(echo "$INPUT" | jq -r '
 
 IFS=$'\t' read -r MODEL_DISPLAY MODEL_ID CTX_PCT CTX_SIZE TOK_IN TOK_OUT COST_RAW LA LR DUR_MS RATE_5H <<< "$PARSED"
 
-# ── Session-wide token sum (main thread + all agents) ──
-TOK_TOTAL=$((TOK_IN + TOK_OUT))
+# ── Token fields kept in PARSED for potential future use ──
 
 # ── Model ──
 case "$MODEL_DISPLAY" in
@@ -189,7 +187,7 @@ VER_STR="${VER:+v${VER} }"
 # Bar + % = main thread context (overflow constraint)
 # Σ tokens = session-wide SUM (main + all agents)
 if [ "$CTX_SIZE" -gt 0 ] 2>/dev/null; then
-  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% of $(fmt_tok "$CTX_SIZE") · Σ $(fmt_tok "$TOK_TOTAL")"
+  CTX_STR="${HEALTH} ${BAR} ${CTX_INT}% of $(fmt_tok "$CTX_SIZE")"
 else
   CTX_STR="${HEALTH} ready"
 fi

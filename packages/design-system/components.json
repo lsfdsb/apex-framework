@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "new-york",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "",
+    "css": "styles/globals.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@apex/design-system/components",
+    "utils": "@apex/design-system/lib/utils",
+    "hooks": "@apex/design-system/hooks",
+    "lib": "@apex/design-system/lib",
+    "ui": "@apex/design-system/components/ui"
+  },
+  "iconLibrary": "lucide"
+}

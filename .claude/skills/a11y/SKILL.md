@@ -1,7 +1,7 @@
 ---
 name: a11y
 description: Runs an accessibility audit against WCAG 2.2 AA standards. This skill should be used when the user says "accessibility", "a11y", "WCAG", "screen reader", "keyboard navigation", "contrast", "aria", or before shipping any user-facing feature. Accessibility is not optional — it's a legal and ethical requirement.
-argument-hint: "[page or component]"
+argument-hint: '[page or component]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -31,6 +31,7 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 ## Manual Review Checklist
 
 ### Perceivable
+
 - [ ] All images have meaningful alt text (or role="presentation" for decorative)
 - [ ] Color contrast: 4.5:1 for normal text, 3:1 for large text (18px+ or 14px+ bold)
 - [ ] Information not conveyed by color alone (add icons, text, or patterns)
@@ -38,6 +39,7 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 - [ ] Text resizes to 200% without breaking layout
 
 ### Operable
+
 - [ ] All interactive elements reachable via keyboard (Tab, Shift+Tab)
 - [ ] Visible focus indicator on all focused elements (2px+ ring, high contrast)
 - [ ] Logical tab order (follows visual reading order)
@@ -47,6 +49,7 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 - [ ] No content that flashes more than 3 times per second
 
 ### Understandable
+
 - [ ] Page language declared (`<html lang="en">`)
 - [ ] Form fields have visible labels (not just placeholder)
 - [ ] Error messages identify the field and explain the fix
@@ -54,6 +57,7 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 - [ ] No unexpected context changes on input
 
 ### Robust
+
 - [ ] Valid semantic HTML (headings in order: h1 → h2 → h3)
 - [ ] ARIA used correctly (aria-label, aria-describedby, aria-live)
 - [ ] Dynamic content announced to screen readers (aria-live="polite")
@@ -62,16 +66,21 @@ grep -rn 'text-red\|text-green\|text-yellow' --include="*.tsx" | grep -v 'sr-onl
 ## Essential Patterns
 
 ### Skip Navigation
+
 First focusable element on every page:
+
 ```html
 <a href="#main" class="sr-only focus:not-sr-only">Skip to content</a>
 ```
 
 ### Heading Hierarchy
+
 Always maintain proper heading order: `h1` → `h2` → `h3`. Never skip levels. Each page gets exactly one `h1`.
 
 ### Focus-Visible
+
 Custom focus styles for keyboard users:
+
 ```css
 :focus-visible {
   outline: 2px solid var(--accent);
@@ -80,16 +89,23 @@ Custom focus styles for keyboard users:
 ```
 
 ### System Theme Detection
+
 Respect user's system preference:
+
 ```css
 @media (prefers-color-scheme: dark) {
-  :root { /* dark mode tokens */ }
+  :root {
+    /* dark mode tokens */
+  }
 }
 ```
+
 Let users override with a toggle. Persist preference in `localStorage`.
 
 ### Live Regions
+
 Announce dynamic content to screen readers:
+
 - `aria-live="polite"` — for status updates (toast notifications, save confirmations)
 - `aria-live="assertive"` — for errors (form validation, critical alerts)
 
@@ -99,6 +115,7 @@ Announce dynamic content to screen readers:
 ```
 
 ## Testing Tools
+
 ```bash
 # Install axe for automated testing
 npm install -D @axe-core/playwright
@@ -117,15 +134,19 @@ test('page should have no a11y violations', async ({ page }) => {
 
 ```markdown
 ## Accessibility Audit: [Page/Component]
+
 **WCAG Level**: AA | **Status**: ✅ PASS / ⚠️ ISSUES / ❌ FAIL
 
 ### Violations
+
 - [WCAG criterion] [Level] [Impact]: [description] → [fix]
 
 ### Warnings
+
 - [Item]: [description] → [recommendation]
 
 ### Score
+
 - Perceivable: [X]/5
 - Operable: [X]/5
 - Understandable: [X]/5

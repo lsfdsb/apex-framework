@@ -94,6 +94,7 @@ When contributing UI components or Design DNA templates:
 ## Review Process
 
 All PRs go through:
+
 1. Automated script validation
 2. Code review by maintainers
 3. Quality gate (`/qa`)

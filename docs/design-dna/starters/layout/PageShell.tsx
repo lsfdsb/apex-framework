@@ -23,7 +23,7 @@ export function PageShell({
   sidebarWidth = 56,
 }: PageShellProps) {
   return (
-    <div className="min-h-screen relative" style={{ color: "var(--text)" }}>
+    <div className="min-h-screen relative" style={{ color: 'var(--text)' }}>
       {sidebar}
       <div className="flex-1 flex flex-col min-w-0">
         {header}

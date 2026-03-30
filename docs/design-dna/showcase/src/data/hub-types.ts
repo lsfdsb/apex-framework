@@ -37,7 +37,14 @@ export interface PipelineState {
 
 export type TaskColumn = "backlog" | "todo" | "in-progress" | "review" | "done";
 export type TaskPhase = "P0" | "P1" | "P2";
-export type TaskDRI = "lead" | "builder" | "qa" | "design-reviewer" | "project-manager" | "watcher" | "technical-writer";
+export type TaskDRI =
+  | "lead"
+  | "builder"
+  | "qa"
+  | "design-reviewer"
+  | "project-manager"
+  | "watcher"
+  | "technical-writer";
 
 export interface Iteration {
   id: number;

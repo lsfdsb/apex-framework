@@ -34,7 +34,17 @@ export function useHashParams(): Record<string, string> {
   return params;
 }
 
-export function Link({ to, children, className, style }: { to: string; children: ReactNode; className?: string; style?: React.CSSProperties }) {
+export function Link({
+  to,
+  children,
+  className,
+  style,
+}: {
+  to: string;
+  children: ReactNode;
+  className?: string;
+  style?: React.CSSProperties;
+}) {
   return (
     <a href={`#${to}`} className={className} style={style}>
       {children}

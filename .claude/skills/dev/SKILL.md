@@ -12,6 +12,7 @@ The APEX dev server runs in the background during your session, with logs captur
 Parse the user's intent and execute the matching subcommand:
 
 ### `/dev` or `/dev status`
+
 Check if the dev server is running and show recent output.
 
 ```bash
@@ -34,6 +35,7 @@ fi
 ```
 
 ### `/dev logs` or `/dev errors`
+
 Show recent dev server output. Focus on errors and warnings.
 
 ```bash
@@ -47,6 +49,7 @@ grep -iE '(error|Error:|failed|TypeError|SyntaxError|Cannot find)' "$LOG_FILE" |
 ```
 
 ### `/dev restart`
+
 Stop the current server and start a fresh one.
 
 ```bash
@@ -87,6 +90,7 @@ fi
 ```
 
 ### `/dev stop`
+
 Stop the dev server.
 
 ```bash

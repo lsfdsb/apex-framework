@@ -31,11 +31,7 @@ export function PaletteSwitcher() {
     <>
       <style>{widgetStyles}</style>
       <div className={`apex-widget${open ? " open" : ""}`}>
-        <button
-          className="apex-widget-toggle"
-          onClick={() => setOpen(!open)}
-          aria-label="Design settings"
-        >
+        <button className="apex-widget-toggle" onClick={() => setOpen(!open)} aria-label="Design settings">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="12" cy="12" r="3" />
             <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
@@ -65,7 +61,9 @@ export function PaletteSwitcher() {
             <div style={{ display: "flex", gap: 4 }}>
               <button
                 className={`mode-btn${mode === "dark" ? " active" : ""}`}
-                onClick={() => { if (mode !== "dark") toggleMode(); }}
+                onClick={() => {
+                  if (mode !== "dark") toggleMode();
+                }}
                 title="Dark"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -74,7 +72,9 @@ export function PaletteSwitcher() {
               </button>
               <button
                 className={`mode-btn${mode === "light" ? " active" : ""}`}
-                onClick={() => { if (mode !== "light") toggleMode(); }}
+                onClick={() => {
+                  if (mode !== "light") toggleMode();
+                }}
                 title="Light"
               >
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

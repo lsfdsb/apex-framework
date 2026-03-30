@@ -6,15 +6,15 @@ These are **path-matched rules** applied automatically by Claude Code when files
 
 Each rule file contains a YAML frontmatter block with a `paths:` list. Claude Code loads the rule automatically when any file matches those glob patterns — no slash command needed.
 
-| File | Applies to |
-|------|-----------|
-| `nextjs.md` | App Router files (`app/**`, `layout.tsx`, `page.tsx`, etc.) |
-| `components.md` | Any file under `**/components/**` |
-| `api.md` | Route handlers and API files |
-| `sql.md` | SQL files and database queries |
-| `supabase.md` | Supabase client and edge function files |
-| `testing.md` | Test files (`*.test.*`, `*.spec.*`) |
-| `error-handling.md` | Files with error boundaries and async flows |
+| File                | Applies to                                                  |
+| ------------------- | ----------------------------------------------------------- |
+| `nextjs.md`         | App Router files (`app/**`, `layout.tsx`, `page.tsx`, etc.) |
+| `components.md`     | Any file under `**/components/**`                           |
+| `api.md`            | Route handlers and API files                                |
+| `sql.md`            | SQL files and database queries                              |
+| `supabase.md`       | Supabase client and edge function files                     |
+| `testing.md`        | Test files (`*.test.*`, `*.spec.*`)                         |
+| `error-handling.md` | Files with error boundaries and async flows                 |
 
 ## Source of truth
 

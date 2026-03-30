@@ -16,9 +16,9 @@
 //
 // by Bueno & Claude · São Paulo, 2026
 
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+import 'jsr:@supabase/functions-js/edge-runtime.d.ts';
 
-const model = new Supabase.ai.Session("gte-small");
+const model = new Supabase.ai.Session('gte-small');
 
 interface SingleRequest {
   input: string;
@@ -32,44 +32,44 @@ type EmbedRequest = SingleRequest | BatchRequest;
 
 Deno.serve(async (req: Request) => {
   // CORS preflight
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, {
       headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       },
     });
   }
 
   // Health check
-  if (req.method === "GET") {
+  if (req.method === 'GET') {
     return new Response(
       JSON.stringify({
-        status: "ok",
-        model: "gte-small",
+        status: 'ok',
+        model: 'gte-small',
         dimensions: 384,
         max_tokens: 512,
       }),
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { 'Content-Type': 'application/json' } },
     );
   }
 
-  if (req.method !== "POST") {
-    return new Response(
-      JSON.stringify({ error: "Method not allowed" }),
-      { status: 405, headers: { "Content-Type": "application/json" } }
-    );
+  if (req.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   try {
     const body: EmbedRequest = await req.json();
 
     if (!body.input) {
-      return new Response(
-        JSON.stringify({ error: "Missing 'input' field" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
-      );
+      return new Response(JSON.stringify({ error: "Missing 'input' field" }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // Batch mode: array of strings
@@ -89,7 +89,7 @@ Deno.serve(async (req: Request) => {
           dimensions: 384,
           count: embeddings.length,
         }),
-        { headers: { "Content-Type": "application/json" } }
+        { headers: { 'Content-Type': 'application/json' } },
       );
     }
 
@@ -104,15 +104,15 @@ Deno.serve(async (req: Request) => {
         embedding: Array.from(result as Float32Array),
         dimensions: 384,
       }),
-      { headers: { "Content-Type": "application/json" } }
+      { headers: { 'Content-Type': 'application/json' } },
     );
   } catch (error) {
     return new Response(
       JSON.stringify({
-        error: "Embedding generation failed",
+        error: 'Embedding generation failed',
         details: error instanceof Error ? error.message : String(error),
       }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
+      { status: 500, headers: { 'Content-Type': 'application/json' } },
     );
   }
 });

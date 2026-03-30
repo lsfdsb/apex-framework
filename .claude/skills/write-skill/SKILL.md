@@ -1,7 +1,7 @@
 ---
 name: write-skill
 description: Use when creating new APEX skills, editing existing skills, or verifying skills work before deployment. Also use when the user says "new skill", "create skill", "write a skill", "add a command", or when extending the framework.
-argument-hint: "[skill-name]"
+argument-hint: '[skill-name]'
 allowed-tools: Read, Grep, Glob, Bash, Write, Edit
 ---
 
@@ -14,12 +14,14 @@ Writing skills IS Test-Driven Development applied to process documentation. You 
 ## When to Create a Skill
 
 **Create when:**
+
 - Technique wasn't intuitively obvious
 - You'd reference this again across projects
 - Pattern applies broadly (not project-specific)
 - Others would benefit
 
 **Don't create for:**
+
 - One-off solutions
 - Standard practices well-documented elsewhere
 - Project-specific conventions (put in CLAUDE.md)
@@ -27,12 +29,12 @@ Writing skills IS Test-Driven Development applied to process documentation. You 
 
 ## Skill Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| **Technique** | Concrete method with steps | `/debug`, `/tdd` |
-| **Pattern** | Way of thinking about problems | `/brainstorm` |
-| **Reference** | API docs, tool documentation | `/supabase` |
-| **Gate** | Quality enforcement checkpoint | `/qa`, `/verify` |
+| Type          | Description                    | Example          |
+| ------------- | ------------------------------ | ---------------- |
+| **Technique** | Concrete method with steps     | `/debug`, `/tdd` |
+| **Pattern**   | Way of thinking about problems | `/brainstorm`    |
+| **Reference** | API docs, tool documentation   | `/supabase`      |
+| **Gate**      | Quality enforcement checkpoint | `/qa`, `/verify` |
 
 ## SKILL.md Structure
 
@@ -40,28 +42,34 @@ Writing skills IS Test-Driven Development applied to process documentation. You 
 ---
 name: skill-name-with-hyphens
 description: Use when [specific triggering conditions]. Do NOT summarize the workflow here.
-argument-hint: "[example args]"
+argument-hint: '[example args]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
 # Skill Name
 
 ## Overview
+
 What is this? Core principle in 1-2 sentences.
 
 ## When to Use
+
 Bullet list with symptoms and use cases.
 
 ## Core Pattern
+
 Before/after code comparison or process steps.
 
 ## Quick Reference
+
 Table for scanning.
 
 ## Common Mistakes
+
 What goes wrong + fixes.
 
 ## Integration
+
 What other skills this connects to.
 ```
 
@@ -82,6 +90,7 @@ description: Use when implementing any feature or bugfix, before writing impleme
 ## Keyword Coverage (CSO)
 
 Use words Claude would search for:
+
 - Error messages: "Hook timed out", "race condition"
 - Symptoms: "flaky", "hanging", "broken"
 - Synonyms: "timeout/hang/freeze"
@@ -90,6 +99,7 @@ Use words Claude would search for:
 ## Naming Convention
 
 **Active voice, verb-first or gerund:**
+
 - `debug` not `debugging-helper`
 - `verify` not `verification-system`
 - `write-skill` not `skill-creation`

@@ -30,7 +30,7 @@ export default function TemplatePage({ component: Component, label, defaultPalet
     initialized.current = true;
     // Scroll to top on template change to prevent nav layout shift
     window.scrollTo({ top: 0, behavior: "instant" });
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [defaultPalette]);
 
   return (
@@ -48,11 +48,41 @@ export default function TemplatePage({ component: Component, label, defaultPalet
           <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "70vh" }}>
             <div style={{ textAlign: "center" }}>
               <div style={{ width: 48, height: 48, margin: "0 auto 24px", position: "relative" }}>
-                <div style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "1px solid var(--border)" }} />
-                <div style={{ position: "absolute", inset: -2, borderRadius: "50%", border: "2px solid transparent", borderTopColor: "var(--accent)", animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite" }} />
-                <div style={{ position: "absolute", inset: 8, borderRadius: "50%", background: "var(--accent)", opacity: 0.15, animation: "apex-pulse 2s ease-in-out infinite" }} />
+                <div
+                  style={{ position: "absolute", inset: 0, borderRadius: "50%", border: "1px solid var(--border)" }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: -2,
+                    borderRadius: "50%",
+                    border: "2px solid transparent",
+                    borderTopColor: "var(--accent)",
+                    animation: "apex-orbit 1.2s cubic-bezier(0.22,1,0.36,1) infinite",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 8,
+                    borderRadius: "50%",
+                    background: "var(--accent)",
+                    opacity: 0.15,
+                    animation: "apex-pulse 2s ease-in-out infinite",
+                  }}
+                />
               </div>
-              <p style={{ fontFamily: "'Instrument Serif', Georgia, serif", fontStyle: "italic", fontSize: 16, color: "var(--text-muted)", letterSpacing: "-0.02em" }}>Forging the beskar...</p>
+              <p
+                style={{
+                  fontFamily: "'Instrument Serif', Georgia, serif",
+                  fontStyle: "italic",
+                  fontSize: 16,
+                  color: "var(--text-muted)",
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Forging the beskar...
+              </p>
             </div>
           </div>
         }
@@ -85,12 +115,15 @@ export default function TemplatePage({ component: Component, label, defaultPalet
             WebkitBackdropFilter: "blur(12px)",
             background: showSource ? "var(--accent)" : "color-mix(in srgb, var(--bg-elevated) 75%, transparent)",
             color: showSource ? "white" : "var(--text-secondary)",
-            border: showSource ? "1px solid var(--accent)" : "1px solid color-mix(in srgb, var(--text-muted) 20%, transparent)",
+            border: showSource
+              ? "1px solid var(--accent)"
+              : "1px solid color-mix(in srgb, var(--text-muted) 20%, transparent)",
             boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
           }}
         >
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" />
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
           </svg>
           {showSource ? "Hide" : "Source"}
         </button>

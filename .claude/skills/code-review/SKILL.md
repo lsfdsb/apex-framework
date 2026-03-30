@@ -1,7 +1,7 @@
 ---
 name: code-review
 description: Use when receiving code review feedback — from PR comments, QA reports, or external reviewers. Also use when the user says "review feedback", "fix review comments", "address PR feedback", or when handling any review response.
-argument-hint: "[PR number or review source]"
+argument-hint: '[PR number or review source]'
 allowed-tools: Read, Grep, Glob, Bash
 ---
 
@@ -25,12 +25,14 @@ WHEN receiving code review feedback:
 ## Forbidden Responses
 
 **NEVER say:**
+
 - "You're absolutely right!"
 - "Great point!" / "Excellent feedback!"
 - "Thanks for catching that!"
 - "Let me implement that now" (before verification)
 
 **INSTEAD:**
+
 - Restate the technical requirement
 - Ask clarifying questions
 - Push back with technical reasoning if wrong
@@ -47,6 +49,7 @@ WHY: Items may be related. Partial understanding = wrong implementation.
 ```
 
 Example:
+
 ```
 Reviewer: "Fix items 1-6"
 You understand 1,2,3,6. Unclear on 4,5.
@@ -58,11 +61,13 @@ You understand 1,2,3,6. Unclear on 4,5.
 ## Source-Specific Handling
 
 ### From the User (Project Owner)
+
 - **Trusted** — implement after understanding
 - **Still ask** if scope unclear
 - **Skip to action** or technical acknowledgment
 
 ### From External Reviewers (PR comments, QA agents)
+
 ```
 BEFORE implementing:
   1. Technically correct for THIS codebase?
@@ -91,6 +96,7 @@ IF reviewer suggests "implementing properly":
 ## Implementation Order
 
 For multi-item feedback:
+
 1. Clarify anything unclear FIRST
 2. Then implement in this order:
    - Blocking issues (breaks, security)
@@ -102,6 +108,7 @@ For multi-item feedback:
 ## When to Push Back
 
 Push back when:
+
 - Suggestion breaks existing functionality
 - Reviewer lacks full context
 - Violates YAGNI (unused feature)
@@ -109,6 +116,7 @@ Push back when:
 - Conflicts with user's architectural decisions
 
 **How:**
+
 - Use technical reasoning, not defensiveness
 - Ask specific questions
 - Reference working tests/code
@@ -131,6 +139,7 @@ Actions speak. Just fix it.
 ## Gracefully Correcting Your Pushback
 
 If you pushed back and were wrong:
+
 ```
 ✅ "You were right — I checked [X] and it does [Y]. Implementing."
 ❌ Long apology or defending why you pushed back
@@ -141,6 +150,7 @@ State the correction factually and move on.
 ## GitHub Thread Replies
 
 When replying to inline review comments on GitHub:
+
 ```bash
 # Reply in the thread, not as top-level comment
 gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies \
@@ -149,11 +159,11 @@ gh api repos/{owner}/{repo}/pulls/{pr}/comments/{id}/replies \
 
 ## Quick Reference
 
-| Mistake | Fix |
-|---------|-----|
-| Performative agreement | State requirement or just act |
-| Blind implementation | Verify against codebase first |
-| Batch without testing | One at a time, test each |
-| Assuming reviewer is right | Check if it breaks things |
-| Avoiding pushback | Technical correctness > comfort |
-| Partial implementation | Clarify all items first |
+| Mistake                    | Fix                             |
+| -------------------------- | ------------------------------- |
+| Performative agreement     | State requirement or just act   |
+| Blind implementation       | Verify against codebase first   |
+| Batch without testing      | One at a time, test each        |
+| Assuming reviewer is right | Check if it breaks things       |
+| Avoiding pushback          | Technical correctness > comfort |
+| Partial implementation     | Clarify all items first         |

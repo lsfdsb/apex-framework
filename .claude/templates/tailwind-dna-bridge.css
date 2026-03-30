@@ -1,0 +1,104 @@
+/* APEX Design DNA → shadcn/ui Token Bridge (Template)
+   Maps DNA CSS custom properties to shadcn variable names.
+
+   Usage: Copy this file to packages/design-system/tokens/bridge.css
+   during scaffold, alongside palette CSS files.
+
+   Prerequisites:
+     1. Import a palette CSS (e.g., palettes/saas-blue.css)
+     2. Import this bridge
+     3. Import foundation.css
+
+   by Bueno & Claude · São Paulo, 2026 */
+
+:root {
+  /* Core surfaces */
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-elevated);
+  --card-foreground: var(--text);
+  --popover: var(--bg-elevated);
+  --popover-foreground: var(--text);
+
+  /* Primary = accent */
+  --primary: var(--accent);
+  --primary-foreground: var(--cta-text);
+
+  /* Secondary = surface */
+  --secondary: var(--bg-surface);
+  --secondary-foreground: var(--text);
+
+  /* Muted */
+  --muted: var(--bg-surface);
+  --muted-foreground: var(--text-muted);
+
+  /* Accent (shadcn) = surface highlight */
+  --accent: var(--bg-surface);
+  --accent-foreground: var(--text);
+
+  /* Status */
+  --destructive: var(--destructive);
+  --destructive-foreground: var(--cta-bg);
+  --success: var(--success);
+
+  /* Borders & inputs */
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--accent);
+
+  /* Sidebar */
+  --sidebar: var(--bg-elevated);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--accent);
+  --sidebar-primary-foreground: var(--cta-text);
+  --sidebar-accent: var(--bg-surface);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--accent);
+
+  /* Radius from DNA foundation */
+  --radius: 0.75rem;
+
+  /* Charts — derived from palette */
+  --chart-1: var(--accent);
+  --chart-2: var(--success);
+  --chart-3: var(--info);
+  --chart-4: var(--warning);
+  --chart-5: var(--destructive);
+}
+
+.dark {
+  --background: var(--bg);
+  --foreground: var(--text);
+  --card: var(--bg-elevated);
+  --card-foreground: var(--text);
+  --popover: var(--bg-elevated);
+  --popover-foreground: var(--text);
+  --primary: var(--accent);
+  --primary-foreground: var(--cta-text);
+  --secondary: var(--bg-surface);
+  --secondary-foreground: var(--text);
+  --muted: var(--bg-surface);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--bg-surface);
+  --accent-foreground: var(--text);
+  --destructive: var(--destructive);
+  --destructive-foreground: var(--cta-bg);
+  --success: var(--success);
+  --border: var(--border);
+  --input: var(--border);
+  --ring: var(--accent);
+  --sidebar: var(--bg-elevated);
+  --sidebar-foreground: var(--text);
+  --sidebar-primary: var(--accent);
+  --sidebar-primary-foreground: var(--cta-text);
+  --sidebar-accent: var(--bg-surface);
+  --sidebar-accent-foreground: var(--text);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--accent);
+  --chart-1: var(--accent);
+  --chart-2: var(--success);
+  --chart-3: var(--info);
+  --chart-4: var(--warning);
+  --chart-5: var(--destructive);
+}

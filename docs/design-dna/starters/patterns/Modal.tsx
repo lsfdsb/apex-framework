@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef } from 'react';
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
   title?: string;
   children: React.ReactNode;
-  size?: "sm" | "md" | "lg";
+  size?: 'sm' | 'md' | 'lg';
 }
 
-const sizes = { sm: "max-w-sm", md: "max-w-lg", lg: "max-w-2xl" };
+const sizes = { sm: 'max-w-sm', md: 'max-w-lg', lg: 'max-w-2xl' };
 
-export function Modal({ open, onClose, title, children, size = "md" }: ModalProps) {
+export function Modal({ open, onClose, title, children, size = 'md' }: ModalProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
@@ -27,10 +27,10 @@ export function Modal({ open, onClose, title, children, size = "md" }: ModalProp
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === 'Escape') onClose();
     };
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
   }, [onClose]);
 
   if (!open) return null;
@@ -43,22 +43,35 @@ export function Modal({ open, onClose, title, children, size = "md" }: ModalProp
         backdrop:bg-black/50 backdrop:backdrop-blur-sm
         open:animate-[apex-enter_300ms_var(--ease-out)]
       `}
-      style={{ background: "var(--bg-elevated)", borderColor: "var(--border)", color: "var(--text)" }}
-      onClick={(e) => { if (e.target === dialogRef.current) onClose(); }}
+      style={{
+        background: 'var(--bg-elevated)',
+        borderColor: 'var(--border)',
+        color: 'var(--text)',
+      }}
+      onClick={(e) => {
+        if (e.target === dialogRef.current) onClose();
+      }}
     >
       {title && (
         <div
           className="flex items-center justify-between px-6 py-4 border-b"
-          style={{ borderColor: "var(--border)" }}
+          style={{ borderColor: 'var(--border)' }}
         >
           <h2 className="text-base font-semibold">{title}</h2>
           <button
             onClick={onClose}
             className="p-1.5 rounded-md transition-colors"
-            style={{ color: "var(--text-muted)" }}
+            style={{ color: 'var(--text-muted)' }}
             aria-label="Close"
           >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <path d="M4 4l8 8M12 4l-8 8" />
             </svg>
           </button>
