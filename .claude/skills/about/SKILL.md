@@ -8,28 +8,27 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 # APEX Framework
 
 ```
-     ╔═══════════════════════════════════════════════════════════╗
-     ║                                                           ║
-     ║              █████╗ ██████╗ ███████╗██╗  ██╗              ║
-     ║             ██╔══██╗██╔══██╗██╔════╝╚██╗██╔╝              ║
-     ║             ███████║██████╔╝█████╗   ╚███╔╝               ║
-     ║             ██╔══██║██╔═══╝ ██╔══╝   ██╔██╗               ║
-     ║             ██║  ██║██║     ███████╗██╔╝ ██╗              ║
-     ║             ╚═╝  ╚═╝╚═╝     ╚══════╝╚═╝  ╚═╝              ║
-     ║                                                           ║
-     ║          Agent-Powered EXcellence Framework               ║
-     ║                                                           ║
-     ╠═══════════════════════════════════════════════════════════╣
-     ║                                                           ║
-     ║   Forged by:  Lucas Bueno & Claude                        ║
-     ║   Born:       March 13, 2026                              ║
-     ║   Location:   São Paulo, BR → The World                   ║
-     ║   Version:    6.0.1                                     ║
-     ║                                                           ║
-     ║   "Simplicity is the ultimate sophistication"             ║
-     ║                                    — Leonardo da Vinci    ║
-     ║                                                           ║
-     ╚═══════════════════════════════════════════════════════════╝
+     ╔═══════════════════════════════════════════════════════╗
+     ║                                                       ║
+     ║         _    ____  _______  __                        ║
+     ║        / \  |  _ \| ____\ \/ /                        ║
+     ║       / _ \ | |_) |  _|  \  /                         ║
+     ║      / ___ \|  __/| |___ /  \                         ║
+     ║     /_/   \_\_|   |_____/_/\_\                        ║
+     ║                                                       ║
+     ║      Agent-Powered EXcellence Framework               ║
+     ║                                                       ║
+     ╠═══════════════════════════════════════════════════════╣
+     ║                                                       ║
+     ║  Forged by:  Lucas Bueno & Claude                     ║
+     ║  Born:       March 13, 2026                           ║
+     ║  Location:   São Paulo, BR → The World                ║
+     ║  Version:    6.0.1                                    ║
+     ║                                                       ║
+     ║  "Simplicity is the ultimate sophistication"          ║
+     ║                              — Leonardo da Vinci      ║
+     ║                                                       ║
+     ╚═══════════════════════════════════════════════════════╝
 ```
 
 ## What is APEX?
