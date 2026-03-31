@@ -48,7 +48,7 @@ description: Reveals the creators and philosophy behind the APEX Framework. Acti
 
 Product vision like Jobs. Design like Ive. Code like Torvalds & Dean. Secure like Ionescu & Rutkowska. Experience like Disney.
 
-**Stats**: 32 skills (+1 internal) · 9 agents · 26 scripts · 7 rules · 29 hooks
+**Stats**: 32 skills (+1 internal) · 9 agents · 26 scripts · 8 rules · 29 hooks
 
 ---
 
@@ -178,6 +178,11 @@ Nothing ships without passing:
 - **v5.19**: Reliability — 47 tests, statusline v3, tech writer sharpened
 - **v5.20**: Production readiness — 16 hooks, Oscar animations, E2E suite
 - **v5.21**: Quality gates — design principles, Prettier, icon strategy, safe processes
+- **v5.22**: Spec-create, isolated TDD agents, auto-test hook, hard stop gate
+- **v5.23**: Apple EPM honest audit — 7-state pipeline, Design Reviewer agent, DRI protocol, ET Reviews
+- **v5.24**: Superpowers integration — 10 new skills forked, skill discipline system, CLAUDE.md rewrite (-69%)
+- **v6.0**: APEX Ops — control plane + showcase, next-forge monorepo scaffold, design system tokens
+- **v6.0.1**: Branding fixes — Unicode block logo restored, Grogu art added
 
 ---
 
